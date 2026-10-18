@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PDF Diff · Akarsh Gopal</title>
+<meta name="description" content="PDF Diff: Private PDF comparisons on your browser. A project by Akarsh Gopal.">
+<meta name="author" content="Akarsh Gopal">
+<link rel="canonical" href="https://akarshgopal.github.io/projects/pdfdiff.html">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#f8f7f4" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0e0e0d" media="(prefers-color-scheme: dark)">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Akarsh Gopal">
+<meta property="og:title" content="PDF Diff · Akarsh Gopal">
+<meta property="og:description" content="PDF Diff: Private PDF comparisons on your browser. A project by Akarsh Gopal.">
+<meta property="og:url" content="https://akarshgopal.github.io/projects/pdfdiff.html">
+<meta property="og:image" content="https://akarshgopal.github.io/assets/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Akarsh Gopal. Primary Objective: Techno-Abundance">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:creator" content="@gopal_akarsh">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preload" href="/assets/fonts/inter-var.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/newsreader-var.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/assets/styles.css">
+<script>(function(){try{var t=localStorage.getItem('theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t;}catch(e){}})();</script>
+<script src="/assets/site.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site-header">
+  <div class="wrap header-in">
+    <a class="wordmark" href="/">Akarsh Gopal</a>
+    <nav aria-label="Main">
+      <ul class="nav">
+      <li><a href="/projects.html" aria-current="page">Projects</a></li>
+      <li><a href="/essays.html">Writing</a></li>
+      <li><a href="/bookshelf.html">Bookshelf</a></li>
+      </ul>
+    </nav>
+    <button class="theme-toggle" type="button" aria-label="Switch colour theme" title="Switch colour theme">
+      <svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.25" fill="none" stroke="currentColor" stroke-width="1.3"/><path d="M8 1.75a6.25 6.25 0 0 1 0 12.5Z" fill="currentColor"/></svg>
+    </button>
+  </div>
+</header>
+<main id="main" class="wrap">
+<article class="case">
+  <a class="back" href="/projects.html"><svg class="ic-back" viewBox="0 0 16 16" aria-hidden="true"><path d="M10 3.5 5.5 8l4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Projects</a>
+  <header class="case-head">
+    <p class="eyebrow">Web app · CLI <span aria-hidden="true">·</span> 2026</p>
+    <h1 style="view-transition-name: title-pdfdiff">PDF Diff</h1>
+    <p class="lede">Private PDF comparisons on your browser.</p>
+  </header>
+  <dl class="meta"><div><dt>Role</dt><dd>Personal project</dd></div><div><dt>Started</dt><dd>Aug 2026</dd></div><div><dt>Stack</dt><dd>TypeScript, React, PDF.js</dd></div><div><dt>Licence</dt><dd>MIT</dd></div><div><dt>Links</dt><dd><ul class="link-list"><li><a href="https://pdfdiff.app">pdfdiff.app<svg class="ic-arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M4.5 11.5l7-7M6 4.5h5.5V10" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></a></li><li><a href="https://github.com/akarshgopal/pdfdiff">Source on GitHub<svg class="ic-arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M4.5 11.5l7-7M6 4.5h5.5V10" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></a></li></ul></dd></div></dl>
+  <figure class="media shot themed" style="view-transition-name: media-pdfdiff"><img class="only-light" src="/assets/projects/pdfdiff-light.webp" width="1600" height="1000" alt="The pdfdiff.app start screen: drop an earlier and a newer PDF, with a preview of two drawing revisions compared" loading="lazy" decoding="async"><img class="only-dark" src="/assets/projects/pdfdiff-dark.webp" width="1600" height="1000" alt="The pdfdiff.app start screen: drop an earlier and a newer PDF, with a preview of two drawing revisions compared" loading="lazy" decoding="async"><figcaption>pdfdiff.app, captured from the live site.</figcaption></figure>
+  <ul class="facts" aria-label="At a glance"><li><span class="fv">0</span><span class="fk">uploads: PDFs never leave the browser</span></li><li><span class="fv">4</span><span class="fk">ways to compare: overlay, side by side, slider, text</span></li><li><span class="fv">~72 MB</span><span class="fk">peak raster memory, whatever the page count</span></li></ul>
+  <div class="cs">
+    <section class="cs-sec" aria-labelledby="s-what-it-is"><h2 id="s-what-it-is">What it is</h2><div class="cs-body prose"><p>Compares two PDF revisions locally in the browser: a pixel overlay, side-by-side pages, a slider that reveals one revision under the other, and highlighted text changes. It also ships a headless CLI (<code>@pdfdiff/cli</code>) that emits overlays and JSON reports, so the same comparison can run in CI or from an agent.</p></div></section><section class="cs-sec" aria-labelledby="s-how-it-is-built"><h2 id="s-how-it-is-built">How it is built</h2><div class="cs-body prose"><p>The comparison logic is split into workspace packages so it can be reused without the app. <code>@pdfdiff/core</code> holds the raster, alignment, connected-region and semantic text comparison algorithms and has no DOM or PDF.js dependency. Separate adapters handle PDF.js text extraction, browser rendering, a React viewer, and the CLI.</p><p>Aligning and diffing two rendered pages is the expensive half of a comparison: roughly 3.9&nbsp;s of a 10&nbsp;s, 43-page run, against 2.5&nbsp;s of canvas rendering. That work runs on a Web Worker, so rendering on the main thread and pixel work overlap and the UI keeps painting. Page rasters are transferred rather than copied, and peak memory stays at two pages of rasters (about 72&nbsp;MB at the standard 3&nbsp;MP budget) however long the document is.</p></div></section><section class="cs-sec" aria-labelledby="s-privacy"><h2 id="s-privacy">Privacy</h2><div class="cs-body prose"><p>The site is static, served from Cloudflare with no server-side upload endpoint. PDFs are processed entirely in the browser; the recent-comparison history stores only filenames, sizes, dates and settings.</p></div></section>
+  </div>
+  <nav class="next" aria-label="Next project">
+    <a href="/projects/treechat.html"><span class="next-k">Next project</span><span class="next-t">TreeChat</span><svg class="ic-arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M4.5 11.5l7-7M6 4.5h5.5V10" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+  </nav>
+</article>
+</main>
+<footer class="site-footer">
+  <div class="wrap footer-in">
+    <p>© 2026 Akarsh Gopal</p>
+    <ul class="footer-links" aria-label="Elsewhere"><li><a href="mailto:akarsh98@gmail.com">Email</a></li><li><a href="https://github.com/akarshgopal" rel="me">GitHub</a></li><li><a href="https://www.linkedin.com/in/akarsh-gopal-b9a8b917b/" rel="me">LinkedIn</a></li><li><a href="https://x.com/gopal_akarsh" rel="me">X</a></li></ul>
+  </div>
+</footer>
+</body>
+</html>
