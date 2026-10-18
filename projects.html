@@ -1,67 +1,134 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="en">
 <head>
-  <meta charset="utf-8">
-  <title>Projects</title>
-  <link rel="stylesheet" href="./styles.css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Projects · Akarsh Gopal</title>
+<meta name="description" content="Projects by Akarsh Gopal: BlueHornet, PDF Diff, TreeChat, Molecular Foundry, 1BRC, and earlier hardware and drone work.">
+<meta name="author" content="Akarsh Gopal">
+<link rel="canonical" href="https://akarshgopal.github.io/projects.html">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#faf8f5" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#111214" media="(prefers-color-scheme: dark)">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Akarsh Gopal">
+<meta property="og:title" content="Projects · Akarsh Gopal">
+<meta property="og:description" content="Projects by Akarsh Gopal: BlueHornet, PDF Diff, TreeChat, Molecular Foundry, 1BRC, and earlier hardware and drone work.">
+<meta property="og:url" content="https://akarshgopal.github.io/projects.html">
+<meta property="og:image" content="https://akarshgopal.github.io/assets/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Akarsh Gopal — akarshgopal.github.io">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:creator" content="@gopal_akarsh">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="stylesheet" href="/assets/styles.css">
+<script>(function(){try{var t=localStorage.getItem('theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t;}catch(e){}})();</script>
+<script src="/assets/theme.js" defer></script>
 </head>
-<!---html page with a list of projects-->
 <body>
-    <div class="main">  
-        <div class="sidebar">
-          <nav class="navbar">
-            <div>
-              <a href="/index.html">Home</a>
-            <div>
-              <a href="/projects.html">Projects</a>
-            </div>
-            <div>
-              <a href="/essays.html">Essays</a>
-            </div>
-            <div>
-              <a href="/notes.html">Notes</a>
-            </div>
-            <div>
-              <a href="/bookshelf.html">Bookshelf</a>
-            </div>
-        </nav>
-    
-        </div>
-        <div class="page">
-            <p>
-                <h1>Projects</h1>
-            </p>
-            <ul>
-                <li>
-                    <h2>Blue Hornet</h2>
-                    <p>Classified for now :P</p> 
-                </li>
-                <li>
-                    <h2>A3T (Drone Team Twente)</h2>
-                    <p>
-                        Once again, I got bored and wanted to work on something hands-on, this time I was getting into robotics and drones. I joined the Uni's newly minted drone team and participated in their first UAS Challenge entry.
-                        We had a team that was quite skilled but relatively inexperienced. We decided to build a VTOL quadplane with a Carbon-fibre reinforced 3D printed airframe. 
-                    </p>
-                </li>
-                <li>
-                    <h2>Project X</h2>
-                    <p>
-                        As a naive freshman in college, I was super bored with classes and was looking for something to work on hands-on.
-                        I was travelling to college everyday on a scooter, and wanted to upgrade to a motorcycle. I wanted an electric one, but couldn't find one.
-                        I decided to make my own. I drew up a few skecthes and specifications, and talked to a couple of friends about the project. 
-                        They really liked it, and I realised other people might want one too, so I put together a team and started working on it.
-                        I made the mistake of wanting to build all major components ourselves, but realised we were in way over our heads. I'm talking ground up power electronics desin like a 30KW AC motor controller, a 6kWh Li-ion Battery management board etc.
-                    </p>
-                        <p>    
-                        However, we managed to get support from the University as well as wiin some funds through a national competition.
-                        In the meanwhile the year was ending and an opportunity for me to study at a University abroad came up that I couldn't pass up. So unfortunately I had to leave the project, but thankfully the team was still there!
-                        The team ended up building a nice prototype and got some recognition for it. They eventually established an EV club at the University.
-                    </p>
-                </li>
-        
-            </ul>        
-        </div>
-      </div>
-    
+<a class="skip" href="#main">Skip to content</a>
+<header class="site-header">
+  <div class="wrap header-in">
+    <a class="wordmark" href="/" aria-label="Akarsh Gopal, home"><span class="mark" aria-hidden="true">ag</span><span class="wordmark-name">Akarsh Gopal</span></a>
+    <nav aria-label="Main">
+      <ul class="nav">
+      <li><a href="/">Home</a></li>
+      <li><a href="/projects.html" aria-current="page">Projects</a></li>
+      <li><a href="/essays.html">Writing</a></li>
+      <li><a href="/notes.html">Notes</a></li>
+      <li><a href="/bookshelf.html">Bookshelf</a></li>
+      </ul>
+    </nav>
+    <button class="theme-toggle" type="button" aria-label="Switch colour theme" title="Switch colour theme">
+      <svg class="i-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.5" fill="none" stroke="currentColor" stroke-width="2"/><path stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M12 1.5v2.5M12 20v2.5M1.5 12H4M20 12h2.5M4.6 4.6l1.8 1.8M17.6 17.6l1.8 1.8M4.6 19.4l1.8-1.8M17.6 6.4l1.8-1.8"/></svg>
+      <svg class="i-moon" viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" d="M20.5 14.5A8.5 8.5 0 1 1 9.5 3.5a7 7 0 0 0 11 11Z"/></svg>
+    </button>
+  </div>
+</header>
+<main id="main" class="wrap">
+<header class="page-head">
+  <h1>Projects</h1>
+  <p class="lede">Things I’ve built, from browser tools to drones and an electric motorcycle.</p>
+</header>
+<section class="section" aria-labelledby="h-featured">
+  <h2 id="h-featured" class="kicker">Featured</h2>
+  <article class="card feature" id="bluehornet">
+  <!-- Video card: BlueHornet demo (~56 s, 720p H.264, faststart). -->
+  <div class="video-frame">
+    <video controls preload="none" playsinline poster="/assets/video/bluehornet-poster.jpg" width="1280" height="720" aria-describedby="bluehornet-desc">
+      <source src="/assets/video/bluehornet-demo.mp4" type="video/mp4">
+      <a href="/assets/video/bluehornet-demo.mp4">Download the BlueHornet demo video (MP4)</a>
+    </video>
+  </div>
+  <div class="feature-body">
+    <div class="card-top"><h3>BlueHornet</h3><span class="tag">Myst Works B.V. · Enschede, NL</span></div>
+    <p class="blurb">Launchable GPS darts to reduce high speed pursuits.</p>
+    <p class="detail" id="bluehornet-desc">In the demo, a chase car fires a GPS tracking dart from its grille at a suspect vehicle (100 km/h, 10 m). The dart attaches and starts flashing, and the police disengage and track the vehicle from a distance.</p>
+    <!-- TODO(akarsh): add your role and the year(s) for BlueHornet / Myst Works here, e.g. <p class="meta">Role · Year</p> -->
+  </div>
+</article>
+</section>
+<section class="section" aria-labelledby="h-current">
+  <h2 id="h-current" class="kicker">Current</h2>
+  <div class="grid">
+<article class="card project" id="pdfdiff">
+  <div class="card-top"><h3>PDF Diff</h3><span class="tag">TypeScript · React</span></div>
+  <p class="blurb">Private PDF comparisons on your browser.</p>
+  <p class="detail">Compares two PDF revisions locally in the browser: a pixel overlay, side-by-side pages, a slider that reveals one revision under the other, and highlighted text changes. Also ships a headless CLI (<code>@pdfdiff/cli</code>) that emits overlays and JSON reports.</p>
+  <div class="actions"><a class="btn btn-primary" href="https://pdfdiff.app">pdfdiff.app<svg viewBox="0 0 24 24" aria-hidden="true" class="arrow"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M7 17 17 7M8 7h9v9"/></svg></a><a class="btn" href="https://github.com/akarshgopal/pdfdiff"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 .5a11.5 11.5 0 0 0-3.64 22.41c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.53-1.33-1.28-1.69-1.28-1.69-1.05-.71.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.56-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.77 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.84 1.19 3.1 0 4.42-2.69 5.39-5.25 5.68.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .5Z"/></svg><span>Source</span></a></div>
+</article>
+<article class="card project" id="treechat">
+  <div class="card-top"><h3>TreeChat</h3><span class="tag">TypeScript · React</span></div>
+  <p class="blurb">Branching AI chat: select any passage to explore it in a side branch, then bring the takeaway back.</p>
+  <p class="detail">Runs in your browser with your own key. There is no TreeChat server and no account; add an OpenRouter key for real answers, or try it straight away with demo replies.</p>
+  <div class="actions"><a class="btn btn-primary" href="https://treechat.cc">treechat.cc<svg viewBox="0 0 24 24" aria-hidden="true" class="arrow"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M7 17 17 7M8 7h9v9"/></svg></a><a class="btn" href="https://github.com/akarshgopal/treechat"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 .5a11.5 11.5 0 0 0-3.64 22.41c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.53-1.33-1.28-1.69-1.28-1.69-1.05-.71.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.56-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.77 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.84 1.19 3.1 0 4.42-2.69 5.39-5.25 5.68.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .5Z"/></svg><span>Source</span></a></div>
+</article>
+<article class="card project" id="ultimat-sim">
+  <div class="card-top"><h3>Molecular Foundry</h3><span class="tag">JavaScript</span></div>
+  <p class="blurb">Ultimate Material Abundance Simulator.</p>
+  <p class="detail">A browser flowsheet workspace for connecting industrial process blocks (desalination, electrolysis, DAC, Sabatier, Haber–Bosch and more) and inspecting material, energy and economic flows. Derived from Ben Schrauwen’s MIT-licensed <a href="https://github.com/benschrauwen/terraform-simulator">terraform-simulator</a>.</p>
+  <div class="actions"><a class="btn btn-primary" href="https://akarshgopal.github.io/ultimat-sim/">Live demo<svg viewBox="0 0 24 24" aria-hidden="true" class="arrow"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M7 17 17 7M8 7h9v9"/></svg></a><a class="btn" href="https://github.com/akarshgopal/ultimat-sim"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 .5a11.5 11.5 0 0 0-3.64 22.41c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.53-1.33-1.28-1.69-1.28-1.69-1.05-.71.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.56-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.77 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.84 1.19 3.1 0 4.42-2.69 5.39-5.25 5.68.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .5Z"/></svg><span>Source</span></a></div>
+</article>
+<article class="card project" id="1brc">
+  <div class="card-top"><h3>1BRC</h3><span class="tag">C · Rust</span></div>
+  <p class="blurb">1 Billion Row Challenge in C and Rust.</p>
+  <p class="detail">Practice in performance-oriented programming on the <a href="https://www.morling.dev/blog/one-billion-row-challenge/">One Billion Row Challenge</a>: aggregate a billion temperature readings as fast as possible. No external dependencies, and no LLM-written code: every character is hand-written.</p>
+  <div class="actions"><a class="btn" href="https://github.com/akarshgopal/1brc"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 .5a11.5 11.5 0 0 0-3.64 22.41c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.53-1.33-1.28-1.69-1.28-1.69-1.05-.71.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.56-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.77 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.84 1.19 3.1 0 4.42-2.69 5.39-5.25 5.68.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .5Z"/></svg><span>Source</span></a></div>
+</article>
+  </div>
+</section>
+<section class="section" aria-labelledby="h-earlier">
+  <h2 id="h-earlier" class="kicker">Earlier</h2>
+  <article class="story" id="a3t">
+    <h3>A3T (Drone Team Twente)</h3>
+    <div class="prose">
+      <p>Once again, I got bored and wanted to work on something hands-on, this time I was getting into robotics and drones. I joined the Uni’s newly minted drone team and participated in their first UAS Challenge entry. We had a team that was quite skilled but relatively inexperienced. We decided to build a VTOL quadplane with a carbon-fibre reinforced 3D printed airframe.</p>
+    </div>
+    <p class="story-links"><a href="https://github.com/akarshgopal/A3T"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 .5a11.5 11.5 0 0 0-3.64 22.41c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.53-1.33-1.28-1.69-1.28-1.69-1.05-.71.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.56-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.77 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.84 1.19 3.1 0 4.42-2.69 5.39-5.25 5.68.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .5Z"/></svg><span>A3T on GitHub</span></a></p>
+  </article>
+  <article class="story" id="project-x">
+    <h3>Project X</h3>
+    <div class="prose">
+      <p>As a naive freshman in college, I was super bored with classes and was looking for something to work on hands-on. I was travelling to college every day on a scooter, and wanted to upgrade to a motorcycle. I wanted an electric one, but couldn’t find one.</p>
+      <p>I decided to make my own. I drew up a few sketches and specifications, and talked to a couple of friends about the project. They really liked it, and I realised other people might want one too, so I put together a team and started working on it.</p>
+      <p>I made the mistake of wanting to build all major components ourselves, but realised we were in way over our heads. I’m talking ground-up power electronics design like a 30&nbsp;kW AC motor controller, a 6&nbsp;kWh Li-ion battery management board, etc.</p>
+      <p>However, we managed to get support from the University as well as win some funds through a national competition. In the meanwhile the year was ending and an opportunity for me to study at a University abroad came up that I couldn’t pass up. So unfortunately I had to leave the project, but thankfully the team was still there! The team ended up building a nice prototype and got some recognition for it. They eventually established an EV club at the University.</p>
+    </div>
+  </article>
+</section>
+<section class="section" aria-labelledby="h-archive">
+  <h2 id="h-archive" class="kicker">From the archive</h2>
+  <ul class="mini-list"><li><a href="https://github.com/akarshgopal/A3T"><span class="mini-name">A3T</span><span class="mini-desc">Aerobotic Tech Team Twente: flight-stack and tooling repo for the drone team.</span></a></li><li><a href="https://github.com/akarshgopal/ATLAS_S3_RL"><span class="mini-name">ATLAS_S3_RL</span><span class="mini-desc">Transfer learning experiment using OpenAI Baselines.</span></a></li><li><a href="https://github.com/akarshgopal/tello-projects"><span class="mini-name">tello-projects</span><span class="mini-desc">Fun projects with a Ryze Tello to learn ROS, sensor fusion, comms and computer vision.</span></a></li><li><a href="https://github.com/akarshgopal/ATLAS-Sem1-Project"><span class="mini-name">ATLAS-Sem1-Project</span><span class="mini-desc">CO₂ data driven servo motor.</span></a></li><li><a href="https://github.com/akarshgopal/Harmonograph"><span class="mini-name">Harmonograph</span><span class="mini-desc">A wxWidgets harmonograph with up to 8 pendulums, a school computer project built with Uthkarsh K Adya.</span></a></li></ul>
+</section>
+</main>
+<footer class="site-footer">
+  <div class="wrap footer-in">
+    <p>© 2026 Akarsh Gopal</p>
+    <ul class="social" aria-label="Elsewhere"><li><a href="mailto:akarsh98@gmail.com" aria-label="Email"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M3 5h18v14H3zM3 6l9 7 9-7"/></svg></a></li><li><a href="https://github.com/akarshgopal" aria-label="GitHub" rel="me"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 .5a11.5 11.5 0 0 0-3.64 22.41c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.53-1.33-1.28-1.69-1.28-1.69-1.05-.71.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.56-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.77 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.84 1.19 3.1 0 4.42-2.69 5.39-5.25 5.68.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .5Z"/></svg></a></li><li><a href="https://www.linkedin.com/in/akarsh-gopal-b9a8b917b/" aria-label="LinkedIn" rel="me"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M20.45 20.45h-3.55v-5.57c0-1.33-.03-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28ZM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12ZM7.12 20.45H3.56V9h3.56v11.45ZM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0Z"/></svg></a></li><li><a href="https://x.com/gopal_akarsh" aria-label="X / Twitter" rel="me"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.9 1.15h3.68l-8.04 9.19L24 22.85h-7.4l-5.8-7.58-6.64 7.58H.48l8.6-9.83L0 1.15h7.59l5.24 6.93 6.07-6.93Zm-1.29 19.5h2.04L6.48 3.24H4.3l13.31 17.41Z"/></svg></a></li></ul>
+  </div>
+</footer>
 </body>
 </html>
