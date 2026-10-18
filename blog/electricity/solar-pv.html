@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="en" data-currency="EUR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Solar PV: From Photon to Grid · How Electricity Works</title>
+<meta name="description" content="An interactive explainer of solar photovoltaics: band gaps and p–n junctions, the IV curve and maximum power point, the Shockley–Queisser limit, cell technologies, the Chinese supply chain, the sun’s geometry, inverters and clipping, system costs and the collapse of solar capture prices.">
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<button id="play-toggle" type="button" aria-pressed="true" title="Pause all animations">❚❚ Pause</button>
+<nav class="series" aria-label="How Electricity Works: the series"><div class="series-in"><a class="series-title" href="index.html">How Electricity Works</a><ol><li><a href="index.html"><span class="n">Essay</span>The main essay</a></li><li><a href="solar-pv.html" aria-current="page"><span class="n">1</span>Solar PV</a></li><li><a href="utility-renewables.html"><span class="n">2</span>Utility-scale renewables</a></li><li><a href="transformers.html"><span class="n">3</span>Transformers</a></li><li><a href="transmission.html"><span class="n">4</span>Transmission</a></li><li><a href="synthetic-fuels.html"><span class="n">5</span>Synthetic fuels</a></li></ol></div></nav><script>(function(){var a=document.querySelector('nav.series [aria-current=page]');if(a){var o=a.closest('ol');if(o.scrollWidth>o.clientWidth)o.scrollLeft=a.offsetLeft-o.offsetLeft-24;}})();</script>
+<main>
+<article>
+<header class="top">
+<p class="kicker">Part 1 of the series · a deep dive from <a class="xref" href="index.html#sunlight">the main essay</a></p>
+<h1>Solar PV: From Photon to Grid</h1>
+<p class="byline">An interactive essay · semiconductor physics, factories, geometry and money · written for Akarsh Gopal, October 2026</p>
+</header>
+
+<p class="lede">In 2025 the world’s factories shipped about 706 gigawatts of solar modules, more than half the generating capacity of the United States, in a single year. Each module is a sheet of glass over a slice of purified sand, with no moving parts. At the factory gate it sells for about nine US cents a watt.<sup class="fn"><a href="#n1">1</a></sup></p>
+
+<p>The <a class="xref" href="index.html#sunlight">main essay</a> gave solar one paragraph and one clear-sky curve. This post follows the energy all the way: a photon after its eight-minute trip from the sun, a junction in a crystal, a cable, an inverter, a grid, and finally a market where the electricity made at noon is increasingly worth almost nothing. On the way: a hard physical limit, a supply chain concentrated in one country, and a price that fell further than almost anyone predicted.</p>
+
+<p>As in the main essay, most figures are live. <span class="tagline tag-real">Real data</span> means measured or published numbers; <span class="tagline tag-ill">Model</span> means a simplified simulation built to show a mechanism. The other parts use the same tags.</p>
+
+<ol class="toc">
+<li><a href="#photons"><span class="n">1</span>Light and the band gap</a></li>
+<li><a href="#junction"><span class="n">2</span>The p–n junction</a></li>
+<li><a href="#iv-curve"><span class="n">3</span>The curve every panel lives on</a></li>
+<li><a href="#sq-limit"><span class="n">4</span>The Shockley–Queisser limit</a></li>
+<li><a href="#modules"><span class="n">5</span>Cells, modules and strings</a></li>
+<li><a href="#cell-tech"><span class="n">6</span>PERC, TOPCon, heterojunction, tandem</a></li>
+<li><a href="#manufacturing"><span class="n">7</span>From sand to module</a></li>
+<li><a href="#sun"><span class="n">8</span>The sun’s geometry</a></li>
+<li><a href="#yield"><span class="n">9</span>A kilowatt around the world</a></li>
+<li><a href="#inverters"><span class="n">10</span>Inverters and clipping</a></li>
+<li><a href="#costs"><span class="n">11</span>Rooftop versus field</a></li>
+<li><a href="#capture"><span class="n">12</span>The noon problem</a></li>
+<li><a href="#lifetime"><span class="n">13</span>Thirty years in the weather</a></li>
+<li><a href="#notes"><span class="n"></span>Notes and sources</a></li>
+</ol>
+
+<h2 id="photons"><span class="num">1</span>Light and the band gap</h2>
+
+<p>Sunlight arrives as photons, each carrying a fixed parcel of energy set by its colour: about 2.7 electronvolts for blue, 1.8 for red, and less for the infrared that makes up about half of the sun’s energy at the ground. On a clear day a surface square to the sun receives roughly a thousand watts per square metre, spread across the spectrum below.<sup class="fn"><a href="#n2">2</a></sup></p>
+
+<p>A semiconductor’s electrons sit on a floor they cannot leave unless something lifts them over a step of fixed height. A photon smaller than the step does nothing and passes straight through, as if the crystal were glass. A larger one lifts an electron free, but the surplus above the step is lost as heat within a trillionth of a second. That step is the material’s <b>band gap</b>: 1.12 eV in silicon.<sup class="fn"><a href="#n3">3</a></sup> Every absorbed photon, whatever its colour, delivers at most one gap’s worth of energy.</p>
+
+<figure class="fig" data-fig="spectrum" id="fig-spectrum">
+<figcaption><span class="tagline tag-real">Real data</span> The reference spectrum of sunlight at the ground (ASTM G173)<sup class="fn"><a href="#n2">2</a></sup> split by a band gap. Grey passes through; orange is lost as heat; yellow is the most a cell could collect. Drag the dashed line or pick a material.<sup class="fn"><a href="#n3">3</a></sup></figcaption>
+</figure>
+
+<p>Move the gap and the trade-off is immediate. A low gap, like germanium’s, catches almost every photon but keeps a small slice of each; a high gap keeps a big slice but lets most light through. For silicon, about 19% of the sunlight’s energy is below the gap and 32% is lost above it as heat. What remains is not yet electricity: electrons have been knocked loose but not yet sent anywhere.</p>
+
+<h2 id="junction"><span class="num">2</span>The p–n junction</h2>
+
+<p>A free electron in silicon wanders until it finds a hole, an empty slot to fall back into, and gives up its energy as heat or a faint glow. To get work out, the cell needs a one-way street that pushes electrons one way and holes the other before they meet.</p>
+
+<p>That street is a <b>p–n junction</b>. One side of the silicon is doped with phosphorus, which has one electron too many (<i>n-type</i>); the other with boron, which has one too few (<i>p-type</i>). Where they meet, electrons spill across and leave a thin layer of fixed charge and a built-in electric field: the cell’s engine. In the band diagram below, “downhill” for an electron is towards the n side, and for a hole towards the p side:</p>
+
+<figure class="fig" data-fig="junction" id="fig-junction">
+<figcaption><span class="tagline tag-ill">Model</span> Band diagram of an illuminated p–n junction. The field sweeps electrons to the n side and holes to the p side; with the circuit closed they return through the lamp. Open it and the bands flatten until recombination balances generation.</figcaption>
+</figure>
+
+<p>Open the circuit and charge piles up: electrons on the n side, holes on the p side, making a voltage that opposes the junction’s field. The bands flatten until carriers recombine as fast as light creates them. That balance point, the <b>open-circuit voltage</b>, is about 0.7 V for a good silicon cell, around 60% of the gap. A cell is a light-powered pump that can lift charge by at most that much.</p>
+
+<p>Close the circuit and the electrons have an easier way home, through the wire and the lamp, so less voltage builds up. A short circuit gives the most current and no voltage; an open circuit the most voltage and no current. Neither delivers power. Everything useful happens in between.</p>
+
+<h2 id="iv-curve"><span class="num">3</span>The curve every panel lives on</h2>
+
+<p>Plot current against voltage for a module and you get its <b>IV curve</b>: flat at the short-circuit current, a sharp knee, then a cliff to the open-circuit voltage. Power is <a class="xref" href="index.html#power-and-energy"><i>P = V × I</i></a>, so it is zero at both ends and peaks at the knee, the <b>maximum power point</b>.</p>
+
+<figure class="fig" data-fig="ivCurve" id="fig-ivCurve">
+<figcaption><span class="tagline tag-ill">Model</span> A single-diode model of a typical 72-cell TOPCon module.<sup class="fn"><a href="#n4">4</a></sup> The shaded rectangle is the power. Drag the operating point, change sun and temperature, then press the button to watch a tracker hunt for the peak.</figcaption>
+</figure>
+
+<p>Light and heat move the curve differently. Light scales the current almost exactly: half the sun, half the current, nearly the same voltage. Heat lowers the voltage, by a few tenths of a percent per degree, because warm silicon recombines carriers faster. A module on a still July afternoon at 60–70 °C can lose a tenth of its rated power, which is why panels have their best minutes on cold, bright spring days.</p>
+
+<p>Datasheet ratings assume “standard test conditions”: 1000 W/m² of reference light and cells at 25 °C. Real modules rarely see that, so nothing in the field delivers its label for long. The <b>maximum power point tracker</b> that keeps a module near the moving peak lives in the inverter (<a href="#inverters">section 10</a>).</p>
+
+<h2 id="sq-limit"><span class="num">4</span>The Shockley–Queisser limit</h2>
+
+<p>In 1961 William Shockley and Hans-Joachim Queisser asked what the best possible single-junction cell could do, with perfect materials and only the losses physics insists on.<sup class="fn"><a href="#n5">5</a></sup> The answer adds one loss to the spectrum split of <a href="#photons">section 1</a>. Anything that absorbs light also emits it, so a perfect cell glows faintly back at the sky, and that radiative recombination steals some current. The voltage can never reach the band gap.</p>
+
+<figure class="fig" data-fig="sqLimit" id="fig-sqLimit">
+<figcaption><span class="tagline tag-real">Computed from real data</span> The detailed-balance limit at 25 °C under ASTM G173, computed for every band gap from 0.4 to 3.0 eV.<sup class="fn"><a href="#n5">5</a></sup> The optimum is 33.7% at 1.34 eV. Crosses mark record cells.<sup class="fn"><a href="#n6">6</a></sup></figcaption>
+</figure>
+
+<p>The peak is broad: anything from 1.1 to 1.5 eV comes within a couple of points. Silicon sits on the left shoulder at 33.4%, but with a handicap. Its gap is <i>indirect</i>, so it absorbs weakly and wafers must be thick, and in thick silicon electrons collide and recombine without emitting light (Auger recombination). That cuts the practical limit to about <b>29.4%</b>.<sup class="fn"><a href="#n7">7</a></sup></p>
+
+<p>The best laboratory silicon cell, a LONGi back-contact cell certified in 2026, reaches 28.3%, 96% of that limit.<sup class="fn"><a href="#n6">6</a></sup> The way past it is a <b>tandem</b>: a wide-gap cell on top takes the blue and green photons and passes the red and infrared to a silicon cell below. LONGi has announced a certified 35.5% for a perovskite–silicon tandem in 2026, against a theoretical limit of about 43%.<sup class="fn"><a href="#n6">6</a></sup> <a href="#cell-tech">Section 6</a> shows why that matters to factories.</p>
+
+<h2 id="modules"><span class="num">5</span>Cells, modules and strings</h2>
+
+<p>A silicon cell makes about 0.6 V at its maximum power point and, at today’s wafer sizes, well over ten amps. So cells are wired in series: same current, voltages add. A utility module of 144 half-cells gives 40–45 V. Twenty to thirty modules in series make a <b>string</b> of up to 1,500 V DC, the limit for most inverters and safety rules, and strings are combined in parallel at the inverter.</p>
+
+<p>Series wiring has a weakness: every element must carry the same current. Shade one cell and the rest of the string still pushes full current through it. The shaded cell is driven into reverse bias, absorbing power and heating up. So modules contain <b>bypass diodes</b>, usually three, each across a third of the module. When a group of cells cannot carry the string current, its diode lets the current go around, at the cost of that third’s output:</p>
+
+<figure class="fig" data-fig="shading" id="fig-shading">
+<figcaption><span class="tagline tag-ill">Model</span> A 72-cell module with three bypass diodes, each across 24 cells.<sup class="fn"><a href="#n8">8</a></sup> Click or drag on cells to shade them, or pick a preset; the curve on the right updates. Remove the diodes to see why they exist.</figcaption>
+</figure>
+
+<p>Shade a single cell. With diodes, the module loses about a third of its power and its curve grows a second hump, one peak where the diode bypasses the group and another where the shaded cell limits everything. A naive tracker can get stuck on the wrong hump, so modern inverters sweep the whole curve now and then. Remove the diodes and most of the output goes, while the shaded cell burns its neighbours’ power: the origin of the “hot spots” that crack glass.</p>
+
+<h2 id="cell-tech"><span class="num">6</span>PERC, TOPCon, heterojunction, tandem</h2>
+
+<p>The junction itself is near-perfect, so a decade of progress in commercial cells has mostly attacked one problem: carriers recombining at surfaces and metal contacts, where broken bonds trap them. Each new cell generation is a more careful way of touching silicon with metal without killing carriers at the contact.</p>
+
+<figure class="fig" data-fig="cellTech" id="fig-cellTech">
+<figcaption><span class="tagline tag-mixed">Schematic + real data</span> Simplified cross-sections, not to scale. Right: average efficiency of mass-produced 2025 modules (ITRPV),<sup class="fn"><a href="#n9">9</a></sup> record cells<sup class="fn"><a href="#n6">6</a></sup> and theoretical limits.</figcaption>
+</figure>
+
+<p><b>PERC</b> added a passivating layer to the back of the cell, opened by a laser only where the contact must touch, and dominated production from the late 2010s. <b>TOPCon</b> replaces that rear with an oxide about 1.5 nanometres thick, capped with doped polysilicon, so carriers tunnel through while the surface stays passivated. Because PERC lines could be upgraded to it, TOPCon went from about 30% of production in 2023 to about 70% in 2024.<sup class="fn"><a href="#n10">10</a></sup></p>
+<p><b>Heterojunction</b> cells wrap the wafer in thin amorphous silicon instead: excellent voltages, but low-temperature processing and more silver or indium. <b>Back-contact</b> cells move all the metal to the rear, so nothing shades the front. They hold the silicon records and, per ITRPV, made the most efficient modules of 2025: 24.1%, against 23.5% for TOPCon and heterojunction.<sup class="fn"><a href="#n9">9</a></sup></p>
+
+<p>These gaps look small but are not. Most of a solar farm’s cost (glass, frames, steel, land, cabling, labour) scales with area, as <a href="#costs">section 11</a> shows, so a point of efficiency cheapens all of it per watt. That is why the industry retools every few years, and why perovskite tandems are being pushed towards mass production despite open questions about outdoor stability. ITRPV expects that after 2027.<sup class="fn"><a href="#n9">9</a></sup></p>
+
+<h2 id="manufacturing"><span class="num">7</span>From sand to module</h2>
+
+<p>From quartz to module takes four industrial steps. Arc furnaces reduce quartz to metallurgical silicon, which is refined into <b>polysilicon</b> of six or more nines purity, mostly by the energy-hungry Siemens process. The polysilicon is pulled into single-crystal <b>ingots</b>, sliced with diamond wire into <b>wafers</b> thinner than a sheet of paper is wide, made into <b>cells</b> by doping, coating and printing contacts, and laminated with glass and a frame into <b>modules</b>.</p>
+
+<p>Few industries this large are so concentrated. In 2024 China made 94% of the world’s polysilicon, 96.5% of its wafers, 90% of its cells and 86% of its modules.<sup class="fn"><a href="#n10">10</a></sup> Industrial policy, cheap coal power for polysilicon, scale and fierce competition between Chinese firms all played a part.</p>
+<p>The result has been repeated cycles of overbuilding. Polysilicon went from $460/kg at the 2008 shortage to under $16 by late 2012, back to $39 in the 2022 squeeze, and below $6 at the end of September 2026, with makers cutting output to stem losses.<sup class="fn"><a href="#n11">11</a></sup> World manufacturing capacity, around 1,460 GW a year, is about twice what the world installs.<sup class="fn"><a href="#n9">9</a></sup></p>
+
+<p>The long-run result is the <a class="xref" href="index.html#fig-learning">main essay’s learning curve</a>: since 1976, each doubling of cumulative shipments has cut the module price by about 26%, by ITRPV’s count (the main essay’s own fit to price data from 1975 gives 24%).<sup class="fn"><a href="#n9">9</a></sup> Shipments reached about 3,200 GW by the end of 2025, at about $0.09 a watt. Silicon use per watt fell from about 14 grams in 2003 to a fraction of that. For solar, the learning curve was an operating plan.</p>
+
+<aside class="deepdive d-renewables">How the same supply-chain concentration plays out for wind turbines, batteries and grid hardware is the subject of <a class="xref" href="utility-renewables.html#supply-chains">Part 2: utility-scale renewables</a>. The transformer shortage that now gates many solar farms has its own chapter in <a class="xref" href="transformers.html#shortage">Part 3</a>.</aside>
+
+<h2 id="sun"><span class="num">8</span>The sun’s geometry</h2>
+
+<p>How often a module sees 1000 W/m² depends on where the sun is, which is pure geometry: latitude, day of the year (the sun’s declination swings 23.4° either side of the equator) and hour. In a high-latitude summer the sun rises in the north-east, climbs high and sets in the north-west; in winter it makes a short, low arc in the south. A module turned away from the sun loses the cosine of the angle.</p>
+
+<figure class="fig" data-fig="sunPath" id="fig-sunPath">
+<figcaption><span class="tagline tag-ill">Model</span> Left: the sun’s path for the chosen latitude and date (dashed: solstices). Right: clear-sky output of 1 kWp through the day for four mountings.<sup class="fn"><a href="#n12">12</a></sup> Drag on the right-hand chart to move the sun.</figcaption>
+</figure>
+
+<p>Three things stand out. At high latitudes the seasons swamp everything: in Berlin, at 52.5°N, a clear June day gives a panel tilted at 38° over three times the energy of a clear December day, and a flat panel nearly ten times. Tilting towards the equator, at a little less than the latitude angle, catches far more of the low winter sun.</p>
+<p>And a <b>tracker</b> that turns the panels east to west fattens the day into a plateau, gaining most in the morning and evening. That shape is worth more than its energy, because it puts output into the pricier shoulder hours (<a href="#capture">section 12</a>). In the United States, 99% of utility-scale solar built in 2024 was on single-axis trackers, which add about five points of capacity factor.<sup class="fn"><a href="#n13">13</a></sup> Two-axis trackers rarely repay their extra steel and motors.</p>
+
+<h2 id="yield"><span class="num">9</span>A kilowatt around the world</h2>
+
+<p>Clear-sky curves flatter. Real yields depend on clouds, haze and temperature, and the best way to see them is to model years of satellite weather. The European Commission’s PVGIS does that; the figure below shows its output for 1 kWp after 14% system losses.<sup class="fn"><a href="#n14">14</a></sup></p>
+
+<figure class="fig" data-fig="yieldMap" id="fig-yieldMap">
+<figcaption><span class="tagline tag-real">Real data (modelled from measured weather)</span> Annual energy from 1 kWp, 2014–2023, fixed at the optimal tilt or on a single-axis tracker (PVGIS 5.3).<sup class="fn"><a href="#n14">14</a></sup> The right-hand scale is capacity factor. Click a place to see its months.</figcaption>
+</figure>
+
+<p>From the Arctic to the Atacama, yields differ by a factor of three for fixed panels and four with desert trackers. A kilowatt in Berlin makes about 1,050–1,100 kWh a year, a capacity factor of 12%; in Seville or Phoenix 1,650–1,820, and over 2,000 on a tracker. In Chile’s Atacama a tracker makes about 3,000 kWh, a capacity factor above 34%.</p>
+<p>The monthly bars matter as much as the totals. Northern sites make roughly three to fourteen times more in June than in December (Berlin about four and a half times), the root of <a class="xref" href="index.html#the-dark-week">the dark week</a> in the main essay. Near the equator the bars are flat, but cloudy tropical skies keep totals modest. Trackers pay most under direct sun; in hazy places such as Tokyo or Beijing most light is diffuse and turning towards the sun gains little.</p>
+
+<p>A solar plant’s cost is almost all paid up front, so its cost per kilowatt-hour is roughly capital divided by lifetime output: double the yield, halve the cost. That is why the same panel makes power far more cheaply in Spain than in Hamburg, as the <a class="xref" href="index.html#fig-buildPlant">main essay’s build-a-plant figure</a> showed.</p>
+
+<h3 id="deployment">Where the panels go</h3>
+
+<p>Yield explains why solar is cheapest in deserts, not where it is built. In 2025 the world made about 2,800 TWh from solar, 8.8% of its electricity, up from 32 TWh in 2010; China made 42% of it. Growth is now fastest elsewhere: India went from 7 TWh in 2015 to 195, the Middle East from 2 to 64, Africa from 3 to 41. Australia, largely on rooftops, gets a fifth of its power from the sun. And panels are cheap enough to spread without any scheme: Pakistan imported 17 GW in 2024, mostly for rooftops escaping high tariffs and outages.<sup class="fn"><a href="#n15">15</a></sup><sup class="fn"><a href="#n16">16</a></sup></p>
+
+<figure class="fig" data-fig="solarWorld" id="fig-solarWorld">
+<figcaption><span class="tagline tag-real">Data</span> Solar generation by region, 2010–2025, in TWh or as a share of each region’s electricity (Ember, including rooftop where reported).<sup class="fn"><a href="#n17">17</a></sup> Hover a label to read a region.</figcaption>
+</figure>
+
+<h2 id="inverters"><span class="num">10</span>Inverters and clipping</h2>
+
+<p>Modules make direct current; the grid runs on alternating current. The <b>inverter</b> in between tracks the maximum power point, turns DC into a sine wave locked to the grid, and increasingly helps run the grid: riding through faults, supporting voltage and, in “grid-forming” designs, providing some of the stability that spinning generators gave <a class="xref" href="index.html#s5">the grid’s frequency</a>. <a class="xref" href="utility-renewables.html#grid-forming">Part 2</a> explores that role.</p>
+
+<p>The inverter is also a design choice. Modules rarely reach nameplate, so it pays to install more DC panel capacity than AC inverter capacity and let the inverter cap output in the brightest hours. That ratio is the <b>inverter loading ratio</b> (DC/AC). The US benchmark utility plant uses 1.34, commercial roofs about 1.2, homes about 1.14.<sup class="fn"><a href="#n18">18</a></sup></p>
+
+<figure class="fig" data-fig="clipping" id="fig-clipping">
+<figcaption><span class="tagline tag-mixed">Real weather + simple model</span> Every hour of 2020 for 1 kWp (PVGIS)<sup class="fn"><a href="#n14">14</a></sup> through an inverter capped at 1 kW ÷ the loading ratio. Top: daily energy, clipped in red; drag to pick a week. Bottom: that week, hour by hour.</figcaption>
+</figure>
+
+<p>Slide the ratio up and little is lost at first. A kilowatt of panels on a Seville tracker never delivers more than about 810 W in any hour of 2020, so at 1.34 only 0.1% of the energy is clipped (real plants clip a little more, as passing clouds make brief peaks). Yet each kilowatt of inverter, and of the scarce grid connection behind it, now delivers 34% more energy: its capacity factor rises from 23% to 31%.</p>
+<p>Clipping only bites above about 1.5; at 1.8 a tenth of the energy is thrown away. Berlin behaves similarly, because cold, clear spring days push its panels close to their rating. Oversizing flattens output into a plateau, and adding a battery to store what would be clipped is the logic of the <a class="xref" href="utility-renewables.html#hybrid-plants">hybrid plants in Part 2</a>.</p>
+
+<aside class="deepdive d-transformers">Downstream of the inverter, every solar farm needs at least one step-up transformer, and a street full of rooftop systems can push the local voltage past its legal limit at noon. Both are in <a class="xref" href="transformers.html#family">Part 3: the transformer family</a> and <a class="xref" href="transformers.html#tap-changers">tap changers and voltage</a>.</aside>
+
+<h2 id="costs"><span class="num">11</span>Rooftop versus field</h2>
+
+<p>The module is now a minor part of most systems’ cost. The US Department of Energy’s early-2025 benchmarks put a utility plant at about $1.12 per watt before storage and a home rooftop system at about $2.95, over two and a half times as much, though both use modules at roughly 30 cents a watt.<sup class="fn"><a href="#n18">18</a></sup></p>
+
+<figure class="fig" data-fig="costStack" id="fig-costStack">
+<figcaption><span class="tagline tag-real">Real data</span> NREL/DOE installed-cost benchmarks, Q1 2025, for a utility plant, a commercial roof and a home system, each with batteries (hatched); dashed: without a battery.<sup class="fn"><a href="#n18">18</a></sup> Hover a segment to read it.</figcaption>
+</figure>
+
+<p>The difference is “soft” cost. For a home system, permitting, inspection, interconnection paperwork, sales, overhead and margin together exceed $2 a watt, more than the hardware; a utility plant spreads them over a hundred megawatts. The US is an expensive extreme. Fraunhofer ISE puts German rooftops at 1,000–2,000 €/kWp and large ground-mounted plants at 700–900 €/kWp,<sup class="fn"><a href="#n19">19</a></sup> and Australia, with standard installs and light permitting, has driven rooftop costs much lower.</p>
+
+<p>Rooftop solar still pays for many households, because it saves the <i>retail</i> price, with the network charges, levies and taxes of the <a class="xref" href="index.html#s10">main essay’s bill</a>, while a field plant earns only wholesale. That gap is what attracts owners, and why tariffs that let them skip paying for the grid they still use are increasingly contested.</p>
+
+<p id="costs-world">The American benchmark is near the top of the world range. IRENA puts the average utility-scale plant commissioned in 2024 at $525 per kilowatt in India, $591 in China, $724 in Brazil and $779 in Europe, against $1,058 in the United States. Since 2015 costs have fallen by roughly half to 70% in every region.<sup class="fn"><a href="#n20">20</a></sup></p>
+
+<h2 id="capture"><span class="num">12</span>The noon problem</h2>
+
+<p>Every panel in a country sees roughly the same sun. With few panels that did not matter: solar produced in daytime hours when demand and prices were high. But in a <a class="xref" href="index.html#fig-merit">merit-order</a> market the price is set by the dearest plant needed. Add enough zero-cost solar and on sunny middays the dear plants drop out, so the price collapses exactly when solar produces.</p>
+
+<p>Here is the main essay’s simulated day again: a spring Sunday on a German-style grid, but with only 40 GW of solar, roughly Germany in 2017. Slide the solar up and watch the noon price.</p>
+
+<figure class="fig showpiece" data-fig="noonDay" id="fig-noonDay">
+<figcaption><span class="tagline tag-ill">Simulation</span> The same model day as the main essay’s <a class="xref" href="index.html#fig-gridDay">grid day</a>: demand, wind and solar are stylised, and prices come from its merit order. Drag across the chart to pick a moment. Under <b>More</b>: weekday, wind and other grids.</figcaption>
+</figure>
+
+<p>With little solar, noon is just another daytime hour and solar earns about the average. Past 80–100 GW the noon price falls to zero or below, exactly when every panel produces. What solar earns relative to the average price of all hours is its <b>capture rate</b>, and the readout tracks it. Germany, with about 74 TWh of solar in its public grid in 2025, shows the same effect in real prices:</p>
+
+<figure class="fig" data-fig="captureHistory" id="fig-captureHistory">
+<figcaption><span class="tagline tag-real">Real data</span> Germany, 2015–2025, from hourly SMARD data.<sup class="fn"><a href="#n21">21</a></sup> Left: average and solar-weighted day-ahead prices, capture rate and negative hours; hover to read a year. Right: average price by hour, April–September, 2015 against 2025.</figcaption>
+</figure>
+
+<p>Through the 2010s solar earned close to the average, a capture rate of 92–99%. Then the midday dip deepened: in 2025 solar earned about €46/MWh against an average of €89, a capture rate of 52%, and prices were negative in 573 hours, almost all on sunny weekend and holiday middays. The 2022 spike shows this is not physics: when gas was dear at every hour, solar’s value soared too. On the right, 2015’s gentle summer hump has become 2025’s noon canyon, the <a class="xref" href="index.html#fig-capture">duck curve</a> of the main essay.</p>
+
+<p>This is “cannibalisation”: each new panel lowers what every existing one earns. Solar stays useful, but the value of the next panel depends more on the rest of the system: batteries that move noon energy to the evening, demand that shifts to noon, interconnectors that export the surplus, trackers and east–west layouts. Since February 2025, new German systems get no market premium in negative-price hours, which nudges them to curtail or store.<sup class="fn"><a href="#n22">22</a></sup> The main essay’s <a class="xref" href="index.html#moving-the-surplus">Moving the surplus</a> and <a class="xref" href="index.html#what-a-megawatt-hour-unlocks">What a megawatt-hour unlocks</a>, and <a class="xref" href="synthetic-fuels.html#cheap-demand">Part 5</a>, ask who could use near-free noon power.</p>
+
+<aside class="deepdive d-renewables">How developers of large wind and solar parks hedge against cannibalisation (power purchase agreements, contracts for difference, co-located storage) is the subject of <a class="xref" href="utility-renewables.html#revenue-models">Part 2’s revenue models</a> and <a class="xref" href="utility-renewables.html#cannibalisation">cannibalisation</a> sections. Why the midday surplus often cannot simply be sent elsewhere is covered in <a class="xref" href="transmission.html#congestion">Part 4 on transmission congestion</a>. Part 2 also sets solar’s capture rate <a class="xref" href="utility-renewables.html#fig-captureCompare">beside wind’s</a>, and charts how much German solar is already <a class="xref" href="utility-renewables.html#fig-curtailment">curtailed for grid congestion</a>.</aside>
+
+<h2 id="lifetime"><span class="num">13</span>Thirty years in the weather</h2>
+
+<p>A module must survive decades of ultraviolet light, frost-to-70 °C cycling, hail, sand and damp heat. It degrades slowly: a large review of field data found a median loss of about 0.5% a year,<sup class="fn"><a href="#n23">23</a></sup> and warranties now commonly run 25 to 30 years. Newer cells bring new failure modes (some TOPCon cells corrode in damp-heat tests), so today’s long-term record is still being written.</p>
+
+<p>Over thirty years, 0.5% a year costs about 7% of lifetime output, small next to the factor of four between sites. The bigger questions are economic: whether a plant keeps its grid connection, what noon power is worth in 2050, and whether glass, aluminium, silver and silicon can be recycled when the 2,844 GW (DC) installed by 2025<sup class="fn"><a href="#n9">9</a></sup> reaches the end of its life.</p>
+
+<p>Within a working lifetime, solar went from a space-programme curiosity to the cheapest new electricity in much of the world. Physics sets a ceiling that silicon has nearly reached; factories have made that physics a commodity; geography sets the yield; markets now set the value. The next post follows the energy into <a class="xref" href="utility-renewables.html#project-anatomy">utility-scale wind and solar parks</a>: how they are designed, financed and connected.</p>
+
+<h2 id="notes">Notes and sources</h2>
+<ol class="notes">
+<li id="n1">Shipments and module price: ITRPV 17th edition (note 9).</li>
+<li id="n2">Reference spectrum: ASTM G173-03, global tilted irradiance at 37° tilt, air mass 1.5, integrated to about 1000 W/m², via <a href="https://www.nrel.gov/grid/solar-resource/spectra-am1.5.html">NREL</a>. The figure uses 10 nm bins.</li>
+<li id="n3">Band gaps at room temperature: Ge 0.66 eV, Si 1.12 eV, GaAs 1.42 eV, CdTe about 1.5 eV, methylammonium lead iodide perovskite about 1.6 eV, and a wide-gap perovskite of about 1.68 eV as used in tandem top cells. <a href="https://www.pveducation.org/pvcdrom/pn-junctions/band-gap">PVEducation</a> and standard semiconductor tables.</li>
+<li id="n4">IV-curve figure: single-diode model of a representative 72-cell TOPCon module, short-circuit current 14 A and open-circuit voltage 52 V at standard test conditions, with temperature coefficients typical of current datasheets; the tracker is a perturb-and-observe algorithm.</li>
+<li id="n5">W. Shockley and H. J. Queisser, “Detailed balance limit of efficiency of p–n junction solar cells”, <i>J. Appl. Phys.</i> 32, 510 (1961), <a href="https://doi.org/10.1063/1.1736034">doi:10.1063/1.1736034</a>. Our calculation integrates the ASTM G173 spectrum (note 2) with a 300 K blackbody for radiative recombination, giving 33.7% at 1.34 eV and 33.4% at 1.12 eV.</li>
+<li id="n6">Record cells: LONGi hybrid back-contact silicon cell, 28.29%, certified by ISFH (2026); LONGi perovskite–silicon tandem, 35.5%, as announced by LONGi in 2026 (the company reports ESTI certification); LONGi gives about 43% as the theoretical limit for this tandem; <a href="https://www.longi.com/en/news/">LONGi news releases</a>. GaAs single-junction 29.1%: M. A. Green et al., “Solar cell efficiency tables” (Versions 67–68), <i>Progress in Photovoltaics</i>; see also the <a href="https://www.nrel.gov/pv/cell-efficiency.html">NREL best research-cell efficiency chart</a>.</li>
+<li id="n7">A. Richter, M. Hermle and S. W. Glunz, “Reassessment of the limiting efficiency for crystalline silicon solar cells”, <i>IEEE J. Photovoltaics</i> 3, 1184 (2013), <a href="https://doi.org/10.1109/JPHOTOV.2013.2270351">doi:10.1109/JPHOTOV.2013.2270351</a>: 29.4% including Auger recombination.</li>
+<li id="n8">Shading figure: two columns of cells per bypass diode; the power–voltage curve treats each cell as a current source with a reverse-bias characteristic.</li>
+<li id="n9">VDMA, <a href="https://www.vdma.org/international-technology-roadmap-photovoltaic"><i>International Technology Roadmap for Photovoltaic</i></a> (ITRPV), 17th edition (2026): 2025 module efficiencies (PERC 21.7%, TOPCon 23.5%, heterojunction 23.5%, back contact 24.1%); learning rate 26% (1976–2025); year-end 2025 module spot price about $0.09/W; 706 GW shipped in 2025, 3,178 GW cumulative shipments; 2,844 GW cumulative installed; about 1,460 GW of manufacturing capacity; tandem mass production expected after 2027. Market shares for PERC and heterojunction from the 16th and 17th editions.</li>
+<li id="n10">IEA PVPS, <a href="https://iea-pvps.org/">PV supply-chain review</a> (I. Kaizuka et al., November 2025): China’s share by stage, 2022–2024; 2024 world production of about 1.96 million tonnes of polysilicon, 804 GW of wafers, 753 GW of cells and 726 GW of modules; TOPCon share of cell output about 30% in 2023 and about 70% in 2024. IEA, <i>Energy Technology Perspectives 2026</i>, gives a similar picture (about 80% of modules and more than 90% of upstream stages).</li>
+<li id="n11">Polysilicon spot prices: <a href="https://www.bernreuter.com/polysilicon/price-trend/">Bernreuter Research, polysilicon price trend</a> (selected points: about $460/kg in March 2008, $15.90 in December 2012, $6.75 in June 2020, $39 in August 2022, $5.84 at the end of September 2026). Silicon use of about 14 g/W in 2003 from the same source.</li>
+<li id="n12">Sun-path figure: solar time; a simple clear-sky model with Kasten–Young air mass, a fixed atmospheric transmittance and diffuse fraction, and 14% system losses. Real yields with real weather are in the next figure.</li>
+<li id="n13">M. Bolinger et al., <a href="https://emp.lbl.gov/utility-scale-solar"><i>Utility-Scale Solar, 2025 Edition</i></a>, Lawrence Berkeley National Laboratory.</li>
+<li id="n14">European Commission Joint Research Centre, <a href="https://re.jrc.ec.europa.eu/pvg_tools/en/">PVGIS 5.3</a>, hourly series (<code>seriescalc</code>), 1 kWp crystalline silicon, 14% system losses, optimal tilt and azimuth for fixed systems, horizontal single-axis tracking; 2014–2023 averages, and the 2020 hourly series for Seville (37.4°N) and Berlin (52.5°N). Solar radiation database noted per site (PVGIS-SARAH3 or PVGIS-ERA5).</li>
+<li id="n15">Ember, <a href="https://ember-energy.org/data/yearly-electricity-data/">Yearly Electricity Data</a> (downloaded 10 October 2026, CC BY 4.0), generation by source, 2000–2025 (<code>scripts/make_world_data.py</code>).</li>
+<li id="n16">Ember, <a href="https://ember-energy.org/app/uploads/2025/04/Report-Global-Electricity-Review-2025.pdf"><i>Global Electricity Review 2025</i></a>: Pakistan imported 17 GW of solar panels in 2024.</li>
+<li id="n17">Scopes differ between sources: Ember puts Germany’s 2025 solar output at 90 TWh, including electricity that rooftop owners use themselves, while the SMARD series in section 12 counts only what is fed into the grid, 74 TWh. Yield map: PVGIS uses SARAH-3 satellite data where available and ERA5 reanalysis elsewhere; where skies are hazy or often overcast (Tokyo, Sydney, Seattle and Beijing in the ERA5-based estimates) a horizontal tracker gains little or loses to a fixed tilted panel. Clipping figure: the 2020 hourly series includes 14% system losses. Cost benchmarks: a 100 MW<sub>dc</sub> tracking plant with 240 MWh of storage, a 250 kW<sub>dc</sub> commercial roof, and an 8 kW<sub>dc</sub> home system with a 13.5 kWh battery; MMP is the modelled market price and MSP the minimum sustainable price. Capture figure: DE-AT-LU bidding zone before October 2018, DE-LU after; computed solar values match the official monthly market values within about 2%; hours are German clock time.</li>
+<li id="n18">US Department of Energy / NREL, <a href="https://www.energy.gov/eere/solar/solar-photovoltaic-system-cost-benchmarks">Solar Photovoltaic System Cost Benchmarks</a>, Q1 2025 (2024 USD), and the accompanying PV System Cost Benchmark Model: PV+storage cost stacks, PV-only totals (utility $1.07 MSP / $1.12 MMP; commercial $1.95 / $1.98; residential $2.78 / $2.95 per W<sub>dc</sub>), inverter loading ratios (1.34, 1.20, 1.14) and module efficiencies.</li>
+<li id="n19">C. Kost et al., <a href="https://www.ise.fraunhofer.de/en/publications/studies/cost-of-electricity.html"><i>Levelized Cost of Electricity — Renewable Energy Technologies</i></a>, Fraunhofer ISE, July 2024.</li>
+<li id="n20">IRENA, <a href="https://www.irena.org/Publications/2025/Jun/Renewable-Power-Generation-Costs-in-2024"><i>Renewable Power Generation Costs in 2024</i></a> (July 2025), Table 3.1 “Utility-scale solar PV costs by region and in the top four major utility-scale markets, 2015 and 2024”.</li>
+<li id="n21">Hourly day-ahead prices (DE-AT-LU to September 2018, DE-LU after) and solar generation: Bundesnetzagentur, <a href="https://www.smard.de/en/downloadcenter/download-market-data/">SMARD</a> market data, CC BY 4.0 (<code>scripts/fetch_smard.py</code>, <code>scripts/smard_compute.py</code>). Cross-check against the official solar market values (“Marktwert Solar”) published by the German transmission operators at <a href="https://www.netztransparenz.de/">netztransparenz.de</a>: e.g. 2024 solar 46.48 €/MWh computed vs 46.24 official; 2025 46.07 vs 45.08. SMARD reports net generation fed into the grid (73.8 TWh of solar in 2025); Ember’s 90 TWh in section 9 also includes self-consumed rooftop output.</li>
+<li id="n22">The 2025 amendment to the German Renewable Energy Sources Act (“Solarspitzengesetz”): new installations receive no market premium or feed-in payment for periods with negative day-ahead prices. See the <a href="https://www.bundesnetzagentur.de/">Bundesnetzagentur</a>.</li>
+<li id="n23">D. C. Jordan and S. R. Kurtz, “Photovoltaic degradation rates — an analytical review”, <i>Progress in Photovoltaics</i> 21, 12 (2013), <a href="https://doi.org/10.1002/pip.1182">doi:10.1002/pip.1182</a>.</li>
+</ol>
+<nav class="pager" aria-label="Previous and next in the series"><a class="prev" href="index.html"><small>← Previous</small>How the World’s Electricity Works</a><a class="next" href="utility-renewables.html"><small>Next →</small>Utility-Scale Renewables: Building and Running the Fleet</a></nav>
+</article>
+</main>
+<script src="series.js"></script>
+</body>
+</html>

@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>1BRC · Akarsh Gopal</title>
+<meta name="description" content="1BRC: 1 Billion Row Challenge in C and Rust. A project by Akarsh Gopal.">
+<meta name="author" content="Akarsh Gopal">
+<link rel="canonical" href="https://akarshgopal.github.io/projects/1brc.html">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#f8f7f4" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0e0e0d" media="(prefers-color-scheme: dark)">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Akarsh Gopal">
+<meta property="og:title" content="1BRC · Akarsh Gopal">
+<meta property="og:description" content="1BRC: 1 Billion Row Challenge in C and Rust. A project by Akarsh Gopal.">
+<meta property="og:url" content="https://akarshgopal.github.io/projects/1brc.html">
+<meta property="og:image" content="https://akarshgopal.github.io/assets/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Akarsh Gopal. Primary Objective: Techno-Abundance">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:creator" content="@gopal_akarsh">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preload" href="/assets/fonts/inter-var.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/newsreader-var.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/assets/styles.css">
+<script>(function(){try{var t=localStorage.getItem('theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t;}catch(e){}})();</script>
+<script src="/assets/site.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site-header">
+  <div class="wrap header-in">
+    <a class="wordmark" href="/">Akarsh Gopal</a>
+    <nav aria-label="Main">
+      <ul class="nav">
+      <li><a href="/projects.html" aria-current="page">Projects</a></li>
+      <li><a href="/essays.html">Writing</a></li>
+      <li><a href="/bookshelf.html">Bookshelf</a></li>
+      </ul>
+    </nav>
+    <button class="theme-toggle" type="button" aria-label="Switch colour theme" title="Switch colour theme">
+      <svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.25" fill="none" stroke="currentColor" stroke-width="1.3"/><path d="M8 1.75a6.25 6.25 0 0 1 0 12.5Z" fill="currentColor"/></svg>
+    </button>
+  </div>
+</header>
+<main id="main" class="wrap">
+<article class="case">
+  <a class="back" href="/projects.html"><svg class="ic-back" viewBox="0 0 16 16" aria-hidden="true"><path d="M10 3.5 5.5 8l4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Projects</a>
+  <header class="case-head">
+    <p class="eyebrow">Performance <span aria-hidden="true">·</span> 2026</p>
+    <h1 style="view-transition-name: title-1brc">1BRC</h1>
+    <p class="lede">1 Billion Row Challenge in C and Rust.</p>
+  </header>
+  <dl class="meta"><div><dt>Role</dt><dd>Personal project</dd></div><div><dt>Started</dt><dd>Sep 2026</dd></div><div><dt>Stack</dt><dd>C, Rust</dd></div><div><dt>Machine</dt><dd>Apple M1 Pro, 16 GB</dd></div><div><dt>Links</dt><dd><ul class="link-list"><li><a href="https://github.com/akarshgopal/1brc">Source on GitHub<svg class="ic-arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M4.5 11.5l7-7M6 4.5h5.5V10" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></a></li></ul></dd></div></dl>
+  
+  <ul class="facts" aria-label="At a glance"><li><span class="fv">26.9 s</span><span class="fk">latest C time for a billion rows</span></li><li><span class="fv">8.7×</span><span class="fk">faster than my first C pass (3:55)</span></li><li><span class="fv">0</span><span class="fk">external dependencies</span></li></ul>
+  <div class="cs">
+    <section class="cs-sec" aria-labelledby="s-what-it-is"><h2 id="s-what-it-is">What it is</h2><div class="cs-body prose"><p>Practice in performance-oriented programming on the <a href="https://www.morling.dev/blog/one-billion-row-challenge/">One Billion Row Challenge</a>: read a billion rows of city temperature readings and print the min, mean and max for every city, as fast as possible. I had no professional experience in either language, so this is a way to learn both.</p></div></section><section class="cs-sec" aria-labelledby="s-rules"><h2 id="s-rules">Rules</h2><div class="cs-body prose"><ul class="rules"><li>No external library dependencies.</li><li>The computation happens at runtime; nothing is baked into the binary.</li><li>No LLM-written code: every character in the codebase is hand-written.</li></ul></div></section><section class="cs-sec" aria-labelledby="s-progress"><h2 id="s-progress">Progress</h2><div class="cs-body prose"><figure class="chart"><ol class="bars" aria-label="Total run time, shorter is better"><li class="base"><span class="bl">Baseline: <code>wc</code> over the file</span><span class="bar" style="--w:0.1986"></span><span class="bv">46.7 s</span></li><li class=""><span class="bl">C, pass 1 (unsorted output)</span><span class="bar" style="--w:1.0000"></span><span class="bv">3:55</span></li><li class=""><span class="bl">Rust, pass 1</span><span class="bar" style="--w:0.6743"></span><span class="bv">2:39</span></li><li class=""><span class="bl">C, pass 2: fewer mallocs, sorted output</span><span class="bar" style="--w:0.4741"></span><span class="bv">1:51</span></li><li class=""><span class="bl">C: chunked <code>fread()</code> instead of <code>fgets()</code></span><span class="bar" style="--w:0.2143"></span><span class="bv">50.4 s</span></li><li class="best"><span class="bl">C: linear probing, unrolled parsing</span><span class="bar" style="--w:0.1144"></span><span class="bv">26.9 s</span></li></ol><figcaption>Total wall-clock time on an Apple M1 Pro with 16&nbsp;GB, from the repo’s notes. Shorter is better.</figcaption></figure></div></section><section class="cs-sec" aria-labelledby="s-lessons"><h2 id="s-lessons">Lessons</h2><div class="cs-body prose"><p>A first from-scratch hash map in C, and a first string merge sort on its keys. The basics of Rust, and first-hand ownership and borrowing; writing the C version first and then the Rust one made it stick. The common bugs were the classic ones: off-by-one errors, string terminators, out-of-bounds access and memory corruption.</p></div></section>
+  </div>
+  <nav class="next" aria-label="Next project">
+    <a href="/projects/a3t.html"><span class="next-k">Next project</span><span class="next-t">A3T</span><svg class="ic-arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M4.5 11.5l7-7M6 4.5h5.5V10" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+  </nav>
+</article>
+</main>
+<footer class="site-footer">
+  <div class="wrap footer-in">
+    <p>© 2026 Akarsh Gopal</p>
+    <ul class="footer-links" aria-label="Elsewhere"><li><a href="mailto:akarsh98@gmail.com">Email</a></li><li><a href="https://github.com/akarshgopal" rel="me">GitHub</a></li><li><a href="https://www.linkedin.com/in/akarsh-gopal-b9a8b917b/" rel="me">LinkedIn</a></li><li><a href="https://x.com/gopal_akarsh" rel="me">X</a></li></ul>
+  </div>
+</footer>
+</body>
+</html>
