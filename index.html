@@ -1,91 +1,252 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-boot="1">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Akarsh Gopal</title>
-<meta name="description" content="Akarsh Gopal: engineer building software for a rocket factory at RFA. Projects, writing and a bookshelf.">
+<meta name="description" content="Akarsh Gopal: software engineer at Rocket Factory Augsburg. Projects, flight log, writing and a bookshelf.">
 <meta name="author" content="Akarsh Gopal">
 <link rel="canonical" href="https://akarshgopal.github.io/">
-<meta name="color-scheme" content="light dark">
-<meta name="theme-color" content="#faf8f5" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#111214" media="(prefers-color-scheme: dark)">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#06090e">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Akarsh Gopal">
 <meta property="og:title" content="Akarsh Gopal">
-<meta property="og:description" content="Akarsh Gopal: engineer building software for a rocket factory at RFA. Projects, writing and a bookshelf.">
+<meta property="og:description" content="Akarsh Gopal: software engineer at Rocket Factory Augsburg. Projects, flight log, writing and a bookshelf.">
 <meta property="og:url" content="https://akarshgopal.github.io/">
 <meta property="og:image" content="https://akarshgopal.github.io/assets/og.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="Akarsh Gopal — akarshgopal.github.io">
+<meta property="og:image:alt" content="Akarsh Gopal, mission control">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:creator" content="@gopal_akarsh">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preload" href="/assets/fonts/space-grotesk.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/jetbrains-mono.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/assets/styles.css">
-<script>(function(){try{var t=localStorage.getItem('theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t;}catch(e){}})();</script>
-<script src="/assets/theme.js" defer></script>
-<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Person", "name": "Akarsh Gopal", "url": "https://akarshgopal.github.io/", "image": "https://akarshgopal.github.io/assets/profile.jpg", "worksFor": {"@type": "Organization", "name": "RFA", "url": "https://rfa.space"}, "sameAs": ["https://github.com/akarshgopal", "https://www.linkedin.com/in/akarsh-gopal-b9a8b917b/", "https://x.com/gopal_akarsh"]}</script>
+<script>(function(){var d=document.documentElement;d.classList.add('js');try{var m=localStorage.getItem('motion');if(m==='reduce')d.dataset.motion='reduce';var rm=m==='reduce'||matchMedia('(prefers-reduced-motion: reduce)').matches;if(d.dataset.boot==='1'&&!rm&&!sessionStorage.getItem('booted')){d.classList.add('booting');sessionStorage.setItem('booted','1');}}catch(e){}})();</script>
+<script src="/assets/js/site.js" defer></script>
+<script type="module" src="/assets/js/hero.js"></script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Person", "name": "Akarsh Gopal", "url": "https://akarshgopal.github.io/", "image": "https://akarshgopal.github.io/assets/profile.jpg", "jobTitle": "Software Engineer", "worksFor": {"@type": "Organization", "name": "Rocket Factory Augsburg", "url": "https://rfa.space"}, "sameAs": ["https://github.com/akarshgopal", "https://www.linkedin.com/in/akarsh-gopal-b9a8b917b/", "https://x.com/gopal_akarsh"]}</script>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
+<div id="boot" aria-hidden="true">
+  <div class="boot-in">
+    <p class="boot-l" style="--i:0">AG/OS 26.10 <span class="dim">· flight software</span></p>
+    <p class="boot-l" style="--i:1">&gt; link · augsburg 48.37°N 10.90°E <span class="ok">ok</span></p>
+    <p class="boot-l" style="--i:2">&gt; mission files · 9 <span class="ok">ok</span></p>
+    <p class="boot-l" style="--i:3">&gt; telemetry · local clock <span class="ok">ok</span></p>
+    <p class="boot-l go" style="--i:4">all systems nominal</p>
+    <div class="boot-bar"><i></i></div>
+  </div>
+</div>
 <header class="site-header">
-  <div class="wrap header-in">
-    <a class="wordmark" href="/" aria-label="Akarsh Gopal, home"><span class="mark" aria-hidden="true">ag</span><span class="wordmark-name">Akarsh Gopal</span></a>
+  <div class="header-in">
+    <a class="wordmark" href="/" data-sfx><span class="mark" aria-hidden="true">AG</span><span class="wordmark-name">Akarsh Gopal</span></a>
     <nav aria-label="Main">
       <ul class="nav">
-      <li><a href="/" aria-current="page">Home</a></li>
-      <li><a href="/projects.html">Projects</a></li>
-      <li><a href="/essays.html">Writing</a></li>
-      <li><a href="/bookshelf.html">Bookshelf</a></li>
+      <li><a href="/" data-sfx aria-current="page"><span class="idx" aria-hidden="true">00</span>Home</a></li>
+      <li><a href="/projects.html" data-sfx><span class="idx" aria-hidden="true">01</span>Projects</a></li>
+      <li><a href="/essays.html" data-sfx><span class="idx" aria-hidden="true">02</span>Writing</a></li>
+      <li><a href="/bookshelf.html" data-sfx><span class="idx" aria-hidden="true">03</span>Bookshelf</a></li>
       </ul>
     </nav>
-    <button class="theme-toggle" type="button" aria-label="Switch colour theme" title="Switch colour theme">
-      <svg class="i-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.5" fill="none" stroke="currentColor" stroke-width="2"/><path stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M12 1.5v2.5M12 20v2.5M1.5 12H4M20 12h2.5M4.6 4.6l1.8 1.8M17.6 17.6l1.8 1.8M4.6 19.4l1.8-1.8M17.6 6.4l1.8-1.8"/></svg>
-      <svg class="i-moon" viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" d="M20.5 14.5A8.5 8.5 0 1 1 9.5 3.5a7 7 0 0 0 11 11Z"/></svg>
-    </button>
+    <div class="tools">
+      <button class="tool cmdk-open" type="button" aria-label="Search and navigate (Ctrl+K)" aria-haspopup="dialog" aria-controls="cmdk" data-sfx><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path stroke="currentColor" stroke-width="1.8" d="m15.5 15.5 5 5"/></svg><span class="tool-label">Search</span><kbd class="kbd" aria-hidden="true"><span class="mod">Ctrl</span>K</kbd></button>
+      <button class="tool sound-toggle" type="button" aria-pressed="false" aria-label="Interface sound" title="Interface sound (off)"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M4 9h4l5-4v14l-5-4H4z"/><path class="wave" fill="none" stroke="currentColor" stroke-width="1.6" d="M16 9a4 4 0 0 1 0 6M18.5 6.5a7.5 7.5 0 0 1 0 11"/><path class="mute" stroke="currentColor" stroke-width="1.6" d="m16 9 6 6m0-6-6 6"/></svg></button>
+    </div>
   </div>
 </header>
-<main id="main" class="wrap">
-<section class="hero">
-  <picture>
-    <source srcset="/assets/profile.webp" type="image/webp">
-    <img class="avatar" src="/assets/profile.jpg" width="400" height="400" alt="Portrait of Akarsh Gopal at night, with a lit-up bridge over the water behind him">
-  </picture>
-  <div>
-    <p class="eyebrow">Engineer · Builder</p>
-    <h1>Hey there! I’m Akarsh.</h1>
-    <p class="lede">I love to learn and engineering’s my thing.</p>
+<div class="hud" aria-hidden="true">
+  <i class="hud-c tl"></i><i class="hud-c tr"></i><i class="hud-c bl"></i><i class="hud-c br"></i>
+  <div class="hud-bar">
+    <span class="hud-k">AUGSBURG</span><span class="hud-v" data-t="clock">--:--:--</span>
+    <span class="hud-k hide-s">T+</span><span class="hud-v hide-s" data-t="met">00:00:00</span>
+    <span class="hud-k">SCROLL</span><span class="hud-v" data-t="scroll">000%</span>
+    <span class="hud-k hide-s">FPS</span><span class="hud-v hide-s" data-t="fps">--</span>
+    <span class="hud-k hide-m">CURSOR</span><span class="hud-v hide-m" data-t="xy">X---- Y----</span>
+    <span class="hud-k hide-m">COORD</span><span class="hud-v hide-m">48.3705°N 10.8978°E</span>
+  </div>
+  <div class="hud-rail"><i data-t="rail"></i></div>
+</div>
+<main id="main">
+<section class="hero" id="top" aria-labelledby="hero-title">
+  <div class="hero-stage" aria-hidden="true">
+    <svg class="hero-fallback" viewBox="0 0 400 600" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1" vector-effect="non-scaling-stroke">
+<path d="M200 40c-22 30-30 70-30 110v300h60V150c0-40-8-80-30-110z"/><path d="M170 150h60M170 250h60M170 270h60M170 450h60" opacity=".6"/>
+<path d="M170 400l-34 60v20h34M230 400l34 60v20h-34"/><path d="M182 450l-8 40h52l-8-40" />
+<path d="M200 40v460" stroke-dasharray="4 6" opacity=".4"/><path d="M110 40h40M110 500h40M130 40v460" opacity=".5"/>
+<circle cx="200" cy="300" r="250" opacity=".12"/><circle cx="200" cy="300" r="180" opacity=".12" stroke-dasharray="2 6"/></g></svg>
+    <div id="hero-gl"></div>
+    <div class="hero-labels"></div>
+    <div class="reticle"></div>
+  </div>
+  <div class="hero-copy wrap">
+    <p class="kicker hero-kicker" data-scramble><span class="kn">●</span> Mission control · Augsburg, DE</p>
+    <h1 id="hero-title" class="hero-title"><span class="ht-1">Akarsh</span> <span class="ht-2">Gopal</span></h1>
+    <p class="hero-lede">I love to learn and engineering’s my thing.</p>
+    <p class="hero-sub">Software Engineer at <a href="https://rfa.space">Rocket Factory Augsburg</a>.</p>
+    <div class="hero-cta">
+      <a class="btn btn-primary" href="/projects.html" data-sfx>Open mission files<svg class="arrow" viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="square" d="M7 17 17 7M9 7h8v8"/></svg></a>
+      <a class="btn" href="#flight-log" data-sfx>Flight log</a>
+      <button class="btn btn-ghost cmdk-open" type="button" aria-haspopup="dialog" aria-controls="cmdk" data-sfx><kbd class="kbd"><span class="mod">Ctrl</span>K</kbd> Command</button>
+    </div>
+  </div>
+  <div class="hero-readout" aria-hidden="true">
+    <p><span>RENDER</span><b data-t="gl">STANDBY</b></p>
+    <p><span>CAM AZ</span><b data-t="az">000.0°</b></p>
+    <p><span>TRAJ</span><b data-t="traj">000%</b></p>
+  </div>
+  <a class="scroll-cue" href="#briefing" aria-label="Scroll to briefing"><span aria-hidden="true">Scroll</span><i aria-hidden="true"></i></a>
+</section>
+
+<section class="section wrap" data-n="01" id="briefing" aria-labelledby="h-brief">
+  <p class="kicker" data-scramble><span class="kn">01</span> Briefing</p>
+  <div class="brief">
+    <figure class="subject reveal">
+      <picture>
+        <source srcset="/assets/profile.webp" type="image/webp">
+        <img src="/assets/profile.jpg" width="400" height="400" alt="Portrait of Akarsh Gopal at night, with a lit-up bridge over the water behind him" loading="lazy" decoding="async">
+      </picture>
+      <figcaption aria-hidden="true"><span>SUBJECT</span><span>A. GOPAL</span></figcaption>
+    </figure>
+    <div class="brief-text">
+      <h2 id="h-brief" class="h-display reveal">Hey there! I’m Akarsh.</h2>
+      <p class="reveal">I’m currently building software to help aerospace engineers build a rocket factory at <a href="https://rfa.space">RFA</a>.</p>
+      <p class="reveal">Previously I worked as a data engineer at Reactive Robotics, helping patients recover faster. Before that I built launchable GPS trackers for safer police pursuits at my company Myst Works.</p>
+    </div>
   </div>
 </section>
-<section class="prose intro" aria-label="About">
-  <p>I’m currently building software to help aerospace engineers build a rocket factory at <a href="https://rfa.space">RFA</a>.</p>
-  <p>Previously I worked as a data engineer at Reactive Robotics, helping patients recover faster. Before that I built launchable GPS trackers for safer police pursuits at my company Myst Works.</p>
+
+<section class="section wrap" data-n="02" id="missions" aria-labelledby="h-missions">
+  <p class="kicker" data-scramble><span class="kn">02</span> Missions</p>
+  <div class="section-head"><h2 id="h-missions" class="h-display reveal">Lately</h2><a class="more" href="/projects.html" data-sfx>All mission files<svg class="arrow" viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="square" d="M7 17 17 7M9 7h8v8"/></svg></a></div>
+  <a class="featured-strip reveal tilt" href="/projects.html#bluehornet" data-sfx><span class="tilt-glare" aria-hidden="true"></span>
+    <span class="fs-art"><svg class="schem" viewBox="0 0 320 180" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="square" stroke-linejoin="miter" vector-effect="non-scaling-stroke"><path pathLength="1" class="d " d="M40 128h240"/><path pathLength="1" class="d dim" d="M40 140h240"/><path pathLength="1" class="d " d="M196 128v-38l10-18h56l14 22v34"/><path pathLength="1" class="d " d="M206 72h56M214 92h48"/><circle pathLength="1" class="d" cx="214" cy="128" r="11"/><circle pathLength="1" class="d" cx="262" cy="128" r="11"/><path pathLength="1" class="d acc" d="M30 118h34l8-8h18"/><path pathLength="1" class="d acc dash" d="M90 110 Q140 76 196 98"/><path pathLength="1" class="d acc" d="M190 95l8 3-6 6"/><text x="40" y="102" text-anchor="start" class="lbl">CHASE</text><text x="236" y="62" text-anchor="middle" class="lbl">TARGET</text><text x="140" y="72" text-anchor="middle" class="lbl">DART</text></g></svg></span>
+    <span class="fs-body"><span class="fs-k">Featured · video</span><span class="fs-name">BlueHornet</span><span class="fs-desc">Launchable GPS darts to reduce high speed pursuits.</span></span>
+    <span class="fs-play" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M8 5v14l11-7z"/></svg></span>
+  </a>
+  <ul class="mf-grid">
+    <li class="mf reveal" style="--d:0">
+      <a class="tilt" href="/projects.html#pdfdiff" data-sfx><span class="tilt-glare" aria-hidden="true"></span>
+        <span class="mf-top"><span>FILE 01</span><span class="st st-live">Live</span></span>
+        <span class="mf-art"><svg class="schem" viewBox="0 0 320 180" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="square" stroke-linejoin="miter" vector-effect="non-scaling-stroke"><path pathLength="1" class="d " d="M60 26h92v128H60z"/><path pathLength="1" class="d " d="M168 26h92v128h-92z"/><path pathLength="1" class="d " d="M74 46h64M74 58h52M74 70h60M74 82h40M74 94h58M74 106h48M74 118h62"/><path pathLength="1" class="d " d="M182 46h64M182 58h52M182 70h60M182 94h58M182 106h48M182 118h62"/><path pathLength="1" class="d acc" d="M178 78h72v12h-72z"/><path pathLength="1" class="d acc dash" d="M160 16v148"/><text x="106" y="170" text-anchor="middle" class="lbl">REV A</text><text x="214" y="170" text-anchor="middle" class="lbl">REV B</text></g></svg></span>
+        <span class="mf-name">PDF Diff</span>
+        <span class="mf-desc">Private PDF comparisons on your browser.</span>
+      </a>
+    </li>
+    <li class="mf reveal" style="--d:1">
+      <a class="tilt" href="/projects.html#treechat" data-sfx><span class="tilt-glare" aria-hidden="true"></span>
+        <span class="mf-top"><span>FILE 02</span><span class="st st-live">Live</span></span>
+        <span class="mf-art"><svg class="schem" viewBox="0 0 320 180" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="square" stroke-linejoin="miter" vector-effect="non-scaling-stroke"><path pathLength="1" class="d " d="M40 24h120v20H40zM40 56h120v32H40zM40 100h120v20H40zM40 132h120v24H40z"/><path pathLength="1" class="d acc" d="M160 72h28v-36h12"/><path pathLength="1" class="d acc" d="M200 26h80v52h-80z"/><path pathLength="1" class="d acc" d="M210 40h56M210 52h48M210 64h40"/><path pathLength="1" class="d acc dash" d="M240 78v30h-80"/><text x="240" y="96" text-anchor="middle" class="lbl">TAKEAWAY</text><text x="100" y="172" text-anchor="middle" class="lbl">MAIN</text><text x="240" y="18" text-anchor="middle" class="lbl">BRANCH</text></g></svg></span>
+        <span class="mf-name">TreeChat</span>
+        <span class="mf-desc">Branching AI chat: select any passage to explore it in a side branch, then bring the takeaway back.</span>
+      </a>
+    </li>
+    <li class="mf reveal" style="--d:2">
+      <a class="tilt" href="/projects.html#ultimat-sim" data-sfx><span class="tilt-glare" aria-hidden="true"></span>
+        <span class="mf-top"><span>FILE 03</span><span class="st st-live">Live</span></span>
+        <span class="mf-art"><svg class="schem" viewBox="0 0 320 180" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="square" stroke-linejoin="miter" vector-effect="non-scaling-stroke"><path pathLength="1" class="d " d="M24 70h56v40H24zM132 70h56v40h-56zM240 40h56v40h-56zM240 100h56v40h-56z"/><path pathLength="1" class="d acc" d="M80 90h52M188 84l52-24M188 96l52 24"/><path pathLength="1" class="d acc" d="M126 86l6 4-6 4M234 57l6 3-5 5M234 117l6 3-6 3"/><path pathLength="1" class="d dash" d="M52 110v34h188v-4"/><text x="52" y="64" text-anchor="middle" class="lbl">DESAL</text><text x="160" y="64" text-anchor="middle" class="lbl">ELECTROLYSIS</text><text x="268" y="34" text-anchor="middle" class="lbl">SABATIER</text><text x="268" y="154" text-anchor="middle" class="lbl">STORAGE</text></g></svg></span>
+        <span class="mf-name">Molecular Foundry</span>
+        <span class="mf-desc">Ultimate Material Abundance Simulator.</span>
+      </a>
+    </li>
+    <li class="mf reveal" style="--d:3">
+      <a class="tilt" href="/projects.html#1brc" data-sfx><span class="tilt-glare" aria-hidden="true"></span>
+        <span class="mf-top"><span>FILE 04</span><span class="st st-source">Source</span></span>
+        <span class="mf-art"><svg class="schem" viewBox="0 0 320 180" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="square" stroke-linejoin="miter" vector-effect="non-scaling-stroke"><path pathLength="1" class="d " d="M20 28h90"/><path pathLength="1" class="d dim" d="M20 42h127"/><path pathLength="1" class="d " d="M20 56h104"/><path pathLength="1" class="d dim" d="M20 70h141"/><path pathLength="1" class="d " d="M20 84h118"/><path pathLength="1" class="d dim" d="M20 98h95"/><path pathLength="1" class="d " d="M20 112h132"/><path pathLength="1" class="d dim" d="M20 126h109"/><path pathLength="1" class="d " d="M20 140h146"/><path pathLength="1" class="d dim" d="M20 154h123"/><path pathLength="1" class="d acc" d="M170 28l50 52v20l-50 52"/><path pathLength="1" class="d acc" d="M220 80h20M220 100h20"/><path pathLength="1" class="d acc" d="M244 66h56v48h-56z"/><text x="272" y="86" text-anchor="middle" class="lbl">MIN/MEAN</text><text x="272" y="100" text-anchor="middle" class="lbl">/MAX</text><text x="20" y="174" text-anchor="start" class="lbl">1,000,000,000 ROWS</text></g></svg></span>
+        <span class="mf-name">1BRC</span>
+        <span class="mf-desc">1 Billion Row Challenge in C and Rust.</span>
+      </a>
+    </li>
+  </ul>
 </section>
-<section class="section">
-  <div class="section-head"><h2>Lately</h2><a class="more" href="/projects.html">All projects<svg viewBox="0 0 24 24" aria-hidden="true" class="arrow"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M7 17 17 7M8 7h9v9"/></svg></a></div>
-  <ul class="mini-list"><li><a href="/projects.html#pdfdiff"><span class="mini-name">PDF Diff</span><span class="mini-desc">Private PDF comparisons on your browser.</span></a></li><li><a href="/projects.html#treechat"><span class="mini-name">TreeChat</span><span class="mini-desc">Branching AI chat: select any passage to explore it in a side branch, then bring the takeaway back.</span></a></li><li><a href="/projects.html#ultimat-sim"><span class="mini-name">Molecular Foundry</span><span class="mini-desc">Ultimate Material Abundance Simulator.</span></a></li><li><a href="/projects.html#1brc"><span class="mini-name">1BRC</span><span class="mini-desc">1 Billion Row Challenge in C and Rust.</span></a></li></ul>
+
+<section class="section wrap" data-n="03" id="flight-log" aria-labelledby="h-log">
+  <p class="kicker" data-scramble><span class="kn">03</span> Flight log</p>
+  <h2 id="h-log" class="h-display reveal">Experience</h2>
+  <ol class="timeline" data-progress>
+    <li class="tl-rail" aria-hidden="true"><i></i></li>
+    <li class="tl-item reveal">
+      <span class="tl-node" aria-hidden="true"></span>
+      <span class="tl-when">Oct 2023 – present</span>
+      <div class="tl-body"><p class="tl-role">Software Engineer <span class="dim">·</span> <a href="https://rfa.space">Rocket Factory Augsburg</a></p><p class="tl-what">Internal data-analysis tooling and ETL pipelines for aerospace test data.</p></div>
+    </li>
+    <li class="tl-item reveal">
+      <span class="tl-node" aria-hidden="true"></span>
+      <span class="tl-when">Jun 2022 – present</span>
+      <div class="tl-body"><p class="tl-role">Co-founder (part-time) <span class="dim">·</span> Aswell</p><p class="tl-what">Software architecture and engineering for a two-sided marketplace app.</p></div>
+    </li>
+    <li class="tl-item reveal">
+      <span class="tl-node" aria-hidden="true"></span>
+      <span class="tl-when">Jun 2022 – Sep 2023</span>
+      <div class="tl-body"><p class="tl-role">Data Engineer <span class="dim">·</span> Reactive Robotics</p><p class="tl-what">Data warehouse pipelines and visualisation.</p></div>
+    </li>
+    <li class="tl-item reveal">
+      <span class="tl-node" aria-hidden="true"></span>
+      <span class="tl-when">Nov 2020 – Jun 2022</span>
+      <div class="tl-body"><p class="tl-role">Co-founder <span class="dim">·</span> <a href="/projects.html#bluehornet">Myst Works B.V.</a></p><p class="tl-what">Systems engineering, software and finance for BlueHornet.</p></div>
+    </li>
+    <li class="tl-item reveal">
+      <span class="tl-node" aria-hidden="true"></span>
+      <span class="tl-when">Sep 2020 – Jun 2021</span>
+      <div class="tl-body"><p class="tl-role">Research Engineer <span class="dim">·</span> Saxion LED</p><p class="tl-what">Trajectory-tracking control for a tilting-rotor hexacopter in PX4.</p></div>
+    </li>
+    <li class="tl-item reveal">
+      <span class="tl-node" aria-hidden="true"></span>
+      <span class="tl-when">Jul 2018 – Jan 2019</span>
+      <div class="tl-body"><p class="tl-role">Intern <span class="dim">·</span> WePublish</p><p class="tl-what">Deep-learning image recognition, served as an API.</p></div>
+    </li>
+    <li class="tl-item reveal">
+      <span class="tl-node" aria-hidden="true"></span>
+      <span class="tl-when">2017 – 2020</span>
+      <div class="tl-body"><p class="tl-role">B.Sc. ATLAS, magna cum laude <span class="dim">·</span> University of Twente</p><p class="tl-what">Technology, liberal arts and sciences, focused on robotics, machine learning and control.</p></div>
+    </li>
+  </ol>
 </section>
-<section class="section">
-  <div class="section-head"><h2>Writing</h2><a class="more" href="/essays.html">All writing<svg viewBox="0 0 24 24" aria-hidden="true" class="arrow"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M7 17 17 7M8 7h9v9"/></svg></a></div>
-  <ul class="mini-list"><li><a href="/blog/electricity/"><span class="mini-name">How Electricity Works</span><span class="mini-desc">An interactive explainer series, from electrons and spinning magnets to merit orders, the grid and synthetic fuels.</span></a></li></ul>
+
+<section class="section wrap" data-n="04" id="transmissions" aria-labelledby="h-tx">
+  <p class="kicker" data-scramble><span class="kn">04</span> Transmissions</p>
+  <div class="section-head"><h2 id="h-tx" class="h-display reveal">Writing</h2><a class="more" href="/essays.html" data-sfx>All writing<svg class="arrow" viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="square" d="M7 17 17 7M9 7h8v8"/></svg></a></div>
+  <article class="tx reveal">
+    <div class="tx-head"><span class="fs-k">Interactive series · 6 parts</span><h3><a href="/blog/electricity/">How Electricity Works</a></h3>
+    <p>An interactive explainer series, from electrons and spinning magnets to merit orders, the grid and synthetic fuels.</p></div>
+    <ol class="channels"><li><a href="/blog/electricity/" data-sfx><span class="ch">Essay</span><span>How the World’s Electricity Works</span></a></li><li><a href="/blog/electricity/solar-pv.html" data-sfx><span class="ch">Part 1</span><span>Solar PV: From Photon to Grid</span></a></li><li><a href="/blog/electricity/utility-renewables.html" data-sfx><span class="ch">Part 2</span><span>Utility-Scale Renewables: Building and Running the Fleet</span></a></li><li><a href="/blog/electricity/transformers.html" data-sfx><span class="ch">Part 3</span><span>Transformers: The Quiet Bottleneck</span></a></li><li><a href="/blog/electricity/transmission.html" data-sfx><span class="ch">Part 4</span><span>Transmission: The Network That Decides What Gets Built</span></a></li><li><a href="/blog/electricity/synthetic-fuels.html" data-sfx><span class="ch">Part 5</span><span>Synthetic Fuels and the Price of a Kilowatt-Hour</span></a></li></ol>
+  </article>
 </section>
-<section class="section" aria-labelledby="h-exp">
-  <h2 id="h-exp">Experience</h2>
-  <ol class="timeline"><li><span class="when">Oct 2023 – present</span><div><p class="role">Software Engineer · <a href="https://rfa.space">Rocket Factory Augsburg</a></p><p class="what">Internal data-analysis tooling and ETL pipelines for aerospace test data.</p></div></li><li><span class="when">Jun 2022 – present</span><div><p class="role">Co-founder (part-time) · Aswell</p><p class="what">Software architecture and engineering for a two-sided marketplace app.</p></div></li><li><span class="when">Jun 2022 – Sep 2023</span><div><p class="role">Data Engineer · Reactive Robotics</p><p class="what">Data warehouse pipelines and visualisation.</p></div></li><li><span class="when">Nov 2020 – Jun 2022</span><div><p class="role">Co-founder · <a href="/projects.html#bluehornet">Myst Works B.V.</a></p><p class="what">Systems engineering, software and finance for BlueHornet.</p></div></li><li><span class="when">Sep 2020 – Jun 2021</span><div><p class="role">Research Engineer · Saxion LED</p><p class="what">Trajectory-tracking control for a tilting-rotor hexacopter in PX4.</p></div></li><li><span class="when">Jul 2018 – Jan 2019</span><div><p class="role">Intern · WePublish</p><p class="what">Deep-learning image recognition, served as an API.</p></div></li><li><span class="when">2017 – 2020</span><div><p class="role">B.Sc. ATLAS, magna cum laude · University of Twente</p><p class="what">Technology, liberal arts and sciences, focused on robotics, machine learning and control.</p></div></li></ol>
+
+<section class="section wrap" data-n="05" id="comms" aria-labelledby="h-comms">
+  <p class="kicker" data-scramble><span class="kn">05</span> Comms</p>
+  <h2 id="h-comms" class="h-display reveal">Find me on</h2>
+  <ul class="comms"><li class="reveal" style="--d:0"><a href="mailto:akarsh98@gmail.com" data-sfx><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="square" d="M3 5h18v14H3zM3 6l9 7 9-7"/></svg><span><span class="c-k">Email</span><span class="c-v">akarsh98@gmail.com</span></span><svg class="arrow" viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="square" d="M7 17 17 7M9 7h8v8"/></svg></a></li><li class="reveal" style="--d:1"><a href="https://github.com/akarshgopal" rel="me" data-sfx><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 .5a11.5 11.5 0 0 0-3.64 22.41c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.53-1.33-1.28-1.69-1.28-1.69-1.05-.71.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.56-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.77 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.84 1.19 3.1 0 4.42-2.69 5.39-5.25 5.68.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .5Z"/></svg><span><span class="c-k">GitHub</span><span class="c-v">github.com/akarshgopal</span></span><svg class="arrow" viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="square" d="M7 17 17 7M9 7h8v8"/></svg></a></li><li class="reveal" style="--d:2"><a href="https://www.linkedin.com/in/akarsh-gopal-b9a8b917b/" rel="me" data-sfx><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M20.45 20.45h-3.55v-5.57c0-1.33-.03-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28ZM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12ZM7.12 20.45H3.56V9h3.56v11.45ZM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0Z"/></svg><span><span class="c-k">LinkedIn</span><span class="c-v">linkedin.com/in/akarsh-gopal</span></span><svg class="arrow" viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="square" d="M7 17 17 7M9 7h8v8"/></svg></a></li><li class="reveal" style="--d:3"><a href="https://x.com/gopal_akarsh" rel="me" data-sfx><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.9 1.15h3.68l-8.04 9.19L24 22.85h-7.4l-5.8-7.58-6.64 7.58H.48l8.6-9.83L0 1.15h7.59l5.24 6.93 6.07-6.93Zm-1.29 19.5h2.04L6.48 3.24H4.3l13.31 17.41Z"/></svg><span><span class="c-k">X / Twitter</span><span class="c-v">@gopal_akarsh</span></span><svg class="arrow" viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="square" d="M7 17 17 7M9 7h8v8"/></svg></a></li></ul>
 </section>
-<section class="section">
-  <h2>Find me on</h2>
-  <ul class="contact"><li><a href="mailto:akarsh98@gmail.com"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M3 5h18v14H3zM3 6l9 7 9-7"/></svg><span><span class="label">Email</span>akarsh98@gmail.com</span></a></li><li><a href="https://github.com/akarshgopal" rel="me"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 .5a11.5 11.5 0 0 0-3.64 22.41c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.53-1.33-1.28-1.69-1.28-1.69-1.05-.71.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.56-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.77 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.84 1.19 3.1 0 4.42-2.69 5.39-5.25 5.68.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .5Z"/></svg><span><span class="label">GitHub</span>akarshgopal</span></a></li><li><a href="https://www.linkedin.com/in/akarsh-gopal-b9a8b917b/" rel="me"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M20.45 20.45h-3.55v-5.57c0-1.33-.03-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28ZM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12ZM7.12 20.45H3.56V9h3.56v11.45ZM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0Z"/></svg><span><span class="label">LinkedIn</span>Akarsh Gopal</span></a></li><li><a href="https://x.com/gopal_akarsh" rel="me"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.9 1.15h3.68l-8.04 9.19L24 22.85h-7.4l-5.8-7.58-6.64 7.58H.48l8.6-9.83L0 1.15h7.59l5.24 6.93 6.07-6.93Zm-1.29 19.5h2.04L6.48 3.24H4.3l13.31 17.41Z"/></svg><span><span class="label">X / Twitter</span>@gopal_akarsh</span></a></li></ul>
-</section>
+<dl class="titleblock wrap" aria-label="Drawing title block">
+  <div class="tb-main"><dt>Title</dt><dd>Mission control</dd></div>
+  <div><dt>Drawn</dt><dd>A. Gopal</dd></div>
+  <div><dt>Location</dt><dd>Augsburg, DE</dd></div>
+  <div><dt>Sheet</dt><dd>1 / 4</dd></div>
+  <div><dt>Rev</dt><dd>2026.10</dd></div>
+</dl>
 </main>
 <footer class="site-footer">
   <div class="wrap footer-in">
-    <p>© 2026 Akarsh Gopal</p>
-    <ul class="social" aria-label="Elsewhere"><li><a href="mailto:akarsh98@gmail.com" aria-label="Email"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M3 5h18v14H3zM3 6l9 7 9-7"/></svg></a></li><li><a href="https://github.com/akarshgopal" aria-label="GitHub" rel="me"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 .5a11.5 11.5 0 0 0-3.64 22.41c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.53-1.33-1.28-1.69-1.28-1.69-1.05-.71.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.56-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.77 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.84 1.19 3.1 0 4.42-2.69 5.39-5.25 5.68.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .5Z"/></svg></a></li><li><a href="https://www.linkedin.com/in/akarsh-gopal-b9a8b917b/" aria-label="LinkedIn" rel="me"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M20.45 20.45h-3.55v-5.57c0-1.33-.03-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28ZM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12ZM7.12 20.45H3.56V9h3.56v11.45ZM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0Z"/></svg></a></li><li><a href="https://x.com/gopal_akarsh" aria-label="X / Twitter" rel="me"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.9 1.15h3.68l-8.04 9.19L24 22.85h-7.4l-5.8-7.58-6.64 7.58H.48l8.6-9.83L0 1.15h7.59l5.24 6.93 6.07-6.93Zm-1.29 19.5h2.04L6.48 3.24H4.3l13.31 17.41Z"/></svg></a></li></ul>
+    <p>© 2026 Akarsh Gopal <span class="dim footer-hint">· Built by hand, no frameworks · Press <kbd class="kbd"><span class="mod">Ctrl</span>K</kbd> to navigate</span></p>
+    <ul class="social" aria-label="Elsewhere"><li><a href="mailto:akarsh98@gmail.com" aria-label="Email" data-sfx><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="square" d="M3 5h18v14H3zM3 6l9 7 9-7"/></svg></a></li><li><a href="https://github.com/akarshgopal" aria-label="GitHub" rel="me" data-sfx><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 .5a11.5 11.5 0 0 0-3.64 22.41c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.53-1.33-1.28-1.69-1.28-1.69-1.05-.71.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.56-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.77 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.84 1.19 3.1 0 4.42-2.69 5.39-5.25 5.68.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .5Z"/></svg></a></li><li><a href="https://www.linkedin.com/in/akarsh-gopal-b9a8b917b/" aria-label="LinkedIn" rel="me" data-sfx><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M20.45 20.45h-3.55v-5.57c0-1.33-.03-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28ZM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12ZM7.12 20.45H3.56V9h3.56v11.45ZM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0Z"/></svg></a></li><li><a href="https://x.com/gopal_akarsh" aria-label="X / Twitter" rel="me" data-sfx><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.9 1.15h3.68l-8.04 9.19L24 22.85h-7.4l-5.8-7.58-6.64 7.58H.48l8.6-9.83L0 1.15h7.59l5.24 6.93 6.07-6.93Zm-1.29 19.5h2.04L6.48 3.24H4.3l13.31 17.41Z"/></svg></a></li></ul>
   </div>
 </footer>
+<dialog id="cmdk" class="cmdk" aria-label="Command palette">
+  <div class="cmdk-in">
+    <div class="cmdk-head">
+      <span class="cmdk-prompt" aria-hidden="true">&gt;</span>
+      <input id="cmdk-input" type="text" role="combobox" aria-expanded="true" aria-controls="cmdk-list" aria-autocomplete="list" autocomplete="off" spellcheck="false" placeholder="Jump to a page, project or link…">
+      <kbd class="kbd" aria-hidden="true">Esc</kbd>
+    </div>
+    <ul id="cmdk-list" role="listbox" aria-label="Results"></ul>
+    <p class="cmdk-foot" aria-hidden="true"><span><kbd class="kbd">↑</kbd><kbd class="kbd">↓</kbd> move</span><span><kbd class="kbd">Enter</kbd> open</span><span><kbd class="kbd">Esc</kbd> close</span></p>
+  </div>
+</dialog>
 </body>
 </html>

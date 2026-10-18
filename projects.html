@@ -2,155 +2,236 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Projects · Akarsh Gopal</title>
-<meta name="description" content="Projects by Akarsh Gopal: BlueHornet, PDF Diff, TreeChat, Molecular Foundry, 1BRC, and earlier hardware and drone work.">
+<meta name="description" content="Mission files: BlueHornet, PDF Diff, TreeChat, Molecular Foundry, 1BRC, and earlier drone, robotics and electric-vehicle work by Akarsh Gopal.">
 <meta name="author" content="Akarsh Gopal">
 <link rel="canonical" href="https://akarshgopal.github.io/projects.html">
-<meta name="color-scheme" content="light dark">
-<meta name="theme-color" content="#faf8f5" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#111214" media="(prefers-color-scheme: dark)">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#06090e">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Akarsh Gopal">
 <meta property="og:title" content="Projects · Akarsh Gopal">
-<meta property="og:description" content="Projects by Akarsh Gopal: BlueHornet, PDF Diff, TreeChat, Molecular Foundry, 1BRC, and earlier hardware and drone work.">
+<meta property="og:description" content="Mission files: BlueHornet, PDF Diff, TreeChat, Molecular Foundry, 1BRC, and earlier drone, robotics and electric-vehicle work by Akarsh Gopal.">
 <meta property="og:url" content="https://akarshgopal.github.io/projects.html">
 <meta property="og:image" content="https://akarshgopal.github.io/assets/og.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="Akarsh Gopal — akarshgopal.github.io">
+<meta property="og:image:alt" content="Akarsh Gopal, mission control">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:creator" content="@gopal_akarsh">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preload" href="/assets/fonts/space-grotesk.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/jetbrains-mono.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/assets/styles.css">
-<script>(function(){try{var t=localStorage.getItem('theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t;}catch(e){}})();</script>
-<script src="/assets/theme.js" defer></script>
+<script>(function(){var d=document.documentElement;d.classList.add('js');try{var m=localStorage.getItem('motion');if(m==='reduce')d.dataset.motion='reduce';var rm=m==='reduce'||matchMedia('(prefers-reduced-motion: reduce)').matches;if(d.dataset.boot==='1'&&!rm&&!sessionStorage.getItem('booted')){d.classList.add('booting');sessionStorage.setItem('booted','1');}}catch(e){}})();</script>
+<script src="/assets/js/site.js" defer></script>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
+<div id="boot" aria-hidden="true">
+  <div class="boot-in">
+    <p class="boot-l" style="--i:0">AG/OS 26.10 <span class="dim">· flight software</span></p>
+    <p class="boot-l" style="--i:1">&gt; link · augsburg 48.37°N 10.90°E <span class="ok">ok</span></p>
+    <p class="boot-l" style="--i:2">&gt; mission files · 9 <span class="ok">ok</span></p>
+    <p class="boot-l" style="--i:3">&gt; telemetry · local clock <span class="ok">ok</span></p>
+    <p class="boot-l go" style="--i:4">all systems nominal</p>
+    <div class="boot-bar"><i></i></div>
+  </div>
+</div>
 <header class="site-header">
-  <div class="wrap header-in">
-    <a class="wordmark" href="/" aria-label="Akarsh Gopal, home"><span class="mark" aria-hidden="true">ag</span><span class="wordmark-name">Akarsh Gopal</span></a>
+  <div class="header-in">
+    <a class="wordmark" href="/" data-sfx><span class="mark" aria-hidden="true">AG</span><span class="wordmark-name">Akarsh Gopal</span></a>
     <nav aria-label="Main">
       <ul class="nav">
-      <li><a href="/">Home</a></li>
-      <li><a href="/projects.html" aria-current="page">Projects</a></li>
-      <li><a href="/essays.html">Writing</a></li>
-      <li><a href="/bookshelf.html">Bookshelf</a></li>
+      <li><a href="/" data-sfx><span class="idx" aria-hidden="true">00</span>Home</a></li>
+      <li><a href="/projects.html" data-sfx aria-current="page"><span class="idx" aria-hidden="true">01</span>Projects</a></li>
+      <li><a href="/essays.html" data-sfx><span class="idx" aria-hidden="true">02</span>Writing</a></li>
+      <li><a href="/bookshelf.html" data-sfx><span class="idx" aria-hidden="true">03</span>Bookshelf</a></li>
       </ul>
     </nav>
-    <button class="theme-toggle" type="button" aria-label="Switch colour theme" title="Switch colour theme">
-      <svg class="i-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.5" fill="none" stroke="currentColor" stroke-width="2"/><path stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M12 1.5v2.5M12 20v2.5M1.5 12H4M20 12h2.5M4.6 4.6l1.8 1.8M17.6 17.6l1.8 1.8M4.6 19.4l1.8-1.8M17.6 6.4l1.8-1.8"/></svg>
-      <svg class="i-moon" viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" d="M20.5 14.5A8.5 8.5 0 1 1 9.5 3.5a7 7 0 0 0 11 11Z"/></svg>
-    </button>
+    <div class="tools">
+      <button class="tool cmdk-open" type="button" aria-label="Search and navigate (Ctrl+K)" aria-haspopup="dialog" aria-controls="cmdk" data-sfx><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path stroke="currentColor" stroke-width="1.8" d="m15.5 15.5 5 5"/></svg><span class="tool-label">Search</span><kbd class="kbd" aria-hidden="true"><span class="mod">Ctrl</span>K</kbd></button>
+      <button class="tool sound-toggle" type="button" aria-pressed="false" aria-label="Interface sound" title="Interface sound (off)"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M4 9h4l5-4v14l-5-4H4z"/><path class="wave" fill="none" stroke="currentColor" stroke-width="1.6" d="M16 9a4 4 0 0 1 0 6M18.5 6.5a7.5 7.5 0 0 1 0 11"/><path class="mute" stroke="currentColor" stroke-width="1.6" d="m16 9 6 6m0-6-6 6"/></svg></button>
+    </div>
   </div>
 </header>
-<main id="main" class="wrap">
-<header class="page-head">
-  <h1>Projects</h1>
-  <p class="lede">Things I’ve built, from browser tools to drones and an electric motorcycle.</p>
+<div class="hud" aria-hidden="true">
+  <i class="hud-c tl"></i><i class="hud-c tr"></i><i class="hud-c bl"></i><i class="hud-c br"></i>
+  <div class="hud-bar">
+    <span class="hud-k">AUGSBURG</span><span class="hud-v" data-t="clock">--:--:--</span>
+    <span class="hud-k hide-s">T+</span><span class="hud-v hide-s" data-t="met">00:00:00</span>
+    <span class="hud-k">SCROLL</span><span class="hud-v" data-t="scroll">000%</span>
+    <span class="hud-k hide-s">FPS</span><span class="hud-v hide-s" data-t="fps">--</span>
+    <span class="hud-k hide-m">CURSOR</span><span class="hud-v hide-m" data-t="xy">X---- Y----</span>
+    <span class="hud-k hide-m">COORD</span><span class="hud-v hide-m">48.3705°N 10.8978°E</span>
+  </div>
+  <div class="hud-rail"><i data-t="rail"></i></div>
+</div>
+<main id="main">
+<header class="page-head wrap">
+  <p class="kicker" data-scramble><span class="kn">//</span> Mission files</p>
+  <h1 class="h-page reveal">Projects</h1>
+  <p class="lede reveal">Things I’ve built, from browser tools to drones and an electric motorcycle.</p>
+  <nav class="jump reveal" aria-label="On this page"><a href="#bluehornet">00 BlueHornet</a><a href="#active">01–04 Active</a><a href="#archived">Archived</a><a href="#log">Repo log</a></nav>
 </header>
-<section class="section" aria-labelledby="h-featured">
-  <h2 id="h-featured" class="kicker">Featured</h2>
-  <article class="card feature" id="bluehornet">
-  <!-- Video card: BlueHornet demo (~56 s, 720p H.264, faststart). -->
-  <div class="video-frame">
-    <video controls preload="none" playsinline poster="/assets/video/bluehornet-poster.jpg" width="1280" height="720" aria-describedby="bluehornet-desc">
-      <source src="/assets/video/bluehornet-demo.mp4" type="video/mp4">
-      <a href="/assets/video/bluehornet-demo.mp4">Download the BlueHornet demo video (MP4)</a>
-    </video>
+<section class="section wrap" aria-label="Featured">
+  <article class="feature reveal" id="bluehornet">
+  <div class="feature-video">
+    <div class="vf">
+      <i class="vf-c tl" aria-hidden="true"></i><i class="vf-c tr" aria-hidden="true"></i><i class="vf-c bl" aria-hidden="true"></i><i class="vf-c br" aria-hidden="true"></i>
+      <video controls preload="none" playsinline poster="/assets/video/bluehornet-poster.jpg" width="1280" height="720" aria-describedby="bluehornet-desc">
+        <source src="/assets/video/bluehornet-demo.mp4" type="video/mp4">
+        <a href="/assets/video/bluehornet-demo.mp4">Download the BlueHornet demo video (MP4)</a>
+      </video>
+    </div>
+    <p class="vf-cap" aria-hidden="true"><span>FILE 00 · BLUEHORNET</span><span>DEMO · 00:56</span></p>
   </div>
   <div class="feature-body">
     <div class="feature-intro">
-      <div class="card-top"><h3>BlueHornet</h3><span class="tag">Myst Works B.V. · Enschede, NL</span></div>
+      <p class="file-top"><span>FEATURED</span><span class="st">Myst Works B.V. · Enschede, NL</span></p>
+      <h2>BlueHornet</h2>
       <p class="blurb">Launchable GPS darts to reduce high speed pursuits.</p>
     </div>
-    <p class="detail" id="bluehornet-desc">In the demo, a chase car fires a GPS tracking dart from its grille at a suspect vehicle (100 km/h, 10 m). The dart attaches and starts flashing, and the police disengage and track the vehicle from a distance.</p>
-    <p class="detail">I handled systems engineering, software and finance: communication networks, state estimation and control, and computer-vision inference. The MVP was completed and validated.</p>
-    <p class="meta">Co-founder, Myst Works B.V. · Nov 2020 – Jun 2022</p>
+    <div class="feature-text">
+      <p class="detail" id="bluehornet-desc">In the demo, a chase car fires a GPS tracking dart from its grille at a suspect vehicle (100 km/h, 10 m). The dart attaches and starts flashing, and the police disengage and track the vehicle from a distance.</p>
+      <p class="detail">I handled systems engineering, software and finance: communication networks, state estimation and control, and computer-vision inference. The MVP was completed and validated.</p>
+      <p class="meta">Co-founder, Myst Works B.V. · Nov 2020 – Jun 2022</p>
+    </div>
   </div>
 </article>
 </section>
-<section class="section" aria-labelledby="h-current">
-  <h2 id="h-current" class="kicker">Current</h2>
-  <div class="grid">
-<article class="card project" id="pdfdiff">
-  <div class="card-top"><h3>PDF Diff</h3><span class="tag">TypeScript · React</span></div>
-  <p class="blurb">Private PDF comparisons on your browser.</p>
-  <p class="detail">Compares two PDF revisions locally in the browser: a pixel overlay, side-by-side pages, a slider that reveals one revision under the other, and highlighted text changes. Also ships a headless CLI (<code>@pdfdiff/cli</code>) that emits overlays and JSON reports.</p>
-  <div class="actions"><a class="btn btn-primary" href="https://pdfdiff.app">pdfdiff.app<svg viewBox="0 0 24 24" aria-hidden="true" class="arrow"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M7 17 17 7M8 7h9v9"/></svg></a><a class="btn" href="https://github.com/akarshgopal/pdfdiff"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 .5a11.5 11.5 0 0 0-3.64 22.41c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.53-1.33-1.28-1.69-1.28-1.69-1.05-.71.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.56-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.77 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.84 1.19 3.1 0 4.42-2.69 5.39-5.25 5.68.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .5Z"/></svg><span>Source</span></a></div>
+<section class="section wrap" data-n="01" id="active" aria-labelledby="h-active">
+  <p class="kicker" data-scramble><span class="kn">01</span> Active missions</p>
+  <h2 id="h-active" class="h-display reveal">Current</h2>
+  <div class="files">
+<article class="file reveal" id="pdfdiff" style="--d:0">
+  <div class="file-art"><svg class="schem" viewBox="0 0 320 180" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="square" stroke-linejoin="miter" vector-effect="non-scaling-stroke"><path pathLength="1" class="d " d="M60 26h92v128H60z"/><path pathLength="1" class="d " d="M168 26h92v128h-92z"/><path pathLength="1" class="d " d="M74 46h64M74 58h52M74 70h60M74 82h40M74 94h58M74 106h48M74 118h62"/><path pathLength="1" class="d " d="M182 46h64M182 58h52M182 70h60M182 94h58M182 106h48M182 118h62"/><path pathLength="1" class="d acc" d="M178 78h72v12h-72z"/><path pathLength="1" class="d acc dash" d="M160 16v148"/><text x="106" y="170" text-anchor="middle" class="lbl">REV A</text><text x="214" y="170" text-anchor="middle" class="lbl">REV B</text></g></svg>
+    <dl class="spec" aria-hidden="true"><div><dt>Stack</dt><dd>TypeScript · React</dd></div><div><dt>Status</dt><dd>Live</dd></div><div><dt>Repo</dt><dd>akarshgopal/pdfdiff</dd></div></dl>
+  </div>
+  <div class="file-body">
+    <p class="file-top"><span>FILE 01</span><span class="st st-live">Live</span></p>
+    <h3>PDF Diff</h3>
+    <p class="blurb">Private PDF comparisons on your browser.</p>
+    <p class="detail">Compares two PDF revisions locally in the browser: a pixel overlay, side-by-side pages, a slider that reveals one revision under the other, and highlighted text changes. Also ships a headless CLI (<code>@pdfdiff/cli</code>) that emits overlays and JSON reports.</p>
+    <div class="actions"><a class="btn btn-primary" href="https://pdfdiff.app" data-sfx>pdfdiff.app<svg class="arrow" viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="square" d="M7 17 17 7M9 7h8v8"/></svg></a><a class="btn" href="https://github.com/akarshgopal/pdfdiff" data-sfx><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 .5a11.5 11.5 0 0 0-3.64 22.41c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.53-1.33-1.28-1.69-1.28-1.69-1.05-.71.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.56-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.77 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.84 1.19 3.1 0 4.42-2.69 5.39-5.25 5.68.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .5Z"/></svg><span>Source</span></a></div>
+  </div>
 </article>
-<article class="card project" id="treechat">
-  <div class="card-top"><h3>TreeChat</h3><span class="tag">TypeScript · React</span></div>
-  <p class="blurb">Branching AI chat: select any passage to explore it in a side branch, then bring the takeaway back.</p>
-  <p class="detail">Runs in your browser with your own key. There is no TreeChat server and no account; add an OpenRouter key for real answers, or try it straight away with demo replies.</p>
-  <div class="actions"><a class="btn btn-primary" href="https://treechat.cc">treechat.cc<svg viewBox="0 0 24 24" aria-hidden="true" class="arrow"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M7 17 17 7M8 7h9v9"/></svg></a><a class="btn" href="https://github.com/akarshgopal/treechat"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 .5a11.5 11.5 0 0 0-3.64 22.41c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.53-1.33-1.28-1.69-1.28-1.69-1.05-.71.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.56-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.77 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.84 1.19 3.1 0 4.42-2.69 5.39-5.25 5.68.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .5Z"/></svg><span>Source</span></a></div>
+<article class="file reveal" id="treechat" style="--d:1">
+  <div class="file-art"><svg class="schem" viewBox="0 0 320 180" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="square" stroke-linejoin="miter" vector-effect="non-scaling-stroke"><path pathLength="1" class="d " d="M40 24h120v20H40zM40 56h120v32H40zM40 100h120v20H40zM40 132h120v24H40z"/><path pathLength="1" class="d acc" d="M160 72h28v-36h12"/><path pathLength="1" class="d acc" d="M200 26h80v52h-80z"/><path pathLength="1" class="d acc" d="M210 40h56M210 52h48M210 64h40"/><path pathLength="1" class="d acc dash" d="M240 78v30h-80"/><text x="240" y="96" text-anchor="middle" class="lbl">TAKEAWAY</text><text x="100" y="172" text-anchor="middle" class="lbl">MAIN</text><text x="240" y="18" text-anchor="middle" class="lbl">BRANCH</text></g></svg>
+    <dl class="spec" aria-hidden="true"><div><dt>Stack</dt><dd>TypeScript · React</dd></div><div><dt>Status</dt><dd>Live</dd></div><div><dt>Repo</dt><dd>akarshgopal/treechat</dd></div></dl>
+  </div>
+  <div class="file-body">
+    <p class="file-top"><span>FILE 02</span><span class="st st-live">Live</span></p>
+    <h3>TreeChat</h3>
+    <p class="blurb">Branching AI chat: select any passage to explore it in a side branch, then bring the takeaway back.</p>
+    <p class="detail">Runs in your browser with your own key. There is no TreeChat server and no account; add an OpenRouter key for real answers, or try it straight away with demo replies.</p>
+    <div class="actions"><a class="btn btn-primary" href="https://treechat.cc" data-sfx>treechat.cc<svg class="arrow" viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="square" d="M7 17 17 7M9 7h8v8"/></svg></a><a class="btn" href="https://github.com/akarshgopal/treechat" data-sfx><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 .5a11.5 11.5 0 0 0-3.64 22.41c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.53-1.33-1.28-1.69-1.28-1.69-1.05-.71.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.56-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.77 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.84 1.19 3.1 0 4.42-2.69 5.39-5.25 5.68.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .5Z"/></svg><span>Source</span></a></div>
+  </div>
 </article>
-<article class="card project" id="ultimat-sim">
-  <div class="card-top"><h3>Molecular Foundry</h3><span class="tag">JavaScript</span></div>
-  <p class="blurb">Ultimate Material Abundance Simulator.</p>
-  <p class="detail">A browser flowsheet workspace for connecting industrial process blocks (desalination, electrolysis, DAC, Sabatier, Haber–Bosch and more) and inspecting material, energy and economic flows. Derived from Ben Schrauwen’s MIT-licensed <a href="https://github.com/benschrauwen/terraform-simulator">terraform-simulator</a>.</p>
-  <div class="actions"><a class="btn btn-primary" href="https://akarshgopal.github.io/ultimat-sim/">Live demo<svg viewBox="0 0 24 24" aria-hidden="true" class="arrow"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M7 17 17 7M8 7h9v9"/></svg></a><a class="btn" href="https://github.com/akarshgopal/ultimat-sim"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 .5a11.5 11.5 0 0 0-3.64 22.41c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.53-1.33-1.28-1.69-1.28-1.69-1.05-.71.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.56-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.77 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.84 1.19 3.1 0 4.42-2.69 5.39-5.25 5.68.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .5Z"/></svg><span>Source</span></a></div>
+<article class="file reveal" id="ultimat-sim" style="--d:0">
+  <div class="file-art"><svg class="schem" viewBox="0 0 320 180" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="square" stroke-linejoin="miter" vector-effect="non-scaling-stroke"><path pathLength="1" class="d " d="M24 70h56v40H24zM132 70h56v40h-56zM240 40h56v40h-56zM240 100h56v40h-56z"/><path pathLength="1" class="d acc" d="M80 90h52M188 84l52-24M188 96l52 24"/><path pathLength="1" class="d acc" d="M126 86l6 4-6 4M234 57l6 3-5 5M234 117l6 3-6 3"/><path pathLength="1" class="d dash" d="M52 110v34h188v-4"/><text x="52" y="64" text-anchor="middle" class="lbl">DESAL</text><text x="160" y="64" text-anchor="middle" class="lbl">ELECTROLYSIS</text><text x="268" y="34" text-anchor="middle" class="lbl">SABATIER</text><text x="268" y="154" text-anchor="middle" class="lbl">STORAGE</text></g></svg>
+    <dl class="spec" aria-hidden="true"><div><dt>Stack</dt><dd>JavaScript</dd></div><div><dt>Status</dt><dd>Live</dd></div><div><dt>Repo</dt><dd>akarshgopal/ultimat-sim</dd></div></dl>
+  </div>
+  <div class="file-body">
+    <p class="file-top"><span>FILE 03</span><span class="st st-live">Live</span></p>
+    <h3>Molecular Foundry</h3>
+    <p class="blurb">Ultimate Material Abundance Simulator.</p>
+    <p class="detail">A browser flowsheet workspace for connecting industrial process blocks (desalination, electrolysis, DAC, Sabatier, Haber–Bosch and more) and inspecting material, energy and economic flows. Derived from Ben Schrauwen’s MIT-licensed <a href="https://github.com/benschrauwen/terraform-simulator">terraform-simulator</a>.</p>
+    <div class="actions"><a class="btn btn-primary" href="https://akarshgopal.github.io/ultimat-sim/" data-sfx>Live demo<svg class="arrow" viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="square" d="M7 17 17 7M9 7h8v8"/></svg></a><a class="btn" href="https://github.com/akarshgopal/ultimat-sim" data-sfx><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 .5a11.5 11.5 0 0 0-3.64 22.41c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.53-1.33-1.28-1.69-1.28-1.69-1.05-.71.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.56-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.77 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.84 1.19 3.1 0 4.42-2.69 5.39-5.25 5.68.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .5Z"/></svg><span>Source</span></a></div>
+  </div>
 </article>
-<article class="card project" id="1brc">
-  <div class="card-top"><h3>1BRC</h3><span class="tag">C · Rust</span></div>
-  <p class="blurb">1 Billion Row Challenge in C and Rust.</p>
-  <p class="detail">Practice in performance-oriented programming on the <a href="https://www.morling.dev/blog/one-billion-row-challenge/">One Billion Row Challenge</a>: aggregate a billion temperature readings as fast as possible. No external dependencies, and no LLM-written code: every character is hand-written.</p>
-  <div class="actions"><a class="btn" href="https://github.com/akarshgopal/1brc"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 .5a11.5 11.5 0 0 0-3.64 22.41c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.53-1.33-1.28-1.69-1.28-1.69-1.05-.71.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.56-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.77 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.84 1.19 3.1 0 4.42-2.69 5.39-5.25 5.68.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .5Z"/></svg><span>Source</span></a></div>
+<article class="file reveal" id="1brc" style="--d:1">
+  <div class="file-art"><svg class="schem" viewBox="0 0 320 180" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="square" stroke-linejoin="miter" vector-effect="non-scaling-stroke"><path pathLength="1" class="d " d="M20 28h90"/><path pathLength="1" class="d dim" d="M20 42h127"/><path pathLength="1" class="d " d="M20 56h104"/><path pathLength="1" class="d dim" d="M20 70h141"/><path pathLength="1" class="d " d="M20 84h118"/><path pathLength="1" class="d dim" d="M20 98h95"/><path pathLength="1" class="d " d="M20 112h132"/><path pathLength="1" class="d dim" d="M20 126h109"/><path pathLength="1" class="d " d="M20 140h146"/><path pathLength="1" class="d dim" d="M20 154h123"/><path pathLength="1" class="d acc" d="M170 28l50 52v20l-50 52"/><path pathLength="1" class="d acc" d="M220 80h20M220 100h20"/><path pathLength="1" class="d acc" d="M244 66h56v48h-56z"/><text x="272" y="86" text-anchor="middle" class="lbl">MIN/MEAN</text><text x="272" y="100" text-anchor="middle" class="lbl">/MAX</text><text x="20" y="174" text-anchor="start" class="lbl">1,000,000,000 ROWS</text></g></svg>
+    <dl class="spec" aria-hidden="true"><div><dt>Stack</dt><dd>C · Rust</dd></div><div><dt>Status</dt><dd>Source</dd></div><div><dt>Repo</dt><dd>akarshgopal/1brc</dd></div></dl>
+  </div>
+  <div class="file-body">
+    <p class="file-top"><span>FILE 04</span><span class="st st-source">Source</span></p>
+    <h3>1BRC</h3>
+    <p class="blurb">1 Billion Row Challenge in C and Rust.</p>
+    <p class="detail">Practice in performance-oriented programming on the <a href="https://www.morling.dev/blog/one-billion-row-challenge/">One Billion Row Challenge</a>: aggregate a billion temperature readings as fast as possible. No external dependencies, and no LLM-written code: every character is hand-written.</p>
+    <div class="actions"><a class="btn" href="https://github.com/akarshgopal/1brc" data-sfx><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 .5a11.5 11.5 0 0 0-3.64 22.41c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.53-1.33-1.28-1.69-1.28-1.69-1.05-.71.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.56-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.77 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.84 1.19 3.1 0 4.42-2.69 5.39-5.25 5.68.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .5Z"/></svg><span>Source</span></a></div>
+  </div>
 </article>
   </div>
 </section>
-<section class="section" aria-labelledby="h-earlier">
-  <h2 id="h-earlier" class="kicker">Earlier</h2>
-  <article class="story" id="a3t">
-    <h3>A3T (Drone Team Twente): UAS Challenge 2020</h3>
+<section class="section wrap" data-n="02" id="archived" aria-labelledby="h-arch">
+  <p class="kicker" data-scramble><span class="kn">02</span> Archived missions</p>
+  <h2 id="h-arch" class="h-display reveal">Earlier</h2>
+  <div class="dossiers">
+<article class="dossier reveal" id="a3t">
+  <div class="dossier-art"><svg class="schem" viewBox="0 0 320 180" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="square" stroke-linejoin="miter" vector-effect="non-scaling-stroke"><path pathLength="1" class="d " d="M160 30v120"/><path pathLength="1" class="d " d="M60 82h200l-10 10H70z"/><path pathLength="1" class="d " d="M140 140h40"/><circle pathLength="1" class="d acc" cx="110" cy="56" r="18"/><circle pathLength="1" class="d acc" cx="210" cy="56" r="18"/><circle pathLength="1" class="d acc" cx="110" cy="118" r="18"/><circle pathLength="1" class="d acc" cx="210" cy="118" r="18"/><path pathLength="1" class="d " d="M110 56v62M210 56v62"/><path pathLength="1" class="d " d="M160 30l-6 10h12z"/><text x="160" y="172" text-anchor="middle" class="lbl">VTOL QUADPLANE · TOP</text></g></svg><span class="dossier-n" aria-hidden="true">ARCHIVE 01</span></div>
+  <div class="dossier-body">
     <p class="meta">Technical lead · from Sep 2019</p>
-    <div class="prose">
-      <p>Once again, I got bored and wanted to work on something hands-on, this time I was getting into robotics and drones. I joined the Uni’s newly minted drone team and participated in their first UAS Challenge entry. We had a team that was quite skilled but relatively inexperienced. We decided to build a VTOL quadplane with a carbon-fibre reinforced 3D printed airframe.</p>
-      <p>As technical lead I worked on the systems design, aerodynamic design and analysis, software-in-the-loop simulation of flight control, and integration and testing of the prototype. The airframe combined 3D printing with a carbon-fibre pultrusion space frame, and the UAV flew a Pixhawk&nbsp;4 with the PX4 flight stack.</p>
-    </div>
-    <ul class="facts" aria-label="Design targets"><li><b>VTOL</b> autonomous</li><li><b>2.5&nbsp;kg</b> payload</li><li><b>27&nbsp;min</b> flight time</li><li><b>32&nbsp;km</b> range</li></ul>
-    <p class="story-links"><a href="https://github.com/akarshgopal/A3T"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 .5a11.5 11.5 0 0 0-3.64 22.41c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.53-1.33-1.28-1.69-1.28-1.69-1.05-.71.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.56-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.77 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.84 1.19 3.1 0 4.42-2.69 5.39-5.25 5.68.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .5Z"/></svg><span>A3T on GitHub</span></a></p>
-  </article>
-  <article class="story" id="bachelor-thesis">
-    <h3>Optimal Control of Tilt-Multirotor using Learned Dynamics</h3>
+    <h3>A3T (Drone Team Twente): UAS Challenge 2020</h3>
+    <div class="prose"><p>Once again, I got bored and wanted to work on something hands-on, this time I was getting into robotics and drones. I joined the Uni’s newly minted drone team and participated in their first UAS Challenge entry. We had a team that was quite skilled but relatively inexperienced. We decided to build a VTOL quadplane with a carbon-fibre reinforced 3D printed airframe.</p><p>As technical lead I worked on the systems design, aerodynamic design and analysis, software-in-the-loop simulation of flight control, and integration and testing of the prototype. The airframe combined 3D printing with a carbon-fibre pultrusion space frame, and the UAV flew a Pixhawk&nbsp;4 with the PX4 flight stack.</p></div>
+    <ul class="telemetry" aria-label="Design targets"><li><span class="tm-k">Mode</span><span class="tm-v">VTOL · autonomous</span></li><li><span class="tm-k">Payload</span><span class="tm-v">2.5 kg</span></li><li><span class="tm-k">Flight time</span><span class="tm-v">27 min</span></li><li><span class="tm-k">Range</span><span class="tm-v">32 km</span></li></ul>
+    <p class="dossier-link"><a href="https://github.com/akarshgopal/A3T" data-sfx><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 .5a11.5 11.5 0 0 0-3.64 22.41c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.53-1.33-1.28-1.69-1.28-1.69-1.05-.71.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.56-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.77 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.84 1.19 3.1 0 4.42-2.69 5.39-5.25 5.68.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .5Z"/></svg><span>A3T on GitHub</span><svg class="arrow" viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="square" d="M7 17 17 7M9 7h8v8"/></svg></a></p>
+  </div>
+</article>
+<article class="dossier reveal" id="bachelor-thesis">
+  <div class="dossier-art"><svg class="schem" viewBox="0 0 320 180" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="square" stroke-linejoin="miter" vector-effect="non-scaling-stroke"><path pathLength="1" class="d " d="M100 50l120 80M220 50 100 130"/><ellipse pathLength="1" class="d acc" cx="100" cy="50" rx="30" ry="9" transform="rotate(-20 100 50)"/><ellipse pathLength="1" class="d acc" cx="220" cy="50" rx="30" ry="9" transform="rotate(20 220 50)"/><ellipse pathLength="1" class="d acc" cx="100" cy="130" rx="30" ry="9" transform="rotate(20 100 130)"/><ellipse pathLength="1" class="d acc" cx="220" cy="130" rx="30" ry="9" transform="rotate(-20 220 130)"/><path pathLength="1" class="d " d="M150 80h20v20h-20z"/><path pathLength="1" class="d dash" d="M40 160c40-30 80 10 120-20s80-10 120-40"/><text x="160" y="174" text-anchor="middle" class="lbl">TILT-ROTOR · LEARNED DYNAMICS</text></g></svg><span class="dossier-n" aria-hidden="true">ARCHIVE 02</span></div>
+  <div class="dossier-body">
     <p class="meta">Bachelor thesis · Apr – Jun 2020</p>
-    <div class="prose">
-      <p>I investigated a neural-network-based Model Predictive Controller for a quadrotor UAV with tilting propellers, in computer simulation using MATLAB.</p>
-    </div>
-    <p class="story-links"><a href="https://github.com/akarshgopal/bachelor_thesis"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 .5a11.5 11.5 0 0 0-3.64 22.41c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.53-1.33-1.28-1.69-1.28-1.69-1.05-.71.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.56-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.77 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.84 1.19 3.1 0 4.42-2.69 5.39-5.25 5.68.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .5Z"/></svg><span>bachelor_thesis on GitHub</span></a></p>
-  </article>
-  <article class="story" id="acktr-ppo">
-    <h3>Performance of ACKTR and PPO with Transfer Learning on Atari-2600 Games</h3>
+    <h3>Optimal Control of Tilt-Multirotor using Learned Dynamics</h3>
+    <div class="prose"><p>I investigated a neural-network-based Model Predictive Controller for a quadrotor UAV with tilting propellers, in computer simulation using MATLAB.</p></div>
+    
+    <p class="dossier-link"><a href="https://github.com/akarshgopal/bachelor_thesis" data-sfx><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 .5a11.5 11.5 0 0 0-3.64 22.41c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.53-1.33-1.28-1.69-1.28-1.69-1.05-.71.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.56-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.77 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.84 1.19 3.1 0 4.42-2.69 5.39-5.25 5.68.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .5Z"/></svg><span>bachelor_thesis on GitHub</span><svg class="arrow" viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="square" d="M7 17 17 7M9 7h8v8"/></svg></a></p>
+  </div>
+</article>
+<article class="dossier reveal" id="acktr-ppo">
+  <div class="dossier-art"><svg class="schem" viewBox="0 0 320 180" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="square" stroke-linejoin="miter" vector-effect="non-scaling-stroke"><path pathLength="1" class="d " d="M40 20v130h250"/><path pathLength="1" class="d acc" d="M40 140c30-4 50-40 80-56s60-30 90-36 60-8 80-10"/><path pathLength="1" class="d dash" d="M40 146c40-2 60-20 90-40s70-28 100-30 40-4 60-4"/><path pathLength="1" class="d dim" d="M40 150v4"/><path pathLength="1" class="d dim" d="M90 150v4"/><path pathLength="1" class="d dim" d="M140 150v4"/><path pathLength="1" class="d dim" d="M190 150v4"/><path pathLength="1" class="d dim" d="M240 150v4"/><path pathLength="1" class="d dim" d="M290 150v4"/><text x="290" y="170" text-anchor="end" class="lbl">STEPS</text><text x="48" y="30" text-anchor="start" class="lbl">REWARD</text></g></svg><span class="dossier-n" aria-hidden="true">ARCHIVE 03</span></div>
+  <div class="dossier-body">
     <p class="meta">Paper · Sep – Dec 2018</p>
-    <div class="prose">
-      <p>Empirical research on how transfer learning affects the performance of two state-of-the-art reinforcement learning algorithms across a diverse set of tasks, using OpenAI’s open-source implementations in Baselines.</p>
-    </div>
-    <p class="story-links"><a href="https://github.com/akarshgopal/ATLAS_S3_RL"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 .5a11.5 11.5 0 0 0-3.64 22.41c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.53-1.33-1.28-1.69-1.28-1.69-1.05-.71.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.56-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.77 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.84 1.19 3.1 0 4.42-2.69 5.39-5.25 5.68.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .5Z"/></svg><span>ATLAS_S3_RL on GitHub</span></a></p>
-  </article>
-  <article class="story" id="project-x">
-    <h3>Vision X (Project X): an electric motorcycle</h3>
+    <h3>Performance of ACKTR and PPO with Transfer Learning on Atari-2600 Games</h3>
+    <div class="prose"><p>Empirical research on how transfer learning affects the performance of two state-of-the-art reinforcement learning algorithms across a diverse set of tasks, using OpenAI’s open-source implementations in Baselines.</p></div>
+    
+    <p class="dossier-link"><a href="https://github.com/akarshgopal/ATLAS_S3_RL" data-sfx><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 .5a11.5 11.5 0 0 0-3.64 22.41c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.53-1.33-1.28-1.69-1.28-1.69-1.05-.71.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.56-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.77 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.84 1.19 3.1 0 4.42-2.69 5.39-5.25 5.68.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .5Z"/></svg><span>ATLAS_S3_RL on GitHub</span><svg class="arrow" viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="square" d="M7 17 17 7M9 7h8v8"/></svg></a></p>
+  </div>
+</article>
+<article class="dossier reveal" id="project-x">
+  <div class="dossier-art"><svg class="schem" viewBox="0 0 320 180" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="square" stroke-linejoin="miter" vector-effect="non-scaling-stroke"><circle pathLength="1" class="d" cx="80" cy="120" r="34"/><circle pathLength="1" class="d" cx="240" cy="120" r="34"/><path pathLength="1" class="d " d="M80 120l50-50h60l50 50M130 70l20 50h40l10-50M190 70l-10-24h-22"/><path pathLength="1" class="d acc" d="M136 84h56v30h-56z"/><path pathLength="1" class="d dim" d="M228 64l-38 6"/><text x="164" y="104" text-anchor="middle" class="lbl">BATTERY</text><text x="160" y="172" text-anchor="middle" class="lbl">ELECTRIC MOTORCYCLE · SIDE</text></g></svg><span class="dossier-n" aria-hidden="true">ARCHIVE 04</span></div>
+  <div class="dossier-body">
     <p class="meta">Aug 2016 – Jan 2018 · Carbon Zero Challenge 2017 finalist</p>
-    <div class="prose">
-      <p>As a naive freshman in college, I was super bored with classes and was looking for something to work on hands-on. I was travelling to college every day on a scooter, and wanted to upgrade to a motorcycle. I wanted an electric one, but couldn’t find one.</p>
-      <p>I decided to make my own. I drew up a few sketches and specifications, and talked to a couple of friends about the project. They really liked it, and I realised other people might want one too, so I put together a team and started working on it.</p>
-      <p>I made the mistake of wanting to build all major components ourselves, but realised we were in way over our heads. I’m talking ground-up power electronics design like a 30&nbsp;kW AC motor controller, a 6&nbsp;kWh Li-ion battery management board, etc.</p>
-      <p>However, we managed to get support from the University as well as win some funds through a national competition: we made it to the finals of the Carbon Zero Challenge 2017 with a funding grant of Rs&nbsp;5&nbsp;lakh (about USD&nbsp;7,000), and linked up with PES University’s research centre (CORI) to develop the powertrain. In the meanwhile the year was ending and an opportunity for me to study at a University abroad came up that I couldn’t pass up. So unfortunately I had to leave the project, but thankfully the team was still there! The team ended up building a nice prototype and got some recognition for it. They eventually established an EV club at the University.</p>
-    </div>
-  </article>
+    <h3>Vision X (Project X): an electric motorcycle</h3>
+    <div class="prose"><p>As a naive freshman in college, I was super bored with classes and was looking for something to work on hands-on. I was travelling to college every day on a scooter, and wanted to upgrade to a motorcycle. I wanted an electric one, but couldn’t find one.</p><p>I decided to make my own. I drew up a few sketches and specifications, and talked to a couple of friends about the project. They really liked it, and I realised other people might want one too, so I put together a team and started working on it.</p><p>I made the mistake of wanting to build all major components ourselves, but realised we were in way over our heads. I’m talking ground-up power electronics design like a 30&nbsp;kW AC motor controller, a 6&nbsp;kWh Li-ion battery management board, etc.</p><p>However, we managed to get support from the University as well as win some funds through a national competition: we made it to the finals of the Carbon Zero Challenge 2017 with a funding grant of Rs&nbsp;5&nbsp;lakh (about USD&nbsp;7,000), and linked up with PES University’s research centre (CORI) to develop the powertrain. In the meanwhile the year was ending and an opportunity for me to study at a University abroad came up that I couldn’t pass up. So unfortunately I had to leave the project, but thankfully the team was still there! The team ended up building a nice prototype and got some recognition for it. They eventually established an EV club at the University.</p></div>
+    <ul class="telemetry" aria-label="Design targets"><li><span class="tm-k">Motor controller</span><span class="tm-v">30 kW AC</span></li><li><span class="tm-k">Battery</span><span class="tm-v">6 kWh Li-ion</span></li><li><span class="tm-k">Grant</span><span class="tm-v">Rs 5 lakh</span></li><li><span class="tm-k">Result</span><span class="tm-v">EV club</span></li></ul>
+    
+  </div>
+</article>
+  </div>
 </section>
-<section class="section" aria-labelledby="h-archive">
-  <h2 id="h-archive" class="kicker">From the archive</h2>
-  <ul class="mini-list"><li><a href="https://github.com/akarshgopal/tello-projects"><span class="mini-name">tello-projects</span><span class="mini-desc">Fun projects with a Ryze Tello to learn ROS, sensor fusion, comms and computer vision.</span></a></li><li><a href="https://github.com/akarshgopal/ATLAS-Sem1-Project"><span class="mini-name">ATLAS-Sem1-Project</span><span class="mini-desc">CO₂ data driven servo motor.</span></a></li><li><a href="https://github.com/akarshgopal/Harmonograph"><span class="mini-name">Harmonograph</span><span class="mini-desc">A wxWidgets harmonograph with up to 8 pendulums, a school computer project built with Uthkarsh K Adya.</span></a></li></ul>
+<section class="section wrap" data-n="03" id="log" aria-labelledby="h-repolog">
+  <p class="kicker" data-scramble><span class="kn">03</span> Repo log</p>
+  <h2 id="h-repolog" class="h-display reveal">From the archive</h2>
+  <ul class="log reveal"><li><a href="https://github.com/akarshgopal/tello-projects" data-sfx><span class="log-id">tello-projects</span><span class="log-d">Fun projects with a Ryze Tello to learn ROS, sensor fusion, comms and computer vision.</span><svg class="arrow" viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="square" d="M7 17 17 7M9 7h8v8"/></svg></a></li><li><a href="https://github.com/akarshgopal/ATLAS-Sem1-Project" data-sfx><span class="log-id">ATLAS-Sem1-Project</span><span class="log-d">CO₂ data driven servo motor.</span><svg class="arrow" viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="square" d="M7 17 17 7M9 7h8v8"/></svg></a></li><li><a href="https://github.com/akarshgopal/Harmonograph" data-sfx><span class="log-id">Harmonograph</span><span class="log-d">A wxWidgets harmonograph with up to 8 pendulums, a school computer project built with Uthkarsh K Adya.</span><svg class="arrow" viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="square" d="M7 17 17 7M9 7h8v8"/></svg></a></li></ul>
 </section>
+<dl class="titleblock wrap" aria-label="Drawing title block">
+  <div class="tb-main"><dt>Title</dt><dd>Mission files</dd></div>
+  <div><dt>Drawn</dt><dd>A. Gopal</dd></div>
+  <div><dt>Location</dt><dd>Augsburg, DE</dd></div>
+  <div><dt>Sheet</dt><dd>2 / 4</dd></div>
+  <div><dt>Rev</dt><dd>2026.10</dd></div>
+</dl>
 </main>
 <footer class="site-footer">
   <div class="wrap footer-in">
-    <p>© 2026 Akarsh Gopal</p>
-    <ul class="social" aria-label="Elsewhere"><li><a href="mailto:akarsh98@gmail.com" aria-label="Email"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M3 5h18v14H3zM3 6l9 7 9-7"/></svg></a></li><li><a href="https://github.com/akarshgopal" aria-label="GitHub" rel="me"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 .5a11.5 11.5 0 0 0-3.64 22.41c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.53-1.33-1.28-1.69-1.28-1.69-1.05-.71.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.56-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.77 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.84 1.19 3.1 0 4.42-2.69 5.39-5.25 5.68.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .5Z"/></svg></a></li><li><a href="https://www.linkedin.com/in/akarsh-gopal-b9a8b917b/" aria-label="LinkedIn" rel="me"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M20.45 20.45h-3.55v-5.57c0-1.33-.03-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28ZM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12ZM7.12 20.45H3.56V9h3.56v11.45ZM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0Z"/></svg></a></li><li><a href="https://x.com/gopal_akarsh" aria-label="X / Twitter" rel="me"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.9 1.15h3.68l-8.04 9.19L24 22.85h-7.4l-5.8-7.58-6.64 7.58H.48l8.6-9.83L0 1.15h7.59l5.24 6.93 6.07-6.93Zm-1.29 19.5h2.04L6.48 3.24H4.3l13.31 17.41Z"/></svg></a></li></ul>
+    <p>© 2026 Akarsh Gopal <span class="dim footer-hint">· Built by hand, no frameworks · Press <kbd class="kbd"><span class="mod">Ctrl</span>K</kbd> to navigate</span></p>
+    <ul class="social" aria-label="Elsewhere"><li><a href="mailto:akarsh98@gmail.com" aria-label="Email" data-sfx><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="square" d="M3 5h18v14H3zM3 6l9 7 9-7"/></svg></a></li><li><a href="https://github.com/akarshgopal" aria-label="GitHub" rel="me" data-sfx><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 .5a11.5 11.5 0 0 0-3.64 22.41c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.53-1.33-1.28-1.69-1.28-1.69-1.05-.71.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.56-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.77 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.84 1.19 3.1 0 4.42-2.69 5.39-5.25 5.68.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .5Z"/></svg></a></li><li><a href="https://www.linkedin.com/in/akarsh-gopal-b9a8b917b/" aria-label="LinkedIn" rel="me" data-sfx><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M20.45 20.45h-3.55v-5.57c0-1.33-.03-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28ZM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12ZM7.12 20.45H3.56V9h3.56v11.45ZM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0Z"/></svg></a></li><li><a href="https://x.com/gopal_akarsh" aria-label="X / Twitter" rel="me" data-sfx><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.9 1.15h3.68l-8.04 9.19L24 22.85h-7.4l-5.8-7.58-6.64 7.58H.48l8.6-9.83L0 1.15h7.59l5.24 6.93 6.07-6.93Zm-1.29 19.5h2.04L6.48 3.24H4.3l13.31 17.41Z"/></svg></a></li></ul>
   </div>
 </footer>
+<dialog id="cmdk" class="cmdk" aria-label="Command palette">
+  <div class="cmdk-in">
+    <div class="cmdk-head">
+      <span class="cmdk-prompt" aria-hidden="true">&gt;</span>
+      <input id="cmdk-input" type="text" role="combobox" aria-expanded="true" aria-controls="cmdk-list" aria-autocomplete="list" autocomplete="off" spellcheck="false" placeholder="Jump to a page, project or link…">
+      <kbd class="kbd" aria-hidden="true">Esc</kbd>
+    </div>
+    <ul id="cmdk-list" role="listbox" aria-label="Results"></ul>
+    <p class="cmdk-foot" aria-hidden="true"><span><kbd class="kbd">↑</kbd><kbd class="kbd">↓</kbd> move</span><span><kbd class="kbd">Enter</kbd> open</span><span><kbd class="kbd">Esc</kbd> close</span></p>
+  </div>
+</dialog>
 </body>
 </html>
