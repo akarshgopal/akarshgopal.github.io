@@ -4,52 +4,51 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Transmission: The Network That Decides What Gets Built · How Electricity Works</title>
-<meta name="description" content="An interactive explainer of electricity transmission: why lines run at high voltage, reactance and the power angle, thermal limits and dynamic line rating, loop flows in a meshed grid, Germany’s north–south congestion, HVDC, underground cables, US planning and permitting, grid-enhancing technologies, interconnectors and the network’s share of the bill.">
+<meta name="description" content="An interactive explainer of electricity transmission: why lines run at high voltage, reactance and the power angle, thermal limits and dynamic line rating, loop flows in a meshed grid, Germany’s north–south congestion, HVDC, underground cables, US planning and permitting, grid-enhancing technologies and interconnectors.">
 <link rel="icon" href="data:,">
 <link rel="stylesheet" href="style.css">
+<script>(function(){var m={"fig-networkEuro":"price.html#fig-networkEuro","network-costs":"price.html#network-costs"};var h=location.hash.slice(1);if(m[h])location.replace(m[h]);})();</script>
 </head>
 <body>
-<nav class="series" aria-label="How Electricity Works: the series"><div class="series-in"><a class="series-title" href="index.html">How Electricity Works</a><ol><li><a href="index.html"><span class="n">Essay</span>The main essay</a></li><li><a href="solar-pv.html"><span class="n">1</span>Solar PV</a></li><li><a href="utility-renewables.html"><span class="n">2</span>Utility-scale renewables</a></li><li><a href="transformers.html"><span class="n">3</span>Transformers</a></li><li><a href="transmission.html" aria-current="page"><span class="n">4</span>Transmission</a></li><li><a href="synthetic-fuels.html"><span class="n">5</span>Synthetic fuels</a></li></ol><button id="play-toggle" type="button" aria-pressed="true" title="Pause all animations">❚❚ Pause</button></div></nav><script>(function(){var a=document.querySelector('nav.series [aria-current=page]');if(a){var o=a.closest('ol');if(o.scrollWidth>o.clientWidth)o.scrollLeft=a.offsetLeft-o.offsetLeft-24;}})();</script>
+<nav class="series" aria-label="How Electricity Works: the series"><div class="series-in"><a class="series-title" href="index.html">How Electricity Works</a><ol><li><a href="the-machine.html"><span class="n">1</span>The machine</a></li><li><a href="transformers.html"><span class="n">2</span>Transformers</a></li><li><a href="transmission.html" aria-current="page"><span class="n">3</span>Transmission</a></li><li><a href="balancing.html"><span class="n">4</span>Balancing</a></li><li><a href="solar-pv.html"><span class="n">5</span>Solar</a></li><li><a href="utility-renewables.html"><span class="n">6</span>Wind</a></li><li><a href="price.html"><span class="n">7</span>Prices</a></li><li><a href="synthetic-fuels.html"><span class="n">8</span>Fuels</a></li><li><a href="futures.html"><span class="n">9</span>Futures</a></li></ol><button id="play-toggle" type="button" aria-pressed="true" title="Pause all animations">❚❚ Pause</button></div></nav><script>(function(){var a=document.querySelector('nav.series [aria-current=page]');if(a){var o=a.closest('ol');if(o.scrollWidth>o.clientWidth)o.scrollLeft=a.offsetLeft-o.offsetLeft-24;}})();</script>
 <main>
 <article>
 <header class="top">
-<p class="kicker">Part 4 of the series · a deep dive from <a class="xref" href="index.html#fig-network">the main essay</a></p>
 <h1>Transmission: The Network That Decides What Gets Built</h1>
-<p class="byline">An interactive essay · reactance, heat, steel towers and politics · by Akarsh Gopal · October 2026</p>
+<p class="byline">Essay 3 of 9 · by Akarsh Gopal · October 2026</p>
 </header>
 
 <p class="lede">A transmission line looks like the simplest thing in the power system: aluminium hung from steel towers. It is also the part that now decides how fast everything else can change. China has strung a second, ultra-high-voltage grid across the country in fifteen years; India has tripled the capacity between its regions since 2014. The United States, which built about 4,000 miles of high-voltage line in 2013, now manages a few hundred a year, and Germany spends around $3.4 billion a year working around lines it has not yet built.</p>
 
-<p>Losses fall with the square of the current, and power flows wherever physics sends it: the <a class="xref" href="index.html#fig-network">main essay</a> showed both. This part asks what limits a line, why long AC lines carry less than short ones, why direct current wins far away and under the sea, why new lines take a decade in some countries and a few years in others, how to get more from old wires, and what it all adds to your bill.</p>
+<p>Transformers raise the voltage; this essay follows the wires between them: what limits a line, why long AC lines carry less than short ones, how power spreads through a meshed network and where it gets stuck, why direct current wins far away and under the sea, why new lines take a decade in some countries and a few years in others, and how to get more from old wires.</p>
 
 <ol class="toc">
-<li><a href="#why-high-voltage"><span class="n">1</span>Why high voltage</a></li>
-<li><a href="#line-physics"><span class="n">2</span>Reactance and the power angle</a></li>
+<li><a href="#why-high-voltage"><span class="n">1</span>Why high voltage: losses, corona and corridors</a></li>
+<li><a href="#line-physics"><span class="n">2</span>Resistance, reactance and the power angle</a></li>
 <li><a href="#thermal-limits"><span class="n">3</span>Heat, sag and the weather</a></li>
-<li><a href="#power-flow"><span class="n">4</span>AC power flow and loop flows</a></li>
+<li><a href="#power-flow"><span class="n">4</span>AC power flow: loop flows and phase angles</a></li>
 <li><a href="#congestion"><span class="n">5</span>Congestion: when cheap power gets stuck</a></li>
-<li><a href="#hvdc"><span class="n">6</span>HVDC</a></li>
+<li><a href="#hvdc"><span class="n">6</span>HVDC: where direct current wins</a></li>
 <li><a href="#underground"><span class="n">7</span>Underground versus overhead</a></li>
 <li><a href="#planning"><span class="n">8</span>Planning, permitting and who pays</a></li>
 <li><a href="#more-from-wires"><span class="n">9</span>Getting more out of existing wires</a></li>
 <li><a href="#interconnection"><span class="n">10</span>Interconnection as a resource</a></li>
-<li><a href="#network-costs"><span class="n">11</span>The network in your bill</a></li>
 <li><a href="#notes"><span class="n">·</span>Notes and sources</a></li>
 </ol>
 
 <h2 id="why-high-voltage"><span class="num">1</span>Why high voltage: losses, corona and corridors</h2>
 
-<p>A current <i>I</i> through a resistance <i>R</i> turns <i>I²R</i> watts into heat, so for a given power, doubling the voltage quarters the loss. That is why the largest lines rose from tens of kilovolts a century ago to 380–400 kV in Europe, 500 and 765 kV in North America and India, and 1,000 kV AC in China. Each step needed <a class="xref" href="transformers.html#family">bigger transformers</a> at both ends, and brought new problems.</p>
+<p>Because <a class="xref" href="transformers.html#s4">losses fall with the square of the current</a>, the largest lines rose from tens of kilovolts a century ago to 380–400 kV in Europe, 500 and 765 kV in North America and India, and 1,000 kV AC in China. Each step needed <a class="xref" href="transformers.html#family">bigger transformers</a> and brought new problems.</p>
 
 <p>The first is <b>corona</b>. At very high voltage, the field at a thin conductor’s surface ionises the air: the line crackles, glows faintly at night, interferes with radio and wastes power, most in rain and fog. The cure is a fatter conductor, built as a <i>bundle</i> of two, four or six wires held apart by spacers. American Electric Power, which runs the largest 765 kV network in the US, publishes what this buys: carrying 1,000 MW over 100 miles, its six-wire 765 kV lines lose 0.6% to resistance and corona together, a typical 345 kV line 4.2%.<sup class="fn"><a href="#n1">1</a></sup></p>
 
-<p>The second argument is land. A 765 kV line needs a right-of-way about 61 m wide and a 345 kV line about 46 m, but over long distances one 765 kV circuit carries as much as six at 345 kV.<sup class="fn"><a href="#n1">1</a></sup></p>
+<p>The second is land. A 765 kV line needs a right-of-way about 61 m wide and a 345 kV line about 46 m, but over long distances one 765 kV circuit carries as much as six at 345 kV.<sup class="fn"><a href="#n1">1</a></sup></p>
 
 <figure class="fig" data-fig="voltageLosses" id="fig-voltageLosses">
 <figcaption><span class="tagline tag-mixed">Real + model</span> Losses and corridor width for moving a chosen power a chosen distance, from American Electric Power’s figures;<sup class="fn"><a href="#n1">1</a></sup> circuit counts come from the next section’s loadability curve.<sup class="fn"><a href="#n2">2</a></sup></figcaption>
 </figure>
 
-<p>At 2 GW over 400 km the contrast is clear: five 345 kV circuits losing about 4.5%, or one 765 kV circuit losing about 2% on a corridor almost four times narrower. The higher voltage costs more per mile but much less per megawatt.<sup class="fn"><a href="#n1">1</a></sup> Why does the number of circuits climb so steeply with distance? Not resistance: reactance.</p>
+<p>At 2 GW over 400 km the choice is five 345 kV circuits losing about 4.5%, or one 765 kV circuit losing about 2% on a corridor almost four times narrower. The higher voltage costs more per mile but much less per megawatt.<sup class="fn"><a href="#n1">1</a></sup> Why does the number of circuits climb so steeply with distance? Not resistance: reactance.</p>
 
 <h2 id="line-physics"><span class="num">2</span>Resistance, reactance and the power angle</h2>
 
@@ -59,7 +58,7 @@
 <figcaption><span class="tagline tag-ill">Model</span> One 380 kV circuit (0.26 Ω/km of reactance, 0.026 Ω/km of resistance) carrying 1,000 A, slowed to one cycle every two seconds; rings show the magnetic field, orange arrows the voltage it induces.</figcaption>
 </figure>
 
-<p>Watch the two traces. The pushback is largest not when the current is largest but when it is changing fastest, as it swings through zero, so voltage and current end up a quarter-cycle apart. That is why reactance moves no energy: what the field takes on the way up it returns on the way down. Every kilometre adds the same field, so reactance grows with length, and with DC it disappears.</p>
+<p>The pushback is largest not when the current is largest but when it is changing fastest, as it swings through zero, so voltage and current end up a quarter-cycle apart. That is why reactance moves no energy: what the field takes on the way up it returns on the way down. Every kilometre adds the same field, so reactance grows with length, and with DC it disappears.</p>
 
 <p>Because of it, the voltage at the sending end of a loaded line runs slightly ahead of the receiving end, by an angle <i>δ</i>. Ignoring resistance, the power carried is</p>
 
@@ -73,7 +72,7 @@
 
 <p>At 90° the line carries the most it ever can. Push further and the power <i>falls</i>; the sending generators speed up, the angle grows, and they fall out of step with the grid. Real systems keep a wide margin, often no more than 30–45° across a path, to survive losing a line. The ceiling falls with length: double the length, double the reactance, half the ceiling.</p>
 
-<p>Length brings a second limit. The line is also a long capacitor, conductors and ground separated by air, and charging it every cycle <i>generates</i> reactive power, while its inductance <i>absorbs</i> reactive power, more as the current rises. The line both makes and uses it. Lightly loaded, it makes more than it uses and the far-end voltage rises; heavily loaded, it uses more and the voltage sags. At one load in between the two cancel exactly and the line looks like a pure resistance. Engineers call that load the line’s <b>surge impedance loading</b>, or SIL. It depends on voltage, not length: about 400 MW at 345 kV, 900 MW at 500 kV and 2,200–2,400 MW at 765 kV.<sup class="fn"><a href="#n1">1</a></sup></p>
+<p>Length brings a second limit. The line is also a long capacitor, conductors and ground separated by air, and charging it every cycle <i>generates</i> reactive power, while its inductance <i>absorbs</i> reactive power, more as the current rises. Lightly loaded, it makes more than it uses and the far-end voltage rises; heavily loaded, it uses more and the voltage sags. At one load in between the two cancel exactly and the line looks like a pure resistance. Engineers call that load the line’s <b>surge impedance loading</b>, or SIL. It depends on voltage, not length: about 400 MW at 345 kV, 900 MW at 500 kV and 2,200–2,400 MW at 765 kV.<sup class="fn"><a href="#n1">1</a></sup></p>
 
 <p>In 1953 H. P. St. Clair summarised decades of experience in a curve every transmission planner still knows: a line’s practical limit, as a multiple of its SIL, against its length. Short lines are limited by heat, medium ones by voltage drop, long ones by stability: three times the SIL or more at 50 miles, once the SIL at 300.</p>
 
@@ -106,23 +105,25 @@
 <figcaption><span class="tagline tag-ill">Model</span> A four-zone caricature of central Europe solved with a DC power flow; line labels show flow and limit.<sup class="fn"><a href="#n10">10</a></sup></figcaption>
 </figure>
 
-<p>With 14 GW of northern surplus, over a third takes the long way round, and the direct German lines overload before the neighbours’ do. The figure offers the only two physical levers. A <a class="xref" href="transformers.html#family">phase-shifting transformer</a> adds an angle to one line, making that path look “uphill”; Poland installed four at Mikułowa on its German border in 2016.<sup class="fn"><a href="#n11">11</a></sup> But it only moves flow between paths. An <b>HVDC</b> link carries exactly the power it is told to, regardless of the AC network around it, which is why Germany’s new north–south corridors are DC.</p>
+<p>With 14 GW of northern surplus, over a third takes the long way round, and the direct German lines overload before the neighbours’ do. The figure offers the only two physical levers. A <a class="xref" href="transformers.html#family">phase-shifting transformer</a> adds an angle to one line, making that path look “uphill”; Poland installed four at Mikułowa on its German border in 2016.<sup class="fn"><a href="#n11">11</a></sup> But it only moves flow between paths. An <b>HVDC</b> link carries exactly the power it is told to, which is why Germany’s new north–south corridors are DC.</p>
 
 <h2 id="congestion"><span class="num">5</span>Congestion: when cheap power gets stuck</h2>
 
-<p>Europe’s markets are <b>zonal</b>: Germany and Luxembourg are one bidding zone with one price, as if the network inside were a copper plate. The market clears ignoring internal lines; then the transmission operators check the flows, and when they do not fit, which in Germany is most days, they <b>redispatch</b>, paying generators north of the bottleneck (often wind farms) to produce less and those south of it to produce more.</p>
+<p>A line is <b>congested</b> when the flow physics sends down it would break its thermal or stability limit, so cheap power behind it cannot reach the demand beyond.</p>
 
-<p>The bill peaked in 2022, when southern gas plants burned crisis-priced fuel, and was about $3.5 billion in 2025.<sup class="fn"><a href="#n12">12</a></sup><sup class="fn"><a href="#n13">13</a></sup> The loop-flow figure above is this process in miniature: every gigawatt it says “must be redispatched” is one of those payments.</p>
+<p>Europe’s markets are <b>zonal</b>: Germany and Luxembourg are one bidding zone with one price, as if the network inside were a copper plate. The market clears ignoring internal lines; then the operators check the flows, and when they do not fit, which in Germany is most days, they <b>redispatch</b>, paying generators north of the bottleneck (often wind farms) to produce less and those south of it to produce more.</p>
+
+<p>The bill peaked in 2022, when southern gas plants burned crisis-priced fuel, and was about $3.5 billion in 2025.<sup class="fn"><a href="#n12">12</a></sup><sup class="fn"><a href="#n13">13</a></sup> Section 4’s loop-flow figure is this process in miniature: every gigawatt it says “must be redispatched” is one of those payments.</p>
 
 <p>The same pattern, cheap power far from the cities, appears almost everywhere. In 2016 China curtailed 17% of its wind output, before new ultra-high-voltage lines and local reforms brought the rate down.<sup class="fn"><a href="#n14">14</a></sup> In India, congestion between regions constrained about 16% of exchange trading in 2013–14.<sup class="fn"><a href="#n15">15</a></sup> Texas solved its version by building first: its CREZ programme, finished in 2014, strung about 3,600 miles of 345 kV line from the western wind zones to its cities.<sup class="fn"><a href="#n16">16</a></sup></p>
-<p>Most large US markets use <b>nodal</b> pricing instead of zones: every substation has its own price, including congestion, so trapped cheap power is priced cheaply where it is, a clear signal for where to put a factory, a battery or an <a class="xref" href="synthetic-fuels.html#cheap-demand">electrolyser</a>. It is also politically explosive: successive German governments have refused to split the country into a cheap north and a dear south, so every consumer shares the bill through network charges. The structural fix is more transmission, above all long DC links.</p>
+<p>Most large US markets use <b>nodal</b> pricing instead: every substation has its own price, so trapped cheap power is cheap where it is, a signal for where to put a factory, a battery or an <a class="xref" href="synthetic-fuels.html#cheap-demand">electrolyser</a>; <a class="xref" href="balancing.html#s9">essay 4 puts prices on this</a>. Splitting a zone is politically explosive: successive German governments have refused to divide the country into a cheap north and a dear south, so every consumer shares the bill through network charges. The structural fix is more transmission, above all long DC links.</p>
 
 <h2 id="hvdc"><span class="num">6</span>HVDC: where direct current wins</h2>
 
 <p>Direct current has no reactance and no angle. A DC line carries whatever power its converters command, up to its conductors’ thermal limit, at any length, with no charging current and two conductors instead of three. Its problem was always the ends: converting AC to DC and back took room-sized mercury-arc valves for most of the twentieth century.</p>
 
 <p>Two converter technologies dominate today. <b>Line-commutated converters</b> (LCC) use thyristors, switches that turn on at will but off only when their current falls to zero. They are robust, cheap per megawatt and efficient, losing about 0.6–0.8% per station, and carry the world’s largest links,<sup class="fn"><a href="#n17">17</a></sup> but need a strong AC grid at both ends and absorb a lot of reactive power.</p>
-<p><b>Voltage-source converters</b> (VSC) use transistors (IGBTs) that switch on and off at will, building a near-perfect sine wave from hundreds of small steps. They lose a little more, about 1% per station,<sup class="fn"><a href="#n17">17</a></sup> but can control reactive power, restart a dead grid, connect offshore wind farms with no grid of their own, and use plastic-insulated cables. They are large-scale relatives of the <a class="xref" href="utility-renewables.html#grid-forming">grid-forming inverters</a> in wind and solar plants.</p>
+<p><b>Voltage-source converters</b> (VSC) use transistors (IGBTs) that switch on and off at will, building a near-perfect sine wave from hundreds of small steps. They lose a little more, about 1% per station,<sup class="fn"><a href="#n17">17</a></sup> but can control reactive power, restart a dead grid, connect offshore wind farms with no grid of their own, and use plastic-insulated cables. They are large-scale relatives of the <a class="xref" href="balancing.html#grid-forming">grid-forming inverters</a> in wind and solar plants.</p>
 
 <p>The economics follow from the cost shape. DC has an expensive fixed part, the two converter stations, and a cheap variable part: fewer conductors, lighter towers, lower losses, no compensation. AC is the reverse. Somewhere the lines cross.</p>
 
@@ -141,11 +142,11 @@
 
 <h2 id="underground"><span class="num">7</span>Underground versus overhead</h2>
 
-<p>Nobody wants a pylon in their view, and in Germany that objection changed the grid. SuedLink, two 2 GW DC circuits over about 700 km from Schleswig-Holstein to the south, was planned in 2013 as an overhead line. After years of protest the Bundestag decided in 2015 that new DC lines should go underground, and the route was replanned from scratch; the line is now due in 2028, at a cost of about $11 billion.<sup class="fn"><a href="#n19">19</a></sup></p>
+<p>Nobody wants a pylon in their view, and in Germany that objection changed the grid. SuedLink, two 2 GW DC circuits over about 700 km from Schleswig-Holstein to the south, was planned in 2013 as an overhead line. After years of protest the Bundestag decided in 2015 that new DC lines should go underground, and the route was replanned; the line is now due in 2028, at a cost of about $11 billion.<sup class="fn"><a href="#n19">19</a></sup></p>
 
 <p>Cables cost more because everything is harder. The insulation is centimetres of extruded plastic that must shed heat into the soil, so cables are thick, laid in trenches with special backfill and jointed every kilometre or so in clean-room conditions. A 2016 German government study put underground routes at three to ten times the cost of overhead ones.<sup class="fn"><a href="#n19">19</a></sup> Repairs take weeks, not days. And an AC cable is a long capacitor: beyond about 100 km its charging current alone fills its rating. So long cables are DC, and Germany’s underground DC choice was coherent, if expensive and slow.</p>
 
-<p>The trade-off cuts both ways. Cables are invisible, nearly immune to storms and wildfire, and win consent faster; overhead lines are cheaper and quicker to repair and upgrade. Most countries mix them: overhead in open country, cable near towns and in sensitive landscapes.</p>
+<p>Cables are invisible, nearly immune to storms and wildfire, and win consent faster; overhead lines are cheaper and quicker to repair and upgrade. Most countries mix them: overhead in open country, cable near towns and in sensitive landscapes.</p>
 
 <h2 id="planning"><span class="num">8</span>Planning, permitting and who pays</h2>
 
@@ -194,19 +195,8 @@
 <p>China has built a separate tier of ultra-high-voltage lines on top of its 500 kV grid: by October 2025, 45 such projects were operating, most carrying power from the west and north to the eastern coast.<sup class="fn"><a href="#n35">35</a></sup> India joined its five regional grids into one synchronous system at the end of 2013, and the capacity between its regions has since more than tripled, to about 120 GW.<sup class="fn"><a href="#n36">36</a></sup></p>
 <p>Smaller, poorer countries pool. The Southern African Power Pool links twelve countries’ utilities from the Cape to the Congo, letting hydro-rich Zambia, Mozambique and the DR Congo trade with coal-heavy South Africa.<sup class="fn"><a href="#n37">37</a></sup> But three members are still not connected, and most trade moves under bilateral deals limited by thin cross-border lines.<sup class="fn"><a href="#n38">38</a></sup></p>
 
-<h2 id="network-costs"><span class="num">11</span>The network in your bill</h2>
+<p>With the wires in place, <a class="xref" href="balancing.html">the next essay</a> asks how the whole system is kept in balance, second by second and hour by hour.</p>
 
-<p>Somebody pays for all this. Network operators are regulated monopolies: the regulator approves their costs and a return on investment, recovered through network charges. How that lands on bills differs by country, and Germany is an extreme case.</p>
-
-<p>On 1 April 2025, about a quarter of a German household’s price was the network tariff, and about a third with the surcharges that also pay for grids: more than the energy itself.<sup class="fn"><a href="#n39">39</a></sup> Of each network dollar, roughly 30 cents pays the four transmission operators and 70 cents the regional and local networks below them.<sup class="fn"><a href="#n40">40</a></sup> What a household pays depends on where it lives and how much it uses: every operator sets a fixed yearly basic charge plus a price per kilowatt-hour, so a small user pays more for each kilowatt-hour than a large one.<sup class="fn"><a href="#n41">41</a></sup></p>
-
-<figure class="fig" data-fig="networkEuro" id="fig-networkEuro">
-<figcaption><span class="tagline tag-real">Real data</span> Net network charges for low-voltage household customers in 2025, each operator’s basic charge plus its charge per kilowatt-hour, as published by the Bundesnetzagentur and converted at US$1.13/€ (ECB 2025).<sup class="fn"><a href="#n41">41</a></sup> The split between transmission and distribution is the national average.<sup class="fn"><a href="#n40">40</a></sup></figcaption>
-</figure>
-
-<p>The spread between operators is not only about efficiency. Thinly populated regions spread their wires over fewer customers; regions where many wind and solar farms were connected carry the cost of connecting them; old, written-down networks are cheaper than new ones.<sup class="fn"><a href="#n41">41</a></sup> German network charges also carry congestion management, and since 2025 the cost of connecting renewables is spread across regions rather than landing on rural areas where the wind farms are.<sup class="fn"><a href="#n42">42</a></sup> In the United States the shift is the same: major utilities’ spending on transmission nearly tripled in real terms between 2003 and 2023, to $27.7 billion.<sup class="fn"><a href="#n43">43</a></sup> Whether that is money well spent depends on what it buys: a line that lets cheap remote wind or hydro replace gas saves far more than it costs; one that sits half-used does not. Getting that right, line by line, is what transmission planning is for.</p>
-
-<p>The final part follows electricity to its newest customers, the electrolysers and fuel plants whose economics depend on <a class="xref" href="synthetic-fuels.html">how cheap a megawatt-hour can get</a>, and so on the grid that delivers it.</p>
 
 <h2 id="notes">Notes and sources</h2>
 <ol class="notes">
@@ -248,13 +238,8 @@
 <li id="n36">Ministry of Power (India), <a href="https://powermin.gov.in/en/content/overview-0">Transmission overview</a>; Press Information Bureau, <a href="https://www.pib.gov.in/PressReleasePage.aspx?PRID=1897769">press release</a>: the national grid became synchronous on 31 December 2013.</li>
 <li id="n37">Southern African Power Pool, <a href="https://www.sapp.co.zw/about-sapp">About SAPP</a> (founded 1995).</li>
 <li id="n38">NREL, <a href="https://docs.nlr.gov/docs/fy25osti/90992.pdf"><i>Evolving Competitive Markets in SAPP</i></a> (2025): 12 member countries, 22 market participants as of July 2024; Angola, Tanzania and Malawi not yet interconnected; competitive markets about 7% of traded energy in the 2024/25 financial year (776 GWh against 9,961 GWh bilateral); SAPP monthly market performance reports, 2024.</li>
-<li id="n39">Network share of the bill: volume-weighted average for 2,500–5,000 kWh a year across all contract types, Monitoring Report 2025, Table 38. “Network-related” groups the net network tariff, metering, the offshore network surcharge and the Section 19 StromNEV surcharge. The main essay’s bill figure uses BDEW’s slightly different breakdown and new-contract prices.</li>
-<li id="n40">Umweltbundesamt, <a href="https://www.umweltbundesamt.de/themen/stromnetzkosten-der-energiewende-fair-verteilen">“Stromnetzkosten der Energiewende fair verteilen”</a>: network charges are about a third of the household price, of which transmission is about 30% of the cost and distribution (866 operators) about 70%. The network-charge figure applies this national split to every operator as an approximation.</li>
-<li id="n41">Bundesnetzagentur, SMARD, <a href="https://www.smard.de/page/home/topic-article/46/219250/netzentgelte">“Netzentgelte”</a>: 2025 net network charges of ten large distribution operators, standard-load-profile customers at low voltage (basic charge in €/year, energy charge in ct/kWh). SMARD’s household figure is the energy charge plus the basic charge spread over 3,500 kWh; the page also lists the reasons charges differ between regions. The figure leaves out metering and the network surcharges.</li>
-<li id="n42">Bundesnetzagentur and Bundeskartellamt, <a href="https://data.bundesnetzagentur.de/Bundesnetzagentur/SharedDocs/Downloads/EN/Areas/ElectricityGas/CollectionCompanySpecificData/Monitoring/MonitoringReport2025.pdf"><i>Monitoring Report 2025</i></a>, Table 38 and section on electricity network tariffs (household network tariffs 10.72 ct/kWh in 2025, about 12.1¢; Section 19 surcharge 1.558 ct/kWh, about 1.76¢, about 60% of it for the distribution of renewable-integration network costs).</li>
-<li id="n43">U.S. Energy Information Administration, <a href="https://www.eia.gov/todayinenergy/detail.php?id=63724">“Grid infrastructure investments drive increase in utility spending over last two decades”</a>, 18 November 2024 (real 2023 dollars).</li>
 </ol>
-<nav class="pager" aria-label="Previous and next in the series"><a class="prev" href="transformers.html"><small>← Previous</small>Transformers: The Quiet Bottleneck</a><a class="next" href="synthetic-fuels.html"><small>Next →</small>Synthetic Fuels and the Price of a Kilowatt-Hour</a></nav>
+<nav class="pager" aria-label="Previous and next in the series"><a class="prev" href="transformers.html"><small>← Previous</small>Transformers: The Quiet Bottleneck</a><a class="next" href="balancing.html"><small>Next →</small>Balancing the Grid: Fifty Hertz and the Markets That Keep It</a></nav>
 </article>
 </main>
 <script src="series.js"></script>
