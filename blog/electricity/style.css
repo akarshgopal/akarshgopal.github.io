@@ -198,3 +198,6 @@ figcaption details.method summary { display: inline; cursor: pointer; color: var
 figcaption details.method summary::-webkit-details-marker { display: none; }
 figcaption details.method[open] summary { display: block; margin: 4px 0 2px; }
 figcaption details.method[open] { display: block; color: var(--ink3); }
+
+/* the day model: power-flow strip beside the day chart on wide screens */
+@media (min-width: 1000px) { .day-pair { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); gap: 16px; align-items: start; } .day-pair > .canvas-wrap { min-width: 0; } }
