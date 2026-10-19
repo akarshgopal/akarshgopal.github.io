@@ -108,7 +108,7 @@ export function losses(el) {
 // ---------------------------------------------------------------------------
 export function transformer(el) {
   // The end of the generator chain: the same machine (lib/machine.js, phase A's coil in copper) feeds a coil on an iron core.
-  const st = { ratio: 18, ph: 0, ang: 0 };
+  const st = { ratio: 380 / 21, ph: 0, ang: 0 }; // 21 kV generator to the 380 kV grid
   const V1 = 21; // kV generator terminal (typical order of magnitude)
   const PMW = 500;
   const fig = new Fig(el, {
@@ -147,26 +147,30 @@ export function transformer(el) {
       text(ctx, 'to the grid', sxw + (narrow ? 0 : 30), Math.max(12, cy - 16), { size: 11, color: C.ink3, align: 'right' });
       text(ctx, `${n1 * 10} turns`, px, cy + ch + 28, { size: 11, color: C.ink2, align: 'center' });
       text(ctx, `${Math.round(n1 * 10 * st.ratio)} turns`, sxw, cy + ch + 28, { size: 11, color: C.ink2, align: 'center' });
-      // waveforms: heights on a log scale, so the small 21 kV wave stays visible next to the big 378 kV one
+      // waveforms: two panels on linear scales, in and out drawn together, so the trade is visible as it is:
+      // voltage goes up by the turns ratio while current goes down by it
       const V2 = V1 * st.ratio, I1 = PMW / (Math.sqrt(3) * V1), I2 = I1 / st.ratio; // kA
-      const rows = [['voltage in', V1, 'kV', C.field], ['current in', I1, 'kA', C.electron], ['voltage out', V2, 'kV', C.field], ['current out', I2, 'kA', C.electron]];
+      const panels = [['voltage', 'kV', C.field, V1, V2], ['current', 'kA', C.electron, I1, I2]];
       const bx = narrow ? 16 : x0 + cw + 70, bw = narrow ? w - 32 : w - bx - 20;
-      const top = narrow ? cy + ch + 46 : 20, rh = narrow ? (h - top - 24) / 4 : (h - 46) / 4;
-      const lg = (v, unit) => { const [lo, hi] = unit === 'kV' ? [2, 420] : [0.02, 30]; return 0.12 + 0.88 * clamp(Math.log(v / lo) / Math.log(hi / lo), 0, 1); };
-      rows.forEach(([lab, val, unit, col], i) => {
-        const y0 = top + i * rh + rh / 2, amp = lg(val, unit) * rh * 0.36;
+      const top = narrow ? cy + ch + 46 : 20, ph = narrow ? (h - top - 16) / 2 : (h - 30) / 2;
+      const fmtv = v => (v < 10 ? v.toFixed(2) : v.toFixed(0));
+      panels.forEach(([lab, unit, col, vin, vout], i) => {
+        const y0 = top + i * ph + ph / 2 + 8, big = Math.max(vin, vout), A = ph * 0.32;
         line(ctx, bx, y0, bx + bw, y0, C.grid2, 1);
-        const pts = []; for (let k = 0; k <= 120; k++) pts.push([bx + k / 120 * bw, y0 - Math.sin(st.ph - k / 120 * 4 * Math.PI) * amp]);
-        pathLine(ctx, pts, col, 2);
-        text(ctx, lab, bx, y0 - rh / 2 + 12, { size: 11, color: C.ink3 });
-        text(ctx, (val < 10 ? val.toFixed(2) : val.toFixed(0)) + ' ' + unit, bx + bw, y0 - rh / 2 + 12, { size: 11.5, color: col, align: 'right', weight: 600 });
+        for (const [v, c, wdt] of [[vin, alpha(col, 0.45), 2], [vout, col, 2.2]]) {
+          const amp = A * v / big, pts = [];
+          for (let k = 0; k <= 120; k++) pts.push([bx + k / 120 * bw, y0 - Math.sin(st.ph - k / 120 * 4 * Math.PI) * amp]);
+          pathLine(ctx, pts, c, wdt);
+        }
+        text(ctx, lab, bx, y0 - ph / 2 + 4, { size: 11, color: C.ink3 });
+        text(ctx, `in ${fmtv(vin)} ${unit}`, bx + bw - 92, y0 - ph / 2 + 4, { size: 11.5, color: alpha(col, 0.75), align: 'right', weight: 600 });
+        text(ctx, `out ${fmtv(vout)} ${unit}`, bx + bw, y0 - ph / 2 + 4, { size: 11.5, color: col, align: 'right', weight: 700 });
       });
-      text(ctx, 'wave heights on a log scale', bx + bw, h - 6, { size: 10, color: C.ink3, align: 'right' });
     },
   });
   const ctl = controls(el);
   const ro = readout(el);
   const upd = () => { const V2 = V1 * st.ratio, I1 = PMW / (Math.sqrt(3) * V1), I2 = I1 / st.ratio; ro.innerHTML = `${PMW} MW goes in at ${V1} kV and <b>${(I1).toFixed(1)} kA</b>; it comes out at <b>${V2.toFixed(0)} kV</b> and <b>${(I2 * 1000).toFixed(0)} A</b>. Voltage × current is unchanged, minus a fraction of a percent of heat in a good transformer.`; fig.invalidate(); };
-  slider(ctl, { label: 'Turns ratio (grid : generator)', min: 0.2, max: 20, step: 0.1, value: st.ratio, color: '#b4703d', fmt: v => v.toFixed(1) + ' : 1', oninput: v => { st.ratio = v; upd(); } });
+  slider(ctl, { label: 'Turns ratio (grid : generator)', min: 0.2, max: 20, step: 'any', value: st.ratio, color: '#b4703d', fmt: v => v.toFixed(1) + ' : 1', oninput: v => { st.ratio = v; upd(); } });
   upd();
 }

@@ -1,5 +1,5 @@
-// US$ by default (euros on pages that set data-currency="EUR"), the other as a toggle. Amounts elsewhere in the essay are stored in
-// US dollars; fmtMoney converts for display.
+// Every amount in the series is shown in US dollars. Amounts are stored in US dollars, except in models built on euro data,
+// whose strings are converted for display (curStr, curDraw, euroFigure).
 //
 // Rates are annual averages of the ECB euro foreign exchange reference rate,
 // series EXR.A.USD.EUR.SP00.A — “US dollar/Euro”, US dollars per 1 euro.
@@ -17,7 +17,6 @@
 // Years outside 2015–2026 use the nearest available year. eurPerUsd = 1 / usdPerEur.
 // A US-dollar amount converts to euros as amount * eurPerUsd.
 
-import { segmented } from './ui.js';
 
 /** USD per 1 EUR, by calendar year. */
 export const USD_PER_EUR = Object.freeze({
@@ -35,8 +34,8 @@ export const USD_PER_EUR = Object.freeze({
   2026: 229.6166 / 198,
 });
 
-// A page can default to euros with <html data-currency="EUR"> (Parts 1, 2, 4 and 5, whose prose quotes euro figures).
-export const DEFAULT_CURRENCY = (typeof document !== 'undefined' && document.documentElement && document.documentElement.dataset.currency === 'EUR') ? 'EUR' : 'USD';
+// The series shows every amount in US dollars. Models built on euro data convert at the ECB rate for the year (see curStr).
+export const DEFAULT_CURRENCY = 'USD';
 
 export const RATE_META = Object.freeze({
   source: 'European Central Bank',
@@ -107,10 +106,6 @@ export function fmtMoney(amountUsd, currency = DEFAULT_CURRENCY, year = 2025, op
   return currency === 'EUR' ? `${sign}€${body}${unit}` : `${sign}$${body}${unit}`;
 }
 
-/**
- * Segmented US$ / € control. Calls onchange with 'USD' or 'EUR'.
- * namePrefix keeps `name` attributes unique when more than one figure has a toggle.
- */
 // Captions follow the toggle too: euro amounts in the figure's caption are converted at `caption` (US$ per €), or left alone if
 // caption === false (figures that convert each year at its own rate, where one rate would mislead).
 const capOrig = new WeakMap();
@@ -119,20 +114,11 @@ function captionCur(fig, cur, rate) {
   if (!capOrig.has(cap)) capOrig.set(cap, cap.innerHTML);
   const o = capOrig.get(cap); cap.innerHTML = cur === 'USD' ? curStr(o, 'USD', rate, false, true) : o; return true;
 }
-// opts.value overrides the page default for one figure (the main essay's euro-native wholesale and bill charts open in €).
-export function currencyToggle(ctl, onchange, namePrefix = 'cur', { caption = USD_PER_EUR[2025], value = DEFAULT_CURRENCY } = {}) {
+export function currencyToggle(ctl, onchange, namePrefix = 'cur', { caption = USD_PER_EUR[2025] } = {}) {
+  // No visible control: every figure shows US dollars. Euro amounts left in a caption are converted once, on load.
   const fig = ctl.closest('figure');
-  if (caption && value === 'USD') { let n = 0; const tryInit = () => { if (!captionCur(fig, 'USD', caption) && n++ < 120) requestAnimationFrame(tryInit); }; requestAnimationFrame(tryInit); }
-  const inner = onchange; onchange = v => { if (caption) captionCur(fig, v, caption); inner(v); };
-  return segmented(ctl, {
-    label: 'Currency',
-    options: [
-      { label: 'US$', value: 'USD', name: `${namePrefix}-usd` },
-      { label: '€', value: 'EUR', name: `${namePrefix}-eur` },
-    ],
-    value,
-    onchange,
-  });
+  if (caption) { let n = 0; const tryInit = () => { if (!captionCur(fig, 'USD', caption) && n++ < 120) requestAnimationFrame(tryInit); }; requestAnimationFrame(tryInit); }
+  return { get value() { return 'USD'; }, set() {} };
 }
 
 // Display conversion of already-formatted euro strings: "€1,234.5" → "$1,394.9", "€/MWh" → "$/MWh",

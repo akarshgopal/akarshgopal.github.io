@@ -152,7 +152,7 @@ export function whereFits(el) {
     height: w => w < 600 ? 470 : 430,
     draw(ctx, w, h) {
       const narrow = w < 600, A = { l: narrow ? 16 : 230, r: w - 20, t: 34, b: h - 16 }, rowH = (A.b - A.t) / USES.length; geo = [];
-      const xs = scale(0, 300, narrow ? A.l : A.l, A.r);
+      const xs = scale(0, 400, A.l, A.r);
       if (!narrow) { [0, 100, 200, 300].forEach(v => { line(ctx, xs(v), A.t - 6, xs(v), A.b, C.grid, 1); text(ctx, v + '%', xs(v), A.t - 10, { size: 10, color: C.ink3, align: 'center' }); }); text(ctx, 'useful energy per unit of electricity', A.l - 10, A.t - 10, { size: 10.5, color: C.ink3, align: 'right', weight: 500 }); }
       USES.forEach((u, i) => {
         const y = A.t + i * rowH, sel = st.sel === i, vc = u.verdict === 'electrify' ? ELEC : u.verdict === 'molecule' ? H2C : mix(ELEC, H2C, 0.5);
@@ -161,7 +161,7 @@ export function whereFits(el) {
         text(ctx, u.n, narrow ? A.l : A.l - 10, ny, { size: 11.5, weight: sel ? 700 : 600, color: C.ink, align: narrow ? 'left' : 'right' });
         const by = narrow ? y + 22 : y + rowH * 0.13, bh = narrow ? Math.min(12, rowH - 30) : rowH * 0.74;
         if (u.opts) {
-          const xsN = narrow ? scale(0, 300, A.l + 140, A.r) : xs, n = u.opts.length, sub = bh / n;
+          const xsN = narrow ? scale(0, 400, A.l + 140, A.r) : xs, n = u.opts.length, sub = bh / n;
           u.opts.forEach(([s, v], j) => { const yy = narrow ? y + 4 + j * ((rowH - 8) / n) : by + j * sub; const hh = narrow ? (rowH - 8) / n - 2 : sub - 2; ctx.fillStyle = alpha(j === 0 ? ELEC : H2C, j === 0 ? 0.8 : 0.55); ctx.fillRect(xsN(0), yy, xsN(v) - xsN(0), hh); text(ctx, `${s} ${v}%`, xsN(v) + 4, yy + hh / 2 + 4, { size: 9.5, color: C.ink2, halo: true }); });
         } else {
           const tag = u.verdict === 'electrify' ? 'electrify directly' : 'needs molecules';

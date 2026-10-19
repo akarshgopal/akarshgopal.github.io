@@ -10,7 +10,7 @@ Goal of current work: make the series global (see GLOBAL-AUDIT.md). Germany/EU b
 - NO Energy-Charts data (licence). SMARD (CC BY 4.0), ENTSO-E, Ember (CC BY 4.0), OWID (CC BY), EIA, World Bank are fine.
 - Label every model: figcaption starts with `<span class="tagline tag-real">Real data</span>`, `tag-ill` (Model) or `tag-mixed` (Real + model).
 - Keep ALL existing element ids/anchors (h2 ids, figure data-fig names). Add, never rename or remove.
-- Money: default US$; where a figure shows prices add a €/$ toggle via src/lib/currency.js (create if absent: export rates by year with a cited source, a `fmtMoney` helper and a `currencyToggle(ctl, onchange)` segmented control). Be consistent.
+- Money: every amount is in US dollars, in prose and figures, with no currency toggle. Figures built on euro data convert their display through src/lib/currency.js (euroFigure / curStr, ECB annual rates); say "converted at US$1.13/€ (ECB 2025)" in the caption. Citations in the notes may keep the source's currency.
 
 ## Code conventions
 - Main essay source is src/index.part1.html, part2, part3 (build concatenates into src/index.html; edit the parts, not src/index.html). Posts: src/posts/<file>.html. Figures are JS modules in src/figs/*.js registered in src/posts.js (posts) or the main-essay registry (grep for an existing fig name like 'merit' to find it).

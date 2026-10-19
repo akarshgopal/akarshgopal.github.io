@@ -15,7 +15,7 @@ const label = (p, i) => i === 0 ? 'Essay' : String(i);
 
 function nav(cur) {
   const items = PAGES.map((p, i) => `<li><a href="${p.file}"${i === cur ? ' aria-current="page"' : ''}${p.status === 'planned' ? ' class="planned"' : ''}><span class="n">${label(p, i)}</span>${esc(p.short)}${p.status === 'planned' ? '<small>in preparation</small>' : ''}</a></li>`).join('');
-  return `<nav class="series" aria-label="${SERIES_TITLE}: the series"><div class="series-in"><a class="series-title" href="index.html">${SERIES_TITLE}</a><ol>${items}</ol></div></nav><script>(function(){var a=document.querySelector('nav.series [aria-current=page]');if(a){var o=a.closest('ol');if(o.scrollWidth>o.clientWidth)o.scrollLeft=a.offsetLeft-o.offsetLeft-24;}})();</script>`;
+  return `<nav class="series" aria-label="${SERIES_TITLE}: the series"><div class="series-in"><a class="series-title" href="index.html">${SERIES_TITLE}</a><ol>${items}</ol><button id="play-toggle" type="button" aria-pressed="true" title="Pause all animations">❚❚ Pause</button></div></nav><script>(function(){var a=document.querySelector('nav.series [aria-current=page]');if(a){var o=a.closest('ol');if(o.scrollWidth>o.clientWidth)o.scrollLeft=a.offsetLeft-o.offsetLeft-24;}})();</script>`;
 }
 function pager(cur) {
   const prev = PAGES[cur - 1], next = PAGES[cur + 1];
@@ -61,6 +61,8 @@ PAGES.forEach((p, i) => {
   else html = stub(p, i);
   // stable ids for every figure that lacks one
   html = html.replace(/<figure([^>]*?)data-fig="([A-Za-z0-9]+)"([^>]*)>/g, (m, a, name, b) => /\bid=/.test(a + b) ? m : `<figure${a}data-fig="${name}" id="fig-${name}"${b}>`);
+  // the page-wide Pause button lives in the series nav, not floating over the text
+  html = html.replace(/<button id="play-toggle"[^>]*>[^<]*<\/button>\n?/, '');
   html = html.replace(/(<main>)/, nav(i) + '\n$1');
   html = html.replace(/(<\/article>)/, pager(i) + '\n$1');
   writeFileSync(`dist/${p.file}`, html);

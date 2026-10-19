@@ -78,7 +78,11 @@ export function faraday(el) {
       if (!lines || lastHalf !== magLen / 2) { lines = dipoleLines(magLen / 2, 6); lastHalf = magLen / 2; }
       // field lines
       ctx.save(); ctx.beginPath(); ctx.rect(0, 0, w, h * 0.62 - 56); ctx.clip(); ctx.translate(mx, cy);
-      ctx.strokeStyle = alpha(C.ink3, 0.28); ctx.lineWidth = 1;
+      // fade the field out before the edge of the drawing instead of cutting it off
+      { const R1 = Math.max(40, Math.min(cy - 4, h * 0.62 - 56 - cy)), g = ctx.createRadialGradient(0, 0, 0, 0, 0, R1);
+        g.addColorStop(0, alpha(C.ink3, 0.42)); g.addColorStop(0.7, alpha(C.ink3, 0.34)); g.addColorStop(1, alpha(C.ink3, 0));
+        ctx.strokeStyle = g; }
+      ctx.lineWidth = 1;
       for (const pts of lines) { ctx.beginPath(); pts.forEach(([x, y], i) => i ? ctx.lineTo(x, y) : ctx.moveTo(x, y)); ctx.stroke(); }
       ctx.restore();
       // coil back halves

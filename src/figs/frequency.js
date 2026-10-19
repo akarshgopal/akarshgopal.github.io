@@ -163,11 +163,12 @@ export function frequency(el) {
         }
       }
       // time axis labels
-      for (let s = Math.ceil(t0 / 60) * 60; s <= t0 + WINDOW; s += 60) text(ctx, (s / 60).toFixed(0) + ' min', B.sx(s), bb.b + 16, { size: 10.5, color: C.ink3, align: 'center' });
+      // tick labels stop short of the 'simulated time' note in the bottom-right corner
+      const noteL = bb.r - measure(ctx, `simulated time ${fmtT(st.t)} · ${st.speed}× speed`, 10.5) - 8;
+      for (let s = Math.ceil(t0 / 60) * 60; s <= t0 + WINDOW && B.sx(s) + 20 < noteL; s += 60) text(ctx, (s / 60).toFixed(0) + ' min', B.sx(s), bb.b + 16, { size: 10.5, color: C.ink3, align: 'center' });
       let lx = bb.l + 130; const ly = bb.t - 9;
       if (!gridLeg) for (const [k, lab] of legend) { rrect(ctx, lx, ly - 8, 10, 10, 2); ctx.fillStyle = COLS[k]; ctx.fill(); text(ctx, lab, lx + 14, ly + 1, { size: 10.5, color: C.ink2 }); lx += 26 + ctx.measureText(lab).width * 1.05; }
       else { const nc = narrow ? 2 : 3; legend.forEach(([k, lab], i) => { const xx = bb.l - 30 + (i % nc) * (bb.r - bb.l + 30) / nc, yy = bb.t - 54 + Math.floor(i / nc) * 13; rrect(ctx, xx, yy - 8, 9, 9, 2); ctx.fillStyle = COLS[k]; ctx.fill(); text(ctx, lab, xx + 12, yy, { size: 9.5, color: C.ink2 }); }); }
-      hint.classList.toggle('done', !!(st.events.length || Math.abs(st.dload) >= 0.05));
       text(ctx, `simulated time ${fmtT(st.t)} · ${st.speed}× speed`, bb.r, h - 6, { size: 10.5, color: C.ink3, align: 'right' });
     },
   });
@@ -182,22 +183,27 @@ export function frequency(el) {
     if (!isPlaying()) { advance(1); }
     fig.invalidate();
   }
-  const hint = document.createElement('p'); hint.className = 'fig-hint';
-  hint.innerHTML = '<b>Try this:</b> press “Trip a 1 GW plant” and watch the rotors slip and the frequency fall until the reserves catch it. Then open <b>More</b> for bigger trips and the inertia.';
   const ctl = controls(el);
   const row1 = document.createElement('div'); row1.className = 'ctl btnrow'; ctl.appendChild(row1);
   button(row1, 'Trip a 1 GW plant', () => trip(1, '−1 GW'), { kind: 'danger', name: 'trip1' });
+  button(row1, 'Trip 3 GW <small>(design incident)</small>', () => trip(3, '−3 GW'), { kind: 'danger', name: 'trip3' });
+  button(row1, 'Lose 15 GW', () => trip(15, '−15 GW'), { kind: 'danger', name: 'trip15' });
   button(row1, 'Reset', () => { reset(); dl.set(0); fig.invalidate(); }, { kind: 'ghost', name: 'reset' });
-  const mo = more(ctl, 'More: bigger trips, inertia and reserves');
-  const row2 = document.createElement('div'); row2.className = 'ctl btnrow'; mo.appendChild(row2);
-  button(row2, 'Trip 3 GW <small>(design incident)</small>', () => trip(3, '−3 GW'), { kind: 'danger', name: 'trip3' });
-  button(row2, 'Lose 15 GW', () => trip(15, '−15 GW'), { kind: 'danger', name: 'trip15' });
+  const mo = more(ctl, 'More: inertia and reserves');
   slider(mo, { label: 'System inertia H', min: 1, max: 8, step: 0.1, value: st.H, color: C.lignite, fmt: v => v.toFixed(1) + ' s', oninput: v => { st.H = v; fig.invalidate(); }, name: 'H' });
   const dl = slider(mo, { label: 'Extra demand <small>(drag)</small>', min: -6, max: 6, step: 0.1, value: 0, color: C.demand, fmt: v => (v > 0 ? '+' : '') + v.toFixed(1) + ' GW', oninput: v => { st.dload = v; fig.invalidate(); }, name: 'demand' });
   segmented(mo, { label: 'Primary reserve', options: [{ label: 'on', value: true }, { label: 'off', value: false }], value: true, onchange: v => { st.fcrOn = v; }, color: C.freq });
   segmented(mo, { label: 'Secondary reserve', options: [{ label: 'on', value: true }, { label: 'off', value: false }], value: true, onchange: v => { st.afrrOn = v; }, color: C.storage });
   segmented(mo, { label: 'Speed', options: [{ label: '1×', value: 1 }, { label: '2×', value: 2 }, { label: '8×', value: 8 }], value: 2, onchange: v => { st.speed = v; } });
+  // open on the event itself: the first time the figure is well in view (and animations are on), a 1 GW plant trips
+  if (typeof IntersectionObserver !== 'undefined') {
+    const io = new IntersectionObserver(es => {
+      if (!es.some(e => e.isIntersecting)) return;
+      io.disconnect();
+      setTimeout(() => { if (isPlaying() && !st.events.length && !st.blackout) trip(1, '−1 GW'); }, 1500);
+    }, { threshold: 0.6 });
+    io.observe(el);
+  }
   // expose for programmatic tests
-  { const ro = [...el.querySelectorAll('.readout')].pop(); (ro || ctl).after(hint); }
   el.__sim = { st, trip, advance, fig };
 }

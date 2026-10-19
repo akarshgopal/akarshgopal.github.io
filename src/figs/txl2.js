@@ -96,7 +96,7 @@ export function loopFlow(el) {
   function upd() {
     const { f } = run(st.T), loop = Math.abs(f[1]) + Math.abs(f[3]), ok = maxFeasible(), over = f.some((v, i) => Math.abs(v) > LINES[i].lim + 1e-6);
     let s = `Of ${st.T} GW sent south, <b>${(st.T ? loop / Math.max(st.T, 1e-9) * 100 : 0).toFixed(0)}%</b> takes the long way round through neighbouring countries. `;
-    s += over ? `Some lines are overloaded: the network can only carry <b>${ok.toFixed(1)} GW</b>, so <b>${(st.T - ok).toFixed(1)} GW</b> must be redispatched: wind turned down in the north, power stations turned up in the south. Germany pays about <b>€3 billion</b> a year for this (€3.08 billion in 2025).` : 'Every line is within its limit.';
+    s += over ? `Some lines are overloaded: the network can only carry <b>${ok.toFixed(1)} GW</b>, so <b>${(st.T - ok).toFixed(1)} GW</b> must be redispatched: wind turned down in the north, power stations turned up in the south. Germany pays about <b>$3.4 billion</b> a year for this ($3.5 billion in 2025, at US$1.13/€).` : 'Every line is within its limit.';
     ro.innerHTML = s; fig.invalidate();
   }
   upd();

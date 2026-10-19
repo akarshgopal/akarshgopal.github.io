@@ -99,7 +99,7 @@ export function powerAngle(el) {
       // regions
       ctx.fillStyle = alpha(HOT, 0.06); ctx.fillRect(sx(90), A.t, sx(180) - sx(90), A.b - A.t);
       text(ctx, 'unstable', sx(135), A.t + 14, { size: 10.5, color: HOT, align: 'center', weight: 600 });
-      if (THERM < ymax) { line(ctx, A.l, sy(THERM), A.r, sy(THERM), C.hot, 1.2, [5, 4]); text(ctx, 'thermal limit of one circuit', A.r - 4, sy(THERM) - 6, { size: 10, color: C.hot, align: 'right', halo: true }); }
+      if (THERM < ymax) { line(ctx, A.l, sy(THERM), A.r, sy(THERM), C.hot, 1.2, [5, 4]); text(ctx, 'thermal limit of one circuit', A.r - 4, w < 600 ? sy(THERM) + 13 : sy(THERM) - 6, { size: 10, color: C.hot, align: 'right', halo: true }); }
       const pts = []; for (let k = 0; k <= 180; k += 2) pts.push([sx(k), sy(Math.min(ymax, Pm * Math.sin(k * Math.PI / 180)))]);
       pathLine(ctx, pts, LINE, 2.4);
       const P = Pm * Math.sin(st.d * Math.PI / 180);
@@ -118,7 +118,11 @@ export function powerAngle(el) {
       arrow(ctx, p2[0], p2[1], p1[0], p1[1], HOT, 1.8, 8);
       text(ctx, 'V₂ receiving end', p2[0] + 2, p2[1] + 16, { size: 10.5, weight: 650, color: C.ink2, align: 'center' });
       text(ctx, 'V₁ sending end', p1[0] + (st.d > 100 ? -6 : 6), p1[1] - 6, { size: 10.5, weight: 650, color: LINE, align: st.d > 100 ? 'right' : 'left', halo: true });
-      if (st.d >= 12) text(ctx, 'voltage across the line = X·I', (p1[0] + p2[0]) / 2 + 8, (p1[1] + p2[1]) / 2 + 2, { size: 10, color: HOT, halo: true });
+      if (st.d >= 12) { // on a phone the label would run off the right edge: put it on the other side of the arrow
+        const mx = (p1[0] + p2[0]) / 2, my = (p1[1] + p2[1]) / 2 + 2, lab = 'voltage across the line = X·I';
+        ctx.font = '400 10px Inter, sans-serif'; const fits = mx + 8 + ctx.measureText(lab).width < w - 4;
+        text(ctx, lab, fits ? mx + 8 : mx - 8, my, { size: 10, color: HOT, halo: true, align: fits ? 'left' : 'right' });
+      }
       ctx.strokeStyle = C.ink3; ctx.lineWidth = 1; ctx.beginPath(); ctx.arc(ox, oy, r * 0.28, -d, 0); ctx.stroke();
       text(ctx, 'δ', ox + r * 0.34 * Math.cos(d / 2), oy - r * 0.34 * Math.sin(d / 2) + 4, { size: 12, weight: 650, color: C.ink });
     },

@@ -225,6 +225,8 @@ export function powerEnergy(el) {
   const parts = () => APP.map(a => on[a.k] ? a.W : 0);
   const total = () => APP.reduce((s, a) => s + (on[a.k] ? a.W : 0), 0);
   for (let i = 0; i < MINUTES; i++) { hist.push(total()); histP.push(parts()); }
+  // the hour so far includes one kettle boil, so the figure opens showing a tall, thin spike next to the low, wide baseline
+  for (let i = 42; i < 45; i++) { hist[i] += 2000; histP[i] = histP[i].map((v, j) => APP[j].k === 'kettle' ? 2000 : v); }
   const fig = new Fig(el, {
     label: 'Power drawn over the last hour, with energy accumulating as the area under the curve',
     height: w => Math.max(240, Math.min(320, w * 0.4)),

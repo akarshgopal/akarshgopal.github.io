@@ -142,7 +142,7 @@ export function curtailment(el) {
   });
   const ctl = controls(el); const ro = readout(el);
   segmented(ctl, { label: 'Show', options: [{ label: 'Energy curtailed', value: 'vol', name: 'cu-vol' }, { label: 'Cost', value: 'cost', name: 'cu-cost' }], value: 'vol', onchange: v => { st.view = v; upd(); } });
-  function upd() { ro.innerHTML = st.view === 'vol' ? 'About 9.4 TWh of wind and solar was curtailed in each of 2024 and 2025 — roughly 3.5% of German renewable output. The mix is shifting: solar curtailment nearly doubled in 2025, increasingly because local distribution grids are full.' : 'Congestion management — turning plants down in the north and others up in the south, holding reserve plants, and trading across borders — has cost about €3 billion a year recently, peaking at €4.2 billion in the 2022 fuel-price crisis.'; fig.invalidate(); }
+  function upd() { ro.innerHTML = st.view === 'vol' ? 'About 9.4 TWh of wind and solar was curtailed in each of 2024 and 2025 — roughly 3.5% of German renewable output. The mix is shifting: solar curtailment nearly doubled in 2025, increasingly because local distribution grids are full.' : 'Congestion management — turning plants down in the north and others up in the south, holding reserve plants, and trading across borders — has cost about €3.0 billion a year recently, peaking at €4.2 billion in the 2022 fuel-price crisis.'; fig.invalidate(); }
   upd();
   euroFigure(el, fig, ctl, 'eu-curtailment');
 }
@@ -284,7 +284,7 @@ export function seasonMix(el) {
       const narrow = w < 600;
       if (st.view === 'month') {
         const box = { l: narrow ? 46 : 56, r: w - 16, t: 40, b: h - 40 };
-        const { sx, sy } = axes(ctx, { box, x0: 0, x1: 12, y0: 0, y1: 50, yticks: [0, 10, 20, 30, 40, 50], xticks: [], yfmt: v => v + ' TWh', ylabel: 'Germany 2025, public generation per month' });
+        const { sx, sy } = axes(ctx, { box, x0: 0, x1: 12, y0: 0, y1: 50, yticks: [0, 10, 20, 30, 40, 50], xticks: [], yfmt: v => v + ' TWh', ylabel: w < 600 ? '' : 'Germany 2025, public generation per month' }); // on a phone the legend takes that line; ticks carry the unit
         const bw = (box.r - box.l) / 12 * 0.7, cols = [['Wind offshore', '#1d4a73'], ['Wind onshore', '#4f9bd1'], ['Solar', '#e3a922']];
         for (let m = 0; m < 12; m++) {
           let b = 0; const x = sx(m + 0.5) - bw / 2;

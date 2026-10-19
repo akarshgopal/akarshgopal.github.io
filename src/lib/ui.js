@@ -102,13 +102,9 @@ export function readout(parent, cls = '') {
   return d;
 }
 
-// Short "try this" prompt shown above the caption; hidden after the first interaction with the figure's controls.
+// "Try this" prompts are retired: the prose says what to try. hint() keeps its signature and returns a detached element.
 export function hint(el, html) {
-  const p = document.createElement('p'); p.className = 'fig-hint'; p.innerHTML = '<b>Try this:</b> ' + html;
-  { const ro = [...el.querySelectorAll('.readout')].pop(); if (ro) ro.after(p); else el.insertBefore(p, el.querySelector('figcaption') || null); }
-  const hide = () => { p.classList.add('done'); }; // dim, never remove: the prompt stays readable
-  el.addEventListener('input', hide, { once: true }); el.addEventListener('click', e => { if (e.target.closest('button')) hide(); }, { once: false });
-  return p;
+  return document.createElement('p');
 }
 
 // Progressive disclosure: advanced controls live in a collapsed "More" row. Returns the inner container.

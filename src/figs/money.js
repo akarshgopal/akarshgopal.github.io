@@ -106,7 +106,7 @@ export function timeline(el) {
 
 // ---------------------------------------------------------------- spot price history (real: Ember)
 export function spot(el) {
-  const st = { mode: 'monthly', hover: null, cur: 'EUR' }; // opens in €, as the prose quotes it
+  const st = { mode: 'monthly', hover: null, cur: 'USD' };
   let M, A;
   const conv = () => { M = DATA.emberMonthly.map(([ym, v]) => { const x = +ym.slice(0, 4) + (+ym.slice(5, 7) - 0.5) / 12; return [x, v * fxY(st.cur, x), ym]; }); A = DATA.emberAnnual.map(([y, v]) => [y, v * fxY(st.cur, y)]); };
   conv();
@@ -155,7 +155,7 @@ export function spot(el) {
 // ---------------------------------------------------------------- bill cascade (real: BDEW + Ember)
 const TAX2026 = [['VAT (19%)', 5.91], ['Electricity tax', 2.05], ['Concession fee', 1.666], ['§19 grid surcharge', 1.559], ['Offshore grid levy', 0.941], ['CHP levy', 0.446]];
 export function bill(el) {
-  const st = { year: 2026, hover: -1, cur: 'EUR' }; // opens in €, as the prose quotes it
+  const st = { year: 2026, hover: -1, cur: 'USD' };
   let B; const conv = () => { B = DATA.bdew.map(([y, ...v]) => [y, ...v.map(x => x * fxY(st.cur, y))]); }; conv();
   const spotOf = y => (DATA.emberAnnual.find(r => r[0] === y) || [0, NaN])[1] / 10 * fxY(st.cur, y);
   const U = () => st.cur === 'USD' ? '¢/kWh' : 'ct/kWh';

@@ -1,16 +1,15 @@
 
 <h2 id="s5"><span class="num">5</span>Fifty hertz</h2>
 
-<p>Here is the strangest fact about the grid. Continental Europe, from Portugal to Turkey, is a single synchronous machine, and so is the eastern half of North America. Thousands of large generators turn in lockstep, their magnetic fields locked to each other through the wires, like the rotors in the figure below.</p>
+<p>Continental Europe, from Portugal to Turkey, is a single synchronous machine, and so is the eastern half of North America. Thousands of generators like the one above turn in lockstep, their magnetic fields locked to each other through the wires.</p>
 
 <p>And the grid stores almost no energy. At every instant, generation must equal consumption plus losses. When they differ, the difference comes, in the first seconds, from the only store there is: the kinetic energy of all those spinning rotors. If consumption wins, the rotors slow and the frequency falls. Frequency is therefore a live, continent-wide measurement of balance, reported by every socket: 50 Hz across Europe, most of Asia, Africa and Australia, 60 Hz across most of the Americas.</p>
 
 <figure class="fig showpiece" data-fig="frequency">
-<figcaption><span class="tagline tag-ill">Simulation</span> A simplified model of a 300 GW synchronous area. It uses Europe’s 50 Hz; North America, most of South America, Saudi Arabia, Korea, Taiwan and western Japan run at 60 Hz, with the same physics. Rotor angles are shown stroboscopically: at exactly 50 Hz they appear frozen; below 50 Hz they drift backwards. Primary (frequency containment) reserve responds in proportion to the deviation within seconds, delivering its full ±3 GW at 200 mHz; secondary reserve slowly pulls frequency back to 50 Hz; below 49.0 Hz, automatic load shedding disconnects blocks of customers. The parameters are chosen to resemble Continental Europe, but this is not a grid operator’s model.<sup class="fn"><a href="#n4">4</a></sup></figcaption>
+<figcaption><span class="tagline tag-ill">Simulation</span> A simplified 300 GW synchronous area at 50 Hz, with parameters chosen to resemble Continental Europe; not a grid operator’s model. The rotors are drawn under a strobe flashing 50 times a second, so at exactly 50 Hz they look frozen and below it they drift backwards.<sup class="fn"><a href="#n4">4</a></sup></figcaption>
 </figure>
 
-<p>Press <b>Trip a 1 GW plant</b>: one large power station, gone in an instant. The rotors slip, the frequency dips, and the reserves catch it well clear of trouble. Now open <b>More</b> and press <b>Trip 3 GW</b>. That is the reference incident Continental Europe is designed to survive: the sudden loss of three gigawatts, roughly two large nuclear units. Several things happen, on different clocks:</p>
-
+<p>The figure opens as one large power station, a gigawatt, drops off the grid without warning. The rotors slip, the frequency dips, and the reserves catch it well clear of trouble. Several things happen, on different clocks:</p>
 
 <p><b>In the first instant</b>, nothing but physics responds. The missing power is drawn from the rotating mass of every machine on the grid, and the frequency starts to fall at a rate set by how much rotating mass there is — the <span class="c-freq">inertia</span>. Then some <b>load relief</b> appears on its own: many motors draw slightly less power when they turn slightly slower.</p>
 
@@ -18,101 +17,100 @@
 
 <p><b>Over minutes</b>, the <b>secondary reserve</b> takes over. A central controller at the grid operator sees the persistent error and dispatches more generation until the frequency is back at exactly 50.000 Hz, freeing the primary reserve for the next incident. After fifteen minutes or so, slower tertiary reserves and the market replace the lost plant for good.</p>
 
-<p>Now press <b>Lose 15 GW</b>, also under More, far beyond the design case. Primary reserve is overwhelmed, the frequency falls through 49.0 Hz, and automatic relays disconnect slices of customers so the rest can survive. That is how Europe survived its split in November 2006, when a line switching in northern Germany cascaded into three islands.</p>
+<p>Continental Europe is designed to survive a bigger blow: the sudden loss of three gigawatts, roughly two large nuclear units (<b>Trip 3 GW</b>). Losing fifteen is far beyond the design case. Primary reserve is overwhelmed, the frequency falls through 49.0 Hz, and automatic relays disconnect slices of customers so the rest can survive. That is how Europe survived its split in November 2006, when a line switching in northern Germany cascaded into three islands.</p>
 
-<p>Try the <span class="c-freq">inertia</span> slider under More. Large spinning machines provide inertia for free; wind turbines and solar panels behind power electronics do not, unless their inverters are programmed to imitate it. With less inertia the frequency falls faster and deeper after the same trip, giving the reserves less time. That is why fast batteries, synchronous condensers and “grid-forming” inverters are joining the toolkit, and why holding reserves costs money that ends up on the network side of the bill.</p>
+<p>Large spinning machines provide <span class="c-freq">inertia</span> for free; wind turbines and solar panels behind power electronics do not, unless their inverters are programmed to imitate it. Turn the inertia down (under <b>More</b>) and the same trip makes the frequency fall faster and deeper, giving the reserves less time. That is why fast batteries, synchronous condensers and “grid-forming” inverters are joining the toolkit, and why holding reserves costs money that ends up on the network side of the bill.</p>
 
-<aside class="deepdive d-renewables">Inverter-based plants have no spinning mass; how they can still hold frequency is in <a class="xref" href="utility-renewables.html#grid-forming">Part 2 on grid-forming inverters</a>, which also covers what the April 2025 Iberian blackout revealed about voltage control. Solar inverters themselves are introduced in <a class="xref" href="solar-pv.html#inverters">Part 1</a>.</aside>
+<aside class="deepdive d-renewables"><a class="xref" href="utility-renewables.html#grid-forming">Part 2</a> shows how inverter-based plants can hold the frequency too, and what the 2025 Iberian blackout revealed about voltage.</aside>
 
-<h2 id="s6"><span class="num">6</span>A day on the grid</h2>
+<h2 id="s7"><span class="num">6</span>The merit order</h2>
 
-<p>Zoom out from seconds to a whole day and the balancing problem changes. Demand has a shape: low at night, a morning ramp, a working-day plateau, an early-evening peak. Solar is a hump at noon and wind wanders over hours and days. Whatever they don’t cover, something else must: the <b>residual load</b>.</p>
+<p>Frequency tells the grid, second by second, whether supply matches demand. Most of that matching is arranged a day ahead. How does the market decide which plants run, and at what price? In most liberalised markets, from Europe’s day-ahead auction to Texas and Australia, every generator submits, for every hour (or quarter-hour) of tomorrow, how much it is willing to produce at what price. Every buyer submits how much it wants to buy. An algorithm then stacks all the offers from cheapest to most expensive — the <b>merit order</b> — and finds where supply meets demand.<sup class="fn"><a href="#n8">8</a></sup></p>
 
-<figure class="fig showpiece" data-fig="gridDay">
-<figcaption><span class="tagline tag-ill">Simulation</span> A synthetic spring Sunday on a German-style grid (no nuclear), dispatched every 15 minutes by the market model of section 7. Under <b>More</b>, the same day runs on the stylised fleets of the merit-order figure: coal-heavy (India, China), gas-heavy (Texas), hydro-heavy (Brazil, Norway) or solar-heavy (California, Australia), with no carbon price outside Germany. Demand, solar and wind profiles are stylised, not measured. Hatched areas are curtailed wind and solar. Drag across the chart to pick a moment; each source is named in its own band, and the strip below shows where that moment’s power comes from and goes.</figcaption>
-</figure>
-
-<p>The figure opens on a spring Sunday with about the solar Germany now has installed, some 110 GW. Drag the cursor to 13:00. The residual load has all but vanished, the price sits below zero, and some wind and solar is switched off because nobody can use it. Then, as the sun sets, the residual load ramps steeply back up and the evening price climbs. Slide the solar down and the price at noon recovers; under <b>More</b>, switch to a weekday and the dip shrinks.</p>
-
-<p>California named this shape. Its grid operator, CAISO, drew the <i>duck curve</i> in 2013: a midday belly of net demand that deepens every year, then a steep evening neck. It is now a fact of life there. In 2024 CAISO curtailed 3.4 TWh of wind and solar, up 29% in a year, 93% of it solar and most of it in spring, when sunshine is strong and air conditioners are off.<sup class="fn"><a href="#n5">5</a></sup> Pick the solar-heavy grid under <b>More</b> to see the same pattern on a fleet built around midday sun.</p>
-
-<p>Negative prices are not a glitch. Germany’s day-ahead market saw 457 negative hours in 2024 and 573 in 2025 (655 at zero or below).<sup class="fn"><a href="#n6">6</a></sup> Some producers are paid per kilowatt-hour whatever the market price (many older solar panels are on fixed feed-in tariffs), and some plants are expensive to stop and restart. Both will pay to keep producing.</p>
-
-<p>This has a cruel consequence for solar itself. Every panel produces in the same hours as every other panel, so the more there are, the lower the price in exactly those hours. A panel ends up selling at a discount to the day’s average, and the discount deepens as the fleet grows. That ratio, what solar earns per megawatt-hour over the average price of all hours, is its <b>capture rate</b>:</p>
-
-<figure class="fig" data-fig="capture">
-<figcaption><span class="tagline tag-ill">Simulation</span> Capture rate of solar in the illustrative day model, averaged over six weighted representative days and three wind levels, as installed solar grows. With batteries, some midday surplus is moved to the evening, propping up the midday price. For comparison, real German solar earned about 76% of the average price in 2023, 59% in 2024 and 52% in 2025, computed from hourly SMARD prices in Part 1.<sup class="fn"><a href="#n7">7</a></sup></figcaption>
-</figure>
-
-<p>This is called <i>cannibalisation</i>. It doesn’t mean solar is bad; it means the value of the next panel depends on what is already on the grid, and that the cheapest kilowatt-hours are cheap partly because they arrive when nobody needs them. Remember this when we get to the cost of building power plants in section 11: a cost per kilowatt-hour is only half of the story; the other half is <i>when</i> those kilowatt-hours arrive.</p>
-
-<aside class="deepdive">Deep dive: <a class="xref" href="solar-pv.html#capture">Part 1, Solar PV</a> computes Germany’s solar capture rate for every year from 2015 to 2025 from hourly prices, and shows how the summer price curve hollowed out at noon. <a class="xref" href="utility-renewables.html#cannibalisation">Part 2</a> compares solar with onshore and offshore wind in Germany and Spain, and shows how <a class="xref" href="utility-renewables.html#hybrid-plants">a battery at the solar farm</a> claws some of the value back.</aside>
-
-
-<h2 id="s7"><span class="num">7</span>The merit order</h2>
-
-<p>How does the market decide which plants run, and at what price? In most liberalised markets, from Europe’s day-ahead auction to Texas and Australia, every generator submits, for every hour (or quarter-hour) of tomorrow, how much it is willing to produce at what price. Every buyer submits how much it wants to buy. An algorithm then stacks all the offers from cheapest to most expensive — the <b>merit order</b> — and finds where supply meets demand.<sup class="fn"><a href="#n8">8</a></sup></p>
-
-<p>What does a plant offer? In a competitive market, roughly its <b>short-run marginal cost</b>: what one more megawatt-hour costs it to make right now. For wind and solar that is close to zero, since the fuel is free; for nuclear it is low; for a fossil plant it is mostly fuel, plus carbon permits where carbon is priced. Here are a country’s offers for one hour, in the order they happened to arrive:</p>
+<p>What does a plant offer? In a competitive market, roughly its <b>short-run marginal cost</b>: what one more megawatt-hour costs it to make right now. For wind and solar that is close to zero, since the fuel is free; for nuclear it is low; for a fossil plant it is mostly fuel, plus carbon permits where carbon is priced. Here are a country’s offers for one hour, in the order they happened to arrive. Sort them:</p>
 
 <figure class="fig" data-fig="meritStack">
-<figcaption><span class="tagline tag-ill">Simulation</span> One hour of offers from an illustrative fleet. Each block is a plant or group of plants: width is the capacity it offers, height its running cost. Sort them, then drag or tap on the chart to set demand. Hover a block for its cost breakdown.<sup class="fn"><a href="#n9">9</a></sup></figcaption>
+<figcaption><span class="tagline tag-ill">Simulation</span> One hour of offers from an illustrative fleet.<sup class="fn"><a href="#n9">9</a></sup></figcaption>
 </figure>
 
 <p>Sorted cheapest first, the offers form a staircase: the supply curve. Demand is a vertical line, how much the country needs this hour. Every plant to the left of it runs; every plant to the right waits. And everyone who runs is paid the same price, the offer of the last plant needed. This is <b>uniform pricing</b>, or pay-as-clear, and it is the most misunderstood feature of electricity markets. Drag the demand line across the edge of a block and the price jumps, not just for the extra megawatt-hours but for all of them.</p>
 
 <p>Why not pay each plant what it bid? Because then nobody would bid their real cost. A wind farm that expects gas to set the price would bid just under it, and so would everyone else: roughly the same price, but with everyone guessing and dearer plants sometimes running ahead of cheaper ones. Pay-as-clear makes bidding your true cost the sensible strategy.</p>
 
-<p>Now let the wind blow. A wind farm’s offer sits at the bottom of the stack, so more wind does not add a block at the top: it widens a block at the bottom and pushes every other plant to the right.</p>
+<p>Now let the wind blow. A wind farm’s offer sits at the bottom of the stack, so more wind does not add a block at the top: it widens a block at the bottom and pushes every other plant to the right. Drag the wind handle:</p>
 
 <figure class="fig" data-fig="meritWind">
-<figcaption><span class="tagline tag-ill">Simulation</span> The same hour and fleet. Drag the <span class="c-wind">wind</span> handle to change wind output; demand stays where you put it. The readout compares the price with what it would be with no wind at all.</figcaption>
+<figcaption><span class="tagline tag-ill">Simulation</span> The same hour and fleet, with <span class="c-wind">wind</span> output as a handle on the chart. The readout compares the price with what it would be with no wind at all.</figcaption>
 </figure>
 
-<p>The demand line now crosses the staircase lower down, at a cheaper plant. This is the <b>merit-order effect</b>: wind and solar lower the price in the hours they produce, including for the coal and gas plants that still run, and, as we saw in section 6, for themselves.</p>
+<p>The demand line now crosses the staircase lower down, at a cheaper plant. This is the <b>merit-order effect</b>: wind and solar lower the price in the hours they produce, including for the coal and gas plants that still run, and, as the next section shows, for themselves.</p>
 
 <p>Last, the fuel. A fossil plant’s height is its fuel price divided by its efficiency, plus the carbon price times its emissions. Lignite burns cheap fuel but emits about twice as much CO₂ per unit of heat as gas, so its block climbs steeply with the carbon price. Here is the full market, with both prices to play with:</p>
 
 <figure class="fig showpiece sticky-canvas" data-fig="merit">
-<figcaption><span class="tagline tag-ill">Simulation</span> The same illustrative market with fuel and carbon prices. Height is running cost: fuel price ÷ efficiency, plus CO₂ price × emissions ÷ efficiency, plus variable costs. Hatched blocks are subsidised renewables that bid below zero. Under <b>More</b>: situations, demand, wind and solar, and regional presets that rescale the same fleet to each region’s 2025 generation mix (Ember) with World Bank 2025 fuel prices and a carbon price only where one applies (the EU ETS, about €75/t).<sup class="fn"><a href="#n9">9</a></sup> Mechanisms, not calibrated models of any country.</figcaption>
+<figcaption><span class="tagline tag-ill">Simulation</span> The same illustrative market with fuel and carbon prices. Height is running cost: fuel price ÷ efficiency, plus CO₂ price × emissions ÷ efficiency, plus variable costs. Hatched blocks are subsidised renewables that bid below zero. Regional presets rescale the same fleet to each region’s 2025 mix.<sup class="fn"><a href="#n9">9</a></sup> Mechanisms, not calibrated models of any country.</figcaption>
 </figure>
 
-<p>Move the <span class="c-gas">gas</span> and carbon sliders. At low carbon prices lignite and coal undercut gas; push carbon up and gas slides ahead of coal, while lignite climbs fastest. This <i>fuel switch</i> is how a carbon price changes what burns, hour by hour, and why Europe’s wholesale price is so often the price of gas plus carbon. Then push gas to around €150 per megawatt-hour of heat, as in 2022 ($170 at this essay’s 2025 exchange rate), or pick the <b>2022-style gas shock</b> under <b>More</b>. The marginal plant in most hours is gas-fired, and its cost sets the price for everyone, including wind farms whose costs didn’t change at all.</p>
+<p>Move the <span class="c-gas">gas</span> and carbon sliders. At low carbon prices lignite and coal undercut gas; push carbon up and gas slides ahead of coal, while lignite climbs fastest. This <i>fuel switch</i> is how a carbon price changes what burns, hour by hour, and why Europe’s wholesale price is so often the price of gas plus carbon. Then push gas to around $170 per megawatt-hour of heat, roughly where it stood in 2022. The marginal plant in most hours is gas-fired, and its cost sets the price for everyone, including wind farms whose costs didn’t change at all.</p>
 
-<p>Switch on <b>Who profits?</b> under <b>More</b>. Every plant below the marginal one is paid the clearing price but spends only its own running cost; the shaded gap is what it keeps. That keep is called <i>infra-marginal rent</i>, and it is normally how plants with low running costs pay back the cost of building them. In 2022 the rents were extraordinary, and governments taxed them.</p>
+<p>Every plant below the marginal one is paid the clearing price but spends only its own running cost. The gap, shaded under <b>Who profits?</b>, is what it keeps. That keep is called <i>infra-marginal rent</i>, and it is normally how plants with low running costs pay back the cost of building them. In 2022 the rents were extraordinary, and governments taxed them.</p>
+
+<h2 id="s6"><span class="num">7</span>A day on the grid</h2>
+
+<p>Zoom out from one hour to a whole day and the balancing problem changes. Demand has a shape: low at night, a morning ramp, a working-day plateau, an early-evening peak. Solar is a hump at noon and wind wanders over hours and days. Whatever they don’t cover, something else must: the <b>residual load</b>.</p>
+
+<figure class="fig showpiece" data-fig="gridDay">
+<figcaption><span class="tagline tag-ill">Simulation</span> A synthetic spring Sunday on a German-style grid with no nuclear, cleared every 15 minutes by the merit order of the previous section. Demand, wind and solar are stylised, not measured; hatched areas are curtailed. The strip below shows where the chosen moment’s power comes from and where it goes.</figcaption>
+</figure>
+
+<p>The figure opens at 13:00 on a spring Sunday, with about the solar Germany now has installed, some 110 GW. The residual load has all but vanished, the price sits below zero, and some wind and solar is switched off because nobody can use it. As the sun sets, the residual load ramps steeply back up and the evening price climbs. Drag across the chart to follow the day, and slide the solar down: the noon price recovers.</p>
+
+<p>California named this shape. Its grid operator, CAISO, drew the <i>duck curve</i> in 2013: a midday belly of net demand that deepens every year, then a steep evening neck. In 2024 it curtailed 3.4 TWh of wind and solar, almost all of it solar and most of it in spring, when sunshine is strong and air conditioners are off.<sup class="fn"><a href="#n5">5</a></sup></p>
+
+<p>Negative prices are not a glitch. Germany’s day-ahead market had 573 negative hours in 2025, up from 457 the year before.<sup class="fn"><a href="#n6">6</a></sup> Some producers are paid per kilowatt-hour whatever the market price (many older solar panels are on fixed feed-in tariffs), and some plants are expensive to stop and restart. Both will pay to keep producing.</p>
+
+<p>This has an awkward consequence for solar itself. Every panel produces in the same hours as every other panel, so the more there are, the lower the price in exactly those hours. A panel ends up selling at a discount to the day’s average, and the discount deepens as the fleet grows. That ratio, what solar earns per megawatt-hour over the average price of all hours, is its <b>capture rate</b>:</p>
+
+<figure class="fig" data-fig="capture">
+<figcaption><span class="tagline tag-ill">Simulation</span> Capture rate of solar in the model day as installed solar grows, with and without batteries that move some midday surplus to the evening. For comparison, real German solar earned about 76% of the average price in 2023 and 52% in 2025.<sup class="fn"><a href="#n7">7</a></sup></figcaption>
+</figure>
+
+<p>This is called <i>cannibalisation</i>. It doesn’t mean solar is bad; it means the value of the next panel depends on what is already on the grid, and that the cheapest kilowatt-hours are cheap partly because they arrive when nobody needs them. Remember this when we get to the cost of building power plants in section 11: a cost per kilowatt-hour is only half of the story; the other half is <i>when</i> those kilowatt-hours arrive.</p>
+
+<aside class="deepdive"><a class="xref" href="solar-pv.html#capture">Part 1</a> computes Germany’s real solar capture rate for every year since 2015.</aside>
+
 
 <h2 id="s8"><span class="num">8</span>Markets in time</h2>
 
-<p>The merit order clears once a day, at noon, for all of tomorrow. But tomorrow is uncertain. A wind farm that sold 10 GW for 18:00 may learn by morning that the wind will be weaker than forecast. What does it do?</p>
+<p>The merit order clears once a day, at noon, for all of tomorrow. But tomorrow is uncertain. A wind farm that sold 10 GW for 18:00 may learn by morning that the wind will be weaker than forecast.</p>
+
+<p>So electricity is traded in a sequence of markets, each closer to real time.<sup class="fn"><a href="#n10">10</a></sup> The <b>day-ahead auction</b> sets most of tomorrow’s schedule and the price quoted in the news. The <b>intraday market</b> then lets traders adjust as forecasts improve, until shortly before delivery. After that, the grid operator activates <b>balancing reserves</b> and charges each party an <b>imbalance price</b> for its error. Press <b>Play</b> to follow one wind farm’s hour through them:</p>
 
 <figure class="fig" data-fig="timeline">
-<figcaption><span class="tagline tag-ill">Simulation</span> One delivery hour seen from the day before. The blue band is a synthetic wind forecast for 18:00–19:00 on day D, narrowing as delivery approaches. The book below shows what the wind farm has sold in each market. Press Play, or drag the “Now” slider.</figcaption>
+<figcaption><span class="tagline tag-ill">Simulation</span> One delivery hour seen from the day before. The blue band is a synthetic wind forecast for 18:00–19:00 on day D, narrowing as delivery approaches; the book below shows what the wind farm has sold in each market.</figcaption>
 </figure>
-
-<p>Electricity is traded in a sequence of markets, each closer to real time.<sup class="fn"><a href="#n10">10</a></sup> The <b>day-ahead auction</b> sets most of tomorrow’s schedule and the price quoted in the news. The <b>intraday market</b> then lets traders adjust as forecasts improve, until shortly before delivery. After that, the grid operator activates <b>balancing reserves</b> and charges each party an <b>imbalance price</b> for its error.</p>
 
 <p>American markets organise the same physics differently. Most US regions have a day-ahead market and then a <b>real-time market</b> that clears every five minutes, and the real-time price serves as the final settlement for deviations.<sup class="fn"><a href="#n11">11</a></sup> Same problem, different labels.</p>
 
-<p>Two extremes bracket everything else. On a <b>sunny, windy holiday</b> the market is oversupplied and prices go negative, in Europe down to the auction floor of −500 €/MWh at worst. In a cold, dark, windless winter week almost every plant is needed and the price is set by the dearest peakers, or by buyers’ willingness to stop consuming. Both kinds of hours are becoming more frequent, and a market of mostly zero-cost wind and solar is increasingly decided by them. We return to the dark week in section 15.</p>
+<p>Two extremes bracket everything else. On a <b>sunny, windy holiday</b> the market is oversupplied and prices go negative, in Europe down to the auction floor of about −$570/MWh at worst. In a cold, dark, windless winter week almost every plant is needed and the price is set by the dearest peakers, or by buyers’ willingness to stop consuming. Both kinds of hours are becoming more frequent, and a market of mostly zero-cost wind and solar is increasingly decided by them. We return to the dark week in section 15.</p>
 
 <h2 id="s9"><span class="num">9</span>Markets in space</h2>
 
 <p>So far we have pretended the grid is a copper plate. It isn’t. Every line has a thermal limit, and you cannot choose which route the power takes: in an AC network it flows along <i>every</i> path between source and sink, split by impedance. Send power north to south and some goes the long way round, through your neighbour’s country if the physics says so.</p>
 
 <figure class="fig showpiece" data-fig="network">
-<figcaption><span class="tagline tag-ill">Simulation</span> A four-node network solved with a DC power-flow approximation and a small linear program that minimises total generation cost subject to line limits. In nodal mode, each node’s price is the cost of serving one more megawatt there. In zonal mode, the market ignores the lines and the operator redispatches afterwards. Under <b>More</b>, change southern demand and line limits (or drag a line’s label), or play a whole day. Generator costs and capacities are illustrative.</figcaption>
+<figcaption><span class="tagline tag-ill">Simulation</span> A four-node network solved with a DC power-flow approximation and a small linear program that minimises generation cost within the line limits. Generator costs and capacities are illustrative.</figcaption>
 </figure>
 
 <p>The figure opens in <b>nodal</b> mode, how most large US markets work, with the northern <span class="c-wind">wind</span> set at the exact moment the West–South line fills. Drag the wind down a notch and all four nodes share one price. Push it up and the prices split: power is trapped in the north, where wind is curtailed and the price can fall to zero, and scarce in the south, where a local peaker must run. The small chart traces that fork across every wind level. These <b>locational marginal prices</b> show where new generation, storage or demand is worth most; the price gap across a full line, times its flow, is the operator’s <i>congestion rent</i>.</p>
-
-<aside class="deepdive d-transmission">Deep dive: why lines congest and what it takes to build more of them is in <a class="xref" href="transmission.html#congestion">Part 4, transmission</a>, which also turns this figure into a <a class="xref" href="transmission.html#power-flow">loop-flow model</a> with a phase-shifting transformer and an HVDC link. Germany’s real bill for congestion — about 9.4 TWh of wind and solar curtailed and some €3 billion a year — is charted in <a class="xref" href="utility-renewables.html#fig-curtailment">Part 2</a>.</aside>
-
 
 <p>Now switch to <b>zonal</b>, which is how Europe, Australia’s NEM and Japan work: Germany and Luxembourg, for example, are one bidding zone with one price. The market clears as if the grid were a copper plate, and the resulting flows break the line limits. So the operators intervene afterwards, paying northern wind farms to curtail and southern gas plants to start. This <b>redispatch</b> never shows up in the wholesale price; it is socialised into network charges, one of the ways the cost of the energy transition migrated into the regulated part of the bill.<sup class="fn"><a href="#n12">12</a></sup></p>
 
 <p>Neither system is free. Nodal pricing is efficient but makes customers in some places pay more; zonal pricing keeps one price but hides the cost of the grid in a socialised charge and blunts the signal for where to build. Splitting Germany into a northern and a southern zone is one of the live debates of European market design; for now Berlin has chosen one zone and more lines.</p>
 
-<p>Nodal and zonal markets are only two arrangements. Most of the world’s electricity is not sold on a spot exchange at all. China’s grid is run by two state-owned companies, with plants paid regulated or negotiated prices, though provincial spot markets are spreading. India’s state distribution companies buy mainly under long-term contracts. Much of Africa and the Gulf has a single state utility or buyer. Texas and Australia run “energy-only” markets with very high price caps; PJM and Britain add capacity auctions.<sup class="fn"><a href="#n13">13</a></sup> Hover a row to see how each works.</p>
+<aside class="deepdive d-transmission"><a class="xref" href="transmission.html#congestion">Part 4</a> follows the same physics onto a map of central Europe, where it costs Germany about $3.4 billion a year.</aside>
+
+<p>Nodal and zonal markets are only two arrangements. Most of the world’s electricity is not sold on a spot exchange at all. China’s grid is run by two state-owned companies, with plants paid regulated or negotiated prices, though provincial spot markets are spreading. India’s state distribution companies buy mainly under long-term contracts. Much of Africa and the Gulf has a single state utility or buyer. Texas and Australia run “energy-only” markets with very high price caps; PJM and Britain add capacity auctions.<sup class="fn"><a href="#n13">13</a></sup></p>
 
 <figure class="fig" data-fig="marketDesigns">
 <figcaption><span class="tagline tag-real">Real data</span> A simplified classification of how electricity systems are organised, with examples. Many countries mix models (India has exchanges, China is adding provincial spot markets). Price caps: ERCOT’s high system-wide offer cap and the AEMC’s NEM market price cap for 2025–26.<sup class="fn"><a href="#n13">13</a></sup></figcaption>

@@ -181,8 +181,8 @@ export function network(el) {
         });
         T(nodal ? 'Full lines (100%) split the price.' : 'Market flows; over 100% must be redispatched.', { size: 11, color: C.ink3, gap: 24 });
         const anyFull = LINES.some((l, li) => Math.abs(nodal ? R.con.flows[li] : R.unc.flows[li]) >= st.limits[li] - 1e-3);
-        if (anyFull) { T('Try this: drag a full line’s label right', { size: 11.5, weight: 600, color: C.ink2 }); T('to raise its limit; prices converge.', { size: 11.5, weight: 600, color: C.ink2 }); }
-        else { T('No line is full: one price everywhere.', { size: 11.5, weight: 600, color: C.ink2 }); T('Try this: drag a label left to tighten it.', { size: 11.5, weight: 600, color: C.ink2 }); }
+        if (anyFull) { T('Drag a full line’s label right to raise', { size: 11.5, weight: 600, color: C.ink2 }); T('its limit and the prices converge.', { size: 11.5, weight: 600, color: C.ink2 }); }
+        else { T('No line is full: one price everywhere.', { size: 11.5, weight: 600, color: C.ink2 }); T('Drag a label left to tighten a line.', { size: 11.5, weight: 600, color: C.ink2 }); }
       }
       // day strip: price at each node through the day, with the current hour marked (day mode only)
       if (st.day && st.dayRes && !narrow && sp.w > 150) {

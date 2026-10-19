@@ -244,7 +244,6 @@ export function merit(el, opts = {}) {
   sliders.solar = slider(adv, { label: 'Solar output', min: 0, max: 50, step: 1, value: st.solar, color: C.solar, fmt: v => v + ' GW', oninput: v => { st.solar = v; upd(); }, name: 'solar' });
   dSl = slider(adv, { label: 'Demand', min: 20, max: 140, step: 1, value: st.D, color: C.demand, fmt: v => v + ' GW', oninput: v => { st.D = v; upd(); }, name: 'D', wide: true }); sliders.D = dSl;
   segmented(adv, { label: 'Who profits?', options: [{ label: 'Hide', value: false }, { label: 'Show infra-marginal rent', value: true }], value: st.rent, onchange: v => { st.rent = v; upd(); } });
-  segmented(adv, { label: 'Currency', options: [{ label: 'US$', value: 'USD', name: 'mc-usd' }, { label: '€', value: 'EUR', name: 'mc-eur' }], value: st.cur, onchange: v => { st.cur = v; for (const k in sliders) sliders[k].set(st[k]); upd(); } });
   const ro = readout(el);
   // fix the slider fmt for HTML subscript
   function upd() {

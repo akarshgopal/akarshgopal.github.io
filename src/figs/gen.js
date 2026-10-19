@@ -11,7 +11,7 @@ const W0 = 3000 / 60 * 2 * Math.PI / SLOW;        // drawn angular speed of a 3,
 
 export function generator(el, opts = {}) {
   const stage = opts.stage || 1, three = stage >= 2;
-  const st = { ang: 0.4, omega: 0, spin: three, rpm: 3000, p: 1, mode: 'v', hist: [], drag: null, lastA: null };
+  const st = { ang: 0.4, omega: 0, spin: true, rpm: 3000, p: 1, mode: 'v', hist: [], drag: null, lastA: null };
   const N = 300;
   const emf = k => st.omega / W0 * Math.sin(st.p * st.ang - k * 2 * Math.PI / 3); // voltage of phase k (A when k = 0)
   const fig = new Fig(el, {

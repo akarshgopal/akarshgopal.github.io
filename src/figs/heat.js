@@ -107,7 +107,7 @@ export function rankine(el) {
       pathLine(ctx, carnot, C.ink2, 1.5, [5, 4]);
       pathLine(ctx, ca, C.hot, 2.2);
       text(ctx, 'Carnot limit', sx(112), sy(100 * (1 - tc / (112 + K))) - 12, { size: 11, color: C.ink2, align: 'left', halo: true });
-      text(ctx, 'practical estimate', sx(690), sy(100 * (1 - Math.sqrt(tc / (690 + K)))) + 16, { size: 11, color: C.hot, align: 'right', halo: true });
+      text(ctx, 'practical estimate', sx(400), sy(100 * (1 - Math.sqrt(tc / (400 + K)))) + 18, { size: 11, color: C.hot, align: 'left', halo: true });
       // history points
       circle(ctx, sx(315), sy(1e-9 + 100 * (1 - Math.sqrt(tc / (315 + K)))), 0, null);
       line(ctx, sx(315), box.b, sx(315), box.b - 8, C.ink3, 1.5);
@@ -185,7 +185,7 @@ export function windPower(el) {
       text(ctx, 'power in the wind ∝ v³', sx(7.4), sy(9.2), { size: 11, color: C.ink3, align: 'right', halo: true });
       text(ctx, 'Betz limit (59%)', sx(9.6), sy(6.6), { size: 11, color: C.wind, align: 'left', halo: true });
       text(ctx, 'turbine output', sx(19), sy(RATED) - 8, { size: 11.5, color: C.wind, weight: 600, align: 'center' });
-      text(ctx, 'cut-out', sx(25), sy(0) - 6, { size: 10.5, color: C.ink3, align: 'center' });
+      text(ctx, 'cut-out', sx(25) + 6, sy(RATED * 0.25), { size: 10.5, color: C.ink3, align: 'left', halo: true });
       line(ctx, sx(st.v), box.t, sx(st.v), box.b, alpha(C.wind, 0.35), 1);
       circle(ctx, sx(st.v), sy(Math.min(10.4, Pw(st.v))), 4, '#fff', C.ink3, 1.5);
       circle(ctx, sx(st.v), sy(P(st.v)), 6, C.wind, '#fff', 2);
@@ -239,7 +239,7 @@ export function betz(el) {
       text(ctx, 'wake: ' + (1 - 2 * a).toFixed(2) + ' v', S.x + S.w - 4, Math.max(S.y + 14, cy - rw - 10), { size: 11, color: C.ink3, align: 'right', halo: true });
       // chart Cp(a)
       const box = narrow ? { l: 50, r: w - 20, t: S.h + 50, b: h - 40 } : { l: S.x + S.w + 56, r: w - 16, t: 30, b: h - 42 };
-      const { sx, sy } = axes(ctx, { box, x0: 0, x1: 0.5, y0: 0, y1: 0.65, xticks: [0, 0.1, 0.2, 0.3, 0.4, 0.5], yticks: [0, 0.2, 0.4, 0.6], xfmt: v => v.toFixed(1), yfmt: v => Math.round(v * 100) + '%', ylabel: 'share of wind power captured', xlabel: 'slow-down at rotor' });
+      const { sx, sy } = axes(ctx, { box, x0: 0, x1: 0.5, y0: 0, y1: 0.65, xticks: [0, 0.1, 0.2, 0.3, 0.4, 0.5], yticks: [0, 0.2, 0.4, 0.6], xfmt: v => Math.round(v * 100) + '%', yfmt: v => Math.round(v * 100) + '%', ylabel: 'share of wind power captured', xlabel: 'slow-down at rotor' });
       const pts = []; for (let x = 0; x <= 0.5; x += 0.005) pts.push([sx(x), sy(4 * x * (1 - x) * (1 - x))]);
       pathLine(ctx, pts, C.wind, 2.4);
       line(ctx, box.l, sy(16 / 27), box.r, sy(16 / 27), C.ink3, 1, [4, 4]);

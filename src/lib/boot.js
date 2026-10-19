@@ -13,12 +13,6 @@ export function boot(FIGS) {
   if (btn) {
     const paint = () => { btn.setAttribute('aria-pressed', isPlaying()); btn.textContent = isPlaying() ? '❚❚ Pause' : '▶ Play'; btn.title = btn.ariaLabel = isPlaying() ? 'Pause all animations' : 'Play all animations'; };
     btn.addEventListener('click', () => setPlaying(!isPlaying()));
-    // never sit on top of a figure: tuck the floating button away whenever it would overlap one
-    const figs = [...document.querySelectorAll('figure.fig')];
-    let raf = 0;
-    const tuck = () => { raf = 0; const p = btn.getBoundingClientRect(); const hit = figs.some(f => { const r = f.getBoundingClientRect(); return r.left < p.right + 6 && r.right > p.left - 6 && r.top < p.bottom + 6 && r.bottom > p.top - 6; }); btn.classList.toggle('tucked', hit); };
-    const q = () => { if (!raf) raf = requestAnimationFrame(tuck); };
-    addEventListener('scroll', q, { passive: true }); addEventListener('resize', q); addEventListener('click', q, true); addEventListener('input', q, true); new ResizeObserver(q).observe(document.body); setInterval(q, 400); q();
     onPlayChange(paint); paint();
   }
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(redrawAll);
