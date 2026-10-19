@@ -64,7 +64,7 @@ export function buildPlant(el) {
   }
   const fig = new Fig(el, {
     label: 'Build a power plant: its full cost per megawatt-hour against what the merit-order market pays it over a year, with a draggable cost-of-capital curve and the year’s prices sorted from highest to lowest',
-    height: w => w < 600 ? 740 : 520,
+    height: w => w < 600 ? 740 : 460,
     draw(ctx, w, h) {
       const narrow = w < 600, r = compute(), P = PRESETS[st.tech], col = P.col;
       // ---- panel A: cost vs earnings, $/MWh

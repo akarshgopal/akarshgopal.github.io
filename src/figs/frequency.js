@@ -59,14 +59,14 @@ export function frequency(el) {
 
   const fig = new Fig(el, {
     label: 'Simulation of grid frequency: a frequency gauge, a row of synchronised generators viewed under a 50 Hz strobe, a frequency trace and a chart of which reserves cover a lost power plant',
-    height: w => w < 640 ? 830 : Math.max(560, Math.min(640, w * 0.72)),
+    height: w => w < 640 ? 830 : Math.max(500, Math.min(540, w * 0.56)),
     animated: true,
     step(dt) { advance(dt * st.speed); st.needle = approach(st.needle, st.df, 12, dt); },
     draw(ctx, w, h) {
       const narrow = w < 640;
       const f = F0 + st.df;
       // ---- gauge
-      const gR = narrow ? Math.min(w * 0.3, 112) : Math.min(140, w * 0.17);
+      const gR = narrow ? Math.min(w * 0.3, 112) : Math.min(120, w * 0.15);
       const gx = narrow ? w / 2 : gR + 40, gy = gR + 30;
       const fmin = 48.5, fmax = 51.5;
       const ang = v => Math.PI + (clamp(v, fmin, fmax) - fmin) / (fmax - fmin) * Math.PI;
@@ -128,9 +128,11 @@ export function frequency(el) {
 
       // ---- frequency trace
       const tNow = st.t, t0 = Math.max(0, tNow - WINDOW);
-      const fb = narrow ? { l: 52, r: w - 16, t: ry + 26 + 2 * (2 * rr + 52) + 34, b: 0 } : { l: 56, r: w - 18, t: Math.max(gy + 92, ry + rr * 2 + 86), b: 0 };
-      const avail = h - fb.t - 20;
-      fb.b = fb.t + avail * 0.48;
+      // desktop: the frequency trace sits beside the gauge, under the generators, so nothing is left empty;
+      // phone: everything stacks
+      const fb = narrow ? { l: 52, r: w - 16, t: ry + 26 + 2 * (2 * rr + 52) + 34, b: 0 } : { l: rx0 + 36, r: w - 18, t: ry + rr * 2 + 96, b: 0 };
+      if (narrow) fb.b = fb.t + (h - fb.t - 20) * 0.48;
+      else fb.b = Math.max(fb.t + 140, gy + 84);
       const fs = st.hist.filter(p => p.t >= t0);
       const fminV = Math.min(49.7, ...fs.map(p => p.f)) - 0.05, fmaxV = Math.max(50.3, ...fs.map(p => p.f)) + 0.05;
       const yt = [];
@@ -146,8 +148,9 @@ export function frequency(el) {
       // ---- who covers the gap
       const legend = [['inertia', 'spinning mass'], ['relief', 'load self-regulation'], ['fcr', 'primary reserve (FCR)'], ['afrr', 'secondary reserve (aFRR)'], ['shed', 'load shedding']];
       const legW = legend.reduce((a, [, lab]) => a + 26 + measure(ctx, lab, 10.5) * 1.05, 0);
-      const gridLeg = narrow || fb.l + 130 + legW > w - 8;
-      const bb = { l: fb.l, r: fb.r, t: fb.b + (gridLeg ? 74 : 40), b: h - 30 };
+      const bbL = narrow ? fb.l : 56;
+      const gridLeg = narrow || bbL + 130 + legW > w - 8;
+      const bb = { l: bbL, r: fb.r, t: fb.b + (gridLeg ? 74 : 40), b: h - 30 };
       const gapMax = Math.max(3.5, ...fs.map(p => Math.abs(p.inertia) + Math.abs(p.relief) + Math.abs(p.fcr) + Math.abs(p.afrr) + p.shed)) * 1.1;
       const B = axes(ctx, { box: bb, x0: t0, x1: t0 + WINDOW, y0: -gapMax * 0.25, y1: gapMax, xticks: [], yfmt: v => v.toFixed(0) + ' GW', ylabel: 'who covers the gap', ny: 3 });
       const keys = ['inertia', 'relief', 'fcr', 'afrr', 'shed'];

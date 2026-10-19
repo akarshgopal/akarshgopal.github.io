@@ -33,7 +33,7 @@ export function network(el) {
   recompute();
   const fig = new Fig(el, {
     label: 'A four-node transmission network. In nodal mode each node has its own price; in zonal mode there is one price and the operator redispatches plants to respect line limits',
-    height: w => w < 600 ? 730 : Math.max(480, Math.min(560, w * 0.62)),
+    height: w => w < 600 ? 730 : Math.max(460, Math.min(500, w * 0.52)),
     animated: true,
     step(dt) {
       st.phase += dt;

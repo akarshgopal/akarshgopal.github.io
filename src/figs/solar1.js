@@ -150,7 +150,7 @@ export function junction(el) {
   const fig = new Fig(el, {
     label: 'Band diagram of a p–n junction in a solar cell: light creates electrons and holes, the junction field sweeps electrons to the n side and holes to the p side, and the external circuit carries electrons through a lamp',
     animated: true,
-    height: w => w < 600 ? 600 : 560,
+    height: w => w < 600 ? 600 : 500,
     step(dt) {
       const step = VBI - st.V;
       // generate pairs

@@ -104,7 +104,7 @@ export function retailWorld(el) {
   const k = () => !st.ppp && st.cur === 'EUR' ? 1 / USD_PER_EUR[2026] : 1, sym = () => !st.ppp && st.cur === 'EUR' ? '€' : '$';
   const fig = new Fig(el, {
     label: 'Household and business electricity prices in 28 countries, third quarter of 2026, including taxes',
-    height: w => (w < 600 ? 15 : 16) * RETAIL.length + 76,
+    height: w => (w < 600 ? 15 : 16) * RETAIL.length + 82,
     draw(ctx, w, h) {
       const narrow = w < 600, rh = narrow ? 15 : 16; st.rh = rh; const L = narrow ? 84 : 110, R = w - (narrow ? 40 : 60), T = 34, max = st.ppp ? 0.72 : 0.45;
       const sx = v => L + v / max * (R - L);

@@ -228,7 +228,7 @@ export function cleanGrid(el) {
   run();
   const fig = new Fig(el, {
     label: 'Build a clean grid: choose solar, wind, batteries, nuclear and gas backup; see a synthetic year day by day, a zoomed week hour by hour, and the resulting system cost, curtailment and unserved hours',
-    height: w => w < 640 ? 700 : Math.max(500, Math.min(560, w * 0.52)),
+    height: w => w < 640 ? 700 : Math.max(440, Math.min(480, w * 0.47)),
     draw(ctx, w, h) {
       const narrow = w < 640;
       const right = narrow ? null : { l: w - 210, r: w - 14, t: 34, b: h - 30 };

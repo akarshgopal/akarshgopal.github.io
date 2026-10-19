@@ -241,7 +241,7 @@ export function sizeFrequency(el) {
   const vol = f => Math.pow(1 / (f * mat(f).B), 0.75); // magnetics volume ∝ (P / f·B·J)^(3/4)
   const fig = new Fig(el, {
     label: 'How the size of a transformer’s magnetic core shrinks with operating frequency, and the chain of power electronics a solid-state transformer needs to exploit it',
-    height: w => w < 600 ? 610 : 560,
+    height: w => w < 600 ? 610 : 500,
     draw(ctx, w, h) {
       const narrow = w < 600, ref = vol(50), v = vol(st.f), m = mat(st.f);
       const A = { l: 14, r: narrow ? w - 14 : w * 0.55, t: 30, b: narrow ? 230 : 300 };
@@ -293,7 +293,7 @@ export function sizeFrequency(el) {
   function upd() {
     const f = st.f, m = mat(f);
     const where = f < 20 ? 'German, Austrian, Swiss and Swedish railways run at 16.7 Hz, and their transformers are correspondingly bulky.' : f < 70 ? 'Mains frequency.' : f < 1000 ? 'Aircraft use 400 Hz precisely to save weight in their transformers and motors.' : 'Here the core must be made of ' + m.name + ', which saturates at a lower flux density than silicon steel.';
-    ro.innerHTML = `At ${f >= 1000 ? (f / 1000).toPrecision(2) + ' kHz' : (f < 20 ? f.toFixed(1) : Math.round(f)) + ' Hz'} with a ${m.name} core (peak flux about ${m.B} T), the magnetics need roughly <b>${pct2(vol(f) / vol(50) * 100)}%</b> of the volume of a 50 Hz design. ${Math.abs(f - 50) < 1 ? '<i>Try this: drag the frequency up to 20 kHz and watch the core shrink.</i> ' : ''}${where}`;
+    ro.innerHTML = `At ${f >= 1000 ? (f / 1000).toPrecision(2) + ' kHz' : (f < 20 ? f.toFixed(1) : Math.round(f)) + ' Hz'} with a ${m.name} core (peak flux about ${m.B} T), the magnetics need roughly <b>${pct2(vol(f) / vol(50) * 100)}%</b> of the volume of a 50 Hz design. ${Math.abs(f - 50) < 1 ? '' : ''}${where}`;
     fig.invalidate();
   }
   upd();

@@ -56,7 +56,7 @@ export function merit(el, opts = {}) {
 
   const fig = new Fig(el, {
     label: 'The merit order: power plants stacked from cheapest to most expensive running cost, with a draggable demand line setting the market price',
-    height: w => stage < 3 ? (w < 600 ? 400 : Math.max(360, Math.min(440, w * 0.48))) : (w < 600 ? 480 : Math.max(420, Math.min(520, w * 0.58))),
+    height: w => stage < 3 ? (w < 600 ? 400 : Math.max(360, Math.min(440, w * 0.48))) : (w < 600 ? 480 : Math.max(400, Math.min(470, w * 0.5))),
     animated: true,
     draw(ctx, w, h) {
       const { blocks, r, total, windEnd } = compute(); last = { blocks, r, windEnd };

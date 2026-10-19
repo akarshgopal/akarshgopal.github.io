@@ -23,6 +23,8 @@ function moment(p) {
   return { sa, wa, su, wu, sc: sa - su, wc: wa - wu, load: r(p.load), exp: r(p.exported), ch: r(p.ch), dis: r(p.dis), flex: r(Math.max(0, p.flex || 0)), price: p.price };
 }
 
+// wide screens show the power-flow strip beside the day chart instead of under it (see .day-pair in style.css)
+const sideBySide = () => typeof matchMedia !== 'undefined' && matchMedia('(min-width: 1000px)').matches;
 export function gridDay(el, opts = {}) {
   const futures = !!opts.futures;
   // Default: a spring Sunday with about the solar Germany now has installed (~110 GW), so midday prices dip below zero.
@@ -33,7 +35,7 @@ export function gridDay(el, opts = {}) {
   const at = () => { const P = sim.periods, dt = 24 / P.length; return P[clamp(Math.floor(st.hour / dt), 0, P.length - 1)]; };
   const fig = new Fig(el, {
     label: futures ? 'A day on the grid with batteries and flexible demand absorbing the midday solar surplus' : 'A day on an illustrative grid: generation by source against demand, and the market price it produces',
-    height: w => w < 600 ? 760 : Math.max(480, Math.min(560, w * 0.62)),
+    height: w => w < 600 ? 660 : Math.max(420, Math.min(500, w * 0.66)),
     draw(ctx, w, h) {
       const P = sim.periods, narrow = w < 600;
       const top = { l: narrow ? 46 : 58, r: w - 14, t: narrow ? 50 : 50, b: h * 0.6 };
@@ -106,7 +108,7 @@ export function gridDay(el, opts = {}) {
         }
         if (!done) unl.push(bd.tech);
       }
-      if (unl.length) { const s = 'also: ' + unl.map(t => TECHS[t].short).join(', ') + ' (see the strip below)'; text(ctx, s, top.l - (narrow ? 40 : 0), 12, { size: 10.5, color: C.ink3 }); }
+      if (unl.length) { const s = 'also: ' + unl.map(t => TECHS[t].short).join(', ') + ' (see the strip)'; text(ctx, s, top.l - (narrow ? 40 : 0), 12, { size: 10.5, color: C.ink3 }); }
       // price panel
       const bot = { l: top.l, r: top.r, t: top.b + 46, b: h - 30 };
       const pr = P.map(q => q.price);
@@ -130,7 +132,7 @@ export function gridDay(el, opts = {}) {
   // ---- power-flow strip: non-crossing ribbons (sources and sinks share one cumulative axis), dots ∝ GW
   flow = new Fig(el, {
     label: 'Where the power comes from and where it goes at the selected time: generation by source on the left; demand, battery charging, flexible demand and exports on the right; curtailed wind and solar below',
-    height: w => w < 600 ? 280 : Math.max(230, Math.ceil(w * 0.24)),
+    height: w => sideBySide() ? Math.max(280, fig.h || 430) : w < 600 ? 280 : Math.max(230, Math.ceil(w * 0.24)),
     animated: true,
     step(dt) { flowT += dt; },
     draw(ctx, w, h) {
@@ -170,6 +172,7 @@ export function gridDay(el, opts = {}) {
     down: (o, x) => { st.hour = clamp(geom.A.sx.inv(x), 0, 23.99); hs.set(st.hour); flow.invalidate(); },
     move: (o, x) => { st.hour = clamp(geom.A.sx.inv(x), 0, 23.99); hs.set(st.hour); flow.invalidate(); },
   });
+  { const pair = document.createElement('div'); pair.className = 'day-pair'; el.insertBefore(pair, fig.wrap); pair.append(fig.wrap, flow.wrap); }
   const ctl = controls(el);
   const ro = readout(el);
   const upd = () => {
