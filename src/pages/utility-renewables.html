@@ -4,23 +4,22 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Utility-Scale Renewables: Building and Running the Fleet · How Electricity Works</title>
-<meta name="description" content="An interactive explainer of utility-scale wind and solar: rotor scaling and specific power, wake losses, interconnection queues and auctions, offshore wind costs, CfDs and PPAs, capture prices and curtailment, hybrid plants with batteries, grid-forming inverters and fitting it all into a power system.">
+<meta name="description" content="An interactive explainer of utility-scale wind and solar: rotor scaling and specific power, wake losses, interconnection queues and auctions, offshore wind costs, CfDs and PPAs, capture prices and curtailment, hybrid plants with batteries and fitting it all into a power system.">
 <link rel="icon" href="data:,">
 <link rel="stylesheet" href="style.css">
+<script>(function(){var m={"fig-gridForming":"balancing.html#fig-gridForming","fig-seasonDay":"#system-integration","grid-forming":"balancing.html#grid-forming"};var h=location.hash.slice(1);if(m[h])location.replace(m[h]);})();</script>
 </head>
 <body>
-<button id="play-toggle" type="button" aria-pressed="true" title="Pause all animations">❚❚ Pause</button>
 <main>
 <article>
 <header class="top">
-<p class="kicker">Part 2 of the series · a deep dive from <a class="xref" href="index.html#wind">the main essay</a> and <a class="xref" href="solar-pv.html">Part 1: Solar PV</a></p>
 <h1>Utility-Scale Renewables: Building and Running the Fleet</h1>
-<p class="byline">An interactive essay · aerodynamics, queues, contracts and control · by Akarsh Gopal · October 2026</p>
+<p class="byline">Essay 6 of 9 · by Akarsh Gopal · October 2026</p>
 </header>
 
 <p class="lede">In 1998–99 the average new wind turbine in the United States had a rotor 48 metres across. By 2024 it was 137 metres, and the largest machines at sea now sweep circles 236 metres wide.<sup class="fn"><a href="#n1">1</a></sup><sup class="fn"><a href="#n2">2</a></sup></p>
 
-<p>This part is about building such machines by the hundred, in fields and at sea, and making them earn a living on a grid designed around spinning generators. The engineering is only half of it. A modern wind or solar farm is also a <em>contract</em>, a <em>grid connection</em> and a <em>control system</em>, and each has become, in turn, the thing that decides whether it gets built.</p>
+<p>This essay is about building such machines, and the solar farms beside them, by the hundred, and making them earn a living: the rotor and its wakes, the queue to connect, the auctions and contracts that share the risk, the falling prices a growing fleet earns, and the batteries, wires and flexible demand that help it fit into a system. The engineering is only half of it. A modern wind or solar farm is also a <em>grid connection</em> and a <em>contract</em>, and each has become, in turn, the thing that decides whether it gets built.</p>
 
 <ol class="toc">
 <li><a href="#wind-physics"><span class="n">1</span>Wind physics at scale</a></li>
@@ -30,14 +29,23 @@
 <li><a href="#revenue-models"><span class="n">5</span>Who carries the risk</a></li>
 <li><a href="#cannibalisation"><span class="n">6</span>Capture prices and curtailment</a></li>
 <li><a href="#hybrid-plants"><span class="n">7</span>Hybrid plants and batteries</a></li>
-<li><a href="#grid-forming"><span class="n">8</span>Grid-forming inverters</a></li>
-<li><a href="#system-integration"><span class="n">9</span>Fitting it into a system</a></li>
+<li><a href="#system-integration"><span class="n">8</span>Fitting it into a system</a></li>
 <li><a href="#notes"><span class="n">·</span>Notes and sources</a></li>
 </ol>
 
 <h2 id="wind-physics"><span class="num">1</span>Wind physics at scale</h2>
 
-<p>Two facts explain most of a turbine’s shape. The power in the wind passing through a rotor is ½ρAv³, proportional to the area it sweeps and to the cube of wind speed, and no rotor can capture more than 16/27 of it, the <a class="xref" href="index.html#fig-betz">Betz limit</a>. Modern three-bladed turbines reach 45–50% at their best.</p>
+<p>A wind turbine skips the heat. It takes kinetic energy directly from moving air. The power carried by wind through a rotor of area <i>A</i> is <i>½ ρ A v³</i>, where ρ is the density of air and <i>v</i> its speed: proportional to the area the rotor sweeps and to the cube of wind speed. That cube is the most important fact about wind power: double the wind speed and the available power rises eightfold.</p>
+
+<figure class="fig" data-fig="windPower">
+<figcaption><span class="tagline tag-ill">Model</span> A 4 MW turbine with a 130 m rotor. Below its rated speed, output rises with the cube of wind speed (at an assumed power coefficient of 0.45); above it, the blades pitch to spill the excess; above 25 m/s the turbine shuts down to protect itself.</figcaption>
+</figure>
+
+<p>Why can’t a turbine take all of it? If it stopped the air completely, the air would pile up and nothing more could flow through. Slow it too little and you extract little; too much and the flow goes around the rotor. In 1920 Albert Betz found the optimum: slow the wind by a third and capture 16/27, about 59%, of the power in the stream. No rotor can do better; modern three-bladed turbines reach 45–50% at their best.</p>
+
+<figure class="fig" data-fig="betz">
+<figcaption><span class="tagline tag-ill">Model</span> The stream tube through an ideal rotor. As the rotor slows the air more (the induction factor <i>a</i>), the tube widens behind it to carry the same mass flow. Power captured is 4<i>a</i>(1 − <i>a</i>)² of the incoming power, peaking at <i>a</i> = ⅓.</figcaption>
+</figure>
 
 <p>The formula rewards size twice. Swept area grows with the square of blade length, so doubling the rotor quadruples the energy. And wind speeds up with height, away from the drag of the ground; because of the cube, a few percent more speed matters. So turbines have kept growing:</p>
 
@@ -61,7 +69,7 @@
 <figcaption><span class="tagline tag-ill">Model</span> A 5 × 4 offshore array in a steady 9 m/s wind, with Jensen–Katić wakes.<sup class="fn"><a href="#n3">3</a></sup><sup class="fn"><a href="#n4">4</a></sup> Below: array output relative to free wind, for every direction.</figcaption>
 </figure>
 
-<p>With the wind straight down a row, the second turbine makes far less than the first, and those behind settle lower still, each in the merged wakes upwind. At Horns Rev, an early Danish offshore farm, the second turbine in such a row made only about 60% as much as the first;<sup class="fn"><a href="#n5">5</a></sup> the model gives 59%.<sup class="fn"><a href="#n4">4</a></sup> That is the worst case. Turn the wind a few degrees and the wakes slide between the turbines and the losses largely vanish, hence the sharp dips in the curve below; averaged over every direction, the array loses about 12% of its output.</p>
+<p>With the wind straight down a row, the second turbine makes far less than the first, and those behind settle lower still, each in the merged wakes upwind. At Horns Rev, an early Danish offshore farm, the second turbine in such a row made only about 60% as much as the first;<sup class="fn"><a href="#n5">5</a></sup> the model gives 59%.<sup class="fn"><a href="#n4">4</a></sup> That is the worst case. Turn the wind a few degrees and the wakes slide between the turbines and the losses largely vanish, hence the sharp dips in the figure’s lower curve; averaged over every direction, the array loses about 12% of its output.</p>
 
 <p>Over land, rougher air mixes wakes in faster. Smooth sea air keeps them longer, so offshore turbines are spaced further apart, and in a crowded North Sea one farm’s wake can cut the output of a neighbour tens of kilometres downwind. Spacing costs cable and seabed; large offshore farms lose of the order of 10–20% of their output to wakes.<sup class="fn"><a href="#n5">5</a></sup></p>
 
@@ -109,7 +117,7 @@
 
 <p>Ørsted cancelled its 2.2 GW Ocean Wind projects off New Jersey in October 2023, and in May 2025 dropped the 2.4 GW Hornsea 4, eight months after it won a contract.<sup class="fn"><a href="#n12">12</a></sup> Later UK rounds cleared higher, the latest at £64–65 in 2012 money, roughly £90/MWh in 2024 money: about 75% above the 2022 low in real terms.<sup class="fn"><a href="#n11">11</a></sup></p>
 
-<p>The lesson reaches beyond offshore wind. Wind and solar have almost no fuel cost, so they are acutely sensitive to the <a class="xref" href="index.html#cheap-energy-expensive-reliability">cost of capital</a> (interest rates rising from 2% to 5% raise the cost of a megawatt-hour by roughly 30%) and to the price of steel, copper and magnets. Solar largely escaped, because Chinese module overcapacity kept prices falling. Wind turbines, made by a few Western firms with thin margins, did not. Every technology has its own bottleneck: Chinese wafers and magnets for solar; vessels and cable factories for offshore wind; and large transformers for everything.</p>
+<p>The lesson reaches beyond offshore wind. Wind and solar have almost no fuel cost, so they are acutely sensitive to the <a class="xref" href="price.html#cheap-energy-expensive-reliability">cost of capital</a> (interest rates rising from 2% to 5% raise the cost of a megawatt-hour by roughly 30%) and to the price of steel, copper and magnets. Solar largely escaped, because Chinese module overcapacity kept prices falling. Wind turbines, made by a few Western firms with thin margins, did not. Every technology has its own bottleneck: Chinese wafers and magnets for solar; vessels and cable factories for offshore wind; and large transformers for everything.</p>
 
 <h3 id="wind-world">Where the turbines are</h3>
 
@@ -133,7 +141,7 @@
 
 <h2 id="cannibalisation"><span class="num">6</span>Capture prices and curtailment</h2>
 
-<p>Every panel in a country produces in the same hours and pushes the price down in exactly those hours, so solar sells at a discount to the average (<a class="xref" href="solar-pv.html#capture">Part 1</a> traces why). What a technology earns per megawatt-hour, divided by the average price, is its <b>capture rate</b>. The dots below are Germany’s real years; the dashed curve re-prices 2025’s hours as if the country had had more or less solar.</p>
+<p>A source whose output bunches into the same hours pushes the price down in exactly those hours, so its <a class="xref" href="balancing.html#s6">capture rate</a> falls as its fleet grows; essay 5 traced the slide for solar. Wind faces the same arithmetic. The dots below are Germany’s real years; the dashed curve re-prices 2025’s hours as if the country had had more or less solar.</p>
 
 <figure class="fig" data-fig="cannibal" id="fig-captureCompare">
 <figcaption><span class="tagline tag-mixed">Real + model</span> Dots: capture rates of solar, onshore and offshore wind in Germany, 2015–2025, against each one’s share of demand, from hourly SMARD data.<sup class="fn"><a href="#n14">14</a></sup><sup class="fn"><a href="#n18">18</a></sup> Curve: 2025’s hours re-priced with solar scaled and everything else as in 2025.<sup class="fn"><a href="#n19">19</a></sup> The second panel is the average April–September day of prices, converted at US$1.13/€ (ECB 2025).</figcaption>
@@ -161,33 +169,15 @@
 <figcaption><span class="tagline tag-mixed">Real + model</span> 1 MW<sub>dc</sub> of tracking solar near Seville, 2023 (PVGIS<sup class="fn"><a href="#n22">22</a></sup>), at real Spanish prices<sup class="fn"><a href="#n14">14</a></sup> converted at US$1.13/€ (ECB 2025), with a battery behind the same connection, run by a simple daily rule.<sup class="fn"><a href="#n23">23</a></sup></figcaption>
 </figure>
 
-<p>The figure opens with a 0.4 MW, four-hour battery behind a connection of 0.75 MW per MW of panels, the US benchmark ratio from <a class="xref" href="solar-pv.html#inverters">Part 1</a>. Little is lost to the connection; the bigger cost is the low noon price. The battery moves a slice of noon into the evening peak and lifts the plant’s average price from about $82 to $101/MWh, slightly above the year’s average, and revenue by about a sixth, though its losses mean fewer megawatt-hours sold.</p>
+<p>The figure opens with a 0.4 MW, four-hour battery behind a connection of 0.75 MW per MW of panels, the US benchmark ratio from <a class="xref" href="solar-pv.html#inverters">essay 5</a>. Little is lost to the connection; the bigger cost is the low noon price. The battery moves a slice of noon into the evening peak and lifts the plant’s average price from about $82 to $101/MWh, slightly above the year’s average, and revenue by about a sixth, though its losses mean fewer megawatt-hours sold.</p>
 
 <p>Each extra hour of storage adds less, because most days have only a few dear hours to fill. Shrink the connection and the battery recovers output that would otherwise be lost, which is why developers now design panels, storage and connection together: in the US queue, nearly half of all solar is proposed as part of a hybrid plant.<sup class="fn"><a href="#n7">7</a></sup></p>
 
 <p>The figure leaves out the battery’s own cost, which decides whether the extra revenue is worth it, and the other markets a battery can serve, frequency reserves above all. But the result is general: storage lifts solar’s value most where there is a lot of solar, and the first hours are worth the most.</p>
 
-<h2 id="grid-forming"><span class="num">8</span>Grid-forming inverters</h2>
+<h2 id="system-integration"><span class="num">8</span>Fitting it into a system</h2>
 
-<p>When a large plant trips, the shortfall is drawn at first from the kinetic energy of the grid’s spinning generators: they slow together, so the <a class="xref" href="index.html#fig-frequency">frequency</a> falls, and the more spinning mass, or <b>inertia</b>, the slower the fall and the more time reserves have to respond before relays start disconnecting customers.</p>
-
-<p>Wind, solar and batteries connect through power electronics, and most today are <b>grid-following</b>: they measure the grid’s voltage and frequency and inject current to match, like a dancer following a partner. They add no inertia, so system inertia falls as they replace coal and gas. A <b>grid-forming</b> inverter sets its own voltage and frequency and pushes back at once when the grid moves, much like a synchronous machine, provided it has stored energy to draw on, typically a battery.</p>
-
-<figure class="fig" data-fig="gridForming">
-<figcaption><span class="tagline tag-ill">Model</span> Frequency after a 1 GW plant trips in a 30 GW system, by share of inverter-based output and how much of it is grid-forming.<sup class="fn"><a href="#n24">24</a></sup> Illustrative numbers, not a particular grid.</figcaption>
-</figure>
-
-<p>Slide the inverter share up with no grid-forming plant and the fall steepens and deepens; past a point the frequency hits the load-shedding threshold before reserves respond. Add grid-forming capacity, or batteries that inject power within a second, and stability returns, mostly without fuel. That is why Britain and Australia, with high wind and solar shares on smallish grids, buy inertia and grid-forming capability, and why grid codes increasingly demand it.</p>
-
-<p>Spinning machines also held <em>voltage</em> steady for free, by absorbing and supplying reactive power. On 28 April 2025, mainland Spain and Portugal blacked out within seconds. ENTSO-E’s expert panel found no single cause: oscillations earlier that day, too little dynamic voltage control and renewable plants held at a fixed power factor, among other weaknesses, let voltage climb until plants tripped in a cascade, Europe’s first overvoltage blackout. Its main recommendation is to require new generators, wind and solar included, to control voltage actively.<sup class="fn"><a href="#n25">25</a></sup> The inverters can do it; until recently the rules did not ask them to.</p>
-
-<h2 id="system-integration"><span class="num">9</span>Fitting it into a system</h2>
-
-<p>One farm can be made more valuable with a bigger rotor, a battery and a better contract. A system must match output that follows the weather to demand that follows people, every hour of the year. Wind and solar help each other: in Germany solar peaks in summer and wind in winter, and in the model day below the two trade places with the season.</p>
-
-<figure class="fig showpiece" data-fig="seasonDay">
-<figcaption><span class="tagline tag-ill">Simulation</span> A model day on a winter weekday with 25 GW of wind; demand, wind and solar are stylised. The real 2025 months follow.</figcaption>
-</figure>
+<p>One farm can be made more valuable with a bigger rotor, a battery and a better contract. A system must match output that follows the weather to demand that follows people, every hour of the year. Wind and solar help each other: in Germany solar peaks in summer and wind in winter.</p>
 
 <figure class="fig" data-fig="seasonMix">
 <figcaption><span class="tagline tag-real">Real data</span> Germany, 2025: monthly public net generation from solar and wind against demand, or any week hour by hour with the day-ahead price converted at US$1.13/€ (ECB 2025) (SMARD).<sup class="fn"><a href="#n14">14</a></sup></figcaption>
@@ -195,9 +185,10 @@
 
 <p>In 2025 German wind made twice as much in January as in July, solar more than five times as much in July as in January, and the sum is flatter than either. Hour by hour it is not: in the stillest week of the year, in mid-January, wind and solar together averaged under 9 GW, while over the year their output peaked at 63 GW, and Germany had 573 hours of negative prices.<sup class="fn"><a href="#n14">14</a></sup></p>
 
-<p>Everything in this series is a partial answer to that variability. Bigger, low-specific-power turbines and offshore wind fill more hours. Batteries move energy across hours; transmission and interconnectors move it across places. Flexible demand (heat pumps, electric cars, electrolysers) can soak up surplus. Contracts decide who is paid for each, and grid codes whether inverters hold the system up. None removes the need for firm capacity in the dark, still week.</p>
+<p>Everything in this series is a partial answer to that variability. Bigger, low-specific-power turbines and offshore wind fill more hours. Batteries move energy across hours; transmission and interconnectors move it across places. Flexible demand (heat pumps, electric cars, electrolysers) can soak up surplus. Contracts decide who is paid for each, and grid codes whether <a class="xref" href="balancing.html#grid-forming">inverters hold the system up</a>. None removes the need for firm capacity in the dark, still week.</p>
 
-<p>The physics of wind and sunlight is settled. What decides how fast the fleet grows is the rest: the queue, the cost of capital, how contracts share risk and how quickly the wires follow. The next part follows those wires, starting with the <a class="xref" href="transformers.html">transformers</a> that change the voltage.</p>
+<p>The physics of wind and sunlight is settled. What decides how fast the fleet grows is the rest: the queue, the cost of capital, how contracts share risk and how quickly the wires follow. The next essay adds it all up as <a class="xref" href="price.html">the price of electricity</a>: what is in a bill, what a plant costs and why some keep getting cheaper.</p>
+
 
 <h2 id="notes">Notes and sources</h2>
 <ol class="notes">
@@ -221,11 +212,9 @@
 <li id="n18">Capture-rate figure: an earlier version also showed Spain; it is omitted because no openly licensed hourly generation series for Spain could be retrieved. Red Eléctrica’s public API serves generation by technology only at daily resolution, and its hourly ESIOS service and the ENTSO-E Transparency Platform require a registered token.</li>
 <li id="n19">Re-pricing model: our own construction from the SMARD 2025 hourly series in note 14. Residual demand is grid load minus wind and solar; the price curve is the median day-ahead price in each 2 GW band with at least 20 hours, made non-decreasing, and held flat beyond the observed range. With 2025’s actual solar it gives a capture rate of 57% and 585 hours below zero, against the real 52% and 573; at 2019’s solar share it gives 92%, against the real 93%. Everything other than solar is held as in 2025. Batteries in the figure are an assumption: two-hour, 85% round trip, one cycle a day. It ignores how plants, imports and storage would adapt to a different solar fleet.</li>
 <li id="n20">Berkeley Lab, <a href="https://eta-publications.lbl.gov/sites/default/files/rewep-2024update_tech-brief_20240429.pdf"><i>Renewables and Wholesale Electricity Prices (ReWEP), 2024 update</i></a>, technical brief, Figure 3. South Australia: our calculation from AEMO <a href="https://aemo.com.au/energy-systems/electricity/national-electricity-market-nem/data-nem/aggregated-data">aggregated price and demand data</a>, region SA1, 2025, five-minute regional reference prices averaged to hours: zero or below in 2,620 hours.</li>
-<li id="n21">Bundesnetzagentur, network and system security (congestion management) reports, quarterly and annual, summarised on <a href="https://www.smard.de/">SMARD</a>: curtailed renewable energy 6,146 GWh (2020), 5,818 (2021), 8,071 (2022), 10,479 (2023), 9,389 (2024) and 9,379 (2025, preliminary); total costs €4.25 bn (2022), €3.34 bn (2023), €2.95 bn (2024) and €3.08 bn (2025; €1.62 bn redispatch, €1.37 bn reserve plants and €0.10 bn countertrading in the federal government’s answer to a parliamentary question, Bundestag hib 689/2026, the source also used in Part 4). The 9.4 TWh curtailed each year is about the consumption of 2.7 million homes at 3,500 kWh a year.</li>
+<li id="n21">Bundesnetzagentur, network and system security (congestion management) reports, quarterly and annual, summarised on <a href="https://www.smard.de/">SMARD</a>: curtailed renewable energy 6,146 GWh (2020), 5,818 (2021), 8,071 (2022), 10,479 (2023), 9,389 (2024) and 9,379 (2025, preliminary); total costs €4.25 bn (2022), €3.34 bn (2023), €2.95 bn (2024) and €3.08 bn (2025; €1.62 bn redispatch, €1.37 bn reserve plants and €0.10 bn countertrading in the federal government’s answer to a parliamentary question, Bundestag hib 689/2026, the source also used in essay 3). The 9.4 TWh curtailed each year is about the consumption of 2.7 million homes at 3,500 kWh a year.</li>
 <li id="n22">European Commission Joint Research Centre, <a href="https://re.jrc.ec.europa.eu/pvg_tools/en/">PVGIS 5.3</a>, hourly series for 2023, Seville (37.4°N, 6.0°W), horizontal single-axis tracker, crystalline silicon, 14% system losses.</li>
 <li id="n23">Hybrid-plant rule: PVGIS gives 2,092 kWh per kWp for this site in 2023. The battery first stores power above the connection limit, then charges from the panels in the cheapest sunny hours if the day’s price spread covers its losses (85% round trip), and discharges in the most expensive hours; it never charges from the grid.</li>
-<li id="n24">Frequency model: synchronous generators contribute an inertia constant of 5 s, grid-forming inverters a virtual 4 s, grid-following inverters nothing. Frequency containment reserve of 1.5 GW is fully active at 200 mHz, ramping over about 20 s (Continental Europe requires full activation within 30 s); load falls about 2% per hertz; optional fast frequency response delivers 0.6 GW within a second.</li>
-<li id="n25">ENTSO-E Expert Panel, <a href="https://www.entsoe.eu/publications/blackout/28-april-2025-iberian-blackout/"><i>Grid incident in Spain and Portugal on 28 April 2025 — Final report</i></a>.</li>
 </ol>
 </article>
 </main>

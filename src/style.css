@@ -129,7 +129,7 @@ table.mini th:first-child, table.mini td:first-child { text-align: left; }
 
 /* series navigation */
 nav.series { position: sticky; top: 0; z-index: 20; font-family: var(--sans); font-size: 0.8rem; background: #fbfaf6; border-bottom: 1px solid var(--grid2); }
-nav.series .series-in { max-width: 68rem; margin: 0 auto; padding: 9px 16px; display: flex; align-items: center; gap: 6px 18px; flex-wrap: wrap; }
+nav.series .series-in { max-width: 80rem; margin: 0 auto; padding: 9px 16px; display: flex; align-items: center; gap: 6px 18px; flex-wrap: wrap; }
 nav.series .series-title { font-weight: 700; color: var(--ink); text-decoration: none; letter-spacing: -0.01em; white-space: nowrap; }
 nav.series ol { list-style: none; display: flex; flex-wrap: wrap; gap: 2px 4px; margin: 0; padding: 0; }
 nav.series li a { display: inline-flex; align-items: baseline; gap: 5px; padding: 3px 8px; border-radius: 7px; color: var(--ink2); text-decoration: none; white-space: nowrap; }
@@ -201,3 +201,13 @@ figcaption details.method[open] { display: block; color: var(--ink3); }
 
 /* the day model: power-flow strip beside the day chart on wide screens */
 @media (min-width: 1000px) { .day-pair { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); gap: 16px; align-items: start; } .day-pair > .canvas-wrap { min-width: 0; } }
+
+/* landing page: the list of essays */
+ol.essays { list-style: none; padding: 0; margin: 1.2rem auto 3rem; font-family: var(--sans); }
+ol.essays li { border-top: 1px solid var(--grid2); }
+ol.essays li:last-child { border-bottom: 1px solid var(--grid2); }
+ol.essays a { display: grid; grid-template-columns: 2.2rem 1fr; gap: 2px 0; padding: 14px 4px; text-decoration: none; color: var(--ink); }
+ol.essays a:hover { background: #efebe2; }
+ol.essays .n { grid-row: span 2; font-size: 1.05rem; color: var(--ink3); font-variant-numeric: tabular-nums; padding-top: 1px; }
+ol.essays .t { font-weight: 650; font-size: 1.02rem; line-height: 1.35; }
+ol.essays .d { font-size: 0.88rem; line-height: 1.5; color: var(--ink2); }

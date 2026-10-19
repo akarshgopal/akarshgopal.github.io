@@ -15,7 +15,29 @@ Screenshots / checks: `pnpm run shots` (Playwright + system Chrome).
 - v2 added §12 (renewables, nuclear, learning: `learning`, `foak`, `cleanGrid`) and §14 (the economic lever: `energyShare`, `unlock`),
   in `src/figs/clean.js` and `src/figs/economy.js`; data in `src/lib/data2.js`.
 
-## v3 — the series (October 2026)
+## v4: nine essays (19 October 2026)
+
+The series is a landing page plus nine essays, read in order. The old main essay and its five deep dives were re-cut so each idea lives in one place (see `CHANGES-2026-10-19.md`, and `scripts/restructure-2026-10.py` for the one-off migration).
+
+| # | File | Essay |
+|---|---|---|
+| – | `index.html` | Landing page: overview, the essays, the 3D generator |
+| 1 | `the-machine.html` | The Machine: Electrons, Magnets and Steam |
+| 2 | `transformers.html` | Transformers: The Quiet Bottleneck |
+| 3 | `transmission.html` | Transmission: The Network That Decides What Gets Built |
+| 4 | `balancing.html` | Balancing the Grid: Fifty Hertz and the Markets That Keep It |
+| 5 | `solar-pv.html` | Solar PV: From Photon to Grid |
+| 6 | `utility-renewables.html` | Utility-Scale Renewables: Building and Running the Fleet |
+| 7 | `price.html` | The Price of Electricity: Bills, Plants and Learning Curves |
+| 8 | `synthetic-fuels.html` | Synthetic Fuels and the Price of a Kilowatt-Hour |
+| 9 | `futures.html` | Cheaper Again? A Century of Prices and the Next Twenty Years |
+
+- **Sources:** `src/pages/<file>.html`, one per page. Order, nav labels and titles: `src/series.mjs`.
+- **Build:** `pnpm run build` → `dist/`. Two bundles: `series.js` (every 2D figure; registry in `src/figures.js`, which merges `src/figs/essay.js` with the post registries) on every page, and `hero.js` (the three.js generator) only on `index.html` and `the-machine.html`. The build injects the series nav (with the Pause button), prev/next links, and `id="fig-<name>"` on every figure.
+- **Old links:** each page carries a small redirect script mapping ids that moved to another page (all the old main-essay anchors live on `index.html`), so `index.html#s9` lands on `balancing.html#s9`.
+- **Money:** every amount is in US dollars, with no currency toggles.
+
+## v3 — the series (October 2026, superseded by v4)
 
 The explainer is now a multi-page static site, **How Electricity Works**:
 

@@ -7,22 +7,19 @@
 <meta name="description" content="An interactive explainer of solar photovoltaics: band gaps and p–n junctions, the IV curve and maximum power point, the Shockley–Queisser limit, cell technologies, the Chinese supply chain, the sun’s geometry, inverters and clipping, system costs and the collapse of solar capture prices.">
 <link rel="icon" href="data:,">
 <link rel="stylesheet" href="style.css">
+<script>(function(){var m={"fig-noonDay":"#capture"};var h=location.hash.slice(1);if(m[h])location.replace(m[h]);})();</script>
 </head>
 <body>
-<button id="play-toggle" type="button" aria-pressed="true" title="Pause all animations">❚❚ Pause</button>
 <main>
 <article>
 <header class="top">
-<p class="kicker">Part 1 of the series · a deep dive from <a class="xref" href="index.html#sunlight">the main essay</a></p>
 <h1>Solar PV: From Photon to Grid</h1>
-<p class="byline">An interactive essay · semiconductor physics, factories, geometry and money · by Akarsh Gopal · October 2026</p>
+<p class="byline">Essay 5 of 9 · by Akarsh Gopal · October 2026</p>
 </header>
 
 <p class="lede">In 2025 the world’s factories shipped about 706 gigawatts of solar modules, more than half the generating capacity of the United States, in a single year. Each module is a sheet of glass over a slice of purified sand, with no moving parts. At the end of 2025 it sold on the spot market for about nine US cents a watt at the factory gate.<sup class="fn"><a href="#n1">1</a></sup></p>
 
-<p>This post follows the energy all the way: a photon after its eight-minute trip from the sun, a junction in a crystal, a cable, an inverter, a grid, and finally a market where the electricity made at noon is increasingly worth almost nothing. On the way: a hard physical limit, a supply chain concentrated in one country, and a price that fell further than almost anyone predicted.</p>
-
-<p>Most figures are live. <span class="tagline tag-real">Real data</span> means measured or published numbers; <span class="tagline tag-ill">Model</span> means a simplified simulation built to show a mechanism.</p>
+<p>This essay follows the energy from a photon after its eight-minute trip from the sun to a junction in a crystal, a cable, an inverter and the grid, and back to the market of the last essay, where electricity made at noon is increasingly worth almost nothing. On the way: a hard physical limit, a supply chain concentrated in one country, and a price that fell further than almost anyone predicted.</p>
 
 <ol class="toc">
 <li><a href="#photons"><span class="n">1</span>Light and the band gap</a></li>
@@ -38,7 +35,7 @@
 <li><a href="#costs"><span class="n">11</span>Rooftop versus field</a></li>
 <li><a href="#capture"><span class="n">12</span>The noon problem</a></li>
 <li><a href="#lifetime"><span class="n">13</span>Thirty years in the weather</a></li>
-<li><a href="#notes"><span class="n"></span>Notes and sources</a></li>
+<li><a href="#notes"><span class="n">·</span>Notes and sources</a></li>
 </ol>
 
 <h2 id="photons"><span class="num">1</span>Light and the band gap</h2>
@@ -122,7 +119,7 @@
 
 <p>Few industries this large are so concentrated. In 2024 China made between 86% and 96.5% of the world’s output at every stage, from polysilicon to modules.<sup class="fn"><a href="#n10">10</a></sup> Industrial policy, cheap coal power, scale and fierce competition between Chinese firms all played a part, and so did repeated overbuilding: polysilicon fell from $460/kg in the 2008 shortage to below $6 in September 2026, and makers are now cutting output to stem losses.<sup class="fn"><a href="#n11">11</a></sup> The world can make about twice as many modules a year as it installs.<sup class="fn"><a href="#n9">9</a></sup></p>
 
-<p>The long-run result is a <a class="xref" href="index.html#fig-learning">learning curve</a>: since 1976 each doubling of cumulative shipments has cut the module price by about 26%.<sup class="fn"><a href="#n9">9</a></sup> By the end of 2025 shipments totalled about 3,200 GW and the factory-gate spot price was about $0.09 a watt. For solar, the learning curve was an operating plan.</p>
+<p>The long-run result is a <a class="xref" href="price.html#fig-learning">learning curve</a>: since 1976 each doubling of cumulative shipments has cut the module price by about 26%.<sup class="fn"><a href="#n9">9</a></sup> By the end of 2025 shipments totalled about 3,200 GW and the factory-gate spot price was about $0.09 a watt. For solar, the learning curve was an operating plan.</p>
 
 <h2 id="sun"><span class="num">8</span>The sun’s geometry</h2>
 
@@ -143,8 +140,8 @@
 <figcaption><span class="tagline tag-real">Real data (modelled from measured weather)</span> Annual energy from 1 kWp, 2014–2023, fixed at the optimal tilt or on a single-axis tracker (PVGIS 5.3).<sup class="fn"><a href="#n14">14</a></sup> The right-hand scale is capacity factor.</figcaption>
 </figure>
 
-<p>From the Arctic to the Atacama, yields differ by a factor of three for fixed panels and four with desert trackers. A kilowatt in Berlin makes about 1,050–1,100 kWh a year; in Seville or Phoenix, over 2,000 on a tracker; in Chile’s Atacama, about 3,000.</p>
-<p>The monthly bars matter as much as the totals. A kilowatt in Berlin makes about four and a half times as much in June as in December, the root of <a class="xref" href="index.html#the-dark-week">the dark week</a> of northern winters. Near the equator the bars are flat, but cloudy tropical skies keep totals modest, and where most light is diffuse a tracker gains little.</p>
+<p>From the Arctic to the Atacama, yields differ by a factor of three for fixed panels and four with desert trackers. A kilowatt in Berlin makes about 1,050–1,100 kWh a year; in Seville or Phoenix, over 2,000 on a tracker; in Chile’s Atacama, about 3,000. The right-hand scale gives the same yields as a <b>capacity factor</b>: a plant’s average output, night included, as a share of its nameplate.</p>
+<p>The monthly bars matter as much as the totals. A kilowatt in Berlin makes about four and a half times as much in June as in December, the root of <a class="xref" href="futures.html#the-dark-week">the dark week</a> of northern winters. Near the equator the bars are flat, but cloudy tropical skies keep totals modest, and where most light is diffuse a tracker gains little.</p>
 
 <p>A solar plant’s cost is almost all paid up front, so its cost per kilowatt-hour is roughly capital divided by lifetime output: double the yield, halve the cost. That is why the same panel makes power far more cheaply in Spain than in Hamburg.</p>
 
@@ -158,7 +155,7 @@
 
 <h2 id="inverters"><span class="num">10</span>Inverters and clipping</h2>
 
-<p>Modules make direct current; the grid runs on alternating current. The <b>inverter</b> in between tracks the maximum power point, turns DC into a sine wave locked to the grid, and increasingly helps run the grid: riding through faults, supporting voltage and, in <a class="xref" href="utility-renewables.html#grid-forming">“grid-forming” designs</a>, providing some of the frequency stability that spinning generators gave.</p>
+<p>Modules make direct current; the grid runs on alternating current. The <b>inverter</b> in between tracks the maximum power point, turns DC into a sine wave locked to the grid, and increasingly helps run the grid: riding through faults, supporting voltage and, in <a class="xref" href="balancing.html#grid-forming">“grid-forming” designs</a>, providing some of the frequency stability that spinning generators gave.</p>
 
 <p>Modules rarely reach nameplate, so it pays to install more DC panel capacity than AC inverter capacity and let the inverter cap output in the brightest hours. That ratio is the <b>inverter loading ratio</b> (DC/AC). The US benchmark utility plant uses 1.34.<sup class="fn"><a href="#n18">18</a></sup></p>
 
@@ -179,21 +176,13 @@
 
 <p>The difference is “soft” cost. For a home system, permitting, inspection, interconnection paperwork, sales, overhead and margin together exceed $2 a watt, more than the hardware; a utility plant spreads them over a hundred megawatts.</p>
 
-<p id="costs-world">The United States is an expensive extreme. IRENA puts the average utility-scale plant commissioned in 2024 at about 53 cents a watt in India and 59 cents in China, against $1.06 in the United States,.<sup class="fn"><a href="#n19">19</a></sup> Fraunhofer ISE puts German rooftops at about $1.10–2.20 a watt,<sup class="fn"><a href="#n20">20</a></sup> and Australia, with standard installs and light permitting, has driven rooftop costs much lower.</p>
+<p id="costs-world">The United States is an expensive extreme. IRENA puts the average utility-scale plant commissioned in 2024 at about 53 cents a watt in India and 59 cents in China, against $1.06 in the United States.<sup class="fn"><a href="#n19">19</a></sup> Fraunhofer ISE puts German rooftops at about $1.10–2.20 a watt,<sup class="fn"><a href="#n20">20</a></sup> and Australia, with standard installs and light permitting, has driven rooftop costs much lower.</p>
 
-<p>Rooftop solar still pays for many households, because it saves the <i>retail</i> price, with all the network charges, levies and taxes of a <a class="xref" href="index.html#s10">household bill</a>, while a field plant earns only wholesale. That gap attracts owners, and it is why tariffs that let them skip paying for the grid they still use are increasingly contested.</p>
+<p>Rooftop solar still pays for many households, because it saves the <i>retail</i> price, with all the network charges, levies and taxes of a <a class="xref" href="price.html#s10">household bill</a>, while a field plant earns only wholesale. That gap attracts owners, and it is why tariffs that let them skip paying for the grid they still use are increasingly contested.</p>
 
 <h2 id="capture"><span class="num">12</span>The noon problem</h2>
 
-<p>Every panel in a country sees roughly the same sun. With few panels that did not matter: solar produced in the daytime, when demand and prices were high. But a wholesale market pays every plant the price of the dearest one needed to meet demand. Add enough zero-cost solar and on sunny middays the dear plants drop out, so the price collapses exactly when solar produces.</p>
-
-<p>Below is a simulated spring Sunday on a German-style grid with 40 GW of solar, roughly Germany in 2017. Slide the solar up and watch the noon price.</p>
-
-<figure class="fig showpiece" data-fig="noonDay">
-<figcaption><span class="tagline tag-ill">Simulation</span> A model day: demand, wind and solar are stylised, and prices come from a simple merit order of the plants on the grid.</figcaption>
-</figure>
-
-<p>With little solar, noon is just another daytime hour and solar earns about the average. Past 80–100 GW the noon price falls to zero or below. What solar earns relative to the average price of all hours is its <b>capture rate</b>. Germany’s real prices show the same effect:</p>
+<p>Every panel in a country sees roughly the same sun, so, as <a class="xref" href="balancing.html#s6">a day on the grid</a> showed, the more panels there are, the lower the price in exactly the hours they produce, and the lower their capture rate. Germany has been running that experiment for real:</p>
 
 <figure class="fig" data-fig="captureHistory">
 <figcaption><span class="tagline tag-real">Real data</span> Germany, 2015–2025, from hourly SMARD data, each year converted at that year’s ECB rate.<sup class="fn"><a href="#n21">21</a></sup> Left: average and solar-weighted day-ahead prices, capture rate and negative hours. Right: average price by hour, April–September, 2015 against 2025.</figcaption>
@@ -201,7 +190,7 @@
 
 <p>Through the 2010s solar earned close to the average. Then the midday dip deepened: in 2025 solar earned about $52/MWh against an average of $101, a capture rate of 52%, and prices were negative in 573 hours, almost all of them sunny weekend and holiday middays. The 2022 spike shows this is not physics: when gas was dear at every hour, solar’s value soared too. On the right, 2015’s gentle summer hump has become 2025’s noon canyon.</p>
 
-<p>Each new panel lowers what every existing one earns, an effect known as cannibalisation. Solar stays useful, but the value of the next panel depends increasingly on the rest of the system: batteries that move noon energy to the evening, <a class="xref" href="synthetic-fuels.html#cheap-demand">demand that shifts to noon</a>, interconnectors that export the surplus, trackers and east–west layouts. Since February 2025 new German systems get no market premium in negative-price hours, which nudges them to curtail or store.<sup class="fn"><a href="#n22">22</a></sup></p>
+<p>Panels can do a little about it themselves: trackers and east–west layouts move output out of noon and into the shoulder hours (<a href="#sun">section 8</a>). The rest depends on the system around them: batteries that move noon energy to the evening, <a class="xref" href="synthetic-fuels.html#cheap-demand">demand that shifts to noon</a>, interconnectors that export the surplus. Since February 2025 new German systems get no market premium in negative-price hours, which nudges them to curtail or store.<sup class="fn"><a href="#n22">22</a></sup></p>
 
 <h2 id="lifetime"><span class="num">13</span>Thirty years in the weather</h2>
 
@@ -209,7 +198,8 @@
 
 <p>Over thirty years, 0.5% a year costs about 7% of lifetime output, small next to the factor of four between sites. The bigger questions are economic: whether a plant keeps its grid connection, what noon power is worth in 2050, and whether glass, aluminium, silver and silicon can be recycled when the 2,844 GW (DC) installed by 2025<sup class="fn"><a href="#n9">9</a></sup> reaches the end of its life.</p>
 
-<p>Within a working lifetime, solar went from a space-programme curiosity to the cheapest new electricity in much of the world. Physics sets a ceiling that silicon has nearly reached; factories have made that physics a commodity; geography sets the yield; markets now set the value. The next post follows the energy into <a class="xref" href="utility-renewables.html#project-anatomy">utility-scale wind and solar parks</a>: how they are designed, financed and connected.</p>
+<p>Within a working lifetime, solar went from a space-programme curiosity to the cheapest new electricity in much of the world. Physics sets a ceiling that silicon has nearly reached; factories have made that physics a commodity; geography sets the yield; markets now set the value. The next essay turns to <a class="xref" href="utility-renewables.html">wind and the fleet as a whole</a>: how wind and solar parks are designed, financed, connected and paid.</p>
+
 
 <h2 id="notes">Notes and sources</h2>
 <ol class="notes">
@@ -221,7 +211,7 @@
 <li id="n6">Record cells: LONGi hybrid back-contact silicon cell, 28.29%, certified by ISFH (2026); LONGi perovskite–silicon tandem, 35.5%, as announced by LONGi in 2026 (the company reports ESTI certification); LONGi gives about 43% as the theoretical limit for this tandem; <a href="https://www.longi.com/en/news/">LONGi news releases</a>. GaAs single-junction 29.1%: M. A. Green et al., “Solar cell efficiency tables” (Versions 67–68), <i>Progress in Photovoltaics</i>; see also the <a href="https://www.nrel.gov/pv/cell-efficiency.html">NREL best research-cell efficiency chart</a>.</li>
 <li id="n7">A. Richter, M. Hermle and S. W. Glunz, “Reassessment of the limiting efficiency for crystalline silicon solar cells”, <i>IEEE J. Photovoltaics</i> 3, 1184 (2013), <a href="https://doi.org/10.1109/JPHOTOV.2013.2270351">doi:10.1109/JPHOTOV.2013.2270351</a>: 29.4% including Auger recombination.</li>
 <li id="n8">Shading figure: two columns of cells per bypass diode; the power–voltage curve treats each cell as a current source with a reverse-bias characteristic.</li>
-<li id="n9">VDMA, <a href="https://www.vdma.org/international-technology-roadmap-photovoltaic"><i>International Technology Roadmap for Photovoltaic</i></a> (ITRPV), 17th edition (2026): 2025 module efficiencies (PERC 21.7%, TOPCon 23.5%, heterojunction 23.5%, back contact 24.1%); learning rate 26% (1976–2025; the main essay’s fit to yearly global average prices from 1975, OWID/IRENA, gives 24%, and its 2024 average of 27 cents a watt, in 2025 dollars, is a different measure from the spot price); year-end 2025 module spot price about $0.09/W; 706 GW shipped in 2025, 3,178 GW cumulative shipments; 2,844 GW cumulative installed; about 1,460 GW of manufacturing capacity; tandem mass production expected after 2027. Market shares for PERC and heterojunction from the 16th and 17th editions.</li>
+<li id="n9">VDMA, <a href="https://www.vdma.org/international-technology-roadmap-photovoltaic"><i>International Technology Roadmap for Photovoltaic</i></a> (ITRPV), 17th edition (2026): 2025 module efficiencies (PERC 21.7%, TOPCon 23.5%, heterojunction 23.5%, back contact 24.1%); learning rate 26% (1976–2025; the fit in the <a class="xref" href="price.html#fig-learning">learning-curve figure</a> to yearly global average prices from 1975, OWID/IRENA, gives 24%, and its 2024 average of 27 cents a watt, in 2025 dollars, is a different measure from the spot price); year-end 2025 module spot price about $0.09/W; 706 GW shipped in 2025, 3,178 GW cumulative shipments; 2,844 GW cumulative installed; about 1,460 GW of manufacturing capacity; tandem mass production expected after 2027. Market shares for PERC and heterojunction from the 16th and 17th editions.</li>
 <li id="n10">IEA PVPS, <a href="https://iea-pvps.org/">PV supply-chain review</a> (I. Kaizuka et al., November 2025): China’s share by stage, 2022–2024; 2024 world production of about 1.96 million tonnes of polysilicon, 804 GW of wafers, 753 GW of cells and 726 GW of modules; TOPCon share of cell output about 30% in 2023 and about 70% in 2024. IEA, <i>Energy Technology Perspectives 2026</i>, gives a similar picture (about 80% of modules and more than 90% of upstream stages).</li>
 <li id="n11">Polysilicon spot prices: <a href="https://www.bernreuter.com/polysilicon/price-trend/">Bernreuter Research, polysilicon price trend</a> (selected points: about $460/kg in March 2008, $15.90 in December 2012, $6.75 in June 2020, $39 in August 2022, $5.84 at the end of September 2026). Silicon use of about 14 g/W in 2003 from the same source.</li>
 <li id="n12">Sun-path figure: solar time; a simple clear-sky model with Kasten–Young air mass, a fixed atmospheric transmittance and diffuse fraction, and 14% system losses. Real yields with real weather are in the next figure.</li>
