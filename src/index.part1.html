@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>How the World’s Electricity Works</title>
+<meta name="description" content="An interactive explainer: from electrons and spinning magnets to merit orders, nodal prices, household bills, a century of price history and the futures of the grid.">
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<button id="play-toggle" type="button" aria-pressed="true" title="Pause all animations">❚❚ Pause</button>
+<main>
+<article>
+<header class="top">
+<h1>How the World’s Electricity Works</h1>
+<p class="byline">An interactive essay · physics, grids, markets, bills, history and futures · written for Akarsh Gopal, October 2026</p>
+</header>
+
+<figure class="fig showpiece" data-fig="hero3d">
+<figcaption>A two-pole, three-phase generator. The rotor is a magnet; each pair of opposite coils is one phase. Drag to look around it.</figcaption>
+</figure>
+
+<p class="lede">Flip a switch and a lamp lights instantly. Somewhere, hundreds of kilometres away, a machine the size of a house turns very slightly harder. In between are wires that hum at exactly fifty (or, in the Americas and western Japan, sixty) cycles a second, an auction that ran yesterday at noon, a bill built up in layers, and more than a century of engineering, money and politics.</p>
+
+<p>This essay follows that chain all the way through. First the physics: what a current is, how a spinning magnet makes one, and why most electricity still comes from boiling water. Then the grid as one continent-sized machine that must balance every second. Then the economics: how markets pick which plants run, why prices differ by hour and place, and why the exchange price has surprisingly little to do with your bill. Then what plants cost, why solar got cheaper by a factor of hundreds while nuclear got dearer, and a century in which electricity kept getting cheaper until about 1973. Finally, why the price of a kilowatt-hour reaches into smelters, hydrogen plants and data centres, and what would have to be true for it to fall again.</p>
+
+<p>Almost every figure is live. Drag things, move the sliders, break things. Where a figure uses real data the caption says so; where it is a simplified model built to show a mechanism, the caption says that too.</p>
+
+<p>This essay is the hub of a short series. Five companion posts go deeper into <a class="xref" href="solar-pv.html">solar photovoltaics</a>, <a class="xref" href="utility-renewables.html">utility-scale wind and solar</a>, <a class="xref" href="transformers.html">transformers</a>, <a class="xref" href="transmission.html">transmission</a> and <a class="xref" href="synthetic-fuels.html">synthetic fuels</a>; boxes like the one under the solar figure in section 3 point to them at the relevant spots.</p>
+
+<h3 id="world">The world’s electricity in one picture</h3>
+
+<p>The world generated about <b>31,900 TWh</b> of electricity in 2025, roughly 7,900 TWh more than in 2015.<sup class="fn"><a href="#n1">1</a></sup> China alone made a third of it, 10,500 TWh, and accounted for 60% of the decade’s growth. The United States made 4,500 TWh, the European Union 2,800, India 2,100. Coal is still the largest single source, at a third of the total. Solar, which was a rounding error in 2015, supplied almost 9% in 2025, as much as nuclear.</p>
+
+<p>The mixes are very different. India runs on coal for 71% of its power, the Middle East on gas for 69%, Brazil on hydro for 52%. France and South Korea lean on nuclear; Australia gets a fifth of its electricity from solar, much of it on rooftops. Germany, which appears often here because its data is unusually open, is a small grid by world standards (about 500 TWh) with no nuclear and a quarter of its power from wind. It is one case among many; where a mechanism plays out differently in Texas, Delhi, Riyadh or São Paulo, the figures say so.</p>
+
+<figure class="fig" data-fig="worldMix">
+<figcaption><span class="tagline tag-real">Real data</span> Electricity generation by source, 2000–2025, from Ember’s yearly electricity data (CC BY 4.0). Pick a region; the second view shows how each region’s generation changed between 2015 and 2025, split by source. “Middle East”, “Africa”, “Latin America” and “ASEAN” are Ember’s regional aggregates.<sup class="fn"><a href="#n1">1</a></sup></figcaption>
+</figure>
+
+<ol class="toc">
+<li><a href="#s1"><span class="n">1</span>Charge, fields and current</a></li>
+<li><a href="#s2"><span class="n">2</span>Making electricity</a></li>
+<li><a href="#s3"><span class="n">3</span>Heat, wind and light</a></li>
+<li><a href="#s4"><span class="n">4</span>Moving it</a></li>
+<li><a href="#s5"><span class="n">5</span>Fifty hertz</a></li>
+<li><a href="#s6"><span class="n">6</span>A day on the grid</a></li>
+<li><a href="#s7"><span class="n">7</span>The merit order</a></li>
+<li><a href="#s8"><span class="n">8</span>Markets in time</a></li>
+<li><a href="#s9"><span class="n">9</span>Markets in space</a></li>
+<li><a href="#s10"><span class="n">10</span>From the exchange to the meter</a></li>
+<li><a href="#s11"><span class="n">11</span>What a power plant costs</a></li>
+<li><a href="#s12"><span class="n">12</span>Renewables, nuclear and learning</a></li>
+<li><a href="#s13"><span class="n">13</span>A century of cheapening</a></li>
+<li><a href="#s14"><span class="n">14</span>Why the price moves everything else</a></li>
+<li><a href="#s15"><span class="n">15</span>Futures</a></li>
+<li><a href="#notes"><span class="n"></span>Notes and sources</a></li>
+</ol>
+
+<h2 id="s1"><span class="num">1</span>Charge, fields and current</h2>
+
+<p>Every atom in a copper wire has electrons, and in a metal some of those electrons are not attached to any particular atom. They wander through the crystal lattice like a gas, bumping into the vibrating ions, moving in every direction at once at more than a thousand kilometres a second. Because they move in every direction equally, nothing flows. There is no current.</p>
+
+<p>Now connect the wire to a battery. The battery pushes a little extra negative charge onto one end of the wire and pulls some away from the other, and this sets up an <span class="c-field" style="color:#d1495b;font-weight:600">electric field</span> along the whole length of the wire. The field gives each <span class="c-electron">electron</span> a very gentle shove in one direction between collisions. Their random motion is still there, but now it has a tiny drift superimposed on it:</p>
+
+<figure class="fig" data-fig="drift">
+<figcaption><span class="tagline tag-ill">Model</span> Left: a close-up of free electrons in copper, with their thermal jitter slowed enormously. Right: the circuit they belong to. The drift speed and signal delay in the readout are computed for a 1.5 mm² copper conductor.</figcaption>
+</figure>
+
+<p>That drift is astonishingly slow. In a kettle cable the electrons creep along at a fraction of a millimetre per second, slower than a snail; with alternating current they merely shuffle back and forth by a few micrometres. Yet the lamp lights instantly, because what travels fast is not the electrons but the field. Close the switch and the push runs along the wire at a large fraction of the speed of light, like water in a pipe that is already full.</p>
+
+<p>This is the first idea worth holding on to: <b>electricity is not a substance that gets delivered</b>. The electrons in your wall were there before you plugged anything in and they will be there afterwards. What is delivered is <i>energy</i>, carried by the fields around the wires.</p>
+
+<h3 id="voltage-is-height">Voltage is height</h3>
+
+<p>Picture a circuit as a landscape. The battery or generator is a pump that lifts charge up a hill; the voltage is the height of the hill (one volt is one joule per coulomb). Charge rolls down through a heater, motor or lamp and gives up its energy as heat, motion or light. The copper wires are nearly flat.</p>
+
+<figure class="fig" data-fig="potential">
+<figcaption><span class="tagline tag-ill">Model</span> A simple circuit unrolled into a landscape of electric potential. The source lifts charge by the source voltage; almost all of that height is lost across the load. Current follows Ohm’s law, I = V / R.</figcaption>
+</figure>
+
+<p>The rate at which energy is delivered is power, and it is simply the height of the hill multiplied by how much charge flows down it each second: <i>P = V × I</i>. Double the voltage at the same current and you deliver twice the power. This little equation will come back, in a very consequential way, when we try to move electricity across a country.</p>
+
+<h3 id="power-and-energy">Power and energy</h3>
+
+<p>The two words that cause the most confusion in everything that follows are <b>power</b> and <b>energy</b>. Power is a rate, measured in watts. Energy is an amount, measured in watt-hours or joules. A kettle draws about two kilowatts, but only for a couple of minutes; a fridge draws a twentieth of that, but all day long:</p>
+
+<figure class="fig" data-fig="powerEnergy">
+<figcaption><span class="tagline tag-ill">Model</span> Switch appliances on and off. The upper trace is power, in watts; the meter counts energy, the area under that curve. One second of animation is one minute of household time. The dashed line is the average power of a household using 3,500 kWh a year.</figcaption>
+</figure>
+
+<p>Your bill charges for energy, in kilowatt-hours. Grids and markets also care about power: how many watts must be available at the worst moment of the year. A household using 3,500 kWh a year averages about 400 W, but occasionally asks for ten times that. Much of the cost of an electricity system is being ready for the moments when everyone asks at once.</p>
+
+<h2 id="s2"><span class="num">2</span>Making electricity</h2>
+
+<p>Batteries make electricity from chemistry, and solar panels make it from light, but nearly all of the world’s electricity has, for more than a century, been made by the effect Michael Faraday discovered in 1831: <b>a changing magnetic field pushes charges around a loop of wire</b>. Move a magnet into a coil and a current flows one way; pull it out and the current flows the other way; hold it still and nothing happens at all.</p>
+
+<figure class="fig" data-fig="faraday">
+<figcaption><span class="tagline tag-ill">Model</span> Drag the magnet through the coil. The galvanometer and the trace show the induced voltage, which is proportional to how quickly the magnetic flux through the coil is changing — not to how strong the magnet is.</figcaption>
+</figure>
+
+<p>Notice that what matters is the <i>rate of change</i>. A faster movement gives a bigger voltage. The direction of the voltage depends on whether the flux through the coil is increasing or decreasing, which is why pushing the magnet in and pulling it out give opposite kicks.</p>
+
+<p>Pushing a magnet in and out by hand is not a practical way to light a city. Instead, we turn it. Put the same magnet on a shaft inside a coil, seen here end-on, and turn the shaft. As the north pole swings past one side of the coil and then the other, the flux through the coil rises, falls and reverses, over and over. Grab the magnet and turn it yourself:</p>
+
+<figure class="fig" data-fig="rotor">
+<figcaption><span class="tagline tag-ill">Model</span> A generator seen end-on: the Faraday figure’s magnet on a shaft, inside one copper coil whose two sides sit in the slots left and right. Dots and crosses show the current coming out of and going into the page. Turn the magnet by hand, or let it spin, drawn 60 times slower than real. Under <b>More</b>: speed and pole pairs; f = pole pairs × rpm / 60.</figcaption>
+</figure>
+
+<p>Turn it slowly and the voltage is small; turn it fast and it grows, because what counts is how fast the flux changes. Turn it steadily and the voltage traces a smooth wave, a <b>sine</b>, simply because the coil sees the magnet’s pole from a steadily turning angle. One revolution of a two-pole rotor gives one cycle of voltage, so a two-pole machine must spin at exactly 3,000 rpm for 50 Hz and 3,600 rpm for 60 Hz. A slow hydro turbine with many poles turns at a few hundred rpm and makes the same frequency. Grid frequency is, quite literally, the rotational speed of its generators.</p>
+
+<h3 id="three-phases">Three phases</h3>
+
+<p>A single coil’s power pulses: full, nothing, full, nothing, a hundred times a second. Large machines and motors dislike pulsing torque. The fix, standard since the 1890s, is to add two more coils to the same machine, a third of a turn round the stator. The magnet reaches each one a third of a turn later, so each makes the same sine wave, 120° behind the last: <span class="c-A">phase A</span>, <span class="c-B">phase B</span> and <span class="c-C">phase C</span>.</p>
+
+<figure class="fig" data-fig="threePhase">
+<figcaption><span class="tagline tag-ill">Model</span> The same generator with three coils, coloured by phase. Switch to “Add them up” to see the three voltages sum to zero at every instant, so no return wire is needed, and to “Power” to see the three pulsing powers, into equal loads, stack up to a perfectly constant total. You can still turn the rotor by hand.</figcaption>
+</figure>
+
+<p>Two remarkable things happen. First, the three voltages add to exactly zero at every instant, so the three wires can serve as each other’s return path and no fourth heavy conductor is needed. Second, the three pulsing power flows add up to a perfectly steady total. A three-phase generator feels a smooth, constant load on its shaft. This is why every high-voltage line you have ever seen carries its conductors in threes.</p>
+
+<aside class="deepdive d-transformers">How transformers connect three-phase windings in star and delta, and why that shifts the phase by 30°, is in <a class="xref" href="transformers.html#three-phase">Part 3: three phases, stars and deltas</a>.</aside>
+
+<h2 id="s3"><span class="num">3</span>Heat, wind and light</h2>
+
+<p>A generator converts rotation into electricity at better than 98% efficiency. The hard part is getting the rotation. For most of the twentieth century, and still for the majority of the world’s electricity today, the answer has been heat: burn coal or gas, or split uranium, boil water into high-pressure steam, and let the steam expand through a turbine.</p>
+
+<p>Heat engines have a ceiling that no engineering can raise. Sadi Carnot showed in 1824 that an engine working between a hot source at absolute temperature <i>T<sub>hot</sub></i> and a cold sink at <i>T<sub>cold</sub></i> can convert at most a fraction <i>1 − T<sub>cold</sub> / T<sub>hot</sub></i> of the heat into work. The rest must be dumped into the cold side — the river, the sea, or the plume above a cooling tower. Hotter steam means a higher ceiling:</p>
+
+<figure class="fig" data-fig="rankine">
+<figcaption><span class="tagline tag-mixed">Model + history</span> Left: a steam cycle, with fuel heat in, work out and waste heat to the condenser. Right: the Carnot limit and a more realistic “endoreversible” estimate as a function of steam temperature. The markers show historical US practice: ~315 °C in the 1920s, a 538–600 °C plateau from the 1960s, ~35% for 1970s subcritical plants, and more than 45% for modern ultra-supercritical units.<sup class="fn"><a href="#n2">2</a></sup></figcaption>
+</figure>
+
+<p>This chart holds one of the central stories of the essay. From the 1900s to the 1960s engineers pushed steam from a few hundred degrees to about 540–600 °C, and every step saved coal. Then, around 1960, the climb stopped. The limit was metallurgy, not Carnot: hotter steels crept, cracked and corroded. A typical American coal plant sat near 35% efficiency for decades, a plateau we return to in section 13.</p>
+
+<h3 id="wind">Wind</h3>
+
+<p>A wind turbine skips the heat. It takes kinetic energy directly from moving air. The power carried by wind through a rotor of area <i>A</i> is <i>½ ρ A v³</i>, where ρ is the density of air and <i>v</i> its speed. That cube is the most important fact about wind power: double the wind speed and the available power rises eightfold.</p>
+
+<figure class="fig" data-fig="windPower">
+<figcaption><span class="tagline tag-ill">Model</span> A 4 MW turbine with a 130 m rotor. Below its rated speed, output rises with the cube of wind speed (at an assumed power coefficient of 0.45); above it, the blades pitch to spill the excess; above 25 m/s the turbine shuts down to protect itself.</figcaption>
+</figure>
+
+<p>Why can’t a turbine take all of it? If it stopped the air completely, the air would pile up and nothing more could flow through. Slow it too little and you extract little; too much and the flow goes around the rotor. In 1920 Albert Betz found the optimum: slow the wind by a third and capture 16/27, about 59%, of the power in the stream.</p>
+
+<figure class="fig" data-fig="betz">
+<figcaption><span class="tagline tag-ill">Model</span> The stream tube through an ideal rotor. As the rotor slows the air more (the induction factor <i>a</i>), the tube widens behind it to carry the same mass flow. Power captured is 4<i>a</i>(1 − <i>a</i>)² of the incoming power, peaking at <i>a</i> = ⅓.</figcaption>
+</figure>
+
+<aside class="deepdive d-renewables">Deep dive: how real turbines are designed around the cube law and the Betz limit is in <a class="xref" href="utility-renewables.html#wind-physics">Part 2, utility-scale renewables</a>: rotors drawn to scale from 1999 to today’s 236-metre offshore giants, a live wake simulation of a wind farm, and <a class="xref" href="utility-renewables.html#capacity-factor-design">why capacity factor is a design choice</a>.</aside>
+
+
+<h3 id="sunlight">Sunlight</h3>
+
+<p>Solar panels have no moving parts at all: a photon knocks an electron loose in a <a class="xref" href="solar-pv.html#junction">silicon junction</a> and the junction’s built-in field sweeps it out into the circuit. The physics is elegant; the economics are dominated by a simpler fact — the sun is only up half the time, and it is low in the sky in winter.</p>
+
+<figure class="fig" data-fig="solarDay">
+<figcaption><span class="tagline tag-ill">Model</span> Output of one kilowatt of panels facing the equator at a chosen location (tilt about three-quarters of the latitude, between 5° and 35°), from a clear-sky model with an adjustable cloud factor. Real yields also depend on local cloud, dust and heat: Riyadh or the Atacama give roughly twice Berlin’s annual output (see <a class="xref" href="solar-pv.html#yield">Part 1’s yield map</a>). The capacity factor is the average output divided by the nameplate rating.</figcaption>
+</figure>
+
+<p>Move the day slider to December and the output collapses to a short, shallow hump. Over a year, a panel in northern Germany delivers on average around a tenth of its nameplate power. This number — the <b>capacity factor</b> — is what turns the price of a panel into the price of a kilowatt-hour, and it is why the same panel produces cheaper electricity in Spain than in Hamburg.</p>
+
+<aside class="deepdive">Deep dive: <a class="xref" href="solar-pv.html#photons">Part 1, Solar PV</a> follows a photon through the band gap and the p–n junction, and maps real yields of a kilowatt <a class="xref" href="solar-pv.html#yield">around the world</a>, with the sun’s geometry in <a class="xref" href="solar-pv.html#sun">a sun-path simulator</a>.</aside>
+
+
+<h2 id="s4"><span class="num">4</span>Moving it</h2>
+
+<p>Power stations are rarely where the people are. China’s coal, wind and sun are in the far west, its factories on the east coast. Brazil’s great dams are in the Amazon, its demand in São Paulo and Rio. Germany’s wind blows on the North Sea coast, far from its southern industry. Moving electricity hundreds or thousands of kilometres runs into the formula from section 1. A wire with resistance <i>R</i> carrying current <i>I</i> turns <i>I²R</i> watts into heat. For a fixed amount of power <i>P = V × I</i>, raising the voltage lowers the current — and the losses fall with the <i>square</i> of the current:</p>
+
+<figure class="fig" data-fig="losses">
+<figcaption><span class="tagline tag-ill">Model</span> Sending power down a line with 0.03 Ω per km per conductor. The glow of the conductors shows the heat lost. Losses scale as P² R / V²: ten times the voltage means a hundredth of the loss.</figcaption>
+</figure>
+
+<p>At household voltage a few hundred megawatts would melt the wires. At 380 kV, the backbone voltage of much of Europe, the figure’s gigawatt crosses 300 km on one circuit losing about 6%; spread over two circuits, as German grid operators usually build such lines, about 3%.<sup class="fn"><a href="#n3">3</a></sup> China goes further: since 2019 a ±1,100 kV direct-current line has carried up to 12 GW about 3,300 km from Xinjiang to Anhui, and Brazil’s ±800 kV lines bring Belo Monte’s Amazon hydropower more than 2,000 km south.<sup class="fn"><a href="#n3">3</a></sup> And this is why AC beat Edison’s DC a century ago: AC voltage is easy to change, with a transformer.</p>
+
+<aside class="deepdive d-transmission">Deep dive: <a class="xref" href="transmission.html#why-high-voltage">Part 4, transmission</a> covers why voltages kept rising, why long AC lines hit a <a class="xref" href="transmission.html#line-physics">stability limit</a> well before they overheat, and <a class="xref" href="transmission.html#hvdc">when direct current wins</a>.</aside>
+
+
+<figure class="fig" data-fig="transformer">
+<figcaption><span class="tagline tag-ill">Model</span> The generator of section 2, its coil wired to a transformer: two coils on a shared iron core. The alternating flux in the core induces a voltage in each turn of each coil, so the voltage ratio equals the turns ratio, and the current ratio is its inverse. Power in equals power out (minus about half a percent). Wave heights are on a log scale.</figcaption>
+</figure>
+
+<p>A transformer is Faraday’s experiment with nothing moving: alternating current in one coil makes an alternating flux in the iron core, which induces a voltage in a second coil. Twenty times the turns gives twenty times the voltage and a twentieth of the current. A generator’s 21 kV is stepped up to 380 kV for the journey, then down in stages to 230 V at the socket.</p>
+
+<aside class="deepdive d-transformers">Deep dive: <a class="xref" href="transformers.html#how-it-works">Part 3, transformers</a> opens the box: an animated core with turns ratio, load and a geomagnetic-storm DC offset, <a class="xref" href="transformers.html#losses">hysteresis and eddy-current losses</a>, <a class="xref" href="transformers.html#cooling">how heat ages the paper insulation</a>, and <a class="xref" href="transformers.html#shortage">why large units now take three years to arrive</a>.</aside>
+
+
+<p>The modern exception is high-voltage direct current. Converters made of power electronics can now turn AC into DC and back efficiently, and for very long distances or undersea cables DC wins. Germany’s planned north–south corridors are DC lines for exactly this reason. Unlike AC lines, whose flows are decided by physics, a DC link’s flow can be set precisely. We will see why that matters in section 9.</p>
