@@ -122,20 +122,41 @@ export function currencyToggle(ctl, onchange, namePrefix = 'cur', { caption = US
 }
 
 // Display conversion of already-formatted euro strings: "€1,234.5" → "$1,394.9", "€/MWh" → "$/MWh",
-// "12.3 ct" → "13.9 ¢". Used by figures whose models are computed in euros (labelled as such in captions).
+// "12.3 ct" → "13.9¢". Used by figures whose models are computed in euros (labelled as such in captions).
+// A formatted string has already been rounded, and converting the rounded figure can move the last digit ("€2.8" from
+// 2.752 → "$3.2", not "$3.1"). Figures that build their strings with eur() below are converted from the unrounded value.
+const EX0 = '\uE000', EX1 = '\uE001';
+const EXACT = /€\uE000([^\uE000\uE001]+)\uE001(-?\d)\uE000/g;
+// Format a number with `d` decimals, with commas if the euro string had them or from `from` up; `round`: slider outputs keep ~3 significant figures.
+function fmtNum(v, d, comma, round, from = 10000) {
+  if (round && d === 0 && v >= 100 && v < 1000) v = Math.round(v / 10) * 10; // $2,373 → $2,370
+  if (round && d === 0 && v >= 1000) { const p = Math.pow(10, Math.floor(Math.log10(v)) - 2); v = Math.round(v / p) * p; }
+  return comma || v >= from ? v.toLocaleString('en-US', { minimumFractionDigits: d, maximumFractionDigits: d }) : v.toFixed(d);
+}
+/**
+ * A euro amount for a figure string, rounded only when it is shown: eur(2.752, 1) reads "€2.8" in euros and "$3.1" in
+ * dollars (2.752 × 1.13, then rounded). `digits` is the number of decimals shown in either currency (−1: to the nearest ten). Pass the string
+ * through curStr (curDraw and euroFigure do); the marker characters never reach the page.
+ */
+export function eur(v, digits = 2) { return '€' + EX0 + Number(v) + EX1 + digits + EX0; }
+const exactOut = (m, v, d, sym, rate, round) => {
+  const n = parseFloat(v) * rate; let a = Math.abs(n), dd = +d;
+  if (dd < 0) { const p = Math.pow(10, -dd); a = Math.round(a / p) * p; dd = 0; }
+  const neg = n < 0 && a.toFixed(dd) !== (0).toFixed(dd) ? '−' : '';
+  return neg + sym + fmtNum(a, dd, false, round, 1000);
+};
 export function curStr(s, cur, rate = USD_PER_EUR[2025], round = false, strict = false) {
-  if (cur !== 'USD' || typeof s !== 'string') return s;
+  if (typeof s !== 'string') return s;
+  if (cur !== 'USD') return s.includes(EX0) ? s.replace(EXACT, (m, v, d) => exactOut(m, v, d, '€', 1, false)) : s;
   const fmt = (num) => {
     const d = (num.split('.')[1] || '').length;
-    let v = parseFloat(num.replace(/,/g, '')) * rate;
-    // slider outputs: keep converted values to ~3 significant figures ($2,373 → $2,370)
-    if (round && d === 0 && v >= 100 && v < 1000) v = Math.round(v / 10) * 10;
-    if (round && d === 0 && v >= 1000) { const p = Math.pow(10, Math.floor(Math.log10(v)) - 2); v = Math.round(v / p) * p; }
-    return num.includes(',') || v >= 10000 ? v.toLocaleString('en-US', { minimumFractionDigits: d, maximumFractionDigits: d }) : v.toFixed(d);
+    const v = parseFloat(num.replace(/,/g, '')) * rate;
+    return fmtNum(v, d, num.includes(','), round);
   };
   return s
+    .replace(EXACT, (m, v, d) => exactOut(m, v, d, '$', rate, round))
     .replace(/€(\s?)([−-]?)(\d[\d,]*(?:\.\d+)?)(?:([–-])(\d[\d,]*(?:\.\d+)?))?/g, (m, sp, neg, num, dash, num2) => '$' + sp + neg + fmt(num) + (num2 ? dash + fmt(num2) : ''))
-    .replace(/(\d[\d,]*(?:\.\d+)?)\s?ct\b/g, (m, num) => fmt(num) + ' ¢')
+    .replace(/(\d[\d,]*(?:\.\d+)?)\s?ct\b/g, (m, num) => fmt(num) + '¢')
     .replace(strict ? /€(?=\/[A-Za-z])/g : /€/g, '$') // strict (captions): only "€/MWh"-style units; keep "the $/€ toggle", "US$1.13/€"
     .replace(/\bct\/kWh/g, '¢/kWh');
 }
@@ -175,7 +196,7 @@ export function curDraw(D, rate = USD_PER_EUR[2025]) {
 export function euroFigure(el, fig, ctl, prefix, rate = USD_PER_EUR[2025]) {
   let cur = DEFAULT_CURRENCY;
   const orig = new WeakMap();
-  const apply = n => { const o = orig.get(n); if (o == null) return; n.innerHTML = cur === 'USD' ? curStr(o, 'USD', rate, n.tagName === 'OUTPUT') : o; };
+  const apply = n => { const o = orig.get(n); if (o == null) return; n.innerHTML = curStr(o, cur, rate, n.tagName === 'OUTPUT'); };
   const nodes = [...el.querySelectorAll('.readout, output')];
   const obs = new MutationObserver(recs => {
     const seen = new Set(); for (const r of recs) { let n = r.target.nodeType === 1 ? r.target : r.target.parentElement; while (n && !nodes.includes(n)) n = n.parentElement; if (n) seen.add(n); }
@@ -184,7 +205,7 @@ export function euroFigure(el, fig, ctl, prefix, rate = USD_PER_EUR[2025]) {
   nodes.forEach(n => { orig.set(n, n.innerHTML); obs.observe(n, { childList: true, characterData: true, subtree: true }); });
   // preset buttons that name euro amounts ("Europe today, €2,100/kW") follow the toggle too; collected before the toggle exists
   const btns = [...el.querySelectorAll('button')].filter(b => b.textContent.includes('€')).map(b => [b, b.innerHTML]);
-  const refresh = () => { nodes.forEach(apply); btns.forEach(([b, o]) => { b.innerHTML = cur === 'USD' ? curStr(o, 'USD', rate, true) : o; }); obs.takeRecords(); fig.ctx.__cur = cur; fig.invalidate(); };
+  const refresh = () => { nodes.forEach(apply); btns.forEach(([b, o]) => { b.innerHTML = curStr(o, cur, rate, true); }); obs.takeRecords(); fig.ctx.__cur = cur; fig.invalidate(); };
   currencyToggle(ctl, v => { cur = v; refresh(); }, prefix);
   refresh();
 }

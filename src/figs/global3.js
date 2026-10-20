@@ -40,7 +40,7 @@ function techWorld(el, tech) {
   function upd() {
     const w = WORLD.gen.world, wl = w[tech][iL], c = WORLD.gen.china[tech][iL];
     if (st.hover) { const r = REG.find(x => x[0] === st.hover); ro.innerHTML = `<b>${r[1]}</b>, ${WORLD.latest}: <b>${Math.round(val(r[0], iL, 'twh'))} TWh</b> of ${nm.toLowerCase()}, ${val(r[0], iL, 'share').toFixed(1)}% of its generation (${Y0}: ${Math.round(val(r[0], i0, 'twh'))} TWh).`; }
-    else ro.innerHTML = `The world generated <b>${Math.round(wl).toLocaleString('en')} TWh</b> from ${nm.toLowerCase()} in ${WORLD.latest}, ${(wl / w.total[iL] * 100).toFixed(1)}% of all electricity, against ${Math.round(w[tech][i0])} TWh in ${Y0}. China alone produced <b>${Math.round(c / wl * 100)}%</b> of it. Hover a label to read a region.`;
+    else ro.innerHTML = `The world generated <b>${Math.round(wl).toLocaleString('en')} TWh</b> from ${nm.toLowerCase()} in ${WORLD.latest}, ${(wl / w.total[iL] * 100).toFixed(1)}% of all electricity, against ${Math.round(w[tech][i0])} TWh in ${Y0}. China alone produced <b>${Math.round(c / wl * 100)}%</b> of it.`;
     fig.invalidate();
   }
   upd();
@@ -76,7 +76,7 @@ export function irenaCosts(el) {
   const ro = readout(el);
   function upd() {
     if (st.hover != null) { const [n, a, b, lo, hi] = IRC[st.hover]; ro.innerHTML = `<b>${n}</b>: $${a.toLocaleString('en')}/kW in 2015, <b>$${b.toLocaleString('en')}/kW</b> in 2024 (${Math.round((1 - b / a) * 100)}% lower); most 2024 projects between $${lo.toLocaleString('en')} and $${hi.toLocaleString('en')}.`; }
-    else ro.innerHTML = 'An Indian solar farm completed in 2024 cost about <b>$525 per kilowatt</b>, a Chinese one $591, an American one <b>$1,058</b> — twice as much for the same panels, which IRENA attributes to differences in local supply chains, permitting and labour costs. Hover a row to read it.';
+    else ro.innerHTML = 'An Indian solar farm completed in 2024 cost about <b>$525 per kilowatt</b>, a Chinese one $591, an American one <b>$1,058</b> — twice as much for the same panels, which IRENA attributes to differences in local supply chains, permitting and labour costs.';
     fig.invalidate();
   }
   upd();

@@ -67,7 +67,7 @@ export function coreFlux(el) {
       if (st.mode === 'ac') { ctx.beginPath(); for (let k = 0; k <= 20; k++) { const x = sx0 - 8 + k * 0.8, y = cy - 5 * Math.sin(k / 20 * Math.PI * 2); k ? ctx.lineTo(x, y) : ctx.moveTo(x, y); } ctx.strokeStyle = C.ink; ctx.lineWidth = 1.5; ctx.stroke(); }
       else { text(ctx, '+', sx0, cy - 1, { size: 13, weight: 700, color: C.ink, align: 'center' }); text(ctx, 'DC', sx0, cy + 10, { size: 8, color: C.ink, align: 'center' }); }
       line(ctx, lx0, o.t + th * 1.3, o.r, o.t + th * 1.3, C.ink2, 1.5); line(ctx, lx0, o.b - th * 1.3, o.r, o.b - th * 1.3, C.ink2, 1.5);
-      if (st.load > 0.001) { line(ctx, lx0, o.t + th * 1.3, lx0, o.b - th * 1.3, C.ink2, 1.5); const glow = clamp(Math.abs(s.v2 * s.i2) / Math.max(st.n, 0.2) * 1.2, 0, 1); circle(ctx, lx0, cy, 13, mix('#fff', '#ffd34d', glow), C.ink, 1.5); if (glow > 0.05) circle(ctx, lx0, cy, 13 + 10 * glow, alpha('#ffd34d', 0.25 * glow), null); text(ctx, 'load', lx0, cy + 30, { size: 10, color: C.ink3, align: 'center' }); }
+      if (st.load > 0.001) { line(ctx, lx0, o.t + th * 1.3, lx0, o.b - th * 1.3, C.ink2, 1.5); const glow = clamp(Math.abs(s.v2 * s.i2) / Math.max(st.n, 0.2) * 1.2, 0, 1); circle(ctx, lx0, cy, 13, mix('#fff', '#ffd34d', glow), C.ink, 1.5); if (glow > 0.05) circle(ctx, lx0, cy, 13 + 10 * glow, alpha('#ffd34d', 0.25 * glow), null); const lw = measure(ctx, 'load', 10); if (lx0 + 18 + lw < w - 4) text(ctx, 'load', lx0 + 18, cy + 4, { size: 10, color: C.ink3 }); else text(ctx, 'load', lx0, cy + 30, { size: 10, color: C.ink3, align: 'center', halo: 6 }); }
       else { line(ctx, lx0, o.t + th * 1.3, lx0, cy - 8, C.ink2, 1.5); line(ctx, lx0, cy + 8, lx0, o.b - th * 1.3, C.ink2, 1.5); text(ctx, 'open', lx0 + 4, cy + 4, { size: 10, color: C.ink3 }); }
       text(ctx, sat ? 'core saturated' : 'magnetic flux in the iron', cx, o.t - 8, { size: 11, weight: 650, color: sat ? SAT : FLUX, align: 'center' });
       // ---- waveforms ----
@@ -110,19 +110,25 @@ export function coreFlux(el) {
 /* ---------------- coreLoss ---------------- */
 const MATS = {
   iron: { name: 'Plain low-carbon iron', Hc: 80, a: 160, Bs: 2.0, rho: 10e-8, dens: 7870, Bmax: 1.8, col: '#7a6f66' },
-  go: { name: 'Grain-oriented silicon steel', Hc: 8, a: 12, Bs: 2.0, rho: 48e-8, dens: 7650, Bmax: 1.8, col: IRON },
+  go: { name: 'Grain-oriented silicon steel', Hc: 16, a: 12, Bs: 2.0, rho: 48e-8, dens: 7650, Bmax: 1.8, col: IRON },
   amo: { name: 'Amorphous metal', Hc: 2.5, a: 5, Bs: 1.56, rho: 130e-8, dens: 7180, Bmax: 1.45, col: '#9f8fb8' },
 };
 const THK = [10, 2, 0.5, 0.35, 0.27, 0.23];
+const fmtW = v => v >= 10 ? Math.round(v) + '' : v >= 0.1 ? v.toFixed(2) : String(+v.toPrecision(1)); // W/kg, never a bare 0.00
 export function coreLoss(el) {
   const st = { m: 'go', B: 1.7, ti: 4 }; let res = {};
-  const hAt = (m, B, up) => { // inverse of B = Bs*tanh((H ∓ Hc)/a) on each branch
-    const x = clamp(B / m.Bs, -0.999, 0.999); return m.a * Math.atanh(x) + (up ? m.Hc : -m.Hc);
+  // inverse of B = Bs*tanh((H ∓ Hc)/a) on each branch, with the coercive offset reversing within w of the turning
+  // point (rising branch starts from the bottom tip, falling branch from the top tip), so the loop closes at ±Bp.
+  // Loop area = 4·Hc·(Bp − w·(1 − e^(−2Bp/w))), with w = 0.15·Bp.
+  const LW = 0.15, loopArea = (Hc, Bp) => 4 * Hc * (Bp - LW * Bp * (1 - Math.exp(-2 / LW)));
+  const hAt = (m, B, up, Bp) => {
+    const x = clamp(B / m.Bs, -0.999, 0.999), w = LW * Bp;
+    return m.a * Math.atanh(x) + (up ? m.Hc * (1 - 2 * Math.exp(-(B + Bp) / w)) : -m.Hc * (1 - 2 * Math.exp(-(Bp - B) / w)));
   };
   function compute() {
     const m = MATS[st.m], B = Math.min(st.B, m.Bmax), f = 50;
     const t = st.m === 'amo' ? 0.025 : THK[st.ti] ; // mm
-    const area = 4 * m.Hc * B * 1.0; // J/m3 per cycle (approx. loop area)
+    const area = loopArea(m.Hc, B); // J/m3 per cycle: the area of the loop drawn
     const ph = area * f / m.dens; // W/kg
     let pe = Math.PI ** 2 * f * f * B * B * (t / 1000) ** 2 / (6 * m.rho * m.dens);
     return { m, B, t, ph, pe, tot: ph + pe };
@@ -134,14 +140,14 @@ export function coreLoss(el) {
       const narrow = w < 600; res = compute(); const { m, B } = res;
       // left: B-H loop
       const L = narrow ? { l: 50, r: w - 14, t: 34, b: 280 } : { l: 56, r: w * 0.5 - 10, t: 34, b: h - 40 };
-      const Hm = Math.max(hAt(m, B, true), 30) * 1.15;
-      const Hlim = st.m === 'iron' ? 600 : 60;
-      const { sx, sy } = axes(ctx, { box: L, x0: -Hlim, x1: Hlim, y0: -2, y1: 2, xticks: [-Hlim, 0, Hlim], yticks: [-2, -1, 0, 1, 2], xfmt: v => v + '', yfmt: v => v + ' T', ylabel: 'flux density B', xlabel: 'magnetising field H (A/m)' });
-      const up = [], dn = []; for (let k = 0; k <= 80; k++) { const b = -B + 2 * B * k / 80; up.push([sx(clamp(hAt(m, b, true), -Hlim, Hlim)), sy(b)]); dn.push([sx(clamp(hAt(m, b, false), -Hlim, Hlim)), sy(b)]); }
+            const Hlim = st.m === 'iron' ? 600 : 60;
+      const { sx, sy } = axes(ctx, { box: L, x0: -Hlim, x1: Hlim, y0: -2, y1: 2, xticks: [-Hlim, 0, Hlim], yticks: [-2, -1, 0, 1, 2], xfmt: v => v === -Hlim ? '' : v + '', yfmt: v => v + ' T', ylabel: 'flux density B', xlabel: 'magnetising field H (A/m)' });
+      text(ctx, String(-Hlim), L.l + 1, L.b + 15, { size: 11, color: C.ink3 }); // left-aligned: clears the −2 T label
+      const up = [], dn = []; for (let k = 0; k <= 80; k++) { const b = -B + 2 * B * k / 80; up.push([sx(clamp(hAt(m, b, true, B), -Hlim, Hlim)), sy(b)]); dn.push([sx(clamp(hAt(m, b, false, B), -Hlim, Hlim)), sy(b)]); }
       ctx.beginPath(); up.forEach(([x, y], i) => i ? ctx.lineTo(x, y) : ctx.moveTo(x, y)); dn.slice().reverse().forEach(([x, y]) => ctx.lineTo(x, y)); ctx.closePath(); ctx.fillStyle = alpha(SAT, 0.15); ctx.fill();
       pathLine(ctx, up, m.col, 2.2); pathLine(ctx, dn, m.col, 2.2);
       const ph = f.t * Math.PI, b = B * Math.sin(ph), rising = Math.cos(ph) > 0;
-      circle(ctx, sx(clamp(hAt(m, b, rising), -Hlim, Hlim)), sy(b), 5.5, C.ink, '#fff', 1.5);
+      circle(ctx, sx(clamp(hAt(m, b, rising, B), -Hlim, Hlim)), sy(b), 5.5, C.ink, '#fff', 1.5);
       text(ctx, 'area inside the loop = heat lost each cycle', L.r - 4, L.b - 10, { size: 10.5, color: SAT, align: 'right', weight: 600, halo: true });
       // right: lamination cross-section + bars
       const R = narrow ? { l: 14, r: w - 14, t: 330, b: h - 10 } : { l: w * 0.5 + 20, r: w - 14, t: 26, b: h - 10 };
@@ -150,7 +156,7 @@ export function coreLoss(el) {
       const nL = clamp(Math.round(bh / Math.max(2.4, 150 * res.t / 10)), 1, 60), lh = bh / nL;
       for (let k = 0; k < nL; k++) {
         const y = by + k * lh; ctx.fillStyle = k % 2 ? m.col : lighten(m.col, 0.12); ctx.fillRect(bx, y, bw, lh - (nL > 1 ? Math.min(0.8, lh * 0.15) : 0));
-        if (lh > 5) { const amp = 0.5 + 0.5 * Math.abs(Math.cos(ph)); ctx.strokeStyle = alpha('#ffd34d', 0.9 * amp); ctx.lineWidth = Math.max(1, Math.min(3, lh / 6)); ctx.beginPath(); ctx.ellipse(bx + bw / 2, y + lh / 2, bw * 0.42, Math.max(1, lh * 0.32), 0, 0, Math.PI * 2); ctx.stroke(); }
+        if (lh > 5 || k % 2 === 0) { const amp = 0.5 + 0.5 * Math.abs(Math.cos(ph)); ctx.strokeStyle = alpha('#ffd34d', 0.9 * amp); ctx.lineWidth = lh > 5 ? Math.max(1, Math.min(3, lh / 6)) : 0.9; ctx.beginPath(); ctx.ellipse(bx + bw / 2, y + lh / 2, bw * 0.42, Math.max(0.9, lh * 0.3), 0, 0, Math.PI * 2); ctx.stroke(); }
       }
       text(ctx, (ctx.canvas.clientWidth < 600) ? 'eddy currents stay inside each sheet' : 'eddy currents circle inside each sheet; insulation between sheets stops them crossing', bx, by + bh + 16, { size: 11, color: C.ink3 });
       // loss bars (log scale)
@@ -159,7 +165,7 @@ export function coreLoss(el) {
       const rowsB = [['hysteresis', res.ph, SAT], ['eddy currents', res.pe, '#e0a03a'], ['total', res.tot, C.ink]];
       const y0 = narrow ? by + bh + 46 : by + 10;
       text(ctx, 'loss at 50 Hz, watts per kg (log scale)', X.l, y0 - 8, { size: 10.5, weight: 650, color: C.ink2 });
-      rowsB.forEach(([nm, v, col], i) => { const y = y0 + i * 30; text(ctx, nm, X.l - 6, y + 13, { size: 10.5, color: C.ink2, align: 'right' }); ctx.fillStyle = col; ctx.fillRect(X.l, y + 3, Math.max(2, lx(v) - X.l), 14); text(ctx, v >= 10 ? Math.round(v) + '' : v.toFixed(2), Math.min(lx(v) + 5, X.r - 30), y + 14, { size: 10.5, weight: 650, color: C.ink, halo: true }); });
+      rowsB.forEach(([nm, v, col], i) => { const y = y0 + i * 30; text(ctx, nm, X.l - 6, y + 13, { size: 10.5, color: C.ink2, align: 'right' }); ctx.fillStyle = col; ctx.fillRect(X.l, y + 3, Math.max(2, lx(v) - X.l), 14); text(ctx, fmtW(v), Math.min(lx(v) + 5, X.r - 30), y + 14, { size: 10.5, weight: 650, color: C.ink, halo: true }); });
       (X.r - X.l < 260 ? [0.01, 1, 100] : [0.01, 0.1, 1, 10, 100, 1000]).forEach(v => text(ctx, String(v), lx(v), y0 + 102, { size: 9, color: C.ink3, align: 'center' }));
     },
   });
@@ -170,7 +176,7 @@ export function coreLoss(el) {
   thkCtl = slider(more(ctl, 'More: lamination thickness'), { label: 'Lamination thickness', min: 0, max: 5, step: 1, value: st.ti, color: IRON, fmt: v => THK[v] >= 1 ? THK[v] + ' mm (solid)' : THK[v] + ' mm', oninput: v => { st.ti = v; upd(); }, name: 'thk' });
   function upd() {
     const r = compute();
-    ro.innerHTML = `<b>${r.m.name}</b> at ${r.B.toFixed(2)} T${st.B > r.m.Bmax ? ` (it saturates above about ${r.m.Bmax} T)` : ''}${st.m === 'amo' ? ', in ribbons 0.025 mm thick' : ''}: about <b>${r.ph.toFixed(2)} W/kg</b> of hysteresis loss and <b>${r.pe >= 10 ? Math.round(r.pe) : r.pe.toFixed(2)} W/kg</b> of eddy-current loss. A large power transformer’s core weighs on the order of 100 tonnes, so every 0.1 W/kg is about 10 kW, around the clock, for forty years.`;
+    ro.innerHTML = `<b>${r.m.name}</b> at ${r.B.toFixed(2)} T${st.B > r.m.Bmax ? ` (it saturates above about ${r.m.Bmax} T)` : ''}${st.m === 'amo' ? ', in ribbons 0.025 mm thick' : ''}: about <b>${r.ph.toFixed(2)} W/kg</b> of hysteresis loss and <b>${fmtW(r.pe)} W/kg</b> of eddy-current loss. A large power transformer’s core weighs on the order of 100 tonnes, so every 0.1 W/kg is about 10 kW, around the clock, for forty years.`;
     fig.invalidate();
   }
   upd();
@@ -192,18 +198,26 @@ export function efficiency(el) {
       ctx.fillStyle = alpha(IRON, 0.35); ctx.beginPath(); pts(k => r.p0).forEach(([x, y], i) => i ? ctx.lineTo(x, y) : ctx.moveTo(x, y)); ctx.lineTo(sx(1.5), sy(0)); ctx.lineTo(sx(0), sy(0)); ctx.fill();
       ctx.fillStyle = alpha(COPPER, 0.4); ctx.beginPath(); pts(k => r.p0 + r.pk * k * k).forEach(([x, y], i) => i ? ctx.lineTo(x, y) : ctx.moveTo(x, y)); pts(k => r.p0).reverse().forEach(([x, y]) => ctx.lineTo(x, y)); ctx.fill();
       pathLine(ctx, pts(k => r.p0 + r.pk * k * k), C.ink, 1.8);
-      text(ctx, 'copper (load) losses ∝ current²', sx(1.0), sy((r.p0 + r.pk * 1.0) / 1000) - 12, { size: 10.5, color: darken(COPPER, 0.3), align: 'right', weight: 600, halo: true });
-      text(ctx, 'core (no-load) losses: constant', sx(1.48), sy(r.p0 / 1000) - 6, { size: 10.5, color: darken(IRON, 0.3), align: 'right', weight: 600, halo: true });
+      // labels step aside from the load cursor rather than sit under its dashed line
+      const dodge = (x0, tw, cx, lo, hi) => (cx < x0 - 4 || cx > x0 + tw + 4) ? x0 : cx + 8 + tw <= hi ? cx + 8 : cx - 8 - tw >= lo ? cx - 8 - tw : x0;
+      [['copper (load) losses ∝ current²', -24, darken(COPPER, 0.3)], ['core (no-load) losses: constant', -6, darken(IRON, 0.3)]].forEach(([lab, dy, col]) => {
+        const tw = measure(ctx, lab, 10.5, 600);
+        text(ctx, lab, dodge(sx(1.48) - tw, tw, sx(st.k), A.l + 4, sx(1.48)), sy(r.p0 / 1000) + dy, { size: 10.5, color: col, weight: 600, halo: true });
+      });
       line(ctx, sx(st.k), A.t, sx(st.k), A.b, C.ink, 1, [3, 3]);
       // efficiency panel
       const E = { l: A.l, r: A.r, t: A.b + 30, b: h - 34 };
       const e0 = 98.0;
-      const { sx: ex, sy: ey } = axes(ctx, { box: E, x0: 0, x1: 1.5, y0: e0, y1: 100, xticks: [0, 0.25, 0.5, 0.75, 1, 1.25, 1.5], yticks: [98, 99, 100], xfmt: v => Math.round(v * 100) + '%', yfmt: v => v + '%', ylabel: 'efficiency', xlabel: 'load, % of rating' });
+      const { sx: ex, sy: ey } = axes(ctx, { box: E, x0: 0, x1: 1.5, y0: e0, y1: 100, xticks: [0, 0.25, 0.5, 0.75, 1, 1.25, 1.5], yticks: [98, 99, 100], xfmt: v => v === 0 ? '' : Math.round(v * 100) + '%', yfmt: v => v + '%', ylabel: 'efficiency', xlabel: 'load, % of rating' });
+      text(ctx, '0%', E.l + 1, E.b + 15, { size: 11, color: C.ink3 }); // left-aligned: clears the 98% label
       const eff = k => k <= 0 ? 0 : 100 * k * r.kva * 1000 / (k * r.kva * 1000 + r.p0 + r.pk * k * k);
       pathLine(ctx, Array.from({ length: 150 }, (_, j) => { const k = 0.01 + j / 100; return [ex(k), ey(Math.max(e0, eff(k)))]; }), C.storage, 2.2);
       const kp = Math.sqrt(r.p0 / r.pk);
       circle(ctx, ex(kp), ey(eff(kp)), 4.5, C.storage, '#fff', 1.4);
-      text(ctx, `peak ${eff(kp).toFixed(2)}% at ${Math.round(kp * 100)}% load`, ex(kp) + 8, ey(eff(kp)) + 14, { size: 10.5, weight: 650, color: darken(C.storage, 0.2), halo: true });
+      const pkLab = `peak ${eff(kp).toFixed(2)}% at ${Math.round(kp * 100)}% load`, pkW = measure(ctx, pkLab, 10.5, 650);
+      const dx = ex(kp), cxk = ex(st.k), clear = x0 => (cxk < x0 - 4 || cxk > x0 + pkW + 4) && x0 >= E.l + 4 && x0 + pkW <= E.r;
+      const pkX = [dx + 8, dx - 8 - pkW].find(clear) ?? (cxk + 8 + pkW <= E.r ? cxk + 8 : cxk - 8 - pkW);
+      text(ctx, pkLab, pkX, ey(eff(kp)) - 7, { size: 10.5, weight: 650, color: darken(C.storage, 0.2), halo: true });
       line(ctx, ex(st.k), E.t, ex(st.k), E.b, C.ink, 1, [3, 3]);
     },
   });

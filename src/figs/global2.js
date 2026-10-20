@@ -65,7 +65,7 @@ export function marketDesigns(el) {
   const st = { sel: 3 };
   let geo = [];
   const fig = new Fig(el, {
-    label: 'Seven ways electricity systems are organised around the world, with examples; hover a row for details',
+    label: 'Seven ways electricity systems are organised around the world, with examples',
     height: w => w < 600 ? 7 * 40 + 20 : 7 * 34 + 20,
     draw(ctx, w, h) {
       const narrow = w < 600, rh = narrow ? 40 : 34; geo = [];
@@ -117,7 +117,11 @@ export function retailWorld(el) {
         text(ctx, n, L - 6, y + rh * 0.7, { size: narrow ? 9.5 : 10.5, align: 'right', weight: hl ? 700 : 450, color: hl ? C.ink : C.ink2 });
         ctx.fillStyle = st.hover === i ? C.solar : alpha(C.solar, hl ? 0.85 : 0.6); rrect(ctx, L, y + 2, sx(hh) - L, rh - 5, 2); ctx.fill();
         const bx = sx(bz), by = y + rh / 2; ctx.fillStyle = C.ink2; ctx.beginPath(); ctx.moveTo(bx, by - 4); ctx.lineTo(bx + 4, by); ctx.lineTo(bx, by + 4); ctx.lineTo(bx - 4, by); ctx.fill();
-        if (st.hover === i || !narrow) text(ctx, (hh * k() * 100).toFixed(1), Math.max(sx(hh), bx) + 7, y + rh * 0.7, { size: 9, color: C.ink3 });
+        if (st.hover === i || !narrow) { // the household value sits at the bar's end; if the diamond is in the way, inside the bar (or past the diamond if the bar is short)
+          const s = (hh * k() * 100).toFixed(1), tw = measure(ctx, s, 9), x0 = sx(hh) + 5, clash = bx + 5 > x0 - 2 && bx - 6 < x0 + tw + 3;
+          const inside = clash && sx(hh) - L > tw + 12;
+          text(ctx, s, inside ? Math.min(sx(hh) - 8, bx - 12) : clash ? bx + 7 : x0, y + rh * 0.7, { size: 9, color: inside ? C.ink : C.ink3, align: inside ? 'right' : 'left' });
+        }
       });
     },
   });
@@ -129,7 +133,7 @@ export function retailWorld(el) {
     const c = v => (v * k() * 100).toFixed(1) + (st.ppp ? ' PPP ¢' : st.cur === 'EUR' ? ' euro cents' : '¢');
     if (st.hover != null) { const [n, hh, bz] = rows()[st.hover]; ro.innerHTML = `<b>${n}</b>: households pay <b>${c(hh)}</b> per kWh, businesses <b>${c(bz)}</b>.`; }
     else if (st.ppp) { const g = n => rows().find(r => r[0] === n)[1]; ro.innerHTML = `Measured by what money buys locally, an Indian household pays <b>${c(g('India'))}</b> per kWh, a Nigerian one <b>${c(g('Nigeria'))}</b> and a Kenyan one <b>${c(g('Kenya'))}</b> — against <b>${c(g('US'))}</b> in the US. Electricity is cheap in poor countries only at market exchange rates.`; }
-    else ro.innerHTML = `A German household pays <b>${c(0.409)}</b> per kWh, an American one <b>${c(0.19)}</b>, a Chinese or Indian one about <b>${c(0.076)}</b>. Where households pay less than businesses (China, India, Pakistan, Mexico), tariffs are being used as social policy.`;
+    else ro.innerHTML = `A German household pays <b>${c(0.409)}</b> per kWh, an American one <b>${c(0.19)}</b>, a Chinese or Indian one about <b>${c(0.076)}</b>. Where households pay less than businesses (China, India, Mexico and most of the cheapest countries), tariffs are being used as social policy.`;
     fig.invalidate();
   }
   upd();
@@ -172,7 +176,7 @@ export function billWorld(el) {
     if (st.hover != null) { const [n, nom, pps] = BILL[order()[st.hover]], v = st.view === 'pps' ? pps : nom; ro.innerHTML = `<b>${n}</b>: energy and supply <b>${f(v[0])}</b>, network <b>${f(v[1])}</b>, taxes and levies <b>${f(v[2])}</b>; total ${f(v[0] + v[1] + v[2])} per kWh.`; }
     else ro.innerHTML = st.view === 'pps'
       ? 'Adjusted for what money buys locally, the ranking changes: Romanian, Czech and Polish households pay the most in Europe, more than German ones; Hungarian, Turkish and Norwegian households the least. Purchasing-power standards (PPS) are an artificial currency in which one PPS buys the same basket everywhere in the EU.'
-      : 'In Germany, Denmark, Sweden and Poland less than 40% of the bill is energy; in Ireland, Greece and Italy most of it is. In Denmark taxes are the largest part; in Ireland and the Netherlands tax credits push the tax layer below zero. Hover a row to read it.';
+      : 'In Germany, Denmark, Sweden and Poland less than 40% of the bill is energy; in Ireland, Greece and Italy most of it is. In Denmark taxes are the largest part; in Ireland and the Netherlands tax credits push the tax layer below zero.';
     fig.invalidate();
   }
   upd();

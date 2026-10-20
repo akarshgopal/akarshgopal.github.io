@@ -19,7 +19,7 @@ const D2R = Math.PI / 180;
 const TECH = {
   perc: { name: 'PERC', full: 'Passivated emitter and rear cell (p-type)', mod: 21.7, share: 'about 14% of production in 2025, falling fast',
     layers: [['silver fingers', '#c9ccd2', 0.05, 'front'], ['anti-reflection coating (SiNₓ)', '#3a5f9e', 0.05], ['n⁺ emitter', '#6f8fc9', 0.06], ['p-type silicon wafer', '#7a7f8c', 0.56], ['rear passivation (AlOₓ/SiNₓ), laser-opened', '#9aa7b8', 0.07], ['aluminium rear contact', '#b8bcc4', 0.12]] },
-  topcon: { name: 'TOPCon', full: 'Tunnel-oxide passivated contact (n-type)', mod: 23.5, share: 'the workhorse: about 30% of cell output in 2023, about 70% in 2024',
+  topcon: { name: 'TOPCon', full: 'Tunnel-oxide passivated contact (n-type)', mod: 23.5, share: 'the workhorse, with about 30% of cell output in 2023 and about 70% in 2024',
     layers: [['silver fingers', '#c9ccd2', 0.05, 'front'], ['anti-reflection coating', '#3a5f9e', 0.05], ['p⁺ boron emitter', '#c98f6f', 0.06], ['n-type silicon wafer', '#6d7480', 0.52], ['tunnel oxide (~1.5 nm)', '#e5d27a', 0.03], ['n⁺ polysilicon', '#8f98c7', 0.08], ['rear coating + silver fingers (bifacial)', '#c9ccd2', 0.08, 'rear']] },
   shj: { name: 'Heterojunction', full: 'Silicon heterojunction (SHJ, n-type)', mod: 23.5, share: 'about 8% of production in 2024',
     layers: [['silver fingers', '#c9ccd2', 0.05, 'front'], ['transparent conductive oxide', '#9fc3d9', 0.05], ['doped + intrinsic amorphous Si', '#b38e5d', 0.06], ['n-type silicon wafer', '#6d7480', 0.52], ['intrinsic + doped amorphous Si', '#8f98c7', 0.06], ['transparent conductive oxide', '#9fc3d9', 0.05], ['silver fingers (bifacial)', '#c9ccd2', 0.05, 'rear']] },
@@ -75,7 +75,7 @@ export function cellTech(el) {
       const ly = box.b + 30;
       circle(ctx, box.l + 6, ly - 4, 5, C.ink, '#fff', 1.5); text(ctx, 'mass-production module, 2025', box.l + 16, ly, { size: 10.5, color: C.ink2 });
       const l2 = box.l + 16 + measure(ctx, 'mass-production module, 2025', 10.5) + 18;
-      if (!narrow) { ctx.save(); ctx.translate(l2, ly - 4); ctx.rotate(Math.PI / 4); ctx.fillStyle = C.solar; ctx.fillRect(-4.5, -4.5, 9, 9); ctx.restore(); text(ctx, 'record cell', l2 + 10, ly, { size: 10.5, color: C.ink2 }); }
+      { ctx.save(); ctx.translate(l2, ly - 4); ctx.rotate(Math.PI / 4); ctx.fillStyle = C.solar; ctx.fillRect(-4.5, -4.5, 9, 9); ctx.restore(); text(ctx, 'record cell', l2 + 10, ly, { size: 10.5, color: C.ink2 }); }
       if (!narrow) lim.forEach(([v, s], i) => text(ctx, s, i === 2 ? ex(v) - 3 : ex(v) + 3, box.t - 2 - (2 - i) * 11, { size: 9.5, color: alpha(C.peaker, 0.9), align: i === 2 ? 'right' : 'left', halo: true }));
       else text(ctx, 'dashed limits: Si 29.4%, one junction 33.7%, tandem ~43%', box.l, ly + 18, { size: 10, color: alpha(C.peaker, 0.9) });
     },
@@ -166,8 +166,9 @@ function poa(mode, lat, tilt, sp, doy) {
 }
 const MODES = { flat: 'Flat on the ground', fixed: 'Fixed, tilted towards the equator', track1: 'Single-axis tracker', track2: 'Two-axis tracker' };
 const MODECOL = { flat: '#9a948a', fixed: '#e3a922', track1: '#d9573b', track2: '#8e62b5' };
+const MLAB = { flat: 'flat', fixed: 'fixed tilt', track1: 'one-axis tracker', track2: 'two-axis tracker' };
 export function sunPath(el) {
-  const st = { lat: 52.5, doy: 172, tilt: 38, mode: 'fixed', hour: 11, auto: true }; let geo = null;
+  const st = { lat: 52.5, doy: 172, tilt: 40, mode: 'fixed', hour: 11, auto: true }; let geo = null;
   const fig = new Fig(el, {
     label: 'The sun’s path across the sky for a chosen latitude and date, and the resulting clear-sky output of a solar panel through the day for four ways of mounting it',
     height: w => w < 600 ? 560 : 420,
@@ -191,7 +192,7 @@ export function sunPath(el) {
       arc(st.doy, C.solar, 2.4);
       const sp = sunPos(st.lat, st.doy, st.hour);
       if (sp.el > 0) { circle(ctx, ax(sp.az), ay(sp.el), 10, alpha(C.solar, 0.3), null); circle(ctx, ax(sp.az), ay(sp.el), 6, C.solar, '#fff', 1.5); }
-      if (!narrow) { text(ctx, 'June', ax(sunPos(st.lat, 172, 12).az) + 4, ay(sunPos(st.lat, 172, 12).el) - 6, { size: 10, color: C.ink3, halo: true }); text(ctx, 'December', ax(sunPos(st.lat, 355, 12).az) + 4, ay(Math.max(0.02, sunPos(st.lat, 355, 12).el)) - 6, { size: 10, color: C.ink3, halo: true }); }
+      text(ctx, 'June', ax(sunPos(st.lat, 172, 12).az) + 4, ay(sunPos(st.lat, 172, 12).el) - 6, { size: 10, color: C.ink3, halo: true }); text(ctx, 'December', ax(sunPos(st.lat, 355, 12).az) + 4, ay(Math.max(0.02, sunPos(st.lat, 355, 12).el)) - 6, { size: 10, color: C.ink3, halo: true });
       // power through the day
       const B = narrow ? { l: 46, r: w - 14, t: 290, b: h - 34 } : { l: w * 0.56, r: w - 16, t: 30, b: h - 40 };
       const { sx, sy } = axes(ctx, { box: B, x0: 0, x1: 24, y0: 0, y1: 1000, yticks: [0, 250, 500, 750, 1000], xticks: [0, 6, 12, 18, 24], xfmt: v => v + ':00', yfmt: v => v + ' W', ylabel: 'clear-sky output of 1 kWp (solar time)' });
@@ -203,6 +204,8 @@ export function sunPath(el) {
         tot[m] = e;
         pathLine(ctx, pts, m === st.mode ? MODECOL[m] : alpha(MODECOL[m], 0.35), m === st.mode ? 2.6 : 1.3);
       }
+      // legend: name the four curves
+      Object.keys(MODES).forEach((m, i) => { const yy = B.t + 11 + i * (narrow ? 13 : 15), sel = m === st.mode; line(ctx, B.l + 6, yy - 4, B.l + 20, yy - 4, sel ? MODECOL[m] : alpha(MODECOL[m], 0.6), sel ? 2.6 : 1.6); text(ctx, MLAB[m], B.l + 25, yy, { size: 10.5, color: sel ? C.ink : C.ink2, weight: sel ? 650 : 450, halo: true }); });
       line(ctx, sx(st.hour), B.t, sx(st.hour), B.b, alpha(C.ink, 0.35), 1, [2, 3]);
       const p = sp.el > 0 ? poa(st.mode, st.lat, st.mode === 'flat' ? 0 : st.tilt, sp, st.doy) * 0.86 : 0;
       circle(ctx, sx(st.hour), sy(p), 5, MODECOL[st.mode], '#fff', 1.5);
@@ -351,38 +354,49 @@ const BENCH = {
   res: { name: 'Residential rooftop', sub: '8 kWdc + 13.5 kWh battery', MSP: [289, 303, 608, 207, 380, 349, 1347, 851], MMP: [321, 357, 689, 227, 428, 349, 1347, 875], pv: { MSP: 2.78, MMP: 2.95 } },
 };
 export function costStack(el) {
-  const st = { basis: 'MMP', hover: null }; let geo = null;
+  const st = { basis: 'MMP', view: 'pv', hover: null }; let geo = null;
+  const REST = '#b8b1a3';
+  // solar only: NREL gives PV-only totals but breaks down only the PV+battery systems, so the PV-only bars split into the module (a per-watt input common to both) and everything else
+  const stack = B => st.view === 'pv' ? [B[st.basis][0], Math.round(B.pv[st.basis] * 1000) - B[st.basis][0]] : B[st.basis];
+  const cats = () => st.view === 'pv' ? [CATS[0], ['Everything else', REST]] : CATS;
   const fig = new Fig(el, {
-    label: 'US installed cost per watt of solar-plus-battery systems in 2025 for utility, commercial and residential projects, broken into module, inverter, battery, structure, electrical, labour, office work and developer costs',
-    height: w => w < 600 ? 530 : 400,
+    label: 'US installed cost per watt of solar systems in 2025 for utility, commercial and residential projects: solar alone, split into the module and everything else, or with batteries, broken into module, inverter, battery, structure, electrical, labour, office work and developer costs',
+    height: w => w < 600 ? (st.view === 'pv' ? 470 : 500) : 400,
     draw(ctx, w, h) {
-      const narrow = w < 600;
-      const box = { l: narrow ? 46 : 56, r: narrow ? w - 14 : w * 0.66, t: 34, b: h - (narrow ? 150 : 56) };
+      const narrow = w < 600, CS = cats();
+      const box = { l: narrow ? 46 : 56, r: narrow ? w - 14 : w * 0.66, t: 34, b: h - (narrow ? (st.view === 'pv' ? 90 : 120) : 56) };
       const { sx, sy } = axes(ctx, { box, x0: 0, x1: 3, y0: 0, y1: 5000, yticks: [0, 1000, 2000, 3000, 4000, 5000], xticks: [], yfmt: v => '$' + (v / 1000).toFixed(0) + '/W', ylabel: `installed cost per watt of panels, 2024 US$ (${st.basis === 'MMP' ? 'market price' : 'minimum sustainable price'})` });
       const keys = Object.keys(BENCH), bw = Math.min(120, (box.r - box.l) / 3 * 0.7); geo = { rects: [] };
       keys.forEach((k, i) => {
         const B = BENCH[k], x = sx(i + 0.5) - bw / 2; let base = 0;
-        B[st.basis].forEach((v, j) => {
+        stack(B).forEach((v, j) => {
           const y0 = sy(base), y1 = sy(base + v);
-          ctx.fillStyle = CATS[j][1]; ctx.fillRect(x, y1, bw, y0 - y1 - 0.8);
-          if (j === 2) { ctx.save(); ctx.beginPath(); ctx.rect(x, y1, bw, y0 - y1); ctx.clip(); ctx.strokeStyle = alpha('#fff', 0.5); ctx.lineWidth = 2; for (let t = -bw; t < bw + (y0 - y1); t += 7) { ctx.beginPath(); ctx.moveTo(x + t, y0); ctx.lineTo(x + t + (y0 - y1), y1); ctx.stroke(); } ctx.restore(); }
+          ctx.fillStyle = CS[j][1]; ctx.fillRect(x, y1, bw, y0 - y1 - 0.8);
+          if (st.view === 'bat' && j === 2) { ctx.save(); ctx.beginPath(); ctx.rect(x, y1, bw, y0 - y1); ctx.clip(); ctx.strokeStyle = alpha('#fff', 0.5); ctx.lineWidth = 2; for (let t = -bw; t < bw + (y0 - y1); t += 7) { ctx.beginPath(); ctx.moveTo(x + t, y0); ctx.lineTo(x + t + (y0 - y1), y1); ctx.stroke(); } ctx.restore(); }
           if (st.hover && st.hover.i === i && st.hover.j === j) { ctx.strokeStyle = C.ink; ctx.lineWidth = 2; ctx.strokeRect(x + 1, y1 + 1, bw - 2, y0 - y1 - 2); }
           geo.rects.push({ i, j, x, y0: y1, y1: y0, w: bw, v });
           base += v;
         });
         text(ctx, '$' + (base / 1000).toFixed(2), x + bw / 2, sy(base) - 8, { size: 12.5, weight: 700, color: C.ink, align: 'center' });
-        // PV-only marker
-        const pv = B.pv[st.basis] * 1000; line(ctx, x - 8, sy(pv), x + bw + 8, sy(pv), C.ink, 2, [4, 3]);
-        text(ctx, narrow ? `$${B.pv[st.basis].toFixed(2)}` : `$${B.pv[st.basis].toFixed(2)} without battery`, narrow ? x + bw + 2 : x + bw / 2, sy(pv) - 6, { size: 10, color: C.ink, weight: 650, align: narrow ? 'right' : 'center', halo: true });
         if (narrow) { const [a, b2] = B.name.split(' '); text(ctx, a, x + bw / 2, box.b + 15, { size: 10.5, weight: 650, color: C.ink, align: 'center' }); if (b2) text(ctx, b2, x + bw / 2, box.b + 28, { size: 10.5, weight: 650, color: C.ink, align: 'center' }); }
         else text(ctx, B.name, x + bw / 2, box.b + 16, { size: 12, weight: 650, color: C.ink, align: 'center' });
-        if (w > 900) text(ctx, B.sub, x + bw / 2, box.b + 31, { size: 10, color: C.ink3, align: 'center' });
+        if (w > 900) text(ctx, st.view === 'pv' ? B.sub.replace(/,? \+ .*| \+ battery/, '') : B.sub, x + bw / 2, box.b + 31, { size: 10, color: C.ink3, align: 'center' });
       });
       // legend
       const L = narrow ? { x: 16, y: box.b + 48, col: (w - 32) / 2 } : { x: box.r + 30, y: 60, col: w - box.r - 40 };
-      if (narrow) { const yy = L.y + Math.ceil(CATS.length / 2) * 18; line(ctx, L.x, yy - 4, L.x + 12, yy - 4, C.ink, 2, [4, 3]); text(ctx, 'dashed: the same system without a battery', L.x + 16, yy, { size: 10.5, color: C.ink2 }); }
-      CATS.slice().reverse().forEach(([lab, col], k) => {
-        const j = CATS.length - 1 - k;
+      if (st.view === 'pv') {
+        const sub = narrow ? ['inverter, structure, wiring, labour, permits, sales, profit'] : ['inverter, structure, wiring, labour,', 'permits, sales, profit'];
+        let y = L.y;
+        [[1, 'Everything else'], [0, 'Module']].forEach(([j, s]) => {
+          ctx.fillStyle = CS[j][1]; ctx.fillRect(L.x, y - 9, 11, 11);
+          text(ctx, s, L.x + 16, y, { size: 10.5, color: C.ink2, weight: st.hover && st.hover.j === j ? 700 : 450 });
+          if (j === 1) sub.forEach(l => { y += 14; text(ctx, l, L.x + 16, y, { size: 10, color: C.ink3 }); });
+          y += 22;
+        });
+        return;
+      }
+      CS.slice().reverse().forEach(([lab, col], k) => {
+        const j = CS.length - 1 - k;
         const x = narrow ? L.x + (k % 2) * L.col : L.x, y = narrow ? L.y + Math.floor(k / 2) * 18 : L.y + k * 22;
         ctx.fillStyle = col; ctx.fillRect(x, y - 9, 11, 11);
         const s = narrow ? lab.replace('Office work: permits, sales, design', 'Office work').replace('Developer costs, overhead, profit', 'Developer, profit').replace('Installation labour', 'Install labour') : lab;
@@ -392,11 +406,13 @@ export function costStack(el) {
   });
   fig.interact({ hit: (x, y) => geo && geo.rects.find(r => x >= r.x && x <= r.x + r.w && y >= r.y0 && y <= r.y1) || null, cursor: 'default', hover: o => { st.hover = o; upd(); } });
   const ctl = controls(el); const ro = readout(el);
+  segmented(ctl, { label: 'System', options: [{ label: 'Solar only', value: 'pv', name: 'cs-pv' }, { label: 'With a battery', value: 'bat', name: 'cs-bat' }], value: 'pv', onchange: v => { st.view = v; st.hover = null; fig.resize(); upd(); } });
   segmented(more(ctl, 'More: price basis'), { label: 'Price basis', options: [{ label: 'Market price (MMP)', value: 'MMP', name: 'b-mmp' }, { label: 'Minimum sustainable (MSP)', value: 'MSP', name: 'b-msp' }], value: 'MMP', onchange: v => { st.basis = v; upd(); } });
   function upd() {
-    const o = st.hover;
-    if (o) { const B = BENCH[Object.keys(BENCH)[o.i]]; const tot = B[st.basis].reduce((a, b) => a + b, 0); ro.innerHTML = `${B.name}: <b>${CATS[o.j][0].toLowerCase()}</b> costs <b>$${(o.v / 1000).toFixed(2)}/W</b>, ${Math.round(o.v / tot * 100)}% of the total.`; }
-    else { const r = BENCH.res[st.basis], u = BENCH.util[st.basis]; ro.innerHTML = `The module costs about the same everywhere — <b>$${(u[0] / 1000).toFixed(2)}/W</b> on a utility site, <b>$${(r[0] / 1000).toFixed(2)}/W</b> on a house. The difference is everything else: office work alone (permits, sales, design, customer acquisition) is <b>$${(r[6] / 1000).toFixed(2)}/W</b> for a home system and $${(u[6] / 1000).toFixed(2)}/W for a utility plant. Hover a segment to read it.`; }
+    const o = st.hover, r = BENCH.res, u = BENCH.util, f = v => (v / 1000).toFixed(2);
+    if (o) { const B = BENCH[Object.keys(BENCH)[o.i]], s = stack(B), tot = s.reduce((a, b) => a + b, 0); ro.innerHTML = `${B.name}${st.view === 'bat' ? ' with a battery' : ''}: <b>${cats()[o.j][0].toLowerCase()}</b> costs <b>$${f(o.v)}/W</b>, ${Math.round(o.v / tot * 100)}% of the total.`; }
+    else if (st.view === 'pv') ro.innerHTML = `The module comes to <b>$${f(u[st.basis][0])}/W</b> on a utility site and <b>$${f(r[st.basis][0])}/W</b> on a house. Everything else comes to <b>$${f(stack(u)[1])}/W</b> for the utility plant and <b>$${f(stack(r)[1])}/W</b> for the home system.`;
+    else ro.innerHTML = `With a battery, NREL breaks the cost down further. Office work alone (permits, sales, design, customer acquisition) is <b>$${f(r[st.basis][6])}/W</b> for a home system and $${f(u[st.basis][6])}/W for a utility plant.`;
     fig.invalidate();
   }
   upd();
@@ -420,8 +436,8 @@ export function captureHistory(el) {
         ({ sy } = axes(ctx, { box, x0: 2014.5, x1: 2025.5, y0: 0, y1: 250, yticks: [0, 50, 100, 150, 200, 250], xticks: narrow ? [2015, 2019, 2023] : [2015, 2017, 2019, 2021, 2023, 2025], yfmt: v => S() + v, ylabel: narrow ? `DE day-ahead, ${S()}/MWh` : `German day-ahead price, ${S()}/MWh (annual averages${st.cur === 'USD' ? ', each year at its ECB rate' : ''})` }));
         const bw = (box.r - box.l) / 11 * 0.36;
         D.forEach(([y, base0, sol0]) => { const base = base0 * K(y), sol = sol0 * K(y); ctx.fillStyle = alpha(C.ink3, 0.55); ctx.fillRect(sx(y) - bw, sy(base), bw, box.b - sy(base)); ctx.fillStyle = C.solar; ctx.fillRect(sx(y), sy(sol), bw, box.b - sy(sol)); });
-        ctx.fillStyle = alpha(C.ink3, 0.55); ctx.fillRect(box.l + 8, box.t + 4, 10, 10); text(ctx, 'all hours (baseload)', box.l + 22, box.t + 13, { size: 10.5, color: C.ink2 });
-        ctx.fillStyle = C.solar; ctx.fillRect(box.l + 8, box.t + 22, 10, 10); text(ctx, 'what solar earned (output-weighted)', box.l + 22, box.t + 31, { size: 10.5, color: C.ink2 });
+        ctx.fillStyle = alpha(C.ink3, 0.55); ctx.fillRect(box.l + 8, box.t + 4, 10, 10); text(ctx, 'all hours (average)', box.l + 22, box.t + 13, { size: 10.5, color: C.ink2 });
+        ctx.fillStyle = C.solar; ctx.fillRect(box.l + 8, box.t + 22, 10, 10); text(ctx, 'what solar earned', box.l + 22, box.t + 31, { size: 10.5, color: C.ink2 });
       } else if (st.view === 'rate') {
         ({ sy } = axes(ctx, { box, x0: 2014.5, x1: 2025.5, y0: 0.4, y1: 1.05, yticks: [0.4, 0.6, 0.8, 1.0], xticks: narrow ? [2015, 2019, 2023] : [2015, 2017, 2019, 2021, 2023, 2025], yfmt: v => Math.round(v * 100) + '%', ylabel: 'solar capture rate: what solar earned ÷ average price' }));
         pathLine(ctx, D.map(([y, b, s]) => [sx(y), sy(s / b)]), darken(C.solar, 0.2), 2.6);
@@ -438,7 +454,7 @@ export function captureHistory(el) {
       const P = narrow ? { l: 46, r: w - 42, t: 384, b: h - 34 } : { l: w * 0.64, r: w - 44, t: 34, b: h - 42 };
       const pa = axes(ctx, { box: P, x0: 0, x1: 23, y0: -20, y1: 160, yticks: [0, 50, 100, 150], xticks: [0, 6, 12, 18], xfmt: v => v + ':00', yfmt: v => S() + v, ylabel: 'average price by hour, April–September' });
       line(ctx, P.l, pa.sy(0), P.r, pa.sy(0), C.grid2, 1);
-      [[2015, alpha(C.ink3, 0.9)], [2025, C.price]].forEach(([y, col]) => { const p = PR[y]; if (!p) return; pathLine(ctx, p.price.map((v, k) => [pa.sx(k), pa.sy(v * K(y))]), col, 2.2); text(ctx, String(y), pa.sx(23) + 4, pa.sy(p.price[23] * K(y)) + 4, { size: 11, weight: 650, color: col, align: 'right' }); });
+      [[2015, alpha(C.ink3, 0.9)], [2025, C.price]].forEach(([y, col]) => { const p = PR[y]; if (!p) return; pathLine(ctx, p.price.map((v, k) => [pa.sx(k), pa.sy(v * K(y))]), col, 2.2); text(ctx, String(y), pa.sx(23) + 5, pa.sy(p.price[23] * K(y)) + 4, { size: 11, weight: 650, color: col, align: 'left' }); });
       if (PR[2025]) { const k = PR[2025].price.indexOf(Math.min(...PR[2025].price)), mv = PR[2025].price[k] * K(2025); text(ctx, `midday ${mv < 0 ? '−' : ''}${S()}${Math.abs(mv).toFixed(0)}`, pa.sx(k), pa.sy(mv) + 16, { size: 10.5, weight: 600, color: C.price, align: 'center', halo: true }); }
     },
   });

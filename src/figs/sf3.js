@@ -138,10 +138,10 @@ const USES = [
   { n: 'Car', opts: [['battery', ch('bev')], ['hydrogen', ch('fcev')], ['e-fuel', ch('efcar')]], note: `Batteries win: an e-fuel car needs about ${Math.round(ch('bev') / ch('efcar'))} times the electricity per kilometre.`, verdict: 'electrify' },
   { n: 'Home heating', opts: [['heat pump', ch('hp')], ['hydrogen fuel cell', FC_HEAT], ['e-methane boiler', ch('emeth')]], note: 'A heat pump delivers almost three units of heat per unit of electricity; burning e-methane delivers less than half a unit.', verdict: 'electrify' },
   { n: 'Short-haul trucks, buses, trains', opts: null, note: 'Battery trucks and overhead-wire trains are already on the road and rails; hydrogen buses and trains have mostly lost the tenders where both competed.', verdict: 'electrify' },
-  { n: 'Fertiliser and chemicals', opts: null, note: 'Ammonia and methanol are the product: they need hydrogen whatever happens. Replacing the ~100 Mt of fossil hydrogen used today is the largest no-regret market.', verdict: 'molecule' },
-  { n: 'Steel (direct reduction)', opts: null, note: 'Hydrogen can replace coke as the chemical that strips oxygen from iron ore; a direct-electric route (electrolysis of iron) is still at pilot scale.', verdict: 'molecule' },
-  { n: 'Ocean shipping', opts: null, note: 'Batteries suit ferries and short routes; deep-sea ships need fuel for weeks: e-methanol or e-ammonia, or biofuels.', verdict: 'molecule' },
-  { n: 'Long-haul aviation', opts: null, note: 'No battery comes close to the energy per kilogram of kerosene; e-kerosene and biofuels are the only drop-in options.', verdict: 'molecule' },
+  { n: 'Fertiliser and chemicals', opts: null, note: 'Ammonia and methanol are already made from hydrogen, almost all of it from natural gas and coal. Swapping in electric hydrogen adds no conversion step, so replacing the ~100 Mt of fossil hydrogen used today is the most obvious first market.', verdict: 'molecule' },
+  { n: 'Steel (direct reduction)', opts: null, note: 'Hydrogen can replace coke as the chemical that strips oxygen from iron ore; a direct-electric route (electrolysis of iron) is still at pilot scale. ArcelorMittal’s 2025 decision shows the price at which hydrogen steel pays has not yet arrived in Europe.', verdict: 'molecule' },
+  { n: 'Ocean shipping', opts: null, note: 'Batteries suit ferries and short routes; deep-sea ships need fuel for weeks. Ammonia (no carbon needed) and methanol (easy to handle) are the leading options, beside biofuels.', verdict: 'molecule' },
+  { n: 'Long-haul aviation', opts: null, note: 'Batteries hold about a fiftieth of the energy per kilogram of kerosene. Waste-based biofuels are limited, so e-kerosene is the backstop the EU’s synthetic-fuel quota is designed to force.', verdict: 'molecule' },
   { n: 'Seasonal power storage', opts: [['battery (days)', ch('batt')], ['hydrogen (weeks)', ch('h2pow')]], note: 'Batteries win for hours to days; for a windless winter fortnight, hydrogen in salt caverns may be the cheapest way to keep energy, despite losing about two-thirds of it.', verdict: 'both' },
 ];
 export function whereFits(el) {
@@ -162,7 +162,7 @@ export function whereFits(el) {
         const by = narrow ? y + 22 : y + rowH * 0.13, bh = narrow ? Math.min(12, rowH - 30) : rowH * 0.74;
         if (u.opts) {
           const xsN = narrow ? scale(0, 400, A.l + 140, A.r) : xs, n = u.opts.length, sub = bh / n;
-          u.opts.forEach(([s, v], j) => { const yy = narrow ? y + 4 + j * ((rowH - 8) / n) : by + j * sub; const hh = narrow ? (rowH - 8) / n - 2 : sub - 2; ctx.fillStyle = alpha(j === 0 ? ELEC : H2C, j === 0 ? 0.8 : 0.55); ctx.fillRect(xsN(0), yy, xsN(v) - xsN(0), hh); text(ctx, `${s} ${v}%`, xsN(v) + 4, yy + hh / 2 + 4, { size: 9.5, color: C.ink2, halo: true }); });
+          u.opts.forEach(([s, v], j) => { const yy = narrow ? y + 4 + j * ((rowH - 8) / n) : by + j * sub; const hh = narrow ? (rowH - 8) / n - 2 : sub - 2; ctx.fillStyle = alpha(j === 0 ? ELEC : H2C, j === 0 ? 0.8 : 0.55); ctx.fillRect(xsN(0), yy, xsN(v) - xsN(0), hh); const ls = `${s} ${v}%`, inBar = xsN(v) + 4 + measure(ctx, ls, 9.5) > w - 4; text(ctx, ls, inBar ? xsN(v) - 5 : xsN(v) + 4, yy + hh / 2 + 4, inBar ? { size: 9.5, weight: 650, color: '#fff', align: 'right' } : { size: 9.5, color: C.ink2, halo: true }); });
         } else {
           const tag = u.verdict === 'electrify' ? 'electrify directly' : 'needs molecules';
           const x0 = narrow ? A.r - measure(ctx, tag, 10.5, 650) - 16 : xs(0);
@@ -175,6 +175,6 @@ export function whereFits(el) {
   });
   fig.interact({ hit: (x, y) => geo.find(g => y >= g.y0 && y <= g.y1) || null, cursor: 'pointer', hover: o => { if (o && o.i !== st.sel) { st.sel = o.i; upd(); } }, down: o => { st.sel = o.i; upd(); } });
   const ro = readout(el);
-  function upd() { const u = USES[st.sel]; ro.innerHTML = `<b>${u.n}.</b> ${u.note} Hover or tap a row.`; fig.invalidate(); }
+  function upd() { const u = USES[st.sel]; ro.innerHTML = `<b>${u.n}.</b> ${u.note} Tap or click another row.`; fig.invalidate(); }
   upd();
 }

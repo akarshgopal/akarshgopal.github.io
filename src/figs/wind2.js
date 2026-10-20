@@ -27,7 +27,7 @@ const CONTRACTS = {
   ppaBase: { name: 'Baseload PPA', who: 'The owner promises a flat block of power at a fixed price, and must buy the shortfall at market prices when the wind is weak — so it keeps the shape risk: revenue ≈ price + (capture − baseload).', f: (d, k) => k + (d.on - d.base) },
 };
 export function revenueModels(el) {
-  const st = { c: 'cfd', k: 65 }; let geo = null;
+  const st = { c: 'merchant', k: 65 }; let geo = null;
   const fig = new Fig(el, {
     label: 'Revenue per megawatt-hour of a German onshore wind farm in each year 2015 to 2025 under different contracts, using the real price wind earned each year',
     height: w => w < 600 ? 360 : 340,
@@ -54,7 +54,7 @@ export function revenueModels(el) {
   slider(more(ctl, 'More: contract price'), { label: 'Contract price (strike, tariff or PPA)', min: 30, max: 110, step: 1, value: st.k, color: C.wind, fmt: v => '€' + v + '/MWh', oninput: v => { st.k = v; upd(); }, name: 'k', wide: true });
   function upd() {
     const vals = DE.map(d => CONTRACTS[st.c].f(d, st.k)), mean = vals.reduce((a, b) => a + b, 0) / vals.length, sd = Math.sqrt(vals.reduce((a, b) => a + (b - mean) ** 2, 0) / vals.length);
-    ro.innerHTML = `<b>${CONTRACTS[st.c].name}</b>: average <b>€${Math.round(mean)}/MWh</b> over 2015–2025, ${Math.max(...vals) - Math.min(...vals) < 0.5 ? 'the same every year — no market risk at all' : `ranging from ${(v => (v < 0 ? '−' : '') + '€' + Math.abs(v))(Math.round(Math.min(...vals)))} to ${(v => (v < 0 ? '−' : '') + '€' + Math.abs(v))(Math.round(Math.max(...vals)))} (year-to-year spread ±€${Math.round(sd)})`}. ${CONTRACTS[st.c].who}`;
+    ro.innerHTML = `<b>${CONTRACTS[st.c].name}</b>: average <b>€${Math.round(mean)}/MWh</b> over 2015–2025, ${Math.max(...vals) - Math.min(...vals) < 0.5 ? 'the same every year: no price risk at all' : `ranging from ${(v => (v < 0 ? '−' : '') + '€' + Math.abs(v))(Math.round(Math.min(...vals)))} to ${(v => (v < 0 ? '−' : '') + '€' + Math.abs(v))(Math.round(Math.max(...vals)))} (year-to-year spread ±€${Math.round(sd)})`}. ${CONTRACTS[st.c].who}`;
     fig.invalidate();
   }
   upd();
@@ -104,7 +104,7 @@ export function captureCompare(el) {
   segmented(more(ctl, 'More: pick technologies'), { label: 'Show', options: [{ label: 'All', value: 'all', name: 'cc-all' }, { label: 'Solar only', value: 'solar', name: 'cc-solar' }, { label: 'Wind only', value: 'wind', name: 'cc-wind' }], value: 'all', onchange: v => { st.on = new Set(SER.filter(s => v === 'all' || (v === 'solar') === (s.f === 'solar')).map(s => s.k)); upd(); } });
   function upd() {
     const o = st.hover;
-    ro.innerHTML = o ? `<b>${o.s.name}, ${o.r.y}</b>: earned €${o.r[o.s.f].toFixed(0)}/MWh against an average of €${o.r.base.toFixed(0)} — a capture rate of <b>${Math.round(o.r[o.s.f] / o.r.base * 100)}%</b> — while supplying ${Math.round(o.r[o.s.s] * 100)}% of demand.` : 'Solar falls fastest because every panel in a country produces at the same hours. Wind is spread over more hours and over the whole year; offshore wind, steadier still, holds above 90% in most years. Hover a point.';
+    ro.innerHTML = o ? `<b>${o.s.name}, ${o.r.y}</b>: earned €${o.r[o.s.f].toFixed(0)}/MWh against an average of €${o.r.base.toFixed(0)} — a capture rate of <b>${Math.round(o.r[o.s.f] / o.r.base * 100)}%</b> — while supplying ${Math.round(o.r[o.s.s] * 100)}% of demand.` : 'Solar falls fastest because every panel in a country produces at the same hours. Wind is spread over more hours and over the whole year; offshore wind, steadier still, holds above 90% in most years.';
     fig.invalidate();
   }
   upd();
@@ -118,10 +118,10 @@ export function curtailment(el) {
   const st = { view: 'vol' };
   const fig = new Fig(el, {
     label: 'Renewable electricity curtailed in Germany because of grid congestion, 2020 to 2025, by technology for 2024 and 2025, and the total annual cost of congestion management',
-    height: w => w < 600 ? 330 : 300,
+    height: w => w < 600 ? 372 : 300,
     draw(ctx, w, h) {
       const narrow = w < 600;
-      const box = { l: narrow ? 46 : 56, r: w - (narrow ? 16 : 200), t: 34, b: h - 40 };
+      const box = { l: narrow ? 46 : 56, r: w - (narrow ? 16 : 200), t: 34, b: h - (narrow ? 82 : 40) };
       if (st.view === 'vol') {
         const { sx, sy } = axes(ctx, { box, x0: 2019.4, x1: 2025.6, y0: 0, y1: 12, yticks: [0, 4, 8, 12], xticks: [2020, 2021, 2022, 2023, 2024, 2025], yfmt: v => v + ' TWh', ylabel: 'renewable output curtailed for grid congestion' });
         const bw = (box.r - box.l) / 6 * 0.55, cols = ['#1d4a73', '#4f9bd1', '#e3a922'];
@@ -131,18 +131,21 @@ export function curtailment(el) {
           else { ctx.fillStyle = '#8a9bb0'; ctx.fillRect(x, sy(v), bw, box.b - sy(v)); }
           text(ctx, v.toFixed(1), sx(y), sy(v) - 6, { size: 11, weight: 650, color: C.ink, align: 'center' });
         });
-        if (!narrow) [['offshore wind', cols[0]], ['onshore wind', cols[1]], ['solar', cols[2]], ['not split by source', '#8a9bb0']].forEach(([s, c], i) => { ctx.fillStyle = c; ctx.fillRect(box.r + 24, box.t + 6 + i * 22, 11, 11); text(ctx, s, box.r + 40, box.t + 16 + i * 22, { size: 11, color: C.ink2 }); });
+        [['offshore wind', cols[0]], ['onshore wind', cols[1]], ['solar', cols[2]], ['not split by source', '#8a9bb0']].forEach(([s, c], i) => {
+          const lx = narrow ? box.l - 30 + (i % 2) * (w - box.l + 14) / 2 : box.r + 24, ly = narrow ? h - 34 + Math.floor(i / 2) * 20 : box.t + 16 + i * 22; // phones: two rows under the axis
+          ctx.fillStyle = c; ctx.fillRect(lx, ly - 10, 11, 11); text(ctx, s, lx + 16, ly, { size: 11, color: C.ink2 });
+        });
       } else {
         const { sx, sy } = axes(ctx, { box, x0: 2021.4, x1: 2025.6, y0: 0, y1: 5, yticks: [0, 1, 2, 3, 4, 5], xticks: [2022, 2023, 2024, 2025], yfmt: v => '€' + v + 'bn', ylabel: 'total cost of grid congestion management in Germany' });
         const bw = (box.r - box.l) / 4 * 0.5;
         CCOST.forEach(([y, v]) => { ctx.fillStyle = '#c8473b'; ctx.fillRect(sx(y) - bw / 2, sy(v), bw, box.b - sy(v)); text(ctx, '€' + v.toFixed(1) + 'bn', sx(y), sy(v) - 6, { size: 11, weight: 650, color: C.ink, align: 'center' }); });
-        if (!narrow) text(ctx, 'redispatch, reserve plants, countertrading', box.r + 24, box.t + 16, { size: 11, color: C.ink2 });
+        text(ctx, 'redispatch, reserve plants, countertrading', narrow ? box.l - 30 : box.r + 24, narrow ? h - 34 : box.t + 16, { size: 11, color: C.ink2 });
       }
     },
   });
   const ctl = controls(el); const ro = readout(el);
   segmented(ctl, { label: 'Show', options: [{ label: 'Energy curtailed', value: 'vol', name: 'cu-vol' }, { label: 'Cost', value: 'cost', name: 'cu-cost' }], value: 'vol', onchange: v => { st.view = v; upd(); } });
-  function upd() { ro.innerHTML = st.view === 'vol' ? 'About 9.4 TWh of wind and solar was curtailed in each of 2024 and 2025 — roughly 3.5% of German renewable output. The mix is shifting: solar curtailment nearly doubled in 2025, increasingly because local distribution grids are full.' : 'Congestion management — turning plants down in the north and others up in the south, holding reserve plants, and trading across borders — has cost about €3.0 billion a year recently, peaking at €4.2 billion in the 2022 fuel-price crisis.'; fig.invalidate(); }
+  function upd() { ro.innerHTML = st.view === 'vol' ? 'About 9.4 TWh of wind and solar was curtailed in each of 2024 and 2025 — roughly 3.5% of German renewable output. The mix is shifting: solar curtailment nearly doubled in 2025, increasingly because local distribution grids are full.' : 'Congestion management — turning plants down in the north and others up in the south, holding reserve plants, and trading across borders — cost €3.08 billion in 2025, after a peak of €4.2 billion in the 2022 fuel-price crisis.'; fig.invalidate(); }
   upd();
   euroFigure(el, fig, ctl, 'eu-curtailment');
 }
@@ -181,7 +184,7 @@ export function hybridPlant(el) {
   }
   const fig = new Fig(el, {
     label: 'A one-megawatt solar plant with a battery behind a shared grid connection in Seville, with real 2023 sunshine and real 2023 Spanish prices: drag the week, change the connection, battery power and hours',
-    height: w => w < 600 ? 500 : 400,
+    height: w => w < 600 ? 514 : 414,
     draw(ctx, w, h) {
       const narrow = w < 600, r = res;
       const Y = { l: narrow ? 40 : 52, r: w - 14, t: 30, b: narrow ? 92 : 96 };
@@ -191,7 +194,7 @@ export function hybridPlant(el) {
       for (const v of [0, 80, 160]) text(ctx, '€' + v, Y.l - 6, py(v) + 4, { size: 10, color: C.ink3, align: 'right' });
       ctx.strokeStyle = C.ink; ctx.lineWidth = 1.5; ctx.strokeRect(Y.l + st.week * 7 * dw, Y.t - 4, 7 * dw, Y.b - Y.t + 8);
       geo = { Y, dw, days };
-      const B = { l: narrow ? 40 : 52, r: w - (narrow ? 40 : 52), t: Y.b + (narrow ? 76 : 46), b: h - 34 };
+      const B = { l: narrow ? 40 : 52, r: w - (narrow ? 40 : 52), t: Y.b + (narrow ? 90 : 60), b: h - 34 }; // room for the legend above the y-axis title
       const { sx, sy } = axes(ctx, { box: B, x0: 0, x1: 168, y0: 0, y1: 1.0, yticks: [0, 0.25, 0.5, 0.75, 1], xticks: [], yfmt: v => v.toFixed(2), ylabel: 'MW per MW of panels, hour by hour, selected week' });
       const ps = scale(-20, 200, B.b, B.t);
       for (const v of [0, 100, 200]) text(ctx, '€' + v, B.r + 6, ps(v) + 4, { size: 10, color: C.price });
@@ -207,9 +210,9 @@ export function hybridPlant(el) {
       for (let d = 0; d < 7; d++) { const t = new Date(Date.UTC(2023, 0, 1) + (st.week * 7 + d) * 864e5); text(ctx, t.getUTCDate() + '/' + (t.getUTCMonth() + 1), sx(d * 24 + 12), B.b + 15, { size: 10.5, color: C.ink3, align: 'center' }); }
       // legend
       const L = [['solar exported', alpha(C.solar, 0.85)], ['battery discharge', '#8e62b5'], ['solar into battery', alpha('#8e62b5', 0.3)], ['lost', alpha(C.peaker, 0.6)], ['price (right)', C.price]];
-      let lx = B.l; const ly = B.t - 26;
+      let lx = B.l; const ly = Y.b + 26;
       if (!narrow) L.forEach(([s, c]) => { ctx.fillStyle = c; ctx.fillRect(lx, ly - 9, 10, 10); text(ctx, s, lx + 14, ly, { size: 10.5, color: C.ink2 }); lx += 14 + measure(ctx, s, 10.5) + 16; });
-      else L.forEach(([s, c], i) => { const x = B.l + (i % 3) * (w - B.l - 10) / 3, y = Y.b + 26 + Math.floor(i / 3) * 16; ctx.fillStyle = c; ctx.fillRect(x - 12, y - 9, 9, 9); text(ctx, s.replace(' (right)', ''), x, y, { size: 10, color: C.ink2 }); });
+      else L.forEach(([s, c], i) => { const x = B.l + (i % 2) * (w - B.l - 10) / 2, y = Y.b + 26 + Math.floor(i / 2) * 16; /* two columns: three crowd at 390 px */ ctx.fillStyle = c; ctx.fillRect(x - 12, y - 9, 9, 9); text(ctx, s.replace(' (right)', ''), x, y, { size: 10, color: C.ink2 }); });
     },
   });
   fig.interact({ hit: (x, y) => geo && y < geo.Y.b + 8 && y > geo.Y.t - 8 ? 'w' : null, cursor: 'ew-resize', down: (o, x) => mv(x), move: (o, x) => mv(x) });
@@ -369,7 +372,7 @@ export function cannibal(el) {
   const recurve = () => { curve = []; for (let s = 0.005; s <= 0.4001; s += 0.0125) curve.push([s, cannRun(s / CN.share1, st.batt).cr]); };
   const DOTS = [['solar', 'solarShare', SOL, 'solar'], ['on', 'onShare', '#4f9bd1', 'onshore wind'], ['off', 'offShare', '#1d4a73', 'offshore wind']];
   const fig = new Fig(el, {
-    label: 'Solar’s capture rate against its share of German demand: real years 2015–2025 as dots, and a curve from re-pricing 2025’s hours with more or less solar; drag the handle along the curve. A second panel shows the average April–September day of prices.',
+    label: 'Solar’s capture rate against its share of German demand: real years 2015–2025 as dots, and a curve from re-pricing 2025’s hours with more or less solar. A day panel shows the average April–September day of prices.',
     height: w => w < 600 ? 600 : 400,
     draw(ctx, w, h) {
       const narrow = w < 600, k = st.k, sh = k * CN.share1;
@@ -383,14 +386,18 @@ export function cannibal(el) {
       DOTS.forEach(([f, s, col]) => CAP.filter(r => r.c === 'de' && r[f] != null).forEach(r => { const x = sx(r[s]), y = sy(r[f] / r.base); pts.push({ x, y, r, f, s, col }); }));
       pts.forEach(p => circle(ctx, p.x, p.y, st.hover === p ? 6 : 3.6, p.col, '#fff', 1.2));
       const last = f => pts.filter(p => p.f === f).sort((a, b) => b.r.y - a.r.y)[0];
-      [['solar', 'solar'], ['on', 'onshore wind'], ['off', 'offshore wind']].forEach(([f, n]) => { const p = last(f); if (p) text(ctx, `${n} ${p.r.y}`, p.x + 7, p.y + (f === 'off' ? -8 : f === 'on' ? 14 : 4), { size: 10, weight: 650, color: darken(p.col, 0.15), halo: true }); });
-      { const s0 = sh > 0.25 ? 0.2 : 0.34, c0 = curve.find(c => c[0] >= s0) || curve[curve.length - 1]; text(ctx, narrow ? '2025 re-priced' : '2025’s hours, re-priced', sx(c0[0]) - 6, sy(c0[1]) - 12, { size: 10, color: darken(SOL, 0.3), align: 'right', halo: true }); }
+      [['solar', 'solar'], ['on', 'onshore wind'], ['off', 'offshore wind']].forEach(([f, n]) => { const p = last(f); if (!p) return;
+        // phone: offshore lifts above the 100% line (clear of the solar dots), solar drops below-left of its dot (clear of the curve and the handle)
+        const nx = narrow && f === 'solar' ? p.x - 14 : narrow && f === 'off' ? p.x + 10 : p.x + 7, ny = narrow && f === 'off' ? sy(1) - 8 : narrow && f === 'solar' ? p.y + 26 : p.y + (f === 'off' ? -8 : f === 'on' ? 14 : 4);
+        text(ctx, `${n} ${p.r.y}`, nx, ny, { size: 10, weight: 650, color: darken(p.col, 0.15), halo: true, align: narrow && f === 'solar' ? 'right' : 'left' }); });
+      { const s0 = sh > 0.24 ? 0.2 : 0.3, c0 = curve.find(c => c[0] >= s0) || curve[curve.length - 1]; text(ctx, narrow ? '2025 re-priced' : '2025’s hours, re-priced', sx(c0[0]) - 8, sy(c0[1]) + 22, { size: 10, color: darken(SOL, 0.3), align: 'right', halo: true }); } // below-left of the falling curve
       const hx = sx(sh), hy = sy(clamp(cur.cr, 0, 1.2));
       line(ctx, hx, hy + 12, hx, A.b, alpha(SOL, 0.6), 1, [2, 3]);
       for (let a = 0; a < 8; a++) { const an = a * Math.PI / 4; line(ctx, hx + Math.cos(an) * 13, hy + Math.sin(an) * 13, hx + Math.cos(an) * 17, hy + Math.sin(an) * 17, SOL, 2); }
       circle(ctx, hx, hy, 11, SOL, '#fff', 2); text(ctx, '↔', hx, hy + 4, { size: 11, color: '#fff', align: 'center', weight: 700 });
       const lab = `${Math.round(cur.cr * 100)}% at ${Math.round(sh * 100)}% of demand`;
-      text(ctx, lab, sh < 0.15 ? hx + 22 : clamp(hx, A.l + 70, A.r - 70), sh < 0.15 ? hy + (narrow ? 50 : 30) : hy - 22, { size: 11, weight: 700, color: darken(SOL, 0.35), align: sh < 0.15 ? 'left' : 'center', halo: true });
+      { const lw = measure(ctx, lab, 11, 700), right = hx + 22 + lw < A.r; // above-right of the handle, clear of the falling curve; below-left near the axis end
+        text(ctx, lab, sh < 0.15 || right ? hx + 22 : hx - 22, sh < 0.15 ? hy + (narrow ? 50 : 30) : right ? hy - 10 : hy + 26, { size: 11, weight: 700, color: darken(SOL, 0.35), align: sh < 0.15 || right ? 'left' : 'right', halo: true }); }
       // ---- the average sunny-half day
       const yMax = 160, gMax = Math.max(60, ...cur.dayS) * 1.1;
       const b = axes(ctx, { box: B, x0: 0, x1: 24, y0: -40, y1: yMax, xticks: [0, 6, 12, 18, 24], xfmt: v => String(v).padStart(2, '0') + ':00', yticks: [-40, 0, 40, 80, 120, 160], yfmt: v => '€' + v, ylabel: 'average April–September day, €/MWh', xlabel: narrow ? 'time (CET)' : 'time of day (CET)' });

@@ -52,7 +52,7 @@ export function loopFlow(el) {
     label: 'A four-zone network: power sent from north to south Germany spreads over every parallel path, including through neighbouring countries; a phase shifter and an HVDC link change the split',
     height: w => w < 600 ? 440 : 420, animated: true, step() {},
     draw(ctx, w, h, f) {
-      const narrow = w < 600, P = { l: narrow ? 60 : 120, r: w - (narrow ? 60 : 120), t: 40, b: h - 40 };
+      const narrow = w < 600, P = { l: narrow ? 40 : 120, r: w - (narrow ? 40 : 120), t: 40, b: h - 40 };
       const pos = n => [lerp(P.l, P.r, n.x), lerp(P.t, P.b, n.y)];
       const { f: flows, dcf } = run(st.T);
       // HVDC link (drawn slightly right of the centre line)
@@ -72,8 +72,8 @@ export function loopFlow(el) {
         const mx = (x0 + x1) / 2 + ox, my = (y0 + y1) / 2;
         const lab = `${Math.abs(fl).toFixed(1)} / ${l.lim} GW`;
         const dx = k === 0 ? -8 : (l.a === 0 && l.b === 2) || (l.a === 2) ? -6 : 6, al = k === 0 || l.a === 2 || l.b === 2 ? 'right' : 'left';
-        const nsN = narrow && k === 0;
-        text(ctx, lab, nsN ? mx - 12 : mx + dx, my + (k === 0 ? (narrow ? -40 : 4) : (l.a === 0 ? -6 : 14)), { size: narrow ? 10 : 11, weight: 650, color: over ? HOT : C.ink2, align: nsN ? 'right' : al, halo: true });
+        const nsN = narrow && k === 0; // on a phone the internal-line label sits level with the West node, the widest gap
+        text(ctx, lab, nsN ? mx - 10 : mx + dx, my + (k === 0 ? 4 : (l.a === 0 ? -6 : 14)), { size: narrow ? 10 : 11, weight: 650, color: over ? HOT : C.ink2, align: nsN ? 'right' : al, halo: true });
         if (k === 3 && st.pst) { const px = lerp(x0, x1, 0.62), py = lerp(y0, y1, 0.62); circle(ctx, px - 5, py, 6, '#fff', darken(LINE, 0.3), 1.6); circle(ctx, px + 5, py, 6, null, darken(LINE, 0.3), 1.6); text(ctx, 'phase shifter', px + 14, py + 4, { size: 10, color: darken(LINE, 0.3), halo: true }); }
       });
       NODES.forEach((n, i) => {
@@ -96,7 +96,7 @@ export function loopFlow(el) {
   function upd() {
     const { f } = run(st.T), loop = Math.abs(f[1]) + Math.abs(f[3]), ok = maxFeasible(), over = f.some((v, i) => Math.abs(v) > LINES[i].lim + 1e-6);
     let s = `Of ${st.T} GW sent south, <b>${(st.T ? loop / Math.max(st.T, 1e-9) * 100 : 0).toFixed(0)}%</b> takes the long way round through neighbouring countries. `;
-    s += over ? `Some lines are overloaded: the network can only carry <b>${ok.toFixed(1)} GW</b>, so <b>${(st.T - ok).toFixed(1)} GW</b> must be redispatched: wind turned down in the north, power stations turned up in the south. Germany pays about <b>$3.4 billion</b> a year for this ($3.5 billion in 2025, at US$1.13/€).` : 'Every line is within its limit.';
+    s += over ? `Some lines are overloaded: the network can only carry <b>${ok.toFixed(1)} GW</b>, so <b>${(st.T - ok).toFixed(1)} GW</b> must be redispatched: wind turned down in the north, power stations turned up in the south. Germany paid about <b>$3.5 billion</b> for this in 2025.` : 'Every line is within its limit.';
     ro.innerHTML = s; fig.invalidate();
   }
   upd();
@@ -131,7 +131,7 @@ export function redispatch(el) {
   function upd() {
     const r = st.hover;
     if (r) { const ee = TX.nemEE[r[0]], tot = r[1] + r[2] + r[3]; ro.innerHTML = `<b>${r[0]}</b>${r[4] ? '' : ' (preliminary)'}: <b>€${(tot / 1000).toFixed(2)} bn</b> in total — redispatch €${Math.round(r[1])} m${ee ? ` (of which €${Math.round(ee)} m compensation for curtailed renewables)` : ''}, reserve plants €${Math.round(r[2])} m, countertrading €${Math.round(r[3])} m.`; }
-    else { const a = TX.nem[0], b = TX.nem[TX.nem.length - 1], t = r => r[1] + r[2] + r[3]; ro.innerHTML = `Congestion management cost about <b>€${(t(a) / 1000).toFixed(1)} bn</b> in ${a[0]} and <b>€${(t(b) / 1000).toFixed(1)} bn</b> in ${b[0]}, after a peak of €${(t(TX.nem[5]) / 1000).toFixed(1)} bn in the 2022 gas crisis. Hover a year for the breakdown; the dashed line marks the part paid to curtailed wind and solar.`; }
+    else { const a = TX.nem[0], b = TX.nem[TX.nem.length - 1], t = r => r[1] + r[2] + r[3]; ro.innerHTML = `Congestion management cost about <b>€${(t(a) / 1000).toFixed(1)} bn</b> in ${a[0]} and <b>€${(t(b) / 1000).toFixed(1)} bn</b> in ${b[0]}, after a peak of €${(t(TX.nem[5]) / 1000).toFixed(1)} bn in the 2022 gas crisis. The dashed line marks the part paid to curtailed wind and solar.`; }
     fig.invalidate();
   }
   upd();
@@ -171,7 +171,9 @@ export function breakEven(el) {
         const Le = Math.min(xmax, t.max) * (t.max < xmax ? 1 : 0.97), yv = cost(t, Le, st.conv);
         if (t.max < xmax) { text(ctx, narrow ? '✕ charging limit' : '✕ charging current uses up the cable', sx(t.max) + 4, sy(Math.min(ymax, yv)) + (narrow ? 18 : 4), { size: 10, color: HOT, halo: true }); }
         const o = t === a ? d : a, oy = o.max < Le ? -Infinity : cost(o, Le, st.conv);
-        text(ctx, t.name, sx(Le) - 4, sy(Math.min(ymax, yv)) + (yv >= oy ? -12 : 26), { size: 11, weight: 650, color: t.col, align: 'right', halo: true });
+        // below its line, the label must clear the line where it is lowest: at the label's left end
+        const Ll = Math.max(0, sx.inv(sx(Le) - 4 - measure(ctx, t.name, 11))), yb = Math.max(sy(Math.min(ymax, yv)) + 26, sy(Math.min(ymax, cost(t, Ll, st.conv))) + 15);
+        text(ctx, t.name, sx(Le) - 4, yv >= oy ? sy(Math.min(ymax, yv)) - 12 : yb, { size: 11, weight: 650, color: t.col, align: 'right', halo: true });
       });
       geo = { A, sx };
     },
@@ -194,12 +196,12 @@ export function breakEven(el) {
 const PROJ = [
   { n: 'Pacific DC Intertie', c: 'US', y: 1970, km: 1362, gw: 3.22, kv: 500, t: 'LCC', r: 'overhead', note: 'Columbia River hydropower to Los Angeles; upgraded several times since 1970', s: 'n20' },
   { n: 'Xiangjiaba–Shanghai', c: 'China', y: 2010, km: 1980, gw: 6.4, kv: 800, t: 'LCC', r: 'overhead', note: 'the first ultra-high-voltage DC link in commercial operation', s: 'n20' },
-  { n: 'Changji–Guquan', c: 'China', y: 2019, km: 3293, gw: 12, kv: 1100, t: 'LCC', r: 'overhead', note: 'Xinjiang to Anhui; CNY 40.7 bn; the first ±1,100 kV line', s: 'n20' },
+  { n: 'Changji–Guquan', c: 'China', y: 2019, km: 3293, gw: 12, kv: 1100, t: 'LCC', r: 'overhead', note: 'Xinjiang to Anhui; the first ±1,100 kV line', s: 'n20' },
   { n: 'Belo Monte–Rio', c: 'Brazil', y: 2019, km: 2518, gw: 4.0, kv: 800, t: 'LCC', r: 'overhead', note: 'Amazon hydropower to Rio de Janeiro; the second of two 4 GW Belo Monte bipoles', s: 'n24' },
-  { n: 'NordLink', c: 'NO–DE', y: 2021, km: 623, gw: 1.4, kv: 525, t: 'VSC', r: 'subsea + land cable', note: 'Norwegian hydropower ↔ German wind; €1.7–1.8 bn', s: 'n21' },
+  { n: 'NordLink', c: 'NO–DE', y: 2021, km: 623, gw: 1.4, kv: 525, t: 'VSC', r: 'subsea + land cable', note: 'Norwegian hydropower ↔ German wind; about $2 billion', s: 'n21' },
   { n: 'Viking Link', c: 'UK–DK', y: 2023, km: 765, gw: 1.4, kv: 525, t: 'VSC', r: 'subsea + land cable', note: 'when opened, the world’s longest land and subsea interconnector', s: 'n21' },
   { n: 'SunZia', c: 'US', y: 2026, km: 885, gw: 3.0, kv: 525, t: 'VSC', r: 'overhead', note: 'New Mexico wind to Arizona; first proposed more than 18 years before it opened', s: 'n22' },
-  { n: 'SuedLink', c: 'Germany', y: 2028, km: 700, gw: 4.0, kv: 525, t: 'VSC', r: 'underground cable', note: 'two 2 GW links, under construction; about €10 bn', s: 'n19' },
+  { n: 'SuedLink', c: 'Germany', y: 2028, km: 700, gw: 4.0, kv: 525, t: 'VSC', r: 'underground cable', note: 'two 2 GW links, under construction; about $11 billion', s: 'n19' },
 ];
 export function hvdcProjects(el) {
   const st = { sel: 2 };
@@ -212,7 +214,7 @@ export function hvdcProjects(el) {
       const { sx, sy } = axes(ctx, { box: A, x0: 0, x1: 3600, y0: 0, y1: 13, xticks: [0, 1000, 2000, 3000], yticks: [0, 4, 8, 12], xfmt: v => v.toLocaleString('en') + ' km', yfmt: v => v + ' GW', ylabel: 'capacity', xlabel: 'length' });
       geo = [];
       PROJ.forEach((p, i) => {
-        const x = sx(p.km), y = sy(p.gw), r = 4 + p.kv / 110, sel = st.sel === i;
+        const x = sx(p.km), y = sy(p.gw), r = narrow ? 2.5 + p.kv / 200 : 4 + p.kv / 110, sel = st.sel === i;
         circle(ctx, x, y, r, alpha(p.t === 'LCC' ? C.coal : DC, sel ? 0.9 : 0.55), sel ? C.ink : '#fff', sel ? 2 : 1.2);
         if (p.y > 2026) { ctx.setLineDash([3, 2]); circle(ctx, x, y, r + 3, null, C.ink3, 1); ctx.setLineDash([]); }
         const right = x < A.r - (narrow ? 110 : 140) && !(narrow && p.n === 'SunZia');

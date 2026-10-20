@@ -67,7 +67,7 @@ export function queueFunnel(el) {
   const ctl = controls(el); const ro = readout(el);
   segmented(ctl, { label: 'View', options: [{ label: 'The queue today', value: 'queue', name: 'q-queue' }, { label: 'What happens to requests', value: 'fate', name: 'q-fate' }], value: 'queue', onchange: v => { st.view = v; st.hover = -1; upd(); } });
   function upd() {
-    if (st.view === 'queue') ro.innerHTML = st.hover >= 0 ? `<b>${QUEUE[st.hover][0]}</b>: ${QUEUE[st.hover][1]} GW in the queues${st.hover === 3 ? ', up 72% in a year' : st.hover === 0 ? ', down 12% in a year' : st.hover === 2 ? ', down 26% in a year' : st.hover === 1 ? ', down 13% in a year' : ''}.` : 'The queues hold almost twice the capacity of the entire US power fleet. Most of it is speculative: developers file early and for more sites than they will build, because a queue position is cheap and grid capacity is scarce. Hover a segment.';
+    if (st.view === 'queue') ro.innerHTML = st.hover >= 0 ? `<b>${QUEUE[st.hover][0]}</b>: ${QUEUE[st.hover][1]} GW in the queues${st.hover === 3 ? ', up 72% in a year' : st.hover === 0 ? ', down 12% in a year' : st.hover === 2 ? ', down 26% in a year' : st.hover === 1 ? ', down 13% in a year' : ''}.` : 'The queues hold almost twice the capacity of the entire US power fleet. Most of it is speculative: developers file early and for more sites than they will build, because a queue position is cheap and grid capacity is scarce.';
     else ro.innerHTML = 'Only 13% of the capacity that applied in 2000–2019 is operating. More than 700 GW of requests were withdrawn in 2024 alone, while about 500 GW of new requests arrived.';
     fig.invalidate();
   }
@@ -81,24 +81,30 @@ const TURBS = [
   { k: 'hx', name: 'GE Haliade-X 13 MW (offshore, e.g. Dogger Bank)', short: 'Haliade-X 13 MW', mw: 13, d: 220, hub: 140, col: '#2c6795', hubIll: true },
   { k: 'v236', name: 'Vestas V236-15.0 MW (offshore)', short: 'V236 15 MW', mw: 15, d: 236, hub: 150, col: '#1d4a73', hubIll: true },
 ];
+// px per metre that fits all four rotors side by side between the axis labels and the cathedral (phones)
+const fitM = w => (w - 24 - 30 - 40 - 6 * TURBS.length) / TURBS.reduce((a, t) => a + t.d, 0);
 export function turbineScale(el) {
   const st = { sel: 't2024', a: 0 };
   const fig = new Fig(el, {
     label: 'Wind turbines drawn to scale: the average new US onshore turbine in 1998–99 and in 2024, and two offshore turbines, with Cologne Cathedral for reference',
-    height: w => w < 600 ? 400 : 420, animated: true,
+    height: w => w < 600 ? Math.round(68 + 300 * Math.min(1.1, fitM(w))) : 420, animated: true,
     step(dt) { st.a += dt * 0.9; },
     draw(ctx, w, h) {
       const narrow = w < 600, ground = h - 38, top = 30, H = 300; // metres shown
-      const m = (ground - top) / H;
+      const m = narrow ? Math.min((ground - top) / H, fitM(w)) : (ground - top) / H;
       ctx.fillStyle = '#e5e1d6'; ctx.fillRect(0, ground, w, h - ground);
-      for (const v of [50, 100, 150, 200, 250]) { line(ctx, 28, ground - v * m, w - 8, ground - v * m, alpha(C.grid2, 0.8), 1); text(ctx, v + ' m', 26, ground - v * m + 4, { size: 10.5, color: C.ink3, align: 'right' }); }
+      for (const v of narrow ? [100, 200] : [50, 100, 150, 200, 250]) { line(ctx, 28, ground - v * m, w - 8, ground - v * m, alpha(C.grid2, 0.8), 1); text(ctx, v + ' m', 26, ground - v * m + 4, { size: 10.5, color: C.ink3, align: 'right' }); }
       // cathedral reference
       const cx = narrow ? w - 24 : w - 50, ch = 157 * m;
       ctx.fillStyle = alpha('#8a7f70', 0.35); ctx.beginPath(); ctx.moveTo(cx - 10, ground); ctx.lineTo(cx - 10, ground - ch * 0.7); ctx.lineTo(cx - 5, ground - ch); ctx.lineTo(cx, ground - ch * 0.7); ctx.lineTo(cx + 3, ground - ch * 0.7); ctx.lineTo(cx + 8, ground - ch * 0.98); ctx.lineTo(cx + 13, ground - ch * 0.7); ctx.lineTo(cx + 13, ground); ctx.fill();
       text(ctx, narrow ? 'Cathedral' : 'Cologne Cathedral, 157 m', narrow ? Math.min(cx + 1, w - 26) : cx + 1, ground + 16, { size: 10, color: C.ink3, align: 'center' });
       const n = TURBS.length, span = (narrow ? cx - 30 : cx - 70) - 40;
+      // on a phone the turbines sit side by side, rotors just clear of each other, all to one scale
+      let nx = 40 + (span - TURBS.reduce((a, t) => a + t.d * m, 0)) / 2 / n;
       TURBS.forEach((t, i) => {
-        const x = 40 + span * (i + 0.5) / n + (narrow ? 0 : 0), hub = ground - t.hub * m, R = t.d / 2 * m, sel = t.k === st.sel;
+        let x = 40 + span * (i + 0.5) / n;
+        if (narrow) { x = nx + t.d / 2 * m; nx += t.d * m + (span - TURBS.reduce((a, u) => a + u.d * m, 0)) / n; }
+        const hub = ground - t.hub * m, R = t.d / 2 * m, sel = t.k === st.sel;
         const col = sel ? t.col : alpha(t.col, 0.45);
         ctx.strokeStyle = col; ctx.lineWidth = Math.max(2, R * 0.05); ctx.beginPath(); ctx.moveTo(x - 1.5, ground); ctx.lineTo(x, hub); ctx.stroke();
         if (sel) { ctx.strokeStyle = alpha(t.col, 0.25); ctx.lineWidth = 1; ctx.setLineDash([3, 3]); ctx.beginPath(); ctx.arc(x, hub, R, 0, Math.PI * 2); ctx.stroke(); ctx.setLineDash([]); }
@@ -113,7 +119,7 @@ export function turbineScale(el) {
   segmented(ctl, { label: 'Turbine', options: TURBS.map(t => ({ label: t.short, value: t.k, name: 'tb-' + t.k })), value: st.sel, onchange: v => { st.sel = v; upd(); } });
   function upd() {
     const t = TURBS.find(x => x.k === st.sel), A = Math.PI * (t.d / 2) ** 2;
-    ro.innerHTML = `<b>${t.name}</b>: ${t.mw} MW, rotor ${t.d} m${t.hubIll ? ' (hub height varies by site; drawn at ' + t.hub + ' m)' : ', hub ' + t.hub + ' m'}. Swept area <b>${Math.round(A).toLocaleString('en-US')} m²</b> — ${(A / 7140).toFixed(1)} football pitches — so the specific power is <b>${Math.round(t.mw * 1e6 / A)} W/m²</b>.`;
+    ro.innerHTML = `<b>${t.name}</b>: ${t.mw} MW, rotor ${t.d} m${t.hubIll ? ' (hub height varies by site; drawn at ' + t.hub + ' m)' : ', hub ' + t.hub + ' m'}. Swept area <b>${Math.round(A).toLocaleString('en-US')} m²</b>, ${(A / 7140).toFixed(1)} football pitches.`;
     fig.invalidate();
   }
   upd();
@@ -124,7 +130,7 @@ const RHO = 1.225, CP = 0.45;
 function weibullPdf(v, c, k = 2) { return v <= 0 ? 0 : (k / c) * Math.pow(v / c, k - 1) * Math.exp(-Math.pow(v / c, k)); }
 function powerCurve(v, D, rated) { if (v < 3 || v > 25) return 0; return Math.min(rated, 0.5 * RHO * Math.PI * (D / 2) ** 2 * CP * v ** 3 / 1e6); }
 export function specificPower(el) {
-  const st = { D: 137, rated: 4, mean: 7.5 };
+  const st = { D: 137, rated: 3.5, mean: 7.5 };
   let stats = {};
   const fig = new Fig(el, {
     label: 'How the size of a wind turbine rotor relative to its generator sets its capacity factor: the power curve, the distribution of wind speeds at the site, and the share of hours the turbine runs at full output',
@@ -137,7 +143,7 @@ export function specificPower(el) {
       const pts = [[sx(0), sy(0)]]; let pmax = 0; for (let v = 0; v <= 26; v += 0.1) pmax = Math.max(pmax, weibullPdf(v, c));
       for (let v = 0; v <= 26; v += 0.1) pts.push([sx(v), sy(weibullPdf(v, c) / pmax * 0.6)]);
       pts.push([sx(26), sy(0)]); ctx.beginPath(); pts.forEach(([x, y], i) => i ? ctx.lineTo(x, y) : ctx.moveTo(x, y)); ctx.fillStyle = alpha('#9fc3d9', 0.45); ctx.fill();
-      text(ctx, 'wind-speed distribution', sx(c * 0.9), sy(0.62) - 4, { size: 10.5, color: '#4c7fa3', align: 'center', halo: true });
+      text(ctx, 'wind-speed distribution', sx(c * 1.4) + 4, sy(weibullPdf(c * 1.4, c) / pmax * 0.6) - 6, { size: 10.5, color: '#4c7fa3', halo: true }); // on the falling side, below the power curve
       // reference curve for 2024-average rotor at same generator, and current
       const ref = []; const cur = [];
       for (let v = 0; v <= 26; v += 0.05) { ref.push([sx(v), sy(powerCurve(v, 100, st.rated) / st.rated)]); cur.push([sx(v), sy(powerCurve(v, st.D, st.rated) / st.rated)]); }
@@ -184,11 +190,11 @@ export function wakeField(el) {
   let geo = null;
   const fig = new Fig(el, {
     label: 'Wind turbine wakes in a five-by-four array: each turbine slows the wind behind it, so downstream turbines make less power; change spacing and wind direction',
-    height: w => w < 600 ? 420 : 400,
+    height: w => w < 600 ? 450 : 440,
     draw(ctx, w, h) {
       const T = layout(), narrow = w < 600;
       const ext = (Math.max(st.cols, st.rows) - 1) / 2 * st.sp + (narrow ? 9 : 4);
-      const box = { l: 10, r: w - 10, t: 10, b: h - (narrow ? 74 : 54) };
+      const box = { l: 10, r: w - 10, t: 10, b: h - (narrow ? 100 : 92) };
       const s = Math.min((box.r - box.l) / (2 * ext), (box.b - box.t) / (2 * ext)), cx = (box.l + box.r) / 2, cy = (box.t + box.b) / 2;
       const X = x => cx + x * s, Y = y => cy + y * s;
       geo = { cx, cy, s };
@@ -198,7 +204,9 @@ export function wakeField(el) {
         ctx.fillStyle = mix('#dfeaf2', '#2c6795', 0) ; if (d > 0.005) ctx.fillStyle = mix('#dfeaf2', '#d9573b', clamp(d / 0.5, 0, 1));
         ctx.fillRect(px, py, step, step);
       }
-      T.forEach((t, i) => { const p = tPow(T, i, st.dir); circle(ctx, X(t[0]), Y(t[1]), 8, '#fff', C.ink, 1.4); text(ctx, Math.round(p * 100) + '', X(t[0]), Y(t[1]) + 3.5, { size: 8.5, weight: 700, color: C.ink, align: 'center' }); });
+      T.forEach((t, i) => { const p = tPow(T, i, st.dir); const lab = Math.round(p * 100) + '', big = lab.length > 2; // "100" needs smaller type to fit its circle
+        circle(ctx, X(t[0]), Y(t[1]), narrow ? 12 : 8, '#fff', C.ink, 1.4);
+        text(ctx, lab, X(t[0]), Y(t[1]) + (narrow ? (big ? 3.5 : 4) : big ? 2.5 : 3.5), { size: narrow ? (big ? 9.5 : 11) : big ? 6.5 : 8.5, small: narrow && big, weight: 700, color: C.ink, align: 'center' }); });
       // wind arrow
       const th = (st.dir + 180) * Math.PI / 180, ax = Math.sin(th), ay = -Math.cos(th), L = narrow ? 24 : 34, ox = box.l + (narrow ? 32 : 50), oy = box.t + (narrow ? 30 : 44);
       circle(ctx, ox, oy, narrow ? 21 : 30, alpha('#fff', 0.7), C.grid2, 1);
@@ -207,7 +215,7 @@ export function wakeField(el) {
       // efficiency vs direction mini chart
       const effs = []; for (let d = 0; d < 360; d += 5) effs.push(arrayEff(d)); const avg = effs.reduce((a, b) => a + b, 0) / effs.length;
       stats = { now: arrayEff(st.dir), avg, min: Math.min(...effs) };
-      const M = { l: box.l + 10, r: box.r - 10, t: box.b + 14, b: box.b + (narrow ? 50 : 34) };
+      const M = { l: box.l + 10, r: box.r - 10, t: box.b + 16, b: box.b + (narrow ? 80 : 72) };
       text(ctx, 'array output vs wind direction', M.l, M.t - 3, { size: 10, color: C.ink3 });
       const mx = scale(0, 360, M.l, M.r), my = scale(0.4, 1, M.b, M.t + 6);
       pathLine(ctx, effs.map((e, i) => [mx(i * 5), my(e)]), C.wind, 1.6);
@@ -222,7 +230,7 @@ export function wakeField(el) {
   const wadv = more(ctl, 'More: spacing and site');
   slider(wadv, { label: 'Spacing between turbines', min: 3, max: 12, step: 0.5, value: st.sp, color: C.ink, fmt: v => v + ' rotor diameters', oninput: v => { st.sp = v; upd(); }, name: 'sp' });
   segmented(wadv, { label: 'Site', options: [{ label: 'Offshore (slow wake recovery)', value: 0.04, name: 'k-off' }, { label: 'Onshore (faster recovery)', value: 0.075, name: 'k-on' }], value: 0.04, onchange: v => { st.k = v; upd(); } });
-  function upd() { fig.render(); ro.innerHTML = `Over a year, with the wind from every direction equally, the array makes <b>${Math.round(stats.avg * 100)}%</b> of what 20 lone turbines would: a wake loss of <b>${Math.round((1 - stats.avg) * 100)}%</b>. From this direction alone: ${Math.round(stats.now * 100)}%. Numbers on turbines: % of a lone turbine's power. Drag on the field to turn the wind.`; fig.invalidate(); }
+  function upd() { fig.render(); ro.innerHTML = `Over a year, with the wind from every direction equally, the array makes <b>${Math.round(stats.avg * 100)}%</b> of what 20 lone turbines would: a wake loss of <b>${Math.round((1 - stats.avg) * 100)}%</b>. From this direction alone: ${Math.round(stats.now * 100)}%. Numbers on turbines: % of a lone turbine's power.`; fig.invalidate(); }
   upd();
 }
 
@@ -247,7 +255,7 @@ export function offshoreCfd(el) {
       const { sx, sy } = axes(ctx, { box, x0: 2014.5, x1: 2026.6, y0: 0, y1: 180, yticks: [0, 40, 80, 120, 160], xticks: narrow ? [2015, 2019, 2023] : [2015, 2017, 2019, 2021, 2023, 2025], yfmt: v => '£' + v, ylabel: `strike price, £/MWh in ${st.base} money` });
       geo = [];
       // Orsted marker
-      const ox = sx(2023.83); line(ctx, ox, box.t, ox, box.b, alpha('#c8473b', 0.5), 1, [3, 3]);
+      const ox = sx(2023.83); line(ctx, ox, box.t, ox, box.b - 20, alpha('#c8473b', 0.5), 1, [3, 3]); // stop above the round labels
       text(ctx, narrow ? 'Ørsted cancels US projects' : 'Oct 2023: Ørsted cancels Ocean Wind 1 & 2 (US)', ox + (narrow ? -4 : 4), box.t + 10, { size: 10.5, color: '#c8473b', align: narrow ? 'right' : 'left', halo: true });
       const pts = [];
       CFD.forEach(([n, x, ps, s], i) => {
@@ -263,6 +271,6 @@ export function offshoreCfd(el) {
   fig.interact({ hit: (x, y) => near(x, y), cursor: 'pointer', hover: o => { if (o) { st.hover = o.i; upd(); } } });
   const ctl = controls(el); const ro = readout(el);
   segmented(ctl, { label: 'Money of', options: [{ label: '2012 (as published to AR6)', value: 2012, name: 'b2012' }, { label: '2024', value: 2024, name: 'b2024' }], value: 2012, onchange: v => { st.base = v; upd(); } });
-  function upd() { const c = CFD[st.hover]; ro.innerHTML = `<b>${c[0]}</b> — ${c[3]}. Hover another round.`; fig.invalidate(); }
+  function upd() { const c = CFD[st.hover]; ro.innerHTML = `<b>${c[0]}</b> — ${c[3]}.`; fig.invalidate(); }
   upd();
 }

@@ -11,7 +11,7 @@ import { PRESETS, crf } from './money.js';
 const USD = 1.13; // US$ per € (ECB 2025), as elsewhere in the essay
 const MMBTU_PER_MWH = 3.412;
 const MARKETS = {
-  today: { label: 'Section 7’s market', gas: 35, co2: 75 },
+  today: { label: 'Essay 4’s market', gas: 35, co2: 75 },
   shock: { label: '2022-style gas shock', gas: 150, co2: 85, imports: 0.001 },
 };
 const DAYS = [['winter', false, 0.25], ['winter', true, 0.08], ['spring', false, 0.36], ['spring', true, 0.14], ['summer', false, 0.12], ['summer', true, 0.05]];
@@ -117,7 +117,7 @@ export function buildPlant(el) {
       }
       pathLine(ctx, curve, C.ink, 1.8);
       line(ctx, Cb.l, c.sy(clamp(r.m, pmin, pmax)), Cb.r, c.sy(clamp(r.m, pmin, pmax)), darken(col, 0.2), 1.5, [5, 4]);
-      text(ctx, `its running cost $${r.m.toFixed(0)}`, Cb.r, c.sy(clamp(r.m, pmin, pmax)) - 5, { size: 10.5, color: darken(col, 0.3), align: 'right', halo: true, weight: 600 });
+      text(ctx, `its running cost $${r.m.toFixed(0)}`, narrow ? Cb.l + 6 : Cb.r, c.sy(clamp(r.m, pmin, pmax)) + (narrow ? 14 : -5), { size: 10.5, color: darken(col, 0.3), align: narrow ? 'left' : 'right', halo: true, weight: 600 }); // phone: below the line, clear of the shaded bars
       text(ctx, narrow ? 'shaded: hours it runs × price above its cost' : 'shaded: the hours it runs; height above its running cost is the rent that pays back its build cost', narrow ? Cb.l : Cb.r, narrow ? Cb.b + 34 : Cb.t - 8, { size: 10.5, color: C.price, align: narrow ? 'left' : 'right', halo: true });
       geom = { b, B, dot: [dx, dy] };
     },

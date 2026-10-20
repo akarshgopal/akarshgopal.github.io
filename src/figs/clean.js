@@ -134,7 +134,8 @@ export function foak(el) {
         line(ctx, sx(1), yc, sx(r), yc, alpha(C.nuclear, 0.55), 5);
         circle(ctx, sx(1), yc, 5, '#fff', C.nuclear, 2); circle(ctx, sx(r), yc, 6, C.nuclear, '#fff', 2);
         const lab = `${p.unit.startsWith('$/') ? '$' + p.first + '→$' + p.latest + '/MWh' : (p.unit === '$bn' ? '$' : p.unit[0]) + p.first + 'bn → ' + (p.unit === '$bn' ? '$' : p.unit[0]) + p.latest + 'bn'}  ×${r.toFixed(1)}`;
-        text(ctx, lab, sx(r) + 11, yc + 4, { size: 11, weight: 650, color: darken(C.nuclear, 0.25) });
+        const fits = sx(r) + 11 + measure(ctx, lab, 11, 650) < w - 4; // else (phones) on the name line, right-aligned
+        text(ctx, lab, fits ? sx(r) + 11 : w - 16, fits ? yc + 4 : ly, { size: 11, weight: 650, color: darken(C.nuclear, 0.25), align: fits ? 'left' : 'right' });
         if (!narrow) text(ctx, p.status, sx(r) + 11, yc + 18, { size: 10, color: C.ink3 });
       });
       if (hover >= 0) { const p = FOAK[hover]; const s = `${p.name}: ${p.basis}. ${p.status}.`; text(ctx, s, narrow ? box.l : 14, h - 8, { size: 10.5, color: C.ink2 }); }
@@ -174,7 +175,7 @@ const YEAR = (() => {
   return { dem, sol, win, D };
 })();
 const crf = (r, n) => r * (1 + r) ** n / ((1 + r) ** n - 1);
-const COST = { // illustrative inputs, consistent with the LCOE calculator presets (US$, 7% WACC)
+const COST = { // illustrative inputs, as in the LCOE presets of money.js (US$, 7% WACC)
   solar: { capex: 1150, life: 30, fom: 15 }, wind: { capex: 1500, life: 25, fom: 40 },
   gas: { capex: 1300, life: 30, fom: 25, fuel: 3.5 * 6.4 + 4, co2: 0.34 },
   batt: { kw: 200, kwh: 250, life: 20 }, nuc: { life: 40, fom: 130, vom: 10, avail: 0.9 },
@@ -222,13 +223,13 @@ const MIXES = {
 };
 const STACK = [['nuclear', C.nuclear, 'nuclear'], ['wind', C.wind, 'wind'], ['solar', C.solar, 'solar'], ['batt', C.storage, 'storage out'], ['gas', C.gas, 'gas']];
 export function cleanGrid(el) {
-  const st = { ...MIXES.mix, nucCapex: 14000, co2: 80, gasPrice: 3.5, wacc: 0.07, week: 16, preset: 'mix' };
+  const st = { ...MIXES.mix, nucCapex: 14000, co2: 85, gasPrice: 3.5, wacc: 0.07, week: 16, preset: 'mix' };
   let sim = null, geo = null;
   const run = () => { sim = simulate({ ...st, keepHourly: true }); };
   run();
   const fig = new Fig(el, {
     label: 'Build a clean grid: choose solar, wind, batteries, nuclear and gas backup; see a synthetic year day by day, a zoomed week hour by hour, and the resulting system cost, curtailment and unserved hours',
-    height: w => w < 640 ? 700 : Math.max(440, Math.min(480, w * 0.47)),
+    height: w => w < 640 ? 610 : Math.max(440, Math.min(480, w * 0.47)),
     draw(ctx, w, h) {
       const narrow = w < 640;
       const right = narrow ? null : { l: w - 210, r: w - 14, t: 34, b: h - 30 };
@@ -271,7 +272,10 @@ export function cleanGrid(el) {
       { let best = -1, bx = 0;
         for (let i = 0; i < 168; i++) { const j = (h0 + i) * 8, sup = sim.hourly[j] + sim.hourly[j + 1] + sim.hourly[j + 2] + sim.hourly[j + 3] + sim.hourly[j + 4], ex = sup - sim.hourly[j + 6];
           if (ex > 0.5) { const y0 = A.sy(sup), y1 = A.sy(sim.hourly[j + 6]); ctx.fillStyle = alpha('#ffffff', 0.38); ctx.fillRect(A.sx(i), y0, A.sx(i + 1) - A.sx(i), y1 - y0); if (ex > best && i > 14 && i < 150) { best = ex; bx = i; } } }
-        if (best > 2) { const j = (h0 + bx) * 8, top = sim.hourly[j] + sim.hourly[j + 1] + sim.hourly[j + 2] + sim.hourly[j + 3] + sim.hourly[j + 4]; text(ctx, 'above the line: charging batteries', A.sx(bx + 0.5), A.sy(top) - 6, { size: 10.5, weight: 600, color: C.ink2, align: 'center', halo: true }); } }
+        if (best > 2) { // keep the label inside the plot and above every hour it spans (curtailment included)
+          const lab = 'above the line: charging batteries', tw = measure(ctx, lab, 10.5, 600), cx = clamp(A.sx(bx + 0.5), W.l + tw / 2 + 4, R - tw / 2);
+          let ty = W.b; for (let i = 0; i < 168; i++) { if (A.sx(i + 1) < cx - tw / 2 - 2 || A.sx(i) > cx + tw / 2 + 2) continue; let s = 0; for (let k = 0; k < 6; k++) s += sim.hourly[(h0 + i) * 8 + k]; ty = Math.min(ty, A.sy(s)); }
+          text(ctx, lab, cx, Math.max(W.t + 10, ty - 6), { size: 10.5, weight: 600, color: C.ink2, align: 'center', halo: true }); } }
       for (let i = 0; i < 168; i++) { const j = (h0 + i) * 8; const sup = sim.hourly[j] + sim.hourly[j + 1] + sim.hourly[j + 2] + sim.hourly[j + 3] + sim.hourly[j + 4]; if (sim.hourly[j + 6] - sup > 0.05) { ctx.fillStyle = alpha(C.peaker, 0.35); ctx.fillRect(A.sx(i), A.sy(sim.hourly[j + 6]), A.sx(1) - A.sx(0) + 0.3, A.sy(sup) - A.sy(sim.hourly[j + 6])); } }
       for (let dd = 0; dd <= 7; dd++) { const x = A.sx(dd * 24); line(ctx, x, W.b, x, W.b + 4, C.grid2, 1); if (dd < 7) text(ctx, ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'][(st.week + dd + 3) % 7], A.sx(dd * 24 + 12), W.b + 15, { size: 10.5, color: C.ink3, align: 'center' }); }
       // legend

@@ -24,7 +24,9 @@ const PATHS = {
   emeth: { label: 'Heat: e-methane', out: 'as heat', co2: 0.198, steps: [['Transmission', 0.95], ['Electrolysis', 'E'], ['Methanation', 0.80], ['Gas grid', 0.99], ['Gas boiler', 0.95]] },
   batt:  { label: 'Storage: battery', out: 'back as electricity', steps: [['Battery round trip', 0.85]] },
   h2pow: { label: 'Storage: hydrogen', out: 'back as electricity', steps: [['Electrolysis', 'E'], ['Compression, cavern', 0.90], ['Gas turbine', 0.60]] },
-  ekero: { label: 'Aircraft: e-kerosene', out: 'as jet fuel in the tank', co2: 0.265, steps: [['Transmission', 0.95], ['Electrolysis', 'E'], ['Synthesis', 0.70], ['Fuel transport', 0.95]] },
+  // e-kerosene synthesis at 58%, not Agora's 70%: with 61% electrolysis that gives the litre builder's 9.6 kWh from 26.9
+  // (its CO₂ and upgrading electricity included), so the two figures agree
+  ekero: { label: 'Aircraft: e-kerosene', out: 'as jet fuel in the tank', co2: 0.265, steps: [['Transmission', 0.95], ['Electrolysis', 'E'], ['Synthesis', 0.58], ['Fuel transport', 0.95]] },
 };
 const DAC_KWH_PER_KG = 1.25; // electricity-equivalent of solid-sorbent DAC with heat-pump heat, kWh per kg CO2 (model)
 
@@ -138,7 +140,7 @@ export function sankey(el) {
     else if (ref) s += ' This is the most efficient route for this job.';
     if (st.path === 'ekero') s += ' No battery can yet carry a long-haul aircraft, so the comparison is with fossil kerosene, not with electricity.';
     if (R.dac) s += ` Capturing the carbon from the air takes ${R.dac.toFixed(0)} kWh of the 100.`;
-    else if (P.co2 && !st.air) s += ' Carbon from a concentrated source (a brewery, a biogas plant) costs little energy and is left out here.';
+    else if (P.co2 && !st.air) s += ` Carbon from a concentrated source (a brewery, a biogas plant) costs little energy${st.path === 'ekero' ? '' : ' and is left out here'}.`;
     ro.innerHTML = s; fig.invalidate();
   }
   upd();
@@ -378,7 +380,7 @@ export function litreBuilder(el) {
       ro.innerHTML = s;
     } else {
       const p = PRODUCTS[st.hover ?? 4], E = ELZ[st.elz], el2 = p.h2 * (E.kwh + E.heat), cc = p.co2 * gj(st.src), tot = el2 + cc + p.proc;
-      ro.innerHTML = `One tonne of <b>${p.name.toLowerCase()}</b> holds ${p.lhv.toFixed(1)} MWh and takes <b>${tot.toFixed(1)} MWh</b>: ${p.h2} t of hydrogen (${el2.toFixed(1)} MWh)${p.co2 ? `, ${p.co2} t of CO₂ from ${CSRC[st.src].short.toLowerCase()} (${cc.toFixed(1)} MWh)` : ''}${p.proc ? ` and ${p.proc} MWh for ${p.k === 'nh3' ? 'air separation and the Haber–Bosch loop' : 'synthesis, compression and upgrading'}` : ''}. Hover a bar to switch products.`;
+      ro.innerHTML = `One tonne of <b>${p.name.toLowerCase()}</b> holds ${p.lhv.toFixed(1)} MWh and takes <b>${tot.toFixed(1)} MWh</b>: ${p.h2} t of hydrogen (${el2.toFixed(1)} MWh)${p.co2 ? `, ${p.co2} t of CO₂ from ${CSRC[st.src].short.toLowerCase()} (${cc.toFixed(1)} MWh)` : ''}${p.proc ? ` and ${p.proc} MWh for ${p.k === 'nh3' ? 'air separation and the Haber–Bosch loop' : 'synthesis, compression and upgrading'}` : ''}. Tap or click a bar to switch products.`;
     }
     fig.invalidate();
   }

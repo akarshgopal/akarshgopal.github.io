@@ -16,7 +16,7 @@ export function drift(el) {
 
   const fig = new Fig(el, {
     label: 'A close-up of electrons in a copper wire and an overview of a circuit with a switch and a lamp',
-    height: w => Math.max(300, Math.min(420, w * 0.52)),
+    height: w => Math.max(340, Math.min(420, w * 0.52)),
     animated: true,
     step(dt) {
       if (st.closed) st.front = Math.min(1.2, st.front + dt * 2.2); else st.front = Math.max(0, st.front - dt * 3);
@@ -39,7 +39,7 @@ export function drift(el) {
     draw(ctx, w, h) {
       const pad = 18;
       // close-up wire
-      const zx = pad, zy = 34, zw = w - 2 * pad, zh = h * 0.46;
+      const zx = pad, zy = 34, zw = w - 2 * pad, zh = Math.min(h * 0.46, h - 206); // leave the circuit at least 100 px
       text(ctx, 'Inside the copper (close-up, not to scale)', zx, 20, { size: 12, color: C.ink3, weight: 500 });
       ctx.save();
       rrect(ctx, zx, zy, zw, zh, 14);
@@ -130,7 +130,7 @@ export function drift(el) {
     const amp = v * Math.SQRT2 / (2 * Math.PI * 50);
     const signal = 10 / (0.7 * 3e8);
     ro.innerHTML = st.mode === 'dc'
-      ? `Drift speed in 1.5 mm² copper: <b>${(v * 1000).toFixed(2)} mm/s</b> — about <b>${(tMeter / 60).toFixed(0)} minutes</b> to crawl one metre. The field that pushes them reaches a lamp 10 m away in roughly <b>${(signal * 1e9).toFixed(0)} ns</b>.`
+      ? `Drift speed in 1.5 mm² copper: <b>${(v * 1000).toFixed(2)}&nbsp;mm/s</b> — about <b>${(tMeter / 60).toFixed(0)}&nbsp;minutes</b> to crawl one metre. The field that pushes them reaches a lamp 10 m away in roughly <b>${(signal * 1e9).toFixed(0)}&nbsp;ns</b>.`
       : `With 50 Hz AC the electrons never get anywhere: they shuffle back and forth by about <b>${(amp * 1e6).toFixed(1)} µm</b>, a hundred times a second.`;
   }
   upd();
@@ -148,7 +148,7 @@ export function potential(el) {
     animated: true,
     step(dt) { st.s = (st.s + dt * (st.V / st.R) * 0.12) % 1; },
     draw(ctx, w, h) {
-      const l = 40, r = w - 30, base = h - 46;
+      const l = 64, r = w - 30, base = h - 46;
       const Vmax = 24; const hScale = (h - 110) / Vmax;
       const top = base - st.V * hScale;
       // Path parameterisation along x: [0..0.2] battery ramp up, [0.2..0.55] wire (flat), [0.55..0.8] lamp slope down, [0.8..1] wire back (flat)
@@ -185,7 +185,7 @@ export function potential(el) {
       // height marker
       line(ctx, l - 14, base, l - 14, top, C.ink3, 1);
       line(ctx, l - 18, top, l - 10, top, C.ink3, 1); line(ctx, l - 18, base, l - 10, base, C.ink3, 1);
-      text(ctx, st.V.toFixed(1) + ' V', l - 4, (top + base) / 2 - 2, { size: 12, color: C.field, weight: 600 });
+      text(ctx, st.V.toFixed(1) + ' V', l - 20, (top + base) / 2 + 4, { size: 12, color: C.field, weight: 600, align: 'right' });
       // charges
       for (const d of dots) {
         const t = (d + st.s) % 1;
@@ -227,6 +227,8 @@ export function powerEnergy(el) {
   for (let i = 0; i < MINUTES; i++) { hist.push(total()); histP.push(parts()); }
   // the hour so far includes one kettle boil, so the figure opens showing a tall, thin spike next to the low, wide baseline
   for (let i = 42; i < 45; i++) { hist[i] += 2000; histP[i] = histP[i].map((v, j) => APP[j].k === 'kettle' ? 2000 : v); }
+  // the meter has been running for that hour too (one sample per minute), so meter, shares and trace agree on load
+  histP.forEach(q => APP.forEach((a, j) => { kWh += q[j] / 60 / 1000; kWhA[a.k] += q[j] / 60 / 1000; }));
   const fig = new Fig(el, {
     label: 'Power drawn over the last hour, with energy accumulating as the area under the curve',
     height: w => Math.max(240, Math.min(320, w * 0.4)),
@@ -256,8 +258,9 @@ export function powerEnergy(el) {
       APP.forEach((a, ai) => {
         if (!histP.some(q => q[ai] > 0)) return;
         ctx.beginPath();
-        histP.forEach((q, i) => { const x0 = Math.max(box.l, sx(-MINUTES + i - acc)), x1 = Math.max(box.l, sx(-MINUTES + i + 1 - acc)); ctx.lineTo(x0, sy(base[i] + q[ai])); ctx.lineTo(x1, sy(base[i] + q[ai])); });
-        for (let i = histP.length - 1; i >= 0; i--) { const x0 = Math.max(box.l, sx(-MINUTES + i - acc)), x1 = Math.max(box.l, sx(-MINUTES + i + 1 - acc)); ctx.lineTo(x1, sy(base[i])); ctx.lineTo(x0, sy(base[i])); }
+        const bx = i => Math.max(box.l, i === histP.length ? sx(0) : sx(-MINUTES + i - acc));
+        histP.forEach((q, i) => { ctx.lineTo(bx(i), sy(base[i] + q[ai])); ctx.lineTo(bx(i + 1), sy(base[i] + q[ai])); });
+        for (let i = histP.length - 1; i >= 0; i--) { ctx.lineTo(bx(i + 1), sy(base[i])); ctx.lineTo(bx(i), sy(base[i])); }
         ctx.closePath(); ctx.fillStyle = alpha(ACOL[a.k], 0.55); ctx.fill();
         histP.forEach((q, i) => { base[i] += q[ai]; });
       });
@@ -271,7 +274,10 @@ export function powerEnergy(el) {
       // average household line
       const avgW = 3500 / 8760 * 1000;
       line(ctx, box.l, sy(avgW), box.r, sy(avgW), C.ink3, 1, [4, 4]);
-      text(ctx, (box.r - box.l < 330 ? 'average household ≈ ' : 'average German household (3,500 kWh/yr) ≈ ') + avgW.toFixed(0) + ' W', box.l + 6, sy(avgW) - 6, { size: 11, color: C.ink3, halo: true });
+      // on a narrow chart the label goes on two short lines so it ends before the kettle spike
+      const avgLab = `≈ ${Math.round(avgW / 100) * 100} W`;
+      if (box.r - box.l < 330) { text(ctx, 'average household', box.l + 6, sy(avgW) - 19, { size: 11, color: C.ink3, halo: true }); text(ctx, avgLab, box.l + 6, sy(avgW) - 6, { size: 11, color: C.ink3, halo: true }); }
+      else text(ctx, 'average household (3,500 kWh/yr) ' + avgLab, box.l + 6, sy(avgW) - 6, { size: 11, color: C.ink3, halo: true });
       // meter
       const mx = w - 130, my = 34;
       rrect(ctx, mx, my, 118, 92, 10); ctx.fillStyle = '#2f2d2a'; ctx.fill();

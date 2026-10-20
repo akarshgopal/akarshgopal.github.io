@@ -59,7 +59,7 @@ export function buildRate(el) {
   function upd() {
     if (st.view === 'de') { const d = TX.deplan, tot = d.reduce((s, r) => s + r[1], 0); ro.innerHTML = `Of about ${tot.toLocaleString('en')} km of lines Germany has written into law since 2009, <b>${d[5][1].toLocaleString('en')} km</b> were in operation by mid-2026 and another ${d[4][1].toLocaleString('en')} km were finished but not yet energised. ${d[3][1].toLocaleString('en')} km were approved or under construction; the rest were still being planned.`; }
     else if (st.hover) { const r = st.hover; ro.innerHTML = `<b>${r[0]}</b>: about <b>${(r[1] + r[2]).toLocaleString('en')} miles</b> of new lines at 345 kV and above${r[2] ? ` (${r[2].toLocaleString('en')} at 500 kV or more)` : ''}${r[0] >= 2023 ? ', as revised by FERC in 2025' : ''}.`; }
-    else ro.innerHTML = 'The United States built an average of about 1,800 miles of new high-voltage lines a year in 2010–2014, and about 540 a year in 2020–2024. Hover a year.';
+    else ro.innerHTML = 'The United States built an average of about 1,800 miles of new high-voltage lines a year in 2010–2014, and about 540 a year in 2020–2024.';
     fig.invalidate();
   }
   upd();
@@ -102,7 +102,8 @@ export function getsWeek(el) {
       // curtailed
       S.forEach((s, t) => { if (s.cut > 0) { ctx.fillStyle = alpha(HOT, 0.55); ctx.fillRect(sx(t), sy(s.flow), sx(t + 1) - sx(t) + 0.5, sy(s.r) - sy(s.flow)); } });
       pathLine(ctx, S.map((s, t) => [sx(t), sy(s.r)]), C.ink, 2);
-      text(ctx, st.mode === 'static' ? 'static rating' : st.mode === 'aar' ? 'ambient-adjusted rating' : 'dynamic rating', sx(2), sy(S[2].r) - 7, { size: 10.5, weight: 650, color: C.ink, halo: true });
+      const lt = narrow ? 50 : 2; // on a phone the label would cross Tuesday's peak: put it over the calm midweek
+      text(ctx, st.mode === 'static' ? 'static rating' : st.mode === 'aar' ? 'ambient-adjusted rating' : 'dynamic rating', sx(lt), sy(S[lt].r) - 7, { size: 10.5, weight: 650, color: C.ink, halo: true });
       let lx = narrow ? A.l : A.l + 200, ly = narrow ? 14 : A.t - 22;
       ctx.fillStyle = alpha(C.wind, 0.6); ctx.fillRect(lx, ly - 8, 10, 10); text(ctx, 'wind power delivered', lx + 14, ly + 1, { size: 10.5, color: C.ink2 });
       ctx.fillStyle = alpha(HOT, 0.6); ctx.fillRect(lx + 140, ly - 8, 10, 10); text(ctx, 'curtailed: the line is full', lx + 154, ly + 1, { size: 10.5, color: C.ink2 });
@@ -133,16 +134,16 @@ export function interconnect(el) {
     return { res, imp, price, curt: Math.max(0, -r2) };
   });
   const fig = new Fig(el, {
-    label: 'One week of German wholesale prices with a link of chosen size to a hydropower neighbour whose price stays at 45 euros per megawatt-hour',
+    label: 'One week of German wholesale prices with a link of chosen size to a hydropower neighbour whose price stays at about $51 per megawatt-hour',
     height: w => w < 600 ? 360 : 320,
     draw(ctx, w, h) {
       const narrow = w < 600, S = sim(), base = (() => { const k = st.link; st.link = 0; const b = sim(); st.link = k; return b; })();
-      const A = { l: narrow ? 46 : 60, r: w - 16, t: 40, b: h - 36 };
+      const A = { l: narrow ? 46 : 60, r: w - 16, t: narrow ? 54 : 40, b: h - 36 };
       const { sx, sy } = axes(ctx, { box: A, x0: 0, x1: 168, y0: -20, y1: 140, xticks: [0, 24, 48, 72, 96, 120, 144, 168], xfmt: v => v === 168 ? '' : ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'][v / 24], yticks: [0, 40, 80, 120], yfmt: v => '€' + v, ylabel: 'German wholesale price, €/MWh' });
-      line(ctx, A.l, sy(45), A.r, sy(45), C.hydro, 1.2, [5, 4]); text(ctx, 'neighbour’s hydro: €45', A.r - 4, sy(45) - 6, { size: 10, color: C.hydro, align: 'right', halo: true });
+      line(ctx, A.l, sy(45), A.r, sy(45), C.hydro, 1.2, [5, 4]); text(ctx, narrow ? 'hydro: €45' : 'neighbour’s hydro: €45', sx(50), sy(45) + 14, { size: 10, color: C.hydro, halo: true }); // under the line from Wednesday to Thursday, where prices stay high
       pathLine(ctx, base.map((s, t) => [sx(t + 0.5), sy(clamp(s.price, -20, 140))]), alpha(C.ink3, 0.8), 1.4, [3, 2]);
       pathLine(ctx, S.map((s, t) => [sx(t + 0.5), sy(clamp(s.price, -20, 140))]), C.price, 2.2);
-      const lx = narrow ? A.l : A.l + 220, ly = A.t - 22;
+      const lx = narrow ? A.l : A.l + 220, ly = narrow ? 14 : A.t - 22;
       line(ctx, lx, ly - 3, lx + 16, ly - 3, C.ink3, 1.4, [3, 2]); text(ctx, 'no link', lx + 20, ly + 1, { size: 10.5, color: C.ink2 });
       line(ctx, lx + 80, ly - 3, lx + 96, ly - 3, C.price, 2.2); text(ctx, `with a ${st.link} GW link`, lx + 100, ly + 1, { size: 10.5, color: C.ink2 });
     },
@@ -192,7 +193,7 @@ export function bill(el) {
   const ctl = controls(el); const ro = readout(el);
   segmented(ctl, { label: 'Show', options: [{ label: 'Every component', value: 'parts', name: 'b-parts' }, { label: 'Grouped', value: 'grp', name: 'b-grp' }], value: st.grp, onchange: v => { st.grp = v; st.hover = null; fig.invalidate(); } });
   const net = TX.bill.filter(r => r[2] === 'network').reduce((s, r) => s + r[1], 0), tot = TX.bill.reduce((s, r) => s + r[1], 0);
-  ro.innerHTML = `The network tariff alone was <b>11.02 ct</b> of ${tot.toFixed(2)} ct (${(11.02 / tot * 100).toFixed(1)}%). Add metering and the two surcharges that pay for offshore grid connections and spread network costs between regions, and the network accounts for <b>${net.toFixed(2)} ct</b>, about <b>${(net / tot * 100).toFixed(0)}%</b> — some <b>€${Math.round(net * 35)}</b> a year for a household using 3,500 kWh, before VAT. Hover a segment.`;
+  ro.innerHTML = `The network tariff alone was <b>11.02 ct</b> of ${tot.toFixed(2)} ct (${(11.02 / tot * 100).toFixed(1)}%). Add metering and the two surcharges that pay for offshore grid connections and spread network costs between regions, and the network accounts for <b>${net.toFixed(2)} ct</b>, about <b>${(net / tot * 100).toFixed(0)}%</b> — some <b>€${Math.round(net * 35)}</b> a year for a household using 3,500 kWh, before VAT.`;
   euroFigure(el, fig, typeof ctl !== 'undefined' ? ctl : controls(el), 'eu-bill');
 }
 
@@ -244,7 +245,7 @@ export function networkEuro(el) {
       text(ctx, narrow ? 'hatched: the fixed basic charge' : `hatched: the fixed €${d[2].toFixed(0)}-a-year basic charge, spread over your kWh`, L, by + bh + 14, { size: 10, color: C.ink3 });
       // ---- chart: charge per kWh against annual use, one curve per operator
       const A = { l: narrow ? 40 : 54, r: R - (narrow ? 4 : 90), t: by + bh + (narrow ? 56 : 50), b: h - 32 };
-      const { sx, sy } = axes(ctx, { box: A, x0: E0, x1: E1, y0: 0, y1: Y1, xticks: [1000, 2000, 3500, 5000, 8000], xfmt: v => v.toLocaleString('en'), yticks: [0, 5, 10, 15, 20, 25], yfmt: v => v + ' ct', ylabel: 'network charge per kWh', xlabel: 'your electricity use, kWh a year' });
+      const { sx, sy } = axes(ctx, { box: A, x0: E0, x1: E1, y0: 0, y1: Y1, xticks: [1000, 2000, 3500, 5000, 8000], xfmt: v => v.toLocaleString('en'), yticks: [0, 5, 10, 15, 20, 25].map(c => c / 1.13), yfmt: v => Math.round(v * 1.13) + '¢', ylabel: 'network charge per kWh', xlabel: 'your electricity use, kWh a year' });
       line(ctx, sx(3500), A.t, sx(3500), A.b, C.grid2, 1, [3, 3]);
       text(ctx, 'typical household', sx(3500) + 4, A.t + 10, { size: 9.5, color: C.ink3 });
       const pts = d0 => { const p = []; for (let e = E0; e <= E1; e += 100) p.push([sx(e), sy(Math.min(Y1, netCt(d0, e)))]); return p; };
@@ -283,7 +284,7 @@ export function networkEuro(el) {
   function upd() {
     const d = DSO[st.d], c = netCt(d, st.kwh), yr = d[2] + d[3] * st.kwh / 100, fixShare = d[2] / yr;
     const at = DSO.map(x => netCt(x, 3500)), lo = at.indexOf(Math.min(...at)), hi = at.indexOf(Math.max(...at));
-    ro.innerHTML = `<b>${d[0]}</b>, ${st.kwh.toLocaleString('en')} kWh a year: <b>€${Math.round(yr)}</b> a year in network charges, <b>${c.toFixed(1)} ct per kWh</b>, of which the fixed €${d[2].toFixed(0)} basic charge is ${Math.round(fixShare * 100)}%. Roughly 30 cents of every network euro pays for the transmission grid and 70 for the regional and local networks. At 3,500 kWh these ten operators charge from ${at[lo].toFixed(1)} ct (${DSO[lo][1]}) to ${at[hi].toFixed(1)} ct (${DSO[hi][1]}).`;
+    ro.innerHTML = `<b>${d[0]}</b>, ${st.kwh.toLocaleString('en')} kWh a year: <b>€${Math.round(yr)}</b> a year in network charges, <b>${c.toFixed(1)} ct per kWh</b>, of which the fixed €${d[2].toFixed(0)} basic charge is ${Math.round(fixShare * 100)}%. Roughly 30 cents of every network dollar pays for the transmission grid and 70 for the regional and local networks. At 3,500 kWh these ten operators charge from ${at[lo].toFixed(1)} ct (${DSO[lo][1]}) to ${at[hi].toFixed(1)} ct (${DSO[hi][1]}).`;
     fig.invalidate();
   }
   upd();
@@ -338,7 +339,11 @@ export function buildGrid(el) {
       ctx.fillStyle = alpha(LINE, 0.22); ctx.fillRect(sx(x0), sy(R), sx(xe) - sx(x0), sy(0) - sy(R));
       ctx.strokeStyle = LINE; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.moveTo(sx(x0), sy(0)); ctx.lineTo(sx(x0), sy(R)); ctx.lineTo(sx(xe), sy(R)); if (!over) ctx.lineTo(sx(xe), sy(0)); ctx.stroke();
       if (over) arrow(ctx, sx(X1) - 26, sy(R) - 10, sx(X1) - 4, sy(R) - 10, LINE, 1.6, 6);
-      if (de) { line(ctx, sx(2045), A.t + 14, sx(2045), A.b, alpha(C.ink3, 0.7), 1, [4, 3]); text(ctx, '2045', sx(2045) + 4, A.t + 24, { size: 10, color: C.ink3 }); }
+      if (de) {
+        line(ctx, sx(2045), A.t + 14, sx(2045), A.b, alpha(C.ink3, 0.7), 1, [4, 3]);
+        if (narrow) { text(ctx, '2045:', sx(2045) + 4, A.t + 24, { size: 10, color: C.ink3, halo: true }); text(ctx, 'climate-neutral target', sx(2045) + 4, A.t + 37, { size: 10, color: C.ink3, halo: true }); }
+        else text(ctx, '2045: climate-neutral target', sx(2045) + 4, A.t + 24, { size: 10, color: C.ink3, halo: true });
+      }
       const doneY = Math.floor(end), endLab = `${de ? 'all in operation' : '55,000 miles built'}: ${over ? 'after ' + X1 + ' (' + doneY + ')' : doneY}`;
       const inside = sy(0) - sy(R) > 34 && sx(xe) - sx(x0) > 150;
       text(ctx, `${left.toLocaleString('en')} ${unit} to go`, sx(x0) + 8, inside ? sy(R) + 16 : sy(R) - 22, { size: 11, weight: 650, color: darken(LINE, 0.3), halo: true });

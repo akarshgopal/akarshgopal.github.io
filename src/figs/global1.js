@@ -132,7 +132,7 @@ export function worldMix(el) {
       const id = st.hoverId || (st.region !== 'world' ? st.region : null);
       if (!id) {
         const d = WORLD.gen.world.total[iLast] - WORLD.gen.world.total[i2015];
-        return `<b>World</b>, ${Y0} to ${LATEST}: generation <b>${twhSigned(d)} TWh</b>. The bars are regions, drawn on one scale. They overlap, so they are not slices of this total. Hover a bar for the split by source.`;
+        return `<b>World</b>, ${Y0} to ${LATEST}: generation <b>${twhSigned(d)} TWh</b>. The bars are regions, drawn on one scale. They overlap, so they are not slices of this total.`;
       }
       const r = region(id);
       const d = delta(id);

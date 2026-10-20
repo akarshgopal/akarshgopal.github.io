@@ -49,29 +49,36 @@ export function faraday(el) {
   const st = { x: -1.0, vx: 0, auto: true, t: 0, emf: 0, phi: 0, dragging: false, hist: new Array(360).fill(0), flow: 0 };
   const LOOPS = 7;
   const flux = x => { let s = 0; for (let i = 0; i < LOOPS; i++) { const xl = (i / (LOOPS - 1) - 0.5) * 0.38; const d = (x - xl) / 0.16; s += 1 / Math.pow(1 + d * d, 1.5); } return s / LOOPS; };
+  st.x = 0; st.phi = flux(0); // the wave starts with the magnet centred in the coil
   let lines = null, lastHalf = 0;
   let geom = {};
+  const DT = 1 / 60; let acc = 0, lastX = st.x;    // the trace is sampled on a fixed timestep, whatever the frame rate
   const fig = new Fig(el, {
     label: 'A bar magnet that can be dragged through a coil of wire, with a meter and a trace of the induced voltage',
     height: w => Math.max(320, Math.min(440, w * 0.56)),
     animated: true,
     step(dt) {
-      st.t += dt;
-      const prevPhi = st.phi;
-      if (!st.dragging && st.auto) {
-        const nx = Math.sin(st.t * 1.4) * 1.05;
-        st.x = nx;
+      acc = Math.min(acc + dt, 0.25);
+      const n = Math.floor(acc / DT + 1e-6), x0 = lastX;
+      acc = Math.max(0, acc - n * DT);
+      for (let s = 1; s <= n; s++) {
+        st.t += DT;
+        const prevPhi = st.phi;
+        let x;
+        if (!st.dragging && st.auto) { st.x = Math.sin(st.t * 1.4) * 1.05; x = st.x; }
+        else x = x0 + (st.x - x0) * s / n; // a dragged magnet: spread this frame's move over its samples
+        st.phi = flux(x);
+        const emf = -(st.phi - prevPhi) / DT * 0.55;
+        st.emf = approach(st.emf, clamp(emf, -1.4, 1.4), 25, DT);
+        st.flow += st.emf * DT * 3;
+        st.hist.push(st.emf); if (st.hist.length > 360) st.hist.shift();
       }
-      st.phi = flux(st.x);
-      const emf = -(st.phi - prevPhi) / dt * 0.55;
-      st.emf = approach(st.emf, clamp(emf, -1.4, 1.4), 25, dt);
-      st.flow += st.emf * dt * 3;
-      st.hist.push(st.emf); if (st.hist.length > 360) st.hist.shift();
+      if (n) lastX = st.x;
     },
     onResize(w, h) { lines = null; },
     draw(ctx, w, h) {
-      const cx = w / 2, cy = h * 0.33, span = w * 0.42;
       const magLen = Math.min(170, w * 0.26), magT = 30;
+      const cx = w / 2, cy = h * 0.33, span = (w / 2 - magLen / 2 - 10) / 1.05; // the magnet stays inside the drawing at either end of its travel
       const coilW = span * 0.38 * 2 * 0.5, coilR = Math.min(56, h * 0.13);
       geom = { cx, cy, span, magLen, magT };
       const mx = cx + st.x * span;
@@ -126,16 +133,17 @@ export function faraday(el) {
       // trace
       const box = { l: gx + gr + 70, r: w - 18, t: gy - 44, b: h - 26 };
       const { sx, sy } = axes(ctx, { box, x0: 0, x1: 360, y0: -1.4, y1: 1.4, yticks: [0], xticks: [], yfmt: () => '0' });
-      text(ctx, 'induced voltage', box.l + 4, box.t + 4, { size: 11, color: C.field, weight: 550 });
+      text(ctx, 'induced voltage', box.l, box.b + 16, { size: 11, color: C.field, weight: 550 });
       pathLine(ctx, st.hist.map((v, i) => [sx(i + 360 - st.hist.length), sy(v)]), C.field, 2);
       text(ctx, 'time →', box.r, box.b + 16, { size: 11, color: C.ink3, align: 'right' });
       if (!st.auto && !st.dragging) text(ctx, 'drag the magnet ↔', mx, cy - magT - 14, { size: 12, color: C.ink2, align: 'center', weight: 550, halo: true });
     },
   });
+  for (let i = 0; i < 360; i++) fig.opts.step(DT); // open with a full trace
   fig.interact({
     hit: (x, y) => { const g = geom; const mx = g.cx + st.x * g.span; return Math.abs(x - mx) < g.magLen / 2 + 10 && Math.abs(y - g.cy) < g.magT ? 'mag' : null; },
     down: (o, x) => { st.dragging = true; st.auto = false; autoSeg.set('drag'); st.off = x - (geom.cx + st.x * geom.span); },
-    move: (o, x) => { st.x = clamp((x - st.off - geom.cx) / geom.span, -1.25, 1.25); },
+    move: (o, x) => { st.x = clamp((x - st.off - geom.cx) / geom.span, -1.05, 1.05); },
     up: () => { st.dragging = false; },
   });
   const ctl = controls(el);

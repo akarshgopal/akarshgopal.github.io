@@ -61,12 +61,12 @@ export function spectrum(el) {
       const right = gx + 14 + glw < w - 6;
       text(ctx, gl, right ? gx + 14 : gx - 14, box.t - 9, { size: 12, weight: 650, color: C.ink, align: right ? 'left' : 'right', halo: true });
       // budget bar
-      const s = sqAt(st.eg), below = s[1], heat = s[2], eff = s[3], other = 1 - below - heat - eff;
+      const s = sqAt(st.eg), below = s[1], heat = s[2], kept = 1 - below - heat;
       const by = h - (narrow ? 76 : 58), bl = box.l, br = w - 14, bw = br - bl;
-      text(ctx, (ctx.canvas.clientWidth < 600) ? 'Where sunlight’s energy goes' : 'Where the energy of sunlight goes, for a single-junction cell with this band gap', bl, by - 12, { size: 11.5, weight: 600, color: C.ink2 });
-      const segs = [['passes through', below, alpha(PASS, 0.9)], ['lost as heat', heat, alpha(HEAT, 0.85)], ['other unavoidable losses', other, lighten(USE, 0.45)], ['electricity (limit)', eff, ELEC]];
+      text(ctx, (ctx.canvas.clientWidth < 600) ? 'Where sunlight’s energy goes' : 'Where the energy of sunlight goes, for a cell with this band gap', bl, by - 12, { size: 11.5, weight: 600, color: C.ink2 });
+      const segs = [['passes through', below, alpha(PASS, 0.9)], ['lost as heat', heat, alpha(HEAT, 0.85)], ['at most one gap’s worth per photon', kept, USE]];
       let x = bl;
-      segs.forEach(([lab, v, col]) => { const ww = v * bw; ctx.fillStyle = col; ctx.fillRect(x, by, ww - 1, 20); if (ww > 34) text(ctx, Math.round(v * 100) + '%', x + ww / 2, by + 14, { size: 11, weight: 650, color: col === ELEC || col === alpha(HEAT, 0.85) ? '#fff' : C.ink, align: 'center' }); x += ww; });
+      segs.forEach(([lab, v, col]) => { const ww = v * bw; ctx.fillStyle = col; ctx.fillRect(x, by, ww - 1, 20); if (ww > 34) text(ctx, Math.round(v * 100) + '%', x + ww / 2, by + 14, { size: 11, weight: 650, color: col === alpha(HEAT, 0.85) ? '#fff' : C.ink, align: 'center' }); x += ww; });
       // legend
       let lx = bl, ly = by + 38;
       segs.forEach(([lab, v, col]) => { const tw = measure(ctx, lab, 11) + 26; if (lx + tw > br) { lx = bl; ly += 16; } ctx.fillStyle = col; ctx.fillRect(lx, ly - 9, 10, 10); text(ctx, lab, lx + 14, ly, { size: 11, color: C.ink2 }); lx += tw; });
@@ -82,7 +82,7 @@ export function spectrum(el) {
   const seg = segmented(more(ctl, 'More: pick a real material'), { label: 'Material', options: MATERIALS.filter(m => m.eg < 1.65 || true).map(m => ({ label: (m.short || m.n) + ` <small>${m.eg} eV</small>`, value: m.eg, name: 'mat-' + m.n.split(' ')[0].toLowerCase() })), value: 1.12, onchange: v => { st.eg = v; egs.set(v); upd(); } });
   const upd = () => {
     const s = sqAt(st.eg);
-    ro.innerHTML = `A ${st.eg.toFixed(2)} eV gap lets <b>${Math.round(s[1] * 100)}%</b> of the sunlight’s energy pass straight through and turns another <b>${Math.round(s[2] * 100)}%</b> into heat. Even a perfect cell could deliver at most <b>${(s[3] * 100).toFixed(1)}%</b> as electricity (its open-circuit voltage would be ${s[5].toFixed(2)} V and its short-circuit current ${s[4].toFixed(1)} mA/cm²).`;
+    ro.innerHTML = `A ${st.eg.toFixed(2)} eV gap lets <b>${Math.round(s[1] * 100)}%</b> of the sunlight’s energy pass straight through and turns another <b>${Math.round(s[2] * 100)}%</b> into heat.`;
     fig.invalidate();
   };
   upd();
@@ -93,7 +93,7 @@ export function sqLimit(el) {
   const st = { eg: 1.34 }; let geo = null;
   const REC = [{ n: 'Silicon record 28.3%', eg: 1.12, e: 0.2829 }, { n: 'GaAs record 29.1%', eg: 1.42, e: 0.291 }];
   const fig = new Fig(el, {
-    label: 'For every band gap from 0.4 to 3 electronvolts, how sunlight divides into light that passes through, heat, other unavoidable losses and electricity; the maximum is about 33.7 percent at 1.34 electronvolts',
+    label: 'For every band gap from 0.4 to 3 electronvolts, how sunlight divides into light that passes through, heat, other unavoidable losses and electricity; the maximum is about 33.7 per cent at 1.34 electronvolts',
     height: w => w < 600 ? 360 : 380,
     draw(ctx, w, h) {
       const narrow = w < 600;
@@ -201,8 +201,9 @@ export function junction(el) {
       // bands
       const pts = f => { const a = []; for (let i = 0; i <= 120; i++) { const x = i / 120; a.push([X(x), f(x)]); } return a; };
       pathLine(ctx, pts(Ec), C.ink, 2.2); pathLine(ctx, pts(Ev), C.ink, 2.2);
-      text(ctx, 'conduction band', X(0.5), Ec(0.5) - 14, { size: 10.5, color: C.ink3, align: 'center', halo: true });
-      text(ctx, 'valence band', X(0.5), Ev(0.5) + 18, { size: 10.5, color: C.ink3, align: 'center', halo: true });
+      if (narrow) text(ctx, 'conduction band', X(0.5), Ec(0.5) - 14, { size: 10.5, color: C.ink3, align: 'center', halo: true });
+      else text(ctx, 'conduction band', X(0.6), Ec(1) + 18, { size: 10.5, color: C.ink3, halo: true }); // desktop: under the flat n-side band, clear of the slope and the electrons
+      text(ctx, 'valence band', X(0.42), Ev(0) + 26, { size: 10.5, color: C.ink3, align: 'right', halo: true }); // left of the slope, below the holes
       // carriers
       for (const c of st.carriers) {
         const x = X(c.x), y = c.t === 'e' ? Ec(c.x) - 6 - (c.born * 18) : Ev(c.x) + 6;
@@ -264,7 +265,7 @@ export function junction(el) {
   const ctl = controls(el); const ro = readout(el);
   segmented(ctl, { label: 'Circuit', options: [{ label: 'Closed (through a lamp)', value: true, name: 'closed' }, { label: 'Open', value: false, name: 'open' }], value: true, onchange: v => { st.closed = v; fig.invalidate(); if (!isPlaying()) for (let i = 0; i < 90; i++) fig.stepOnce(1 / 30); } });
   slider(ctl, { label: 'Light', min: 0, max: 1, step: 0.05, value: 1, color: C.solar, fmt: v => v === 0 ? 'dark' : Math.round(v * 100) + '%', oninput: v => { st.light = v; if (!isPlaying()) for (let i = 0; i < 60; i++) fig.stepOnce(1 / 30); }, name: 'light' });
-  ro.innerHTML = 'Electrons (blue) roll <i>down</i> the slope of the conduction band towards the n side; holes (white) float <i>up</i> the valence band towards the p side. That one-way sorting is the whole trick: it turns randomly created pairs into a current. Open the circuit and the sorted charge has nowhere to go, so it piles up, flattens the slope, and recombination rises until it balances generation — that equilibrium is the open-circuit voltage.';
+  ro.innerHTML = 'Electrons (blue) roll <i>down</i> the slope of the conduction band towards the n side; holes (red rings) float <i>up</i> the valence band towards the p side. That one-way sorting is the whole trick: it turns randomly created pairs into a current.';
   for (let i = 0; i < 120; i++) fig.opts.step(1 / 30);
 }
 function approach(cur, target, rate, dt) { return target + (cur - target) * Math.exp(-rate * dt); }
@@ -334,7 +335,7 @@ export function ivCurve(el) {
       if (box.b - sy(Iop) > 26) text(ctx, `${(st.V * Iop).toFixed(0)} W`, (box.l + x) / 2, box.b - 10, { size: 12, weight: 700, color: darken(C.solar, 0.45), align: 'center' });
       text(ctx, 'Isc', sx(0) + 6, sy(M.Isc) - 6, { size: 10.5, color: C.ink3 });
       text(ctx, 'Voc', sx(M.Voc), box.b - 6, { size: 10.5, color: C.ink3, align: 'center' });
-      text(ctx, narrow ? 'dashed: 1000 W/m², 25 °C' : 'grey dashed: standard test conditions (1000 W/m², 25 °C)', box.r - 2, box.t + 4, { size: 10.5, color: C.ink3, align: 'right' });
+      text(ctx, narrow ? 'dashed: 1,000 W/m², 25 °C' : 'grey dashed: standard test conditions (1,000 W/m², 25 °C)', box.r - 2, box.t + 4, { size: 10.5, color: C.ink3, align: 'right' });
     },
   });
   fig.interact({ hit: (x, y) => geo && x > geo.box.l - 8 && x < geo.box.r + 8 && y > geo.box.t - 8 && y < geo.box.b + 8 ? 'v' : null, cursor: 'ew-resize', down: (o, x) => mv(x), move: (o, x) => mv(x) });
@@ -413,7 +414,7 @@ export function shading(el) {
         line(ctx, x0 + 2, yb, x1 - 2, yb, C.ink3, 1);
         const sh = st.shade.some((v, i) => v && sub(i) === s);
         const on = st.bypass && sh && opBypass[s];
-        text(ctx, st.bypass ? (on ? 'on' : (narrow ? 'idle' : 'diode')) : '—', (x0 + x1) / 2, yb + 13, { size: narrow ? 8.5 : 10, color: on ? C.peaker : C.ink3, align: 'center', weight: on ? 650 : 450 });
+        text(ctx, st.bypass ? (on ? 'on' : 'idle') : '—', (x0 + x1) / 2, yb + 13, { size: narrow ? 8.5 : 10, color: on ? C.peaker : C.ink3, align: 'center', weight: on ? 650 : 450 });
       }
       // P–V chart
       const box = narrow ? { l: 44, r: w - 14, t: my + ROWS * cellH + 70, b: h - 34 } : { l: mx + mw + 70, r: w - 18, t: 34, b: h - 40 };
@@ -445,7 +446,7 @@ export function shading(el) {
     const ns = st.shade.filter(Boolean).length, refP = ref.reduce((a, b) => Math.max(a, b.P), 0);
     const pk = peaks(cur).length;
     ro.innerHTML = ns === 0 ? `Unshaded, the module makes <b>${Math.round(refP)} W</b> at its best point.` :
-      `${ns} of 72 cells shaded (${(ns / 72 * 100).toFixed(0)}% of the area), but the best output falls to <b>${Math.round(best.P)} W</b>: <b>${Math.round((1 - best.P / refP) * 100)}%</b> lower.` + (pk > 1 ? ` The curve now has ${pk} peaks; a naive tracker can get stuck on the wrong one.` : '') + (!st.bypass && best.hot > 5 ? ` Without bypass diodes the shaded cell is driven into reverse and dissipates about <b>${Math.round(best.hot)} W</b> as heat in a few square centimetres — a hot spot.` : '');
+      `${ns} of 72 cells shaded (${(ns / 72 * 100).toFixed(0)}% of the area), but the best output falls to <b>${Math.round(best.P)} W</b>: <b>${Math.round((1 - best.P / refP) * 100)}%</b> lower.` + (pk > 1 ? ` The curve now has ${pk} peaks; a naive power-point tracker can get stuck on the wrong one.` : '') + (!st.bypass && best.hot > 5 ? ` Without bypass diodes the shaded cell is forced to run backwards and dissipates about <b>${Math.round(best.hot)} W</b> as heat in a few square centimetres — a hot spot.` : '');
     fig.invalidate();
   }
   PRESETS.leaf().forEach(i => st.shade[i] = 1);

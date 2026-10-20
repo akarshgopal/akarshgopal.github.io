@@ -2,7 +2,7 @@
 // and no link would break when opened from the file system (absolute paths, directory links).
 import { readFileSync, readdirSync, existsSync, statSync } from 'node:fs';
 import { join } from 'node:path';
-const DIST = 'dist';
+const DIST = process.env.OUT || 'dist';
 const pages = readdirSync(DIST).filter(f => f.endsWith('.html'));
 const ids = {}, problems = [];
 const strip = s => s.replace(/<script[\s\S]*?<\/script>/g, '').replace(/<!--[\s\S]*?-->/g, '');

@@ -99,7 +99,7 @@ export function powerAngle(el) {
       // regions
       ctx.fillStyle = alpha(HOT, 0.06); ctx.fillRect(sx(90), A.t, sx(180) - sx(90), A.b - A.t);
       text(ctx, 'unstable', sx(135), A.t + 14, { size: 10.5, color: HOT, align: 'center', weight: 600 });
-      if (THERM < ymax) { line(ctx, A.l, sy(THERM), A.r, sy(THERM), C.hot, 1.2, [5, 4]); text(ctx, 'thermal limit of one circuit', A.r - 4, w < 600 ? sy(THERM) + 13 : sy(THERM) - 6, { size: 10, color: C.hot, align: 'right', halo: true }); }
+      if (THERM < ymax) { line(ctx, A.l, sy(THERM), A.r, sy(THERM), C.hot, 1.2, [5, 4]); text(ctx, narrow ? 'thermal limit' : 'thermal limit of one circuit', A.r - 4, sy(THERM) - 6, { size: 10, color: C.hot, align: 'right', halo: true }); }
       const pts = []; for (let k = 0; k <= 180; k += 2) pts.push([sx(k), sy(Math.min(ymax, Pm * Math.sin(k * Math.PI / 180)))]);
       pathLine(ctx, pts, LINE, 2.4);
       const P = Pm * Math.sin(st.d * Math.PI / 180);
@@ -120,8 +120,10 @@ export function powerAngle(el) {
       text(ctx, 'V₁ sending end', p1[0] + (st.d > 100 ? -6 : 6), p1[1] - 6, { size: 10.5, weight: 650, color: LINE, align: st.d > 100 ? 'right' : 'left', halo: true });
       if (st.d >= 12) { // on a phone the label would run off the right edge: put it on the other side of the arrow
         const mx = (p1[0] + p2[0]) / 2, my = (p1[1] + p2[1]) / 2 + 2, lab = 'voltage across the line = X·I';
-        ctx.font = '400 10px Inter, sans-serif'; const fits = mx + 8 + ctx.measureText(lab).width < w - 4;
-        text(ctx, lab, fits ? mx + 8 : mx - 8, my, { size: 10, color: HOT, halo: true, align: fits ? 'left' : 'right' });
+        const fits = mx + 8 + measure(ctx, lab, 10) < w - 4, fits2 = mx + 8 + measure(ctx, 'voltage across', 10) < w - 4;
+        if (fits) text(ctx, lab, mx + 8, my, { size: 10, color: HOT, halo: true });
+        else if (fits2) { text(ctx, 'voltage across', mx + 8, my - 6, { size: 10, color: HOT, halo: true }); text(ctx, 'the line = X·I', mx + 8, my + 7, { size: 10, color: HOT, halo: true }); }
+        else text(ctx, lab, mx - 8, my, { size: 10, color: HOT, halo: true, align: 'right' });
       }
       ctx.strokeStyle = C.ink3; ctx.lineWidth = 1; ctx.beginPath(); ctx.arc(ox, oy, r * 0.28, -d, 0); ctx.stroke();
       text(ctx, 'δ', ox + r * 0.34 * Math.cos(d / 2), oy - r * 0.34 * Math.sin(d / 2) + 4, { size: 12, weight: 650, color: C.ink });
@@ -157,8 +159,8 @@ export function loadability(el) {
       [[0, 80, 'thermal'], [80, 320, 'voltage drop'], [320, 1000, 'stability']].forEach(([a, b, s], i) => {
         ctx.fillStyle = alpha([HOT, C.solar, LINE][i], 0.06); ctx.fillRect(sx(a), A.t, sx(b) - sx(a), A.b - A.t);
         const lab = narrow ? ['therm.', 'V drop', 'stability'][i] : s;
-        // On phone keep all region labels along the bottom so they miss the y-axis title.
-        const labY = narrow ? A.b - 8 : (i === 2 ? A.t - 6 : A.b - 8);
+        // On phone put the region labels just inside the top, clear of the y-axis title and of the low 345 kV curve.
+        const labY = narrow ? A.t + 13 : (i === 2 ? A.t - 6 : A.b - 8);
         text(ctx, lab, (sx(a) + sx(b)) / 2, labY, { size: narrow ? 9.5 : 10, color: [HOT, darken(C.solar, 0.25), LINE][i], align: 'center', weight: 600, halo: true });
       });
       const cols = [lighten(LINE, 0.35), LINE, darken(LINE, 0.35)];
@@ -167,11 +169,12 @@ export function loadability(el) {
         pathLine(ctx, pts, cols[i], 2.4);
         const yEnd = sy(loadMW(v, 1000));
         if (!narrow) text(ctx, v.name, A.r + 6, yEnd + 4, { size: 11, weight: 650, color: cols[i] });
-        else text(ctx, v.name, sx(1000) - 4, yEnd - 6, { size: 10.5, weight: 650, color: cols[i], align: 'right', halo: true });
+        else text(ctx, v.name, sx(1000) - 4, v.kv === 765 ? yEnd + 15 : yEnd - 6, { size: 10.5, weight: 650, color: cols[i], align: 'right', halo: true }); // 765 kV below its curve, clear of AEP's circle
       });
       // AEP anchors (miles → km)
       [[765, 550 * MI, 1500], [500, 140 * MI, 1500], [345, 50 * MI, 1500]].forEach(([kv, km, mw]) => circle(ctx, sx(km), sy(mw), 4, '#fff', C.ink, 1.5));
       if (!narrow) text(ctx, '○ AEP: reach of 1,500 MW', sx(1000), sy(1500) + 18, { size: 10, color: C.ink3, align: 'right' });
+      else text(ctx, '○ AEP: reach of 1,500 MW', A.r - 2, A.t + 52, { size: 10, color: C.ink3, align: 'right', halo: true });
       line(ctx, sx(st.km), A.t, sx(st.km), A.b, C.ink, 1, [3, 3]);
       VOLTS.forEach((v, i) => circle(ctx, sx(st.km), sy(loadMW(v, st.km)), 4.5, cols[i], '#fff', 1.5));
       geo = { A, sx };
@@ -234,14 +237,15 @@ export function sagDLR(el) {
       ctx.fillStyle = alpha(C.biomass, 0.18); ctx.fillRect(P.l - 10, ground, P.r - P.l + 20, 6);
       // clearance line: 8 m above ground
       const clr = ground - 8 / mPerPx;
-      line(ctx, P.l, clr, P.r, clr, HOT, 1, [4, 4]); text(ctx, 'minimum clearance', P.r - 2, clr - 5, { size: 10, color: HOT, align: 'right', halo: true });
+      line(ctx, P.l, clr, P.r, clr, HOT, 1, [4, 4]); text(ctx, 'minimum clearance', P.r - 16, clr - 5, { size: 10, color: HOT, align: 'right', halo: true });
       [P.l, P.r].forEach(x => { ctx.strokeStyle = C.ink2; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(x - 9, ground); ctx.lineTo(x, attach - 6); ctx.lineTo(x + 9, ground); ctx.stroke(); line(ctx, x - 16, attach, x + 16, attach, C.ink2, 2); });
       const curve = s => { const pts = []; for (let k = 0; k <= 60; k++) { const u = k / 60, x = lerp(P.l, P.r, u); pts.push([x, attach + 4 * s * u * (1 - u) / mPerPx]); } return pts; };
       pathLine(ctx, curve(sagMax), alpha(HOT, 0.5), 1.2, [3, 3]);
       const col = mix(LINE, HOT, clamp((T - 20) / Math.max(1, c.Tmax - 20), 0, 1));
       pathLine(ctx, curve(sag), col, 3);
       text(ctx, `sag ${sag.toFixed(1)} m at ${Math.round(T)} °C`, (P.l + P.r) / 2, attach + sag / mPerPx + 18, { size: 11, weight: 650, color: col, align: 'center', halo: true });
-      text(ctx, `sag at the ${c.Tmax} °C limit`, (P.l + P.r) / 2 + 80, attach + sagMax / mPerPx + 16, { size: 9.5, color: alpha(HOT, 0.9), align: 'left', halo: true });
+      if (narrow) text(ctx, `dashed: sag at the ${c.Tmax} °C limit`, (P.l + P.r) / 2, attach + Math.max(sag, sagMax) / mPerPx + 33, { size: 9.5, color: alpha(HOT, 0.9), align: 'center', halo: true });
+      else text(ctx, `sag at the ${c.Tmax} °C limit`, (P.l + P.r) / 2 + 80, attach + sagMax / mPerPx + 16, { size: 9.5, color: alpha(HOT, 0.9), align: 'left', halo: true });
       text(ctx, '400 m span', (P.l + P.r) / 2, P.t - 12, { size: 10.5, color: C.ink3, align: 'center' });
       // weather arrows
       for (let k = 0; k < Math.round(st.v); k++) arrow(ctx, P.l + 30 + k * 16, P.t - 22 + (k % 2) * 5, P.l + 42 + k * 16, P.t - 22 + (k % 2) * 5, alpha(C.wind, 0.8), 1.4, 5);

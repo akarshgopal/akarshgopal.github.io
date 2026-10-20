@@ -81,7 +81,12 @@ export function gridDay(el, opts = {}) {
       const hits = (r, q) => !(r.x0 > q.x1 || r.x1 < q.x0 || r.y0 > q.y1 || r.y1 < q.y0);
       const lab = (s, x, y, o) => { const r = rectOf(s, x, y, o); if (!hits(r, tip)) { text(ctx, s, x, y, o); taken.push(r); return true; } return false; };
       const iNoon = Math.round(13 / dt);
-      lab('demand', A.sx(22.6), A.sy(P[Math.round(22.6 / dt)].load) - 8, { size: 11.5, color: C.ink, weight: 600, align: 'right', halo: true });
+      const dY0 = A.sy(P[Math.round(22.6 / dt)].load) - 8; let dY = dY0;
+      if (futures) { // keep the label above the stacked bands (storage, curtailment) under its whole width
+        const x1 = A.sx(22.6), x0 = x1 - measure(ctx, 'demand', 11.5, 600) - 4;
+        P.forEach((q, i) => { if (A.sx((i + 1) * dt) >= x0 && A.sx(i * dt) <= x1) dY = Math.min(dY, A.sy(Math.max(q.load, base[i] + (curt[i] || 0))) - 6); });
+      }
+      if (!lab('demand', A.sx(22.6), dY, { size: 11.5, color: C.ink, weight: 600, align: 'right', halo: true }) && dY !== dY0) lab('demand', A.sx(22.6), dY0, { size: 11.5, color: C.ink, weight: 600, align: 'right', halo: true }); // lifted spot under the tooltip: fall back to the line
       const rl = P.map(q => Math.max(0, q.load - q.solar - q.wind)), minI = rl.indexOf(Math.min(...rl));
       lab(narrow ? 'demand − wind & solar' : 'demand minus wind & solar', clamp(A.sx(minI * dt), top.l + 70, top.r - 70), Math.min(A.sy(rl[minI]) + 16, top.b - 8), { size: 11, color: C.ink2, align: 'center', halo: true });
       if (curt[iNoon] > 1) lab('curtailed', A.sx(13), A.sy(base[iNoon] + curt[iNoon]) - 6, { size: 11, color: '#a87b10', align: 'center', halo: true });

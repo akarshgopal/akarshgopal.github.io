@@ -8,38 +8,46 @@ import { drawStator, drawRotor, drawCoil, COPPER, PH, PH_NAME } from '../lib/mac
 
 const SLOW = 60;                                  // drawn 60× slower than real
 const W0 = 3000 / 60 * 2 * Math.PI / SLOW;        // drawn angular speed of a 3,000 rpm rotor
+const DT = 1 / 60;                                // the trace is sampled on this fixed timestep, whatever the frame rate
 
 export function generator(el, opts = {}) {
   const stage = opts.stage || 1, three = stage >= 2;
   const st = { ang: 0.4, omega: 0, spin: true, rpm: 3000, p: 1, mode: 'v', hist: [], drag: null, lastA: null };
   const N = 300;
-  const emf = k => st.omega / W0 * Math.sin(st.p * st.ang - k * 2 * Math.PI / 3); // voltage of phase k (A when k = 0)
+  let acc = 0, sAng = st.ang, sOm = 0;            // time not yet sampled; rotor angle and speed at the last sample
+  const emf = (k, a = st.ang, om = st.omega) => om / W0 * Math.sin(st.p * a - k * 2 * Math.PI / 3); // voltage of phase k (A when k = 0)
   const fig = new Fig(el, {
     label: three ? 'A generator with three coils a third of a turn apart: three voltages 120 degrees out of step, their sum, and their power'
       : 'A generator seen end-on: turn the magnet by hand inside one coil and watch the flux and the voltage it induces',
     height: w => w < 560 ? Math.round(w * 0.78 + 250) : Math.max(320, Math.min(390, w * 0.46)),
     animated: true,
     step(dt) {
-      if (st.drag == null) {
-        const target = st.spin ? st.rpm / 60 * 2 * Math.PI / SLOW : 0;
-        st.omega += (target - st.omega) * Math.min(1, dt * (st.spin ? 3 : 1.2)); // a let-go rotor coasts to a stop
-        st.ang += st.omega * dt;
+      acc = Math.min(acc + dt, 0.25);
+      const n = Math.floor(acc / DT + 1e-6), a0 = sAng, o0 = sOm;
+      acc = Math.max(0, acc - n * DT);
+      for (let s = 1; s <= n; s++) {
+        let a, om = st.omega;
+        if (st.drag == null) {
+          const target = st.spin ? st.rpm / 60 * 2 * Math.PI / SLOW : 0;
+          st.omega += (target - st.omega) * Math.min(1, DT * (st.spin ? 3 : 1.2)); // a let-go rotor coasts to a stop
+          st.ang += st.omega * DT; a = st.ang; om = st.omega;
+        } else { a = a0 + (st.ang - a0) * s / n; om = o0 + (st.omega - o0) * s / n; } // a hand-turned rotor: spread this frame's turn over its samples
+        st.hist.push({ phi: Math.cos(st.p * a), v: [0, 1, 2].map(k => emf(k, a, om)) }); if (st.hist.length > N) st.hist.shift();
       }
-      const v = [0, 1, 2].map(emf);
-      st.hist.push({ phi: Math.cos(st.p * st.ang), v }); if (st.hist.length > N) st.hist.shift();
+      if (n) { sAng = st.ang; sOm = st.omega; }
     },
     draw(ctx, w, h) {
       const narrow = w < 560;
       const R = narrow ? Math.min(w * 0.3, 120) : Math.min(h * 0.38, w * 0.17);
       const cx = narrow ? w / 2 : R + 44, cy = narrow ? R + 30 : h / 2;
-      const slots = [];
+      const slots = [], da = st.ang + (st.drag == null ? st.omega * acc : 0); // drawn angle, between samples
       const ks = three ? [0, 1, 2] : [0];
       for (let k of ks) for (let q = 0; q < 2 * st.p; q++) {
         const a = Math.PI + q * Math.PI / st.p + k * 2 * Math.PI / 3 / st.p;
-        slots.push({ a, col: three ? PH[k] : COPPER, e: (q % 2 ? -1 : 1) * emf(k) });
+        slots.push({ a, col: three ? PH[k] : COPPER, e: (q % 2 ? -1 : 1) * emf(k, da) });
       }
       drawStator(ctx, cx, cy, R, slots);
-      drawRotor(ctx, cx, cy, R * 0.78, st.ang, st.p, !three);
+      drawRotor(ctx, cx, cy, R * 0.78, da, st.p, !three);
       if (three && !narrow) for (const k of ks) { const a = Math.PI + k * 2 * Math.PI / 3 / st.p; text(ctx, PH_NAME[k], cx + Math.cos(a) * (R + 34), cy + Math.sin(a) * (R + 34) + 4, { size: 12, weight: 700, color: PH[k], align: 'center' }); }
       st.geom = { cx, cy, R };
       // trace
@@ -66,7 +74,7 @@ export function generator(el, opts = {}) {
       text(ctx, `animation slowed ${SLOW}×`, box.r, box.b + 18, { size: 11, color: C.ink3, align: 'right' });
     },
   });
-  for (let i = 0; i < N; i++) fig.opts.step(1 / 60);
+  for (let i = 0; i < N; i++) fig.opts.step(DT);
   // turn the rotor by hand (stage 1) — anywhere on the rotor
   fig.interact({
     hit: (x, y) => { const g = st.geom; return g && Math.hypot(x - g.cx, y - g.cy) < g.R + 10 ? 'rotor' : null; },
@@ -84,7 +92,7 @@ export function generator(el, opts = {}) {
   const upd = () => {
     const f = st.p * st.rpm / 60;
     ro.innerHTML = !three
-      ? (st.spin ? `${st.p * 2} poles at ${st.rpm} rpm → <b>${f.toFixed(1)} Hz</b>. ${Math.abs(f - 50) < 0.3 ? 'That’s Europe’s grid frequency.' : Math.abs(f - 60) < 0.3 ? 'That’s North America’s.' : ''}` : `Turn the magnet: the faster you turn it, the faster the flux through the coil changes, and the bigger the voltage. Each half-turn the flux reverses and so does the voltage.`)
+      ? (st.spin ? `${st.p * 2} poles at ${st.rpm.toLocaleString('en')} rpm → <b>${f.toFixed(1)} Hz</b>. ${Math.abs(f - 50) < 0.3 ? 'That’s Europe’s grid frequency.' : Math.abs(f - 60) < 0.3 ? 'That’s North America’s.' : ''}` : `Turn the magnet: the faster you turn it, the faster the flux through the coil changes, and the bigger the voltage. Each half-turn the flux reverses and so does the voltage.`)
       : st.mode === 'v' ? `Three coils a third of a turn apart see the same magnet a third of a turn later: three identical voltages, each <b>120°</b> behind the last.`
       : st.mode === 'sum' ? `Add the three voltages and you get <b>zero</b>, at every instant. The three wires can be each other’s return path.`
       : `Each coil’s power pulses, but the three add up to a <b>constant</b> total: a smooth, steady load on the shaft.`;
@@ -93,7 +101,7 @@ export function generator(el, opts = {}) {
   if (!three) {
     spinSeg = segmented(ctl, { label: 'Rotor', options: [{ label: 'Turn it by hand', value: false, name: 'g-hand' }, { label: 'Let it spin', value: true, name: 'g-spin' }], value: st.spin, onchange: v => { st.spin = v; upd(); } });
     const adv = more(ctl, 'More: speed and poles');
-    slider(adv, { label: 'Rotor speed', min: 0, max: 3600, step: 50, value: st.rpm, color: C.field, fmt: v => v.toFixed(0) + ' rpm', oninput: v => { st.rpm = v; upd(); }, name: 'rpm' });
+    slider(adv, { label: 'Rotor speed', min: 0, max: 3600, step: 50, value: st.rpm, color: C.field, fmt: v => v.toLocaleString('en') + ' rpm', oninput: v => { st.rpm = v; upd(); }, name: 'rpm' });
     segmented(adv, { label: 'Pole pairs', options: [{ label: '1', value: 1 }, { label: '2', value: 2 }, { label: '3', value: 3 }], value: 1, onchange: v => { st.p = v; upd(); } });
     hint(el, 'grab the magnet and turn it, slowly and then fast; then pick <b>Let it spin</b>.');
   } else {
@@ -139,8 +147,9 @@ export function windings(el) {
         if (mag < 0.02 && Math.abs(off % 18) < 0) return;
         for (let s = ((off % 18) + 18) % 18; s < Lt; s += 18) { let u = s, i = 0; while (i < seg.length && u > seg[i]) { u -= seg[i]; i++; } if (i >= seg.length) break; const t = u / seg[i]; circle(ctx, pts[i][0] + (pts[i + 1][0] - pts[i][0]) * t, pts[i][1] + (pts[i + 1][1] - pts[i][1]) * t, 2.4, col); }
       };
-      // tidy routing: A and B leave straight to the right; C drops below the windings first; N lower still
-      const yC = P[2][1] + (narrow ? 26 : 30), yN = P[2][1] + (narrow ? 52 : 60);
+      // tidy routing: A and B leave straight to the right; N drops from the star point just below the windings;
+      // C drops lower still, outside N, so the two never cross
+      const yN = P[2][1] + (narrow ? 26 : 30), yC = P[2][1] + (narrow ? 52 : 60);
       const route = [[P[0], [outX, P[0][1]]], [P[1], [outX, P[1][1]]], [P[2], [P[2][0], yC], [outX, yC]]];
       for (let k = 0; k < 3; k++) {
         dots(route[k], st.off[k], PH[k], Math.abs(cur[k]));

@@ -7,7 +7,7 @@ import { Fig } from '../lib/fig.js';
 import { C, alpha, mix, lighten, darken } from '../lib/colors.js';
 import * as D0 from '../lib/draw.js';
 import { rrect, line, circle, clamp, lerp, pathLine, scale } from '../lib/draw.js';
-import { curDraw, euroFigure } from '../lib/currency.js';
+import { curDraw, euroFigure, eur } from '../lib/currency.js';
 const { text, measure, axes } = curDraw(D0);
 import { controls, slider, segmented, readout, hint, more } from '../lib/ui.js';
 import { FUEL } from '../lib/fueldata.js';
@@ -37,7 +37,7 @@ const PRODS = {
   ker: { name: 'e-Kerosene', unit: '€/L', per: 'litre', dp: 2, ymax: 7, ticks: [0, 1, 2, 3, 4, 5, 6, 7], f: v => '€' + v },
 };
 export function lcohExplorer(el) {
-  const st = { price: 50, hours: 4000, capex: 2100, kwh: H2_KWH, prod: 'h2', gas: 35, co2p: 70, src: 'bio' };
+  const st = { price: 50, hours: 4000, capex: 2100, kwh: H2_KWH, prod: 'h2', gas: 35, co2p: 75, src: 'bio' };
   el.__sim = { st };
   const parts = (q) => {
     if (st.prod === 'h2') { const r = lcoh({ ...st, hours: q }); return { segs: [['electricity', r.power, ELEC], ['electrolyser capital', r.cap, CAPC], ['fixed O&M', r.om, OPXC], ['stack replacement', r.stack, lighten(CAPC, 0.4)]], tot: r.tot }; }
@@ -53,24 +53,24 @@ export function lcohExplorer(el) {
       const narrow = w < 600, P = PRODS[st.prod], r = parts(st.hours), g = fossilTot(), ymax = P.ymax;
       const B = narrow ? { l: 54, r: w - 16, t: 34, b: 120 } : { l: 70, r: 200, t: 40, b: h - 44 };
       const A = narrow ? { l: 46, r: w - 16, t: 190, b: h - 40 } : { l: 340, r: w - 24, t: 40, b: h - 44 };
-      const fmtv = v => P.dp ? v.toFixed(2) : Math.round(v).toLocaleString('en');
+      const ev = v => eur(v, P.dp);
       if (!narrow) {
         const { sy } = axes(ctx, { box: B, x0: 0, x1: 1, y0: 0, y1: ymax, xticks: [], yticks: P.ticks, yfmt: P.f, ylabel: `€ per ${P.per} of ${P.name.toLowerCase()}` });
         let y = 0; const bx = B.l + 20, bw = 56;
-        r.segs.forEach(([s, v, c]) => { const y0 = sy(Math.min(ymax, y)), y1 = sy(Math.min(ymax, y + v)); ctx.fillStyle = alpha(c, 0.85); ctx.fillRect(bx, y1, bw, y0 - y1); if (y0 - y1 > 13) text(ctx, `${s} €${fmtv(v)}`, bx + bw + 8, (y0 + y1) / 2 + 4, { size: 10, color: C.ink2, halo: true }); y += v; });
-        text(ctx, `dashed: ${fossilName()} €${fmtv(g)}`, bx - 6, B.b + 16, { size: 10, color: FOSS });
-        text(ctx, `€${fmtv(r.tot)}${P.unit.slice(1)}`, bx + bw / 2, Math.max(B.t + 16, sy(Math.min(ymax, r.tot)) - 8), { size: 12, weight: 700, color: C.ink, align: 'center', halo: true });
+        r.segs.forEach(([s, v, c]) => { const y0 = sy(Math.min(ymax, y)), y1 = sy(Math.min(ymax, y + v)); ctx.fillStyle = alpha(c, 0.85); ctx.fillRect(bx, y1, bw, y0 - y1); if (y0 - y1 > 13) text(ctx, `${s} ${ev(v)}`, bx + bw + 8, (y0 + y1) / 2 + 4, { size: 10, color: C.ink2, halo: true }); y += v; });
+        text(ctx, `dashed: ${fossilName()} ${ev(g)}`, bx - 6, B.b + 16, { size: 10, color: FOSS });
+        text(ctx, `${ev(r.tot)}${P.unit.slice(1)}`, bx + bw / 2, Math.max(B.t + 16, sy(Math.min(ymax, r.tot)) - 8), { size: 12, weight: 700, color: C.ink, align: 'center', halo: true });
         line(ctx, bx - 6, sy(Math.min(ymax, g)), bx + bw + 6, sy(Math.min(ymax, g)), FOSS, 1.4, [4, 3]);
       } else {
         const xs = scale(0, ymax, B.l, B.r);
         text(ctx, `€ per ${P.per} of ${P.name.toLowerCase()}`, B.l, B.t - 14, { size: 11, weight: 500, color: C.ink3 });
         let x = 0; const by = B.t, bh = 30;
         r.segs.forEach(([s, v, c]) => { ctx.fillStyle = alpha(c, 0.85); ctx.fillRect(xs(x), by, xs(Math.min(ymax, x + v)) - xs(x), bh); x += v; });
-        text(ctx, `€${fmtv(r.tot)}`, Math.min(xs(Math.min(ymax, r.tot)) + 6, B.r - 40), by + 20, { size: 12, weight: 700, color: C.ink, halo: true });
+        text(ctx, ev(r.tot), Math.min(xs(Math.min(ymax, r.tot)) + 6, B.r - 40), by + 20, { size: 12, weight: 700, color: C.ink, halo: true });
         line(ctx, xs(Math.min(ymax, g)), by - 4, xs(Math.min(ymax, g)), by + bh + 4, FOSS, 1.5, [3, 2]);
         let lx = B.l, ly = by + bh + 20;
-        r.segs.forEach(([s, v, c]) => { const t = `${s} €${P.dp ? v.toFixed(1) : Math.round(v)}`, W = measure(ctx, t, 10) + 24; if (lx + W > B.r) { lx = B.l; ly += 15; } ctx.fillStyle = alpha(c, 0.85); ctx.fillRect(lx, ly - 8, 9, 9); text(ctx, t, lx + 12, ly, { size: 10, color: C.ink2 }); lx += W; });
-        text(ctx, `dashed: ${fossilName()} ≈ €${P.dp ? g.toFixed(2) : Math.round(g)}`, B.l, ly + 16, { size: 10, color: FOSS });
+        r.segs.forEach(([s, v, c]) => { const t = `${s} ${eur(v, P.dp ? 1 : 0)}`, W = measure(ctx, t, 10) + 24; if (lx + W > B.r) { lx = B.l; ly += 15; } ctx.fillStyle = alpha(c, 0.85); ctx.fillRect(lx, ly - 8, 9, 9); text(ctx, t, lx + 12, ly, { size: 10, color: C.ink2 }); lx += W; });
+        text(ctx, `dashed: ${fossilName()} ≈ ${ev(g)}`, B.l, ly + 16, { size: 10, color: FOSS });
       }
       const { sx, sy } = axes(ctx, { box: A, x0: 0, x1: 8760, y0: 0, y1: ymax, xticks: narrow ? [0, 2000, 4000, 6000, 8000] : [0, 1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000], xfmt: v => v ? (v / 1000) + 'k' : '0', yticks: P.ticks, yfmt: P.f, ylabel: narrow ? `${P.unit} against full-load hours` : 'cost against the electrolyser’s full-load hours a year', xlabel: 'full-load hours' });
       const pts = [], ptsE = [];
@@ -95,13 +95,13 @@ export function lcohExplorer(el) {
   function upd() {
     const P = PRODS[st.prod], r = parts(st.hours), g = fossilTot(), F = fossil(st), E = eProducts(st);
     const be = k => { const f0 = sum(F[k]) - F[k].carbon, per = ({ h2: 0.202 * 33.33 / 0.76 / 1000, nh3: 1.8, ker: 2.53e-3 })[k]; return (sum(E[k]) - f0) / per; };
-    const bv = be(st.prod), bes = bv <= st.co2p ? 'already pays at this carbon price' : `breaks even at a carbon price of about €${(Math.round(bv / 10) * 10).toLocaleString('en')}/t`;
-    const fm = v => P.dp ? v.toFixed(2) : Math.round(v).toLocaleString('en');
+    const bv = be(st.prod), bes = bv <= st.co2p ? 'already pays at this carbon price' : `breaks even at a carbon price of about ${eur(bv, -1)}/t`;
+    const fm = v => eur(v, P.dp);
     if (st.prod === 'h2') {
       const lh = lcoh(st), share = lh.power / lh.tot;
-      ro.innerHTML = `Hydrogen costs <b>€${lh.tot.toFixed(2)} per kg</b>: ${Math.round(share * 100)}% electricity, ${Math.round((lh.cap + lh.stack) / lh.tot * 100)}% equipment. A power price 10% higher adds €${(0.1 * st.price * st.kwh / 1000).toFixed(2)}/kg; halving the hours from ${st.hours.toLocaleString('en')} adds €${(lcoh({ ...st, hours: st.hours / 2 }).tot - lh.tot).toFixed(2)}. Grey hydrogen from gas costs about €${g.toFixed(2)}; electric hydrogen ${bes}.`;
+      ro.innerHTML = `Hydrogen costs <b>${eur(lh.tot, 2)} per kg</b>: ${Math.round(share * 100)}% electricity, ${Math.round((lh.cap + lh.stack) / lh.tot * 100)}% equipment. A power price 10% higher adds ${eur(0.1 * st.price * st.kwh / 1000, 2)}/kg; halving the hours from ${st.hours.toLocaleString('en')} adds ${eur(lcoh({ ...st, hours: st.hours / 2 }).tot - lh.tot, 2)}. Grey hydrogen from gas costs about ${eur(g, 2)}; electric hydrogen ${bes}.`;
     } else {
-      ro.innerHTML = `${P.name} from this electrolyser costs <b>€${fm(r.tot)} per ${P.per}</b> against €${fm(g)} for ${fossilName()}, ${(r.tot / g).toFixed(1)} times as much; it ${bes}. ${st.prod === 'ker' ? `Each €10/MWh off the power price takes about €${(sum(E.ker) - sum(eProducts({ ...st, price: st.price - 10 }).ker)).toFixed(2)} off a litre.` : `Hydrogen is ${Math.round(E.nh3.h2 / r.tot * 100)}% of its cost.`}`;
+      ro.innerHTML = `${P.name} from this electrolyser costs <b>${fm(r.tot)} per ${P.per}</b> against ${fm(g)} for ${fossilName()}, ${(r.tot / g).toFixed(1)} times as much; it ${bes}. ${st.prod === 'ker' ? `Each $10/MWh off the power price takes about ${eur(sum(E.ker) - sum(eProducts({ ...st, price: st.price - 10 * EUR }).ker), 2)} off a litre.` : `Hydrogen is ${Math.round(E.nh3.h2 / r.tot * 100)}% of its cost.`}`;
     }
     fig.invalidate();
   }
@@ -129,16 +129,17 @@ export function cheapHours(el) {
       const narrow = w < 600, cv = curve();
       const A = { l: narrow ? 46 : 64, r: w - (narrow ? 16 : 24), t: 40, b: narrow ? 300 : 230 };
       const P = { l: A.l, r: A.r, t: A.b + 54, b: h - 34 };
-      const ymax = 16;
-      const { sx, sy } = axes(ctx, { box: A, x0: 0, x1: 8760, y0: 0, y1: ymax, xticks: narrow ? [0, 2000, 4000, 6000, 8000] : [0, 1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000], xfmt: v => v ? (v / 1000) + 'k h' : '0', yticks: [0, 4, 8, 12, 16], yfmt: v => '€' + v, ylabel: '€ per kg of hydrogen, running the cheapest hours first' });
+      const ymax = 24; // high enough to show the cost of running only the zero-price hours
+      const { sx, sy } = axes(ctx, { box: A, x0: 0, x1: 8760, y0: 0, y1: ymax, xticks: narrow ? [0, 2000, 4000, 6000, 8000] : [0, 1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000], xfmt: v => v ? (v / 1000) + 'k h' : '0', yticks: [0, 6, 12, 18, 24], yfmt: v => '€' + v, ylabel: '€ per kg of hydrogen, running the cheapest hours first' });
       const best = cv.reduce((a, b) => b[1].tot < a[1].tot ? b : a);
       ctx.fillStyle = alpha(ELEC, 0.2); ctx.beginPath(); ctx.moveTo(sx(200), sy(0)); cv.forEach(([H, q]) => ctx.lineTo(sx(H), sy(clamp(q.power, -2, ymax)))); ctx.lineTo(sx(8760), sy(0)); ctx.closePath(); ctx.fill();
       pathLine(ctx, cv.filter(([H, q]) => q.cap + q.om + q.stack <= ymax).map(([H, q]) => [sx(H), sy(q.cap + q.om + q.stack)]), CAPC, 1.6, [5, 3]);
       pathLine(ctx, cv.filter(([H, q]) => q.tot <= ymax).map(([H, q]) => [sx(H), sy(q.tot)]), C.ink, 2.4);
       { const e = cv.find(([H, q]) => q.cap + q.om + q.stack <= ymax * 0.6) || cv[0], ev = e[1].cap + e[1].om + e[1].stack; text(ctx, 'equipment', sx(e[0]) + 7, sy(ev) - 6, { size: 10, color: CAPC, align: 'left', halo: true }); }
-      text(ctx, 'electricity', sx(7800), sy(lcoh({ price: avg(7800), hours: 7800, capex: st.capex, kwh: H2_KWH }).power / 2) + 4, { size: 10, color: darken(ELEC, 0.3), align: 'center', halo: true });
+      // inside the electricity band, below the dashed equipment line
+      { const H = 7800, q = lcoh({ price: avg(H), hours: H, capex: st.capex, kwh: H2_KWH }), eq = q.cap + q.om + q.stack; text(ctx, 'electricity', sx(H), Math.min(sy(0) - 4, (sy(Math.min(eq, q.power)) + sy(0)) / 2 + 4), { size: 10, color: darken(ELEC, 0.3), align: 'center', halo: true }); }
       line(ctx, sx(best[0]), sy(0), sx(best[0]), sy(best[1].tot), alpha(C.ink, 0.4), 1, [3, 3]);
-      text(ctx, `cheapest: ${best[0].toLocaleString('en')} h, €${best[1].tot.toFixed(1)}/kg`, sx(best[0]), sy(best[1].tot) + 18, { size: 10.5, weight: 650, color: C.ink, align: 'center', halo: true });
+      text(ctx, `cheapest: ${best[0].toLocaleString('en')} h, ${eur(best[1].tot, 2)}/kg`, sx(best[0]), sy(best[1].tot) + 18, { size: 10.5, weight: 650, color: C.ink, align: 'center', halo: true });
       const q = lcoh({ price: avg(st.hours), hours: st.hours, capex: st.capex, kwh: H2_KWH });
       circle(ctx, sx(st.hours), sy(Math.min(ymax, q.tot)), 6, H2C, '#fff', 2);
       // price duration
@@ -148,8 +149,9 @@ export function cheapHours(el) {
       const pp = []; for (let i = 0; i < 8760; i += 8) pp.push([ax2.sx(i), ax2.sy(clamp(sorted[i], pmin, pmax))]);
       pathLine(ctx, pp, C.price, 2);
       if (st.sys !== 'sa') line(ctx, P.l, ax2.sy(20), P.r, ax2.sy(20), HEATC, 1, [4, 3]);
-      if (st.sys !== 'sa') text(ctx, `€20/MWh: ${n20.toLocaleString('en')} hours count as renewable under EU rules`, ax2.sx(n20) + 8, ax2.sy(20) + 14, { size: 10, color: HEATC, halo: true });
-      { const t = `${st.hours.toLocaleString('en')} h, average ${avg(st.hours) < 0 ? '−' : ''}€${Math.abs(avg(st.hours)).toFixed(0)}`, left = ax2.sx(st.hours) - 6 - measure(ctx, t, 10.5, 650) < P.l + 4; text(ctx, t, ax2.sx(st.hours) + (left ? 6 : -6), P.t + 12, { size: 10.5, weight: 650, color: darken(H2C, 0.2), align: left ? 'left' : 'right', halo: true }); }
+      // above the dashed line at the right, where prices are well above it
+      if (st.sys !== 'sa') text(ctx, narrow ? '€20/MWh: EU renewable limit' : `€20/MWh: ${n20.toLocaleString('en')} hours count as renewable under EU rules`, P.r - 4, ax2.sy(20) - 4, { size: 10, color: HEATC, align: 'right', halo: true });
+      { const t = `${st.hours.toLocaleString('en')} h, average ${eur(avg(st.hours), 0)}`, left = ax2.sx(st.hours) - 6 - measure(ctx, t, 10.5, 650) < P.l + 4; text(ctx, t, ax2.sx(st.hours) + (left ? 6 : -6), P.t + 12, { size: 10.5, weight: 650, color: darken(H2C, 0.2), align: left ? 'left' : 'right', halo: true }); }
     },
   });
   fig.interact({ hit: (x, y) => y < fig.h - 10 ? {} : null, cursor: 'ew-resize', down: (o, x) => drag(x), move: (o, x) => drag(x) });
@@ -161,7 +163,7 @@ export function cheapHours(el) {
   function upd() {
     const q = lcoh({ price: avg(st.hours), hours: st.hours, capex: st.capex, kwh: H2_KWH });
     const best = curve().reduce((a, b) => b[1].tot < a[1].tot ? b : a);
-    ro.innerHTML = `Running the cheapest <b>${st.hours.toLocaleString('en')}</b> hours of ${SYS[st.sys].yr}, the electricity averaged <b>${avg(st.hours) < 0 ? '−' : ''}€${Math.abs(avg(st.hours)).toFixed(0)}/MWh</b> and hydrogen costs <b>€${q.tot.toFixed(2)}/kg</b>. At €${st.capex.toLocaleString('en')}/kW the best compromise is about ${best[0].toLocaleString('en')} hours (€${best[1].tot.toFixed(2)}/kg). ${st.sys === 'sa' ? `${zn.toLocaleString('en')} hours had zero or negative prices — South Australia’s midday solar glut — yet an electrolyser running only then would still run less than a third of the year.` : `Only ${zn.toLocaleString('en')} hours had zero or negative prices: an electrolyser that ran only then would pay for its equipment over very few kilograms.`}`;
+    ro.innerHTML = `Running the cheapest <b>${st.hours.toLocaleString('en')}</b> hours of ${SYS[st.sys].yr}, the electricity averaged <b>${eur(avg(st.hours), 0)}/MWh</b> and hydrogen costs <b>${eur(q.tot, 2)}/kg</b>. At ${eur(st.capex, -1)}/kW the best compromise is about ${best[0].toLocaleString('en')} hours (${eur(best[1].tot, 2)}/kg). ${st.sys === 'sa' ? `${zn.toLocaleString('en')} hours had zero or negative prices — South Australia’s midday solar glut — yet an electrolyser running only then would still run less than a third of the year.` : `Only ${zn.toLocaleString('en')} hours had zero or negative prices: an electrolyser that ran only then would pay for its equipment over very few kilograms.`}`;
     fig.invalidate();
   }
   upd();
@@ -189,7 +191,7 @@ export function fossil(o) {
 }
 const sum = o => Object.values(o).reduce((a, b) => a + b, 0);
 export function productCost(el) {
-  const st = { price: 50, hours: 4000, src: 'bio', gas: 35, co2p: 70 };
+  const st = { price: 50, hours: 4000, src: 'bio', gas: 35, co2p: 75 };
   const PR = [['h2', 'Hydrogen', '€/kg', 2], ['nh3', 'Ammonia', '€/t', 0], ['ker', 'Kerosene', '€/L', 2]];
   const fig = new Fig(el, {
     label: 'Cost of electricity-based hydrogen, ammonia and kerosene compared with the fossil versions, for chosen power, gas and carbon prices',
@@ -300,9 +302,10 @@ export function futures(el) {
 /* ---------------- plant2035 ---------------- */
 // "Your 2035 plant": drag an electrolysis plant around power price × full-load hours. Lines show where the
 // electric product matches its fossil equivalent at a given carbon price (section 3–4 model: lcoh, eProducts, fossil;
-// gas €35/MWh; e-kerosene uses CO₂ from air capture at scale, €250/t). Policy: EU carbon price €70/t (as section 4),
+// gas €35/MWh; e-kerosene uses CO₂ from air capture at scale, €250/t). Policy: EU carbon price €75/t (as section 4),
 // US 45V credit up to $3/kg; the three $10/$20/$40 futures of the main essay as reference dots.
-const PARITY = [0, 70, 200, 500, 1000];
+const E200 = 200 / 1.13, E500 = 500 / 1.13, E1000 = 1000 / 1.13; // $200, $500 and $1,000 a tonne at US$1.13/€
+const PARITY = [0, 75, E200, E500, E1000];
 export function plant2035(el) {
   const st = { price: 20 * EUR, hours: 5000, prod: 'h2', capex: 2100, credit: false };
   let geo = null, img = null, imgKey = '';
@@ -311,7 +314,7 @@ export function plant2035(el) {
   const eCost = (k, p, H) => sum(eProducts({ price: p, hours: H, capex: st.capex, src: 'dacf' })[k]) - (st.credit && k === 'h2' ? 3 * EUR : 0);
   const fNo = (k, p) => { const F = fossil({ gas: 35, co2p: 0, price: p })[k]; return sum(F); };
   const beAt = (k, p, H) => (eCost(k, p, H) - fNo(k, p)) / PER[k]; // carbon price for parity, €/t CO₂
-  const bandCol = v => v <= 0 ? '#2fa58a' : v <= 70 ? mix('#2fa58a', '#9ccf8a', v / 70) : v <= 200 ? mix('#9ccf8a', '#f2d16b', (v - 70) / 130) : v <= 500 ? mix('#f2d16b', '#e58a4e', (v - 200) / 300) : mix('#e58a4e', '#b5434a', clamp((v - 500) / 700, 0, 1));
+  const bandCol = v => v <= 0 ? '#2fa58a' : v <= 75 ? mix('#2fa58a', '#9ccf8a', v / 75) : v <= 200 ? mix('#9ccf8a', '#f2d16b', (v - 75) / 125) : v <= 500 ? mix('#f2d16b', '#e58a4e', (v - 200) / 300) : mix('#e58a4e', '#b5434a', clamp((v - 500) / 700, 0, 1));
   const fig = new Fig(el, {
     label: 'Drag an electrolysis plant across power price and full-load hours; lines show where its hydrogen, ammonia or e-kerosene would cost the same as the fossil version at a given carbon price',
     height: w => w < 600 ? 430 : 380,
@@ -327,7 +330,7 @@ export function plant2035(el) {
       }
       ctx.imageSmoothingEnabled = true; ctx.drawImage(img, A.l, A.t, A.r - A.l, A.b - A.t);
       // parity lines: for each carbon price, the hours at which e-cost = fossil cost, by bisection
-      const labs = [];
+      const lines = [];
       PARITY.forEach(X => {
         const pts = [];
         for (let p = 0; p <= pmax; p += 1) {
@@ -337,12 +340,27 @@ export function plant2035(el) {
           pts.push([sx(p), sy(hi)]);
         }
         if (pts.length > 1) {
-          pathLine(ctx, pts, alpha(C.ink, X === 0 ? 0.85 : 0.5), X === 0 ? 1.8 : 1.1, X === 70 ? [4, 3] : null);
-          const lv = { 0: 7300, 70: 6500, 200: 3800, 500: 3100, 1000: 5600 }[X], ty = sy(lv); let q = pts[pts.length - 1]; if (pts[pts.length - 1][1] <= ty && pts[0][1] >= ty) q = pts.reduce((m, c) => Math.abs(c[1] - ty) < Math.abs(m[1] - ty) ? c : m); labs.push([X, q]);
+          pathLine(ctx, pts, alpha(C.ink, X === 0 ? 0.85 : 0.5), X === 0 ? 1.8 : 1.1, X === 75 ? [4, 3] : null);
+          lines.push([X, pts]);
         }
       });
-      // labels at the right-hand end of each line, kept apart
-      let lastY = -99; labs.sort((a, b) => a[1][1] - b[1][1]).forEach(([X, q]) => { const y = Math.max(q[1] + 4, lastY + 13, A.t + 14), s = X === 0 ? 'parity, no carbon price' : X === 70 ? 'today’s €70/t' : `€${X.toLocaleString('en')}/t`; const tw = measure(ctx, s, 10); const x = clamp(q[0] + 4, A.l + 2, A.r - tw - 2); text(ctx, s, x, Math.min(y, A.b - 4), { size: 10, weight: 650, color: C.ink, halo: true }); lastY = y; });
+      // labels at the right-hand end of each line, kept apart: each label goes beside its own line near a preferred
+      // height, inside the plot and clear of every line, the other labels and the three future dots
+      const dense = []; lines.forEach(([, P]) => P.forEach((p, i) => { if (!i) return dense.push(p); const o = P[i - 1], n = Math.ceil(Math.hypot(p[0] - o[0], p[1] - o[1]) / 2); for (let t = 1; t <= n; t++) dense.push([lerp(o[0], p[0], t / n), lerp(o[1], p[1], t / n)]); }));
+      const taken = SCEN.map(s => { const x = sx(s.usd * EUR), y = sy(s.hours); return [x - 5, y - 14, x + 8 + measure(ctx, '$' + s.usd, 9.5), y + 5]; });
+      const clash = r => dense.some(([x, y]) => x > r[0] - 2 && x < r[2] + 2 && y > r[1] - 2 && y < r[3] + 2) || taken.some(t => t[0] < r[2] + 3 && r[0] < t[2] + 3 && t[1] < r[3] + 3 && r[1] < t[3] + 3);
+      lines.forEach(([X, pts]) => {
+        const ty = sy({ 0: 7300, 75: 6500, [E200]: 3800, [E500]: 3800, [E1000]: 5600 }[X]);
+        const strs = X === 0 ? ['parity, no carbon price', 'parity'] : X === 75 ? ['today’s €75/t', '€75/t'] : [`${eur(X, -1)}/t`];
+        const cands = [];
+        strs.forEach((s, si) => { const tw = measure(ctx, s, 10, 650); pts.forEach(([qx, qy]) => [[qx + 6, qy + 4, 0], [qx - 6 - tw, qy + 4, 10], [qx - tw / 2, qy - 7, 5], [qx - tw / 2, qy + 15, 5]].forEach(([x, b, pen]) => {
+          const r = [x, b - 9, x + tw, b + 2]; if (r[0] < A.l + 3 || r[2] > A.r - 3 || r[1] < A.t + 2 || r[3] > A.b - 3) return;
+          cands.push({ s, x, b, r, sc: Math.abs(qy - ty) + pen + si * 80 });
+        })); });
+        cands.sort((a, b) => a.sc - b.sc);
+        const c = cands.find(c => !clash(c.r)) || cands[0]; if (!c) return;
+        taken.push(c.r); text(ctx, c.s, c.x, c.b, { size: 10, weight: 650, color: C.ink, halo: true });
+      });
       // the three futures
       SCEN.forEach(s => { const x = sx(s.usd * EUR), y = sy(s.hours); circle(ctx, x, y, 3.5, alpha(C.ink2, 0.7)); if (Math.hypot(x - sx(st.price), y - sy(st.hours)) > 24) text(ctx, '$' + s.usd, x + 6, y - 4, { size: 9.5, color: C.ink2, halo: true }); });
       // the plant
@@ -353,12 +371,12 @@ export function plant2035(el) {
       // legend: colour = carbon price needed
       if (!narrow) {
         const lx = A.r + 22; let ly = A.t + 8; text(ctx, 'carbon price', lx, ly, { size: 10.5, weight: 650, color: C.ink2 }); text(ctx, 'needed for parity', lx, ly + 13, { size: 10.5, weight: 650, color: C.ink2 }); ly += 24;
-        [[0, 'none'], [70, '€70/t'], [200, '€200/t'], [500, '€500/t'], [1200, 'more']].forEach(([v, s], i) => { ctx.fillStyle = mix(C.paper, bandCol(v), 0.55); ctx.fillRect(lx, ly + i * 18, 18, 15); text(ctx, s, lx + 24, ly + 11 + i * 18, { size: 10, color: C.ink2 }); });
-        text(ctx, 'dots: the $10/$20/$40', lx, ly + 5 * 18 + 14, { size: 10, color: C.ink3 });
-        text(ctx, 'futures of section 9', lx, ly + 5 * 18 + 27, { size: 10, color: C.ink3 });
+        [[0, 'none'], [75, '€75/t'], [E200, `${eur(E200, -1)}/t`], [E500, `${eur(E500, -1)}/t`], [1200, 'more']].forEach(([v, s], i) => { ctx.fillStyle = mix(C.paper, bandCol(v), 0.55); ctx.fillRect(lx, ly + i * 18, 18, 15); text(ctx, s, lx + 24, ly + 11 + i * 18, { size: 10, color: C.ink2 }); });
+        text(ctx, 'dots: the three futures', lx, ly + 5 * 18 + 14, { size: 10, color: C.ink3 });
+        text(ctx, 'in the text', lx, ly + 5 * 18 + 27, { size: 10, color: C.ink3 });
       } else {
         let lx = A.l - 36; const ly = h - 16; text(ctx, 'carbon price for parity:', lx, ly - 16, { size: 10, color: C.ink2 });
-        [[0, 'none'], [70, '€70'], [200, '€200'], [500, '€500'], [1200, 'more']].forEach(([v, s]) => { ctx.fillStyle = mix(C.paper, bandCol(v), 0.55); ctx.fillRect(lx, ly - 9, 12, 11); text(ctx, s, lx + 15, ly, { size: 10, color: C.ink2 }); lx += measure(ctx, s, 10) + 26; });
+        [[0, 'none'], [75, '€75'], [E200, eur(E200, -1)], [E500, eur(E500, -1)], [1200, 'more']].forEach(([v, s]) => { ctx.fillStyle = mix(C.paper, bandCol(v), 0.55); ctx.fillRect(lx, ly - 9, 12, 11); text(ctx, s, lx + 15, ly, { size: 10, color: C.ink2 }); lx += measure(ctx, s, 10) + 26; });
       }
       geo = { sx, sy, A, px, py };
     },
@@ -375,9 +393,9 @@ export function plant2035(el) {
   segmented(mo, { label: 'Installed electrolyser cost', options: [{ label: 'Europe today, €2,100/kW', value: 2100, name: 'pc-now' }, { label: '2030 (assumed), €1,500/kW', value: 1500, name: 'pc-2030' }, { label: 'China today, €800/kW', value: 800, name: 'pc-cn' }, { label: 'At scale (assumed), €300/kW', value: 300, name: 'pc-doe' }], value: st.capex, onchange: v => { st.capex = v; upd(); } });
   segmented(mo, { label: 'US 45V credit ($3/kg, hydrogen only)', options: [{ label: 'Off', value: false, name: 'pl-noc' }, { label: 'On', value: true, name: 'pl-45v' }], value: st.credit, onchange: v => { st.credit = v; upd(); } });
   function upd() {
-    const k = st.prod, [nm, unit, dp] = PRD[k], e = eCost(k, st.price, st.hours), f70 = fNo(k, st.price) + 70 * PER[k], be = beAt(k, st.price, st.hours);
-    const fmt = v => (unit === '€/t' ? '€' + Math.round(v).toLocaleString('en') + '/t' : '€' + v.toFixed(dp) + '/' + unit.split('/')[1]);
-    ro.innerHTML = `Your plant buys power at <b>€${Math.round(st.price)}/MWh</b> and runs <b>${st.hours.toLocaleString('en')} hours</b> a year. ${nm}: <b>${fmt(e)}</b>${st.credit && k === 'h2' ? ' after the US credit' : ''}, against ${fmt(f70)} for the fossil version at today’s €70/t carbon price. ` + (be <= 0 ? 'It is <b>cheaper without any carbon price</b>.' : be <= 70 ? `It already wins at today’s carbon price (parity at €${Math.round(be)}/t).` : `Parity needs a carbon price of <b>≈€${Math.round(be / 10) * 10}/t</b> CO₂.`);
+    const k = st.prod, [nm, unit, dp] = PRD[k], e = eCost(k, st.price, st.hours), f75 = fNo(k, st.price) + 75 * PER[k], be = beAt(k, st.price, st.hours);
+    const fmt = v => eur(v, dp) + '/' + unit.split('/')[1];
+    ro.innerHTML = `Your plant buys power at <b>${eur(st.price, 0)}/MWh</b> and runs <b>${st.hours.toLocaleString('en')} hours</b> a year. ${nm}: <b>${fmt(e)}</b>${st.credit && k === 'h2' ? ' after the US credit' : ''}, against ${fmt(f75)} for the fossil version at today’s €75/t carbon price. ` + (be <= 0 ? 'It is <b>cheaper without any carbon price</b>.' : be <= 75 ? `It already wins at today’s carbon price (parity at ${eur(be, 0)}/t).` : `Parity needs a carbon price of <b>≈${eur(be, -1)}/t</b> CO₂.`);
     fig.invalidate();
   }
   upd();

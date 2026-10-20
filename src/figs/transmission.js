@@ -112,7 +112,7 @@ export function transformer(el) {
   const V1 = 21; // kV generator terminal (typical order of magnitude)
   const PMW = 500;
   const fig = new Fig(el, {
-    label: 'The generator from section 2 feeds a transformer: two coils on an iron core. The ratio of turns sets how voltage and current trade off',
+    label: 'The generator from the first essay feeds a transformer: two coils on an iron core. The ratio of turns sets how voltage and current trade off',
     height: w => w < 560 ? 560 : Math.max(320, Math.min(380, w * 0.44)),
     animated: true,
     step(dt) { st.ph += dt * 2 * Math.PI * 0.5; st.ang = st.ph; },
@@ -123,7 +123,6 @@ export function transformer(el) {
       const e = Math.sin(st.ang);
       drawStator(ctx, gx, gy, gR, [{ a: Math.PI, col: COPPER, e }, { a: 0, col: COPPER, e: -e }]);
       drawRotor(ctx, gx, gy, gR * 0.78, st.ang, 1);
-      text(ctx, 'generator', gx, gy + gR + 34, { size: 11, color: C.ink3, align: 'center' });
       // core
       const t = narrow ? 22 : 26, x0 = gx + gR + 46, cw = narrow ? w - x0 - 16 : w * 0.42 - x0 + 70, ch = narrow ? 220 : Math.min(h - 90, 230), cy = gy - ch / 2;
       rrect(ctx, x0, cy, cw, ch, 14); ctx.fillStyle = '#c9c2b4'; ctx.fill();
@@ -140,20 +139,21 @@ export function transformer(el) {
       const px = x0 + t / 2, sxw = x0 + cw - t / 2;
       line(ctx, gx, gy - gR - 18, gx, cy - 10, COPPER, 2); line(ctx, gx, cy - 10, px, cy - 10, COPPER, 2); line(ctx, px, cy - 10, px, cy + t + 4, COPPER, 2);
       line(ctx, gx, gy + gR + 18, gx, cy + ch + 10, COPPER, 2); line(ctx, gx, cy + ch + 10, px, cy + ch + 10, COPPER, 2); line(ctx, px, cy + ch + 10, px, cy + ch - t - 4, COPPER, 2);
+      text(ctx, 'generator', gx, gy + gR + 34, { size: 11, color: C.ink3, align: 'center', halo: 8 }); // after the lead, so the lead passes behind it
       const n1 = 6, n2 = clamp(Math.round(6 * st.ratio / 6), 1, 36);
       drawWinding(ctx, px, cy + t + 4, cy + ch - t - 4, n1, COPPER, t);
       drawWinding(ctx, sxw, cy + t + 4, cy + ch - t - 4, n2, '#b4703d', t);
       line(ctx, sxw, cy + t + 4, sxw, cy - 10, '#b4703d', 2); line(ctx, sxw, cy - 10, sxw + (narrow ? 10 : 30), cy - 10, '#b4703d', 2);
       text(ctx, 'to the grid', sxw + (narrow ? 0 : 30), Math.max(12, cy - 16), { size: 11, color: C.ink3, align: 'right' });
       text(ctx, `${n1 * 10} turns`, px, cy + ch + 28, { size: 11, color: C.ink2, align: 'center' });
-      text(ctx, `${Math.round(n1 * 10 * st.ratio)} turns`, sxw, cy + ch + 28, { size: 11, color: C.ink2, align: 'center' });
+      text(ctx, `${Math.round(n1 * 10 * st.ratio).toLocaleString('en')} turns`, sxw, cy + ch + 28, { size: 11, color: C.ink2, align: 'center' });
       // waveforms: two panels on linear scales, in and out drawn together, so the trade is visible as it is:
       // voltage goes up by the turns ratio while current goes down by it
-      const V2 = V1 * st.ratio, I1 = PMW / (Math.sqrt(3) * V1), I2 = I1 / st.ratio; // kA
+      const V2 = V1 * st.ratio, I1 = PMW / V1, I2 = I1 / st.ratio; // kA, single-phase as drawn: I = P / V
       const panels = [['voltage', 'kV', C.field, V1, V2], ['current', 'kA', C.electron, I1, I2]];
       const bx = narrow ? 16 : x0 + cw + 70, bw = narrow ? w - 32 : w - bx - 20;
       const top = narrow ? cy + ch + 46 : 20, ph = narrow ? (h - top - 16) / 2 : (h - 30) / 2;
-      const fmtv = v => (v < 10 ? v.toFixed(2) : v.toFixed(0));
+      const fmtv = (v, u) => (v < 10 ? v.toFixed(2) : u === 'kA' && v < 100 ? v.toFixed(1) : v.toFixed(0));
       panels.forEach(([lab, unit, col, vin, vout], i) => {
         const y0 = top + i * ph + ph / 2 + 8, big = Math.max(vin, vout), A = ph * 0.32;
         line(ctx, bx, y0, bx + bw, y0, C.grid2, 1);
@@ -163,14 +163,14 @@ export function transformer(el) {
           pathLine(ctx, pts, c, wdt);
         }
         text(ctx, lab, bx, y0 - ph / 2 + 4, { size: 11, color: C.ink3 });
-        text(ctx, `in ${fmtv(vin)} ${unit}`, bx + bw - 92, y0 - ph / 2 + 4, { size: 11.5, color: alpha(col, 0.75), align: 'right', weight: 600 });
-        text(ctx, `out ${fmtv(vout)} ${unit}`, bx + bw, y0 - ph / 2 + 4, { size: 11.5, color: col, align: 'right', weight: 700 });
+        text(ctx, `in ${fmtv(vin, unit)} ${unit}`, bx + bw - 92, y0 - ph / 2 + 4, { size: 11.5, color: alpha(col, 0.75), align: 'right', weight: 600 });
+        text(ctx, `out ${fmtv(vout, unit)} ${unit}`, bx + bw, y0 - ph / 2 + 4, { size: 11.5, color: col, align: 'right', weight: 700 });
       });
     },
   });
   const ctl = controls(el);
   const ro = readout(el);
-  const upd = () => { const V2 = V1 * st.ratio, I1 = PMW / (Math.sqrt(3) * V1), I2 = I1 / st.ratio; ro.innerHTML = `${PMW} MW goes in at ${V1} kV and <b>${(I1).toFixed(1)} kA</b>; it comes out at <b>${V2.toFixed(0)} kV</b> and <b>${(I2 * 1000).toFixed(0)} A</b>. Voltage × current is unchanged, minus a fraction of a percent of heat in a good transformer.`; fig.invalidate(); };
+  const upd = () => { const V2 = V1 * st.ratio, I1 = PMW / V1, I2 = I1 / st.ratio; const fI = i => i >= 1 ? i.toFixed(i < 10 ? 2 : 1) + ' kA' : Math.round(i * 1000) + ' A'; ro.innerHTML = `${PMW} MW goes in at ${V1} kV and <b>${fI(I1)}</b>; it comes out at <b>${V2.toFixed(0)} kV</b> and <b>${fI(I2)}</b>. Voltage × current is unchanged, minus a fraction of a per cent of heat in a good transformer.`; fig.invalidate(); };
   slider(ctl, { label: 'Turns ratio (grid : generator)', min: 0.2, max: 20, step: 'any', value: st.ratio, color: '#b4703d', fmt: v => v.toFixed(1) + ' : 1', oninput: v => { st.ratio = v; upd(); } });
   upd();
 }

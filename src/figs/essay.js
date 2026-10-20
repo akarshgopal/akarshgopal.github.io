@@ -15,12 +15,12 @@ import { heatPump, adequacy } from './futures.js';
 import { learning, foak, cleanGrid } from './clean.js';
 import { energyShare, unlock } from './economy.js';
 import { worldMix } from './global1.js';
-import { accessWorld, marketDesigns, retailWorld, billWorld } from './global2.js';
+import { marketDesigns, retailWorld, billWorld } from './global2.js';
 
 export const MAIN_FIGS = {
   drift, potential, powerEnergy, faraday, rankine, windPower, betz, solarDay,
   losses, transformer, frequency, merit, gridDay, capture, network, timeline, spot, bill, usCompare, lcoe, lazardHistory,
-  historyChart, offset, heatPump, adequacy, learning, foak, cleanGrid, energyShare, unlock, worldMix, accessWorld, marketDesigns, retailWorld, billWorld,
+  historyChart, offset, heatPump, adequacy, learning, foak, cleanGrid, energyShare, unlock, worldMix, marketDesigns, retailWorld, billWorld,
   buildPlant,
   rotor: el => generator(el, { stage: 1 }),
   threePhase: el => generator(el, { stage: 2 }),

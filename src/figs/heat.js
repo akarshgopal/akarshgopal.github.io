@@ -53,7 +53,7 @@ export function rankine(el) {
         ctx.beginPath(); ctx.moveTo(fx - 7, fy); ctx.quadraticCurveTo(fx - 4, fy - fh * 0.6, fx, fy - fh); ctx.quadraticCurveTo(fx + 4, fy - fh * 0.6, fx + 7, fy); ctx.closePath();
         ctx.fillStyle = alpha(mix('#f2b134', '#e0503a', 0.5 + 0.5 * Math.sin(k)), 0.8); ctx.fill();
       }
-      text(ctx, 'boiler', boiler.x + boiler.w / 2, boiler.y - 8, { size: 11.5, color: C.ink2, align: 'center', weight: 550 });
+      text(ctx, 'boiler', boiler.x + boiler.w * 0.38, boiler.y + boiler.h + 16, { size: 11.5, color: C.ink2, align: 'center', weight: 550 }); // below, clear of the pipes
       // turbine (expanding)
       const th0 = 16, th1 = 46;
       ctx.beginPath(); ctx.moveTo(tIn.x, tIn.y - th0); ctx.lineTo(tOut.x, tOut.y - th1); ctx.lineTo(tOut.x, tOut.y + th1); ctx.lineTo(tIn.x, tIn.y + th0); ctx.closePath();
@@ -72,8 +72,9 @@ export function rankine(el) {
       // condenser
       rrect(ctx, cond.x, cond.y, cond.w, cond.h, 10); ctx.fillStyle = '#e3edf3'; ctx.fill(); ctx.strokeStyle = '#c1d3de'; ctx.stroke();
       for (let k = 0; k < 4; k++) { const yy = cond.y + cond.h * (0.25 + k * 0.17); ctx.beginPath(); for (let i = 0; i <= 20; i++) { const xx = cond.x + 8 + i / 20 * (cond.w - 16); ctx.lineTo(xx, yy + Math.sin(i * 0.9 + st.blade * 0.5) * 2.5); } ctx.strokeStyle = alpha(C.cold, 0.6); ctx.lineWidth = 1.6; ctx.stroke(); }
-      text(ctx, 'condenser', cond.x + cond.w / 2, cond.y + cond.h + 16, { size: 11.5, color: C.ink2, align: 'center', weight: 550 });
-      text(ctx, '→ waste heat ' + Math.round(100 - eff().ca) + '%', cond.x + cond.w / 2 + 8, cond.y + cond.h + 32, { size: 10.5, color: C.cold, align: 'left', weight: 600 });
+      // labelled on its left, where no pipe runs
+      text(ctx, 'condenser', cond.x - 8, cond.y + cond.h / 2 - 3, { size: 11.5, color: C.ink2, align: 'right', weight: 550 });
+      text(ctx, 'waste heat ' + Math.round(100 - eff().ca) + '%', cond.x - 8, cond.y + cond.h / 2 + 13, { size: 10.5, color: C.cold, align: 'right', weight: 600 });
       // pump
       circle(ctx, pump.x, pump.y, 11, '#fff', C.ink3, 1.5);
       ctx.save(); ctx.translate(pump.x, pump.y); ctx.rotate(st.blade * 0.6); line(ctx, -7, 0, 7, 0, C.ink3, 2); line(ctx, 0, -7, 0, 7, C.ink3, 2); ctx.restore();
@@ -107,15 +108,18 @@ export function rankine(el) {
       pathLine(ctx, carnot, C.ink2, 1.5, [5, 4]);
       pathLine(ctx, ca, C.hot, 2.2);
       text(ctx, 'Carnot limit', sx(112), sy(100 * (1 - tc / (112 + K))) - 12, { size: 11, color: C.ink2, align: 'left', halo: true });
-      text(ctx, 'practical estimate', sx(400), sy(100 * (1 - Math.sqrt(tc / (400 + K)))) + 18, { size: 11, color: C.hot, align: 'left', halo: true });
+      const peT = narrow ? 250 : 400; // further left on a phone, clear of the 1970s label
+      text(ctx, 'practical estimate', sx(peT), sy(100 * (1 - Math.sqrt(tc / (peT + K)))) + 18, { size: 11, color: C.hot, align: 'left', halo: true });
       // history points
       circle(ctx, sx(315), sy(1e-9 + 100 * (1 - Math.sqrt(tc / (315 + K)))), 0, null);
       line(ctx, sx(315), box.b, sx(315), box.b - 8, C.ink3, 1.5);
       text(ctx, '1920s ≈315°', sx(315), box.b - 12, { size: 10.5, color: C.ink3, align: 'center' });
+      // the 1970s label sits right of its point, below the practical curve; on a phone both labels shorten (the caption has the full names)
       circle(ctx, sx(540), sy(35), 4.5, C.coal, '#fff', 1.5);
-      text(ctx, '1970s US subcritical ≈35%', sx(540) - 8, sy(35) + 4, { size: 10.5, color: C.coal, align: 'right', halo: true });
+      const lab70 = narrow ? ['1970s', '≈35%'] : ['1970s US', 'subcritical ≈35%'];
+      lab70.forEach((s, i) => text(ctx, s, sx(540) + 9, sy(35) + 4 + i * 13, { size: 10.5, color: C.coal, align: 'left', halo: true }));
       circle(ctx, sx(610), sy(45), 4.5, C.coal, '#fff', 1.5);
-      text(ctx, 'modern ultra-supercritical >45%', sx(610) - 8, sy(45) - 10, { size: 10.5, color: C.coal, align: 'right', halo: true });
+      text(ctx, narrow ? 'modern >45%' : 'modern ultra-supercritical >45%', sx(610) - 8, sy(45) - 10, { size: 10.5, color: C.coal, align: 'right', halo: true });
       // marker
       const e = eff();
       line(ctx, sx(st.Th), box.t, sx(st.Th), box.b, alpha(C.hot, 0.35), 1);

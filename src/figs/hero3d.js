@@ -26,7 +26,7 @@ export function hero3d(el) {
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(32, 1.6, 0.1, 100);
   camera.position.set(0, 0.5, 9.2);
-  camera.lookAt(0, 0, 0);
+  camera.lookAt(0, -0.2, 0); // aim a little low so the feet clear the bottom edge
 
   scene.add(new THREE.HemisphereLight(0xfff8ee, 0xb8b0a2, 1.3));
   const key = new THREE.DirectionalLight(0xffffff, 2.2); key.position.set(4, 6, 7); scene.add(key);
@@ -47,7 +47,9 @@ export function hero3d(el) {
 
   // Teeth + coils
   const copperBase = new THREE.Color('#c98a55');
-  const phaseCols = [C.phaseA, C.phaseC, C.phaseB, C.phaseA, C.phaseC, C.phaseB].map(c => new THREE.Color(c));
+  // coils counter-clockwise from the right, as in the 2D three-phase figure: A, B, C, A, B, C; the rotor turns clockwise,
+  // so it reaches A, then C's far coil, then B — B lags A by a third of a turn
+  const phaseCols = [C.phaseA, C.phaseB, C.phaseC, C.phaseA, C.phaseB, C.phaseC].map(c => new THREE.Color(c));
   const coils = [];
   for (let k = 0; k < 6; k++) {
     const a = k * Math.PI / 3;
@@ -113,14 +115,14 @@ export function hero3d(el) {
     renderer.setPixelRatio(Math.min(2.5, window.devicePixelRatio || 1));
     renderer.setSize(w, h, true);
     camera.aspect = w / h;
-    camera.position.z = w < 500 ? 11.5 : 9.2;
+    camera.position.z = w < 500 ? 11.5 : 11.2; // far enough back that the whole stator ring fits on a wide screen
     camera.updateProjectionMatrix();
     render();
   }
   function render() {
-    rotor.rotation.z = ang;
+    rotor.rotation.z = -ang; // clockwise, like the 2D figures
     for (let k = 0; k < 6; k++) {
-      const e = Math.sin(ang - k * Math.PI / 3);
+      const e = Math.sin(ang + k * Math.PI / 3);
       coils[k].emissiveIntensity = glow ? Math.pow(Math.abs(e), 2) * 0.9 : 0;
     }
     root.rotation.set(pitch, yaw, 0);

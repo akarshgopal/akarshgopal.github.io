@@ -28,7 +28,7 @@ export function threePhase(el) {
     label: 'Three-phase transformer connections: star and delta windings, the phasors of the high- and low-voltage sides, and the phase shift given by the clock number',
     height: w => w < 600 ? 560 : 400, animated: true, step() {},
     draw(ctx, w, h, f) {
-      const narrow = w < 600, G = GROUPS[st.g], rot = f.t * 0.6;
+      const narrow = w < 600, G = GROUPS[st.g], rot = f.t * 0.6; // rot animates the waves only; the phasors stay put, high-side A at 12 o'clock
       const shift = -G.k * 30 * Math.PI / 180; // LV relative to HV, CCW positive
       // winding sketches
       const sketch = (cx, cy, r, type, label) => {
@@ -46,7 +46,7 @@ export function threePhase(el) {
       circle(ctx, pc.x, pc.y, pc.r, '#fff', C.grid2, 1);
       for (let k = 0; k < 12; k++) { const a = Math.PI / 2 - k * Math.PI / 6; text(ctx, String(k === 0 ? 12 : k), pc.x + (pc.r + 12) * Math.cos(a), pc.y - (pc.r + 12) * Math.sin(a) + 4, { size: 10, color: C.ink3, align: 'center' }); }
       for (let i = 0; i < 3; i++) {
-        const a = Math.PI / 2 - i * 2 * Math.PI / 3 + rot;
+        const a = Math.PI / 2 - i * 2 * Math.PI / 3;
         arrow(ctx, pc.x, pc.y, pc.x + pc.r * 0.92 * Math.cos(a), pc.y - pc.r * 0.92 * Math.sin(a), PH[i], 3, 9);
         const b = a + shift;
         arrow(ctx, pc.x, pc.y, pc.x + pc.r * 0.55 * Math.cos(b), pc.y - pc.r * 0.55 * Math.sin(b), alpha(PH[i], 0.75), 2, 7);
@@ -57,9 +57,9 @@ export function threePhase(el) {
       if (B.r - B.l > 80) {
         const yy = scale(-1.1, 1.1, B.b, B.t), xx = scale(0, 1, B.l, B.r);
         line(ctx, B.l, yy(0), B.r, yy(0), C.grid2, 1);
-        const wave = (amp, ph, col, wd) => pathLine(ctx, Array.from({ length: 121 }, (_, k) => { const u = k / 120; return [xx(u), yy(amp * Math.sin(2 * Math.PI * u * 1.5 + rot + Math.PI / 2 + ph - Math.PI / 2))]; }), col, wd);
+        const wave = (amp, ph, col, wd, dash) => pathLine(ctx, Array.from({ length: 121 }, (_, k) => { const u = k / 120; return [xx(u), yy(amp * Math.sin(2 * Math.PI * u * 1.5 + rot + ph))]; }), col, wd, dash);
         wave(1, 0, C.phaseA, 2.2); wave(0.6, shift, alpha(C.phaseA, 0.7), 2, [4, 3]);
-        text(ctx, 'phase A, high side (solid) and low side', B.l, B.t - 10, { size: 10.5, color: C.ink2, weight: 600 });
+        text(ctx, 'phase A, high side (solid) and low side (dashed)', B.l, B.t - 10, { size: 10.5, color: C.ink2, weight: 600 });
         text(ctx, `shift: ${G.k === 0 ? 'none' : (G.k > 6 ? 'low side leads by ' + (12 - G.k) * 30 + '°' : 'low side lags by ' + G.k * 30 + '°')}`, B.l, B.b + 18, { size: 11, weight: 650, color: C.ink });
       }
     },
@@ -202,8 +202,9 @@ export function shortage(el) {
         const P = ppi.map(r => [sx(r[0] + (r[1] - 0.5) / 12), sy(r[2] / pb * 100)]), Q = cpi.map(r => [sx(r[0] + (r[1] - 0.5) / 12), sy(r[2] / cb * 100)]);
         pathLine(ctx, Q, C.ink3, 1.8); pathLine(ctx, P, SAT, 2.4);
         const lp = ppi[ppi.length - 1], lc = cpi[cpi.length - 1];
-        const lab = (pt, s, col, dy) => narrow ? text(ctx, s, pt[0] - 4, pt[1] + dy, { size: 10.5, weight: 650, color: col, align: 'right', halo: true }) : text(ctx, s, pt[0] + 6, pt[1] + 4 + dy, { size: 11, weight: 650, color: col });
-        lab(P[P.length - 1], `transformers ${Math.round(lp[2] / pb * 100)}`, SAT, narrow ? -8 : 0); lab(Q[Q.length - 1], `all consumer prices ${Math.round(lc[2] / cb * 100)}`, C.ink2, narrow ? 16 : 0);
+        // on a phone the end labels would sit on the 2021 climb, so they become a key in the empty top-left corner
+        const lab = (pt, s, col, row) => narrow ? text(ctx, s, A.l + 8, A.t + 14 + row * 17, { size: 10.5, weight: 650, color: col, halo: true }) : text(ctx, s, pt[0] + 6, pt[1] + 4, { size: 11, weight: 650, color: col });
+        lab(P[P.length - 1], `transformers ${Math.round(lp[2] / pb * 100)}`, SAT, 0); lab(Q[Q.length - 1], `all consumer prices ${Math.round(lc[2] / cb * 100)}`, C.ink2, 1);
         geo = { sx, sy, A };
         if (st.hover) { const r = st.hover; const x = sx(r[0] + (r[1] - 0.5) / 12); line(ctx, x, A.t, x, A.b, C.ink, 1, [2, 2]); }
       } else {
@@ -228,7 +229,7 @@ export function shortage(el) {
   function upd() {
     if (st.view === 'lead') ro.innerHTML = 'Before 2020 a large transformer could be ordered for delivery within a year. By 2024 three years was common, and some quotes ran to five. Distribution transformers went from months to as long as two years.';
     else if (st.hover) { const r = st.hover, c = cpi.find(q => q[0] === r[0] && q[1] === r[1]); ro.innerHTML = `<b>${['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'][r[1] - 1]} ${r[0]}</b>: transformer producer prices <b>${Math.round(r[2] / pb * 100)}</b>, consumer prices ${c ? Math.round(c[2] / cb * 100) : '–'} (2019 = 100).`; }
-    else { const lp = ppi[ppi.length - 1]; ro.innerHTML = `From 2008 to 2020 transformer prices barely moved. Between 2020 and 2023 they rose by about two-thirds, and they have kept rising: by ${['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'][lp[1] - 1]} ${lp[0]}, US producer prices were <b>${Math.round(lp[2] / pb * 100 - 100)}% above</b> their 2019 level, against about ${Math.round(cpi[cpi.length - 1][2] / cb * 100 - 100)}% for consumer prices in general. Hover the chart.`; }
+    else { const lp = ppi[ppi.length - 1]; ro.innerHTML = `From 2008 to 2020 transformer prices barely moved. Between 2020 and 2023 they rose by more than 60%, and they have kept rising: by ${['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'][lp[1] - 1]} ${lp[0]}, US producer prices were <b>${Math.round(lp[2] / pb * 100 - 100)}% above</b> their 2019 level, against about ${Math.round(cpi[cpi.length - 1][2] / cb * 100 - 100)}% for consumer prices in general.`; }
     fig.invalidate();
   }
   upd();
@@ -241,7 +242,7 @@ export function sizeFrequency(el) {
   const vol = f => Math.pow(1 / (f * mat(f).B), 0.75); // magnetics volume ∝ (P / f·B·J)^(3/4)
   const fig = new Fig(el, {
     label: 'How the size of a transformer’s magnetic core shrinks with operating frequency, and the chain of power electronics a solid-state transformer needs to exploit it',
-    height: w => w < 600 ? 610 : 500,
+    height: w => w < 600 ? 610 : 580,
     draw(ctx, w, h) {
       const narrow = w < 600, ref = vol(50), v = vol(st.f), m = mat(st.f);
       const A = { l: 14, r: narrow ? w - 14 : w * 0.55, t: 30, b: narrow ? 230 : 300 };
@@ -255,7 +256,7 @@ export function sizeFrequency(el) {
       text(ctx, `${pct2(v / ref * 100)}% of the volume`, cx, cy + Math.max(ss / 2, 8) + 16, { size: 11.5, weight: 700, color: C.ink, align: 'center', halo: true });
       // SST chain
       const B = narrow ? { l: 14, r: w - 14, t: 292, b: 430 } : { l: w * 0.58, r: w - 14, t: 40, b: 320 };
-      const blocks = st.f <= 60 ? [['50 Hz transformer', 99.3]] : [['rectifier', 99.0], ['high-frequency inverter', 99.0], [`${st.f >= 1000 ? (st.f / 1000).toPrecision(2) + ' kHz' : Math.round(st.f) + ' Hz'} transformer`, 99.6], ['rectifier', 99.0], ['inverter', 99.0]];
+      const blocks = st.f <= 60 ? [[`${st.f < 20 ? st.f.toFixed(1) : Math.round(st.f)} Hz transformer`, 99.5]] : [['rectifier', 99.0], ['high-frequency inverter', 99.0], [`${st.f >= 1000 ? (st.f / 1000).toPrecision(2) + ' kHz' : Math.round(st.f) + ' Hz'} transformer`, 99.6], ['rectifier', 99.0], ['inverter', 99.0]];
       text(ctx, st.f <= 60 ? 'conventional: one passive box' : 'solid-state transformer: five stages', B.l, B.t - 14, { size: 11, weight: 650, color: C.ink2 });
       const bh = Math.min(30, (B.b - B.t - 30) / blocks.length - 8);
       let eff = 1;
@@ -267,7 +268,8 @@ export function sizeFrequency(el) {
       const lx = scale(Math.log10(16.7), Math.log10(50000), T.l, T.r), ly = scale(Math.log10(0.5), Math.log10(260), T.b, T.t);
       chart = { T, lx };
       [[0.5], [1], [2], [5], [10], [20], [50], [100], [200]].forEach(([v]) => { if ([1, 10, 100].includes(v) || !narrow) { line(ctx, T.l, ly(Math.log10(v)), T.r, ly(Math.log10(v)), C.grid, 1); text(ctx, v + '%', T.l - 6, ly(Math.log10(v)) + 4, { size: 10, color: C.ink3, align: 'right' }); } });
-      [[16.7, '16.7 Hz'], [50, '50'], [400, '400 Hz'], [1000, '1 kHz'], [20000, '20 kHz']].filter(([f]) => !narrow || f !== 1000).forEach(([f, lab]) => { line(ctx, lx(Math.log10(f)), T.b, lx(Math.log10(f)), T.b + 4, C.ink3, 1); text(ctx, lab, lx(Math.log10(f)), T.b + 16, { size: 10, color: C.ink3, align: 'center' }); });
+      [[16.7, ''], [50, '50'], [400, '400 Hz'], [1000, '1 kHz'], [20000, '20 kHz']].filter(([f]) => !narrow || f !== 1000).forEach(([f, lab]) => { line(ctx, lx(Math.log10(f)), T.b, lx(Math.log10(f)), T.b + 4, C.ink3, 1); text(ctx, lab, lx(Math.log10(f)), T.b + 16, { size: 10, color: C.ink3, align: 'center' }); });
+      text(ctx, '16.7 Hz', T.l, T.b + 16, { size: 10, color: C.ink3, align: narrow ? 'center' : 'left' }); // desktop: left-aligned, clears the 0.5% label
       text(ctx, 'core volume, % of a 50 Hz design (log scale)', T.l, T.t - 10, { size: 10.5, color: C.ink3 });
       text(ctx, 'operating frequency (log scale)', T.r, T.b + 30, { size: 10.5, color: C.ink3, align: 'right' });
       // material bands and the curve, segment by segment
@@ -350,7 +352,7 @@ export function scaleUp(el) {
       if (big) { rrect(ctx, tx + tw * 0.1, gy - tankH - bh * 0.35, tw * 0.38, bh * 0.22, bh * 0.1); ctx.fillStyle = lighten(IRON, 0.25); ctx.fill(); }
       text(ctx, s < 25 ? 'no data: drawn by extending the trend' : `${fmtKg(M.kg)}${M.real ? '' : ' (model)'} · ${H < 10 ? H.toFixed(1) : Math.round(H)} m tall`, Sc.r - 4, Sc.t - 14, { size: 11, color: C.ink2, align: 'right', weight: 600 });
       // ---- charts on a shared log rating axis
-      const X0 = 0, X1 = 6, C1 = narrow ? { l: 54, r: w - 16, t: 300, b: 430 } : { l: w * 0.5 + 44, r: w - 16, t: 40, b: h * 0.5 - 14 }, C2 = narrow ? { l: 54, r: w - 16, t: 470, b: h - 40 } : { l: w * 0.5 + 44, r: w - 16, t: h * 0.5 + 22, b: h - 40 };
+      const X0 = 0, X1 = 6, C1 = narrow ? { l: 54, r: w - 16, t: 300, b: 430 } : { l: w * 0.5 + 44, r: w - 16, t: 40, b: h * 0.5 - 14 }, C2 = narrow ? { l: 54, r: w - 16, t: 470, b: h - 46 } : { l: w * 0.5 + 44, r: w - 16, t: h * 0.5 + 22, b: h - 50 };
       const xt = [0, 1, 2, 3, 4, 5, 6], xf = v => ['1 kVA', '10 kVA', '100 kVA', '1 MVA', '10 MVA', '100 MVA', '1 GVA'][v];
       const a1 = axes(ctx, { box: C1, x0: X0, x1: X1, y0: 98, y1: 100, xticks: xt, xfmt: () => '', yticks: [98, 98.5, 99, 99.5, 100], yfmt: v => v.toFixed(1) + '%', ylabel: 'least peak efficiency EU rules allow' });
       ctx.fillStyle = alpha(C.ink3, 0.12); ctx.fillRect(a1.sx(0), C1.t, a1.sx(Math.log10(25)) - a1.sx(0), C1.b - C1.t);
@@ -359,21 +361,22 @@ export function scaleUp(el) {
       seg(Math.log10(25), L3, 0); seg(L3, 6, 1);
       text(ctx, 'loss caps → efficiency floor', a1.sx(L3) + 4, a1.sy(99.0), { size: 9.5, color: C.ink3, halo: true });
       line(ctx, a1.sx(L3), a1.sy(99.2), a1.sx(L3), a1.sy(99.45), C.ink3, 1, [2, 2]);
-      const a2 = axes(ctx, { box: C2, x0: X0, x1: X1, y0: 1, y1: 6, xticks: xt, xfmt: xf, yticks: [1, 2, 3, 4, 5, 6], yfmt: v => ['10 kg', '100 kg', '1 t', '10 t', '100 t', '1,000 t'][v - 1], ylabel: 'total mass (log scale)' });
+      const a2 = axes(ctx, { box: C2, x0: X0, x1: X1, y0: 1, y1: 6, xticks: xt, xfmt: v => v && !(narrow && v === 1) ? xf(v) : '', yticks: [1, 2, 3, 4, 5, 6], yfmt: v => ['10 kg', '100 kg', '1 t', '10 t', '100 t', '1,000 t'][v - 1], ylabel: 'total mass (log scale)' });
+      text(ctx, xf(0), C2.l + 1, C2.b + 15, { size: 11, color: C.ink3 }); // left-aligned: clears the 10 kg label
       const lw = l => Math.log10(massAt(10 ** l).kg);
       const lp = []; for (let l = Math.log10(25); l <= 6.0001; l += 0.05) lp.push([a2.sx(l), a2.sy(lw(l))]);
       pathLine(ctx, lp, alpha(IRON, 0.9), 1.4, [5, 4]);
       ctx.fillStyle = alpha(COPPER, 0.25); ctx.fillRect(a2.sx(5), a2.sy(Math.log10(365000)), a2.sx(6) - a2.sx(5), a2.sy(Math.log10(135000)) - a2.sy(Math.log10(365000)));
       text(ctx, 'DOE: 135–365 t', a2.sx(5) + 4, a2.sy(Math.log10(365000)) - 5, { size: 9.5, color: darken(COPPER, 0.3), halo: true });
       SIE.forEach(r => circle(ctx, a2.sx(Math.log10(r[0])), a2.sy(Math.log10(r[2])), 3, darken(IRON, 0.2), '#fff', 1));
-      if (!narrow) text(ctx, 'dots: catalogue units · dashed: model between them', C2.l + 4, C2.t + 10, { size: 9.5, color: C.ink3 });
       // stops and the cursor
       STOPS.forEach(([v]) => { const x = a2.sx(Math.log10(v)); line(ctx, x, C2.b, x, C2.b + 4, C.ink3, 1); });
       const cx = a1.sx(st.lg);
       line(ctx, cx, C1.t, cx, C2.b, alpha(C.ink, 0.5), 1, [3, 3]);
+      if (!narrow) text(ctx, 'dots: catalogue units · dashed: model between them', C2.l + 4, C2.t + 10, { size: 9.5, color: C.ink3, halo: 6 });
       if (pei != null) { circle(ctx, cx, a1.sy(pei), 4.5, C.storage, '#fff', 1.5); text(ctx, pei.toFixed(2) + '%', clamp(cx + 8, C1.l, C1.r - 50), a1.sy(pei) + 14, { size: 10.5, weight: 700, color: darken(C.storage, 0.25), halo: true }); }
       if (s >= 25) circle(ctx, cx, a2.sy(Math.log10(M.kg)), 4.5, IRON, '#fff', 1.5);
-      const ky = C2.b + (narrow ? 26 : 24);
+      const ky = C2.b + (narrow ? 32 : 33);
       circle(ctx, cx, ky, 10, C.ink, '#fff', 2); text(ctx, '↔', cx, ky + 4, { size: 11, color: '#fff', align: 'center', weight: 700 });
       geo = { sx: a1.sx, C1, C2, cx, ky };
     },

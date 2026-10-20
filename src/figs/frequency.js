@@ -59,7 +59,7 @@ export function frequency(el) {
 
   const fig = new Fig(el, {
     label: 'Simulation of grid frequency: a frequency gauge, a row of synchronised generators viewed under a 50 Hz strobe, a frequency trace and a chart of which reserves cover a lost power plant',
-    height: w => w < 640 ? 830 : Math.max(500, Math.min(540, w * 0.56)),
+    height: w => w < 640 ? 848 : Math.max(500, Math.min(540, w * 0.56)),
     animated: true,
     step(dt) { advance(dt * st.speed); st.needle = approach(st.needle, st.df, 12, dt); },
     draw(ctx, w, h) {
@@ -150,9 +150,11 @@ export function frequency(el) {
       const legW = legend.reduce((a, [, lab]) => a + 26 + measure(ctx, lab, 10.5) * 1.05, 0);
       const bbL = narrow ? fb.l : 56;
       const gridLeg = narrow || bbL + 130 + legW > w - 8;
-      const bb = { l: bbL, r: fb.r, t: fb.b + (gridLeg ? 74 : 40), b: h - 30 };
+      const bb = { l: bbL, r: fb.r, t: fb.b + (gridLeg ? 92 : 40), b: h - 30 };
       const gapMax = Math.max(3.5, ...fs.map(p => Math.abs(p.inertia) + Math.abs(p.relief) + Math.abs(p.fcr) + Math.abs(p.afrr) + p.shed)) * 1.1;
-      const B = axes(ctx, { box: bb, x0: t0, x1: t0 + WINDOW, y0: -gapMax * 0.25, y1: gapMax, xticks: [], yfmt: v => v.toFixed(0) + ' GW', ylabel: 'who covers the gap', ny: 3 });
+      const B = axes(ctx, { box: bb, x0: t0, x1: t0 + WINDOW, y0: -gapMax * 0.25, y1: gapMax, xticks: [], yfmt: v => v.toFixed(0) + ' GW', ylabel: gridLeg ? '' : 'who covers the gap', ny: 3 });
+      // a stacked legend sits above the chart, so its title goes above the legend
+      if (gridLeg) text(ctx, 'who covers the gap', bb.l - 30, bb.t - 72, { size: 11, color: C.ink3, weight: 500 });
       const keys = ['inertia', 'relief', 'fcr', 'afrr', 'shed'];
       if (fs.length > 1) {
         let prev = fs.map(() => 0);

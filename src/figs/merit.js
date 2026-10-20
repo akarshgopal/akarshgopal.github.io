@@ -84,10 +84,10 @@ export function merit(el, opts = {}) {
         if (!d) { d = { x: b.x, p: b.price, c: b.cap }; st.disp.set(b.id, d); }
         const k = snap ? 1 : 0.22;
         d.x = lerp(d.x, b.x, k); d.p = lerp(d.p, b.price, k); d.c = lerp(d.c, b.cap, k);
-        const x0 = sx(d.x), x1 = sx(d.x + d.c), y0 = sy(0), y1 = sy(Math.min(d.p, Y1 + 20));
+        const x0 = sx(d.x), x1 = sx(d.x + d.c), y0 = sy(0), y1 = sy(Math.min(d.p, st.unsorted ? Y1 : Y1 + 20)); // unsorted: off-scale bars stop at the axis top, clear of the title
         const accepted = (b.q || 0) / b.cap;
         const col = TECHS[b.tech].color;
-        const isMarg = r.marginal && r.marginal.id === b.id;
+        const isMarg = !st.unsorted && r.marginal && r.marginal.id === b.id; // no price-setter until the offers are sorted
         const hh = Math.max(Math.abs(d.p) < 3 ? 7 : 2, Math.abs(y1 - y0)), top = Math.abs(d.p) < 3 ? y0 - hh : Math.min(y0, y1);
         // rent
         if (st.rent && accepted > 0 && b.price < price && price < CAP_PRICE) {
@@ -102,7 +102,7 @@ export function merit(el, opts = {}) {
         if (isMarg) { ctx.strokeStyle = C.ink; ctx.lineWidth = 2; ctx.strokeRect(x0, top, x1 - x0, hh); }
         if (isMarg && st.pulse > 0) { const g = (1 - st.pulse) * 14; ctx.strokeStyle = alpha(C.price, st.pulse); ctx.lineWidth = 3; ctx.strokeRect(x0 - g, top - g, x1 - x0 + 2 * g, hh + 2 * g); st.pulse = Math.max(0, st.pulse - dtE * 1.6); }
         if (st.hover === b.id) { ctx.strokeStyle = alpha(C.ink, 0.6); ctx.lineWidth = 1.5; ctx.strokeRect(x0, top, x1 - x0, hh); }
-        if (b.price > Y1 && x1 - x0 > 26) text(ctx, M(b.price, 0) + ' ↑', (x0 + x1) / 2, sy(Y1) + 12, { size: 10, color: '#fff', align: 'center', weight: 600 });
+        if (b.price > Y1 && x1 - x0 > 26) text(ctx, M(b.price, 0) + ' ↑', (x0 + x1) / 2, sy(Y1) + 12, { size: 10, color: accepted > 0 ? '#fff' : C.ink, align: 'center', weight: 600 });
       }
       ctx.restore();
       if (st.unsorted) {
@@ -116,8 +116,11 @@ export function merit(el, opts = {}) {
         line(ctx, ex, ey - 46, ex, ey + 14, C.wind, 2);
         circle(ctx, ex, ey - 46, 11, C.wind, '#fff', 2);
         text(ctx, '↔', ex, ey - 42, { size: 11, color: '#fff', align: 'center', weight: 700 });
-        const wl = 'wind ' + st.wind.toFixed(0) + ' GW', ww = measure(ctx, wl, 12, 650), rt = ex + 16 + ww < box.r;
-        text(ctx, wl, rt ? ex + 16 : ex - 16, ey - 42, { size: 12, weight: 650, color: darken(C.wind, 0.15), halo: true, align: rt ? 'left' : 'right' });
+        // the label sits left of the handle, over the near-zero blocks; with little wind there is no room, so it goes under the axis
+        const wl = 'wind ' + st.wind.toFixed(0) + ' GW', ww = measure(ctx, wl, 12, 650), lf = ex - 16 - ww > box.l + 4;
+        const wlx = lf ? ex - 16 - ww : ex + 8, wly = lf ? ey - 42 : ey + 36;
+        text(ctx, wl, wlx, wly, { size: 12, weight: 650, color: darken(C.wind, 0.15), halo: true });
+        geom.windLab = { x0: wlx - 4, x1: wlx + ww + 4, y0: wly - 13, y1: wly + 4 };
         geom.windX = ex; geom.windY = ey - 46;
       }
       // demand line
@@ -131,11 +134,17 @@ export function merit(el, opts = {}) {
       if (r.marginal && price < CAP_PRICE) {
         const m = r.marginal; const d = st.disp.get(m.id);
         const mx = sx(d.x + d.c / 2), my = sy(clamp(d.p, Y0, Y1));
-        const label = 'sets the price: ' + TECHS[m.tech].short + (m.eff ? ` (${Math.round(m.eff * 100)}% efficient)` : '');
+        // keep the text off the demand line: left of it, else right of it, dropping the efficiency if neither side has room
+        const full = 'sets the price: ' + TECHS[m.tech].short + (m.eff ? ` (${Math.round(m.eff * 100)}% efficient)` : '');
+        const fits = s => { const tw = measure(ctx, s, 11.5, 600); return dx - 10 - tw >= box.l + 4 ? dx - 10 - tw : dx + 10 + tw <= box.r - 4 ? dx + 10 : null; };
+        const label = fits(full) != null ? full : 'sets the price: ' + TECHS[m.tech].short;
         const tw = measure(ctx, label, 11.5, 600);
-        const lx = clamp(mx - tw / 2, box.l + 4, box.r - tw - 4);
+        let lx = clamp(mx - tw / 2, box.l + 4, box.r - tw - 4);
+        if (lx < dx + 8 && lx + tw > dx - 8) lx = fits(label) ?? lx;
         const tagR = box.l + 6 + measure(ctx, `${M(price, 0)}/MWh`, 12, 700) + 22, hitsTag = w < 600 && lx < tagR;
         ML = { label, x0: lx, x1: lx + tw, y: my < box.t + 60 ? my + 40 : my - 34, tagBelow: hitsTag && my >= box.t + 60 };
+        const WL = stage === 2 && geom.windLab; // keep clear of the wind label
+        if (WL && ML.x1 > WL.x0 && ML.x0 < WL.x1 && ML.y + 4 > WL.y0 && ML.y - 12 < WL.y1) ML.y = WL.y0 - 6;
       }
       // price line
       if (price < CAP_PRICE) {

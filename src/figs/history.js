@@ -40,9 +40,9 @@ export function historyChart(el) {
       const narrow = w < 600;
       const box = { l: narrow ? 40 : 56, r: w - 16, t: 28, b: narrow ? 230 : 250 };
       const sx = scale(1880, 2027, box.l, box.r);
-      const ly = v => Math.log10(v); const sy = scale(ly(0.5), ly(800), box.b, box.t);
+      const ly = v => Math.log10(v); const sy = scale(ly(1), ly(800), box.b, box.t);
       // grid
-      for (const v of [0.5, 1, 2, 5, 10, 20, 50, 100, 200, 500]) { const y = Math.round(sy(ly(v))) + 0.5; line(ctx, box.l, y, box.r, y, v === 0.5 ? C.grid2 : C.grid, 1); text(ctx, v + '¢', box.l - 6, y + 4, { size: 10.5, color: C.ink3, align: 'right' }); }
+      for (const v of [1, 2, 5, 10, 20, 50, 100, 200, 500]) { const y = Math.round(sy(ly(v))) + 0.5; line(ctx, box.l, y, box.r, y, v === 1 ? C.grid2 : C.grid, 1); text(ctx, v + '¢', box.l - 6, y + 4, { size: 10.5, color: C.ink3, align: 'right' }); }
       for (const yr of [1900, 1920, 1940, 1960, 1980, 2000, 2020]) text(ctx, yr, sx(yr), box.b + 15, { size: 10.5, color: C.ink3, align: 'center' });
       text(ctx, 'US residential electricity, ¢ per kWh (log scale)', box.l, box.t - 12, { size: 11, color: C.ink3, weight: 500 });
       // 1973 break
@@ -51,10 +51,8 @@ export function historyChart(el) {
       const [a, b] = REAL2002; pathLine(ctx, [[sx(a[0]), sy(ly(a[1]))], [sx(b[0]), sy(ly(b[1]))]], C.ink, 2.4);
       REAL2002.forEach(([y, v]) => circle(ctx, sx(y), sy(ly(v)), 4, C.ink));
       text(ctx, 'real price (2002 $), falling ~5% a year', sx(1928), sy(ly(515 / Math.pow(1.05, 36) * 1.8)), { size: 11, color: C.ink, weight: 600, halo: true });
-      // counterfactual: the old trend continued
-      const cf = []; for (let y = 1970; y <= 2025; y += 1) cf.push([sx(y), sy(ly(9.7 / Math.pow(1.05, y - 1970)))]);
-      pathLine(ctx, cf, alpha(C.ink, 0.35), 1.5, [4, 4]);
-      text(ctx, 'if the old trend had continued', sx(2024), sy(ly(9.7 / Math.pow(1.05, 54))) - 8, { size: 10.5, color: C.ink3, align: 'right', halo: true });
+      // the trend carried on to 1973 only: no real-price series after 1970 is in the project, so later years show nominal prices alone
+      pathLine(ctx, [[sx(1970), sy(ly(9.7))], [sx(1973), sy(ly(9.7 / Math.pow(1.05, 3)))]], alpha(C.ink, 0.45), 1.5, [4, 4]);
       // nominal
       NOMINAL.forEach(([y, v], i) => { circle(ctx, sx(y), sy(ly(v)), 3.5, '#fff', C.price, 2); });
       pathLine(ctx, NOMINAL.slice(1, 4).map(([y, v]) => [sx(y), sy(ly(v))]), alpha(C.price, 0.6), 1.4, [3, 3]);
@@ -124,7 +122,7 @@ export function offset(el) {
       const { sx, sy } = axes(ctx, { box, x0: Y0, x1: Y1, y0: 0, y1: 1.6, yticks: [0, 0.5, 1, 1.5], yfmt: v => v.toFixed(1), xticks: [1950, 1960, 1970, 1980, 1990], ylabel: 'real cost index (1950 = 1) — illustrative' });
       const ref = model({ engine: true, fuel: false, infl: false, env: false });
       pathLine(ctx, ref.map(r => [sx(r[0]), sy(r[1])]), alpha(C.ink, 0.25), 1.6, [4, 4]);
-      text(ctx, 'if nothing had changed', sx(1982), sy(ref.find(r => r[0] >= 1982)[1]) + 16, { size: 10.5, color: C.ink3 });
+      text(ctx, 'if nothing had changed', box.r - 2, sy(ref[ref.length - 1][1]) + 15, { size: 10.5, color: C.ink3, align: 'right', halo: true }); // below the line's low right end, so the falling dash stays clear of it
       const m = model(st);
       // stacked components
       const layers = [[2, C.gas, 'fuel'], [3, C.network, 'capital'], [4, C.nuclear, 'retrofits']];
@@ -144,6 +142,6 @@ export function offset(el) {
   const tog = (k, lab, col) => { const b = button(ctl, lab, () => { st[k] = !st[k]; b.setAttribute('aria-pressed', st[k]); fig.invalidate(); }, { kind: 'chip', color: col, name: k }); b.setAttribute('aria-pressed', st[k]); };
   tog('engine', 'Efficiency & scale gains continue after 1965', C.storage);
   tog('fuel', 'Oil & fuel shock 1973', C.gas);
-  tog('infl', 'Inflation & interest rates', C.network);
+  tog('infl', 'Interest rates & construction delays', C.network);
   tog('env', 'Environmental retrofits', C.nuclear);
 }

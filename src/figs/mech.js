@@ -70,17 +70,34 @@ export function electrolyserCell(el) {
       ctx.fillStyle = alpha(ELEC, 0.22); ctx.fillRect(A.l, sy(V_LHV), xj - A.l, A.b - sy(V_LHV));
       ctx.fillStyle = alpha(HEAT, 0.18); ctx.fillRect(A.l, sy(V), xj - A.l, sy(V_LHV) - sy(V));
       line(ctx, A.l, sy(1.23), A.r, sy(1.23), alpha(C.ink, 0.5), 1, [4, 3]);
-      text(ctx, narrow ? '1.23 V: the minimum' : '1.23 V: the least that can split water', A.r - 4, sy(1.23) + 13, { size: 10, color: C.ink2, align: 'right', halo: true });
       line(ctx, A.l, sy(V_HHV), A.r, sy(V_HHV), alpha(HEAT, 0.6), 1, [2, 3]);
-      text(ctx, narrow ? '1.48 V: heat above this' : '1.48 V: above this the cell makes spare heat', A.r - 4, sy(V_HHV) - 5, { size: 10, color: darken(HEAT, 0.1), align: 'right', halo: true });
       const pts = []; for (let j = 0.005; j <= 3; j += 0.02) pts.push([sx(j), sy(cellV(j))]);
+      // threshold labels sit at the right edge unless the dashed operating-point line would cross them; then they move
+      // beside it (left, then right), shortening if needed, clear of the curve and the "into the hydrogen" label
+      const ihW = measure(ctx, 'into the hydrogen', 10, 650), keep = [[A.l + 2, A.b - 19, A.l + 10 + ihW, A.b - 4]];
+      { const dw = measure(ctx, `${st.j.toFixed(1)} A/cm² · ${V.toFixed(2)} V`, 11, 700), fl = xj + 12 + dw > A.r; keep.push(fl ? [xj - 12 - dw, sy(V) - 23, xj - 12, sy(V) - 9] : [xj + 12, sy(V) + 9, xj + 12 + dw, sy(V) + 23]); }
+      const thrLabel = (strs, b, color) => {
+        let best = null;
+        strs.forEach(s => { const lw = measure(ctx, s, 10); [A.r - 4 - lw, xj - 7 - lw, xj + 7].forEach(x => {
+          const r = [x, b - 9, x + lw, b + 2];
+          if (best || r[0] < A.l + 3 || r[2] > A.r - 2 || (xj > r[0] - 4 && xj < r[2] + 4)) return;
+          if (keep.some(k => k[0] < r[2] + 3 && r[0] < k[2] + 3 && k[1] < r[3] && r[1] < k[3]) || pts.some(([px, py]) => px > r[0] - 2 && px < r[2] + 2 && py > r[1] - 2 && py < r[3] + 2)) return;
+          best = [s, x, r];
+        }); });
+        if (!best) { const s = strs[strs.length - 1]; best = [s, A.r - 4 - measure(ctx, s, 10)]; }
+        text(ctx, best[0], best[1], b, { size: 10, color, halo: true }); if (best[2]) keep.push(best[2]);
+      };
+      thrLabel(narrow ? ['1.23 V: the minimum', '1.23 V min'] : ['1.23 V: the least that can split water', '1.23 V: the minimum'], sy(1.23) + 13, C.ink2);
+      thrLabel(narrow ? ['1.48 V: spare heat above', '1.48 V: heat'] : ['1.48 V: above this the cell gives off heat', '1.48 V: spare heat above'], sy(V_HHV) - 5, darken(HEAT, 0.1));
       pathLine(ctx, pts, C.ink, 2.2);
       text(ctx, 'into the hydrogen', A.l + 6, A.b - 8, { size: 10, weight: 650, color: darken(ELEC, 0.35), halo: true });
-      if (sy(V_LHV) - sy(V) > 14) text(ctx, 'lost as heat', xj - 6, sy(V_LHV) - 6, { size: 10, weight: 650, color: HEAT, align: 'right', halo: true });
+      // everything above 1.25 V is lost to the fuel (LHV basis); above 1.48 V the cell also gives off spare heat
+      if (sy(V_LHV) - sy(V) > 14) text(ctx, 'lost', xj - 6, sy(V_LHV) - 6, { size: 10, weight: 650, color: HEAT, align: 'right', halo: true });
       line(ctx, xj, sy(V), xj, A.b, alpha(H2C, 0.6), 1, [3, 3]);
       circle(ctx, xj, sy(V), 9, alpha(H2C, 0.18)); circle(ctx, xj, sy(V), 6.5, H2C, '#fff', 2);
-      const lab = `${st.j.toFixed(1)} A/cm² · ${V.toFixed(2)} V`, lw = measure(ctx, lab, 11, 700), lx = xj + 12 + lw > A.r ? xj - 12 - lw : xj + 12;
-      text(ctx, lab, lx, sy(V) - 10, { size: 11, weight: 700, color: darken(H2C, 0.25), halo: true });
+      // the curve rises to the right: label below-right of the dot, or above-left near the right edge, clear of the curve
+      const lab = `${st.j.toFixed(1)} A/cm² · ${V.toFixed(2)} V`, lw = measure(ctx, lab, 11, 700), flip = xj + 12 + lw > A.r;
+      text(ctx, lab, flip ? xj - 12 - lw : xj + 12, flip ? sy(V) - 12 : sy(V) + 20, { size: 11, weight: 700, color: darken(H2C, 0.25), halo: true });
       geo = { sx, sy, A, dot: [xj, sy(V)] };
     },
   });
@@ -94,7 +111,7 @@ export function electrolyserCell(el) {
   const js = slider(ctl, { label: 'Current density', min: 0.1, max: 3, step: 0.05, value: st.j, color: H2C, fmt: v => `${v.toFixed(2)} A/cm²`, oninput: v => { st.j = v; upd(); }, name: 'j' });
   function upd() {
     const V = cellV(st.j), kwh = V * KWH_PER_KG_PER_V, eff = V_LHV / V, kgh = st.j * 1e4 / (2 * 96485) * 2.016e-3 * 3600;
-    ro.innerHTML = `At <b>${st.j.toFixed(2)} A/cm²</b> the cell needs <b>${V.toFixed(2)} V</b>: <b>${kwh.toFixed(1)} kWh</b> of electricity per kilogram of hydrogen in the stack, of which ${Math.round(eff * 100)}% ends up in the hydrogen and the rest is heat. Each square metre of cell makes ${kgh.toFixed(2)} kg of hydrogen an hour. Drive it harder and the same equipment makes more hydrogen, but every kilogram takes more electricity.`;
+    ro.innerHTML = `At <b>${st.j.toFixed(2)} A/cm²</b> the cell needs <b>${V.toFixed(2)} V</b>: <b>${kwh.toFixed(1)} kWh</b> of electricity per kilogram of hydrogen in the stack, of which ${Math.round(eff * 100)}% ends up in the hydrogen as usable fuel (its lower heating value) and the rest is lost. Each square metre of cell makes ${kgh.toFixed(2)} kg of hydrogen an hour. Drive it harder and the same equipment makes more hydrogen, but every kilogram takes more electricity.`;
     fig.invalidate();
   }
   upd();
@@ -149,7 +166,9 @@ export function bladeElement(el) {
       arrow(ctx, tx + va * k, ty, tx + va * k, ty - ub * k, C.ink3, 2.2, 8);
       arrow(ctx, tx, ty, tx + va * k, ty - ub * k, C.ink, 2.6, 9);
       text(ctx, `wind ${va.toFixed(1)} m/s`, tx, ty + 15, { size: 10, weight: 650, color: darken(C.wind, 0.25) });
-      text(ctx, `blade speed ${ub.toFixed(0)} m/s`, tx + va * k + 7, Math.max(ty - ub * k * 0.3, ty - ub * k + 32), { size: 10, weight: 650, color: C.ink2, halo: true });
+      { const bx = tx + va * k + 7, by = Math.max(ty - ub * k * 0.3, ty - ub * k + 32); // phones: two lines, clear of the airflow arrows
+        if (narrow) { text(ctx, 'blade speed', bx, by - 6, { size: 10, weight: 650, color: C.ink2, halo: true }); text(ctx, `${ub.toFixed(0)} m/s`, bx, by + 7, { size: 10, weight: 650, color: C.ink2, halo: true }); }
+        else text(ctx, `blade speed ${ub.toFixed(0)} m/s`, bx, by, { size: 10, weight: 650, color: C.ink2, halo: true }); }
       text(ctx, `apparent wind`, tx + va * k + 7, ty - ub * k + 4, { size: 10.5, weight: 700, color: C.ink, halo: true });
       text(ctx, `${W.toFixed(0)} m/s, ${phiD.toFixed(0)}° off the plane`, tx + va * k + 7, ty - ub * k + 18, { size: 10, color: C.ink2, halo: true });
       // right: the airfoil in the apparent wind
@@ -225,7 +244,7 @@ export function lineField(el) {
         const x = W.l + (q + 0.5) * (xEnd - W.l) / n;
         for (let r = 1; r <= 3; r++) {
           const rad = r * 14 * Math.abs(i) ** 0.6; if (rad < 2) continue;
-          ctx.strokeStyle = alpha(C.field, 0.55 * Math.abs(i) / r); ctx.lineWidth = 1.4;
+          ctx.strokeStyle = alpha(C.field, (0.35 + 0.6 * Math.abs(i)) / Math.sqrt(r)); ctx.lineWidth = 1.8;
           ctx.beginPath(); ctx.ellipse(x, W.y, rad * 0.32, rad, 0, 0, Math.PI * 2); ctx.stroke();
         }
         // induced voltage arrow along the wire: proportional to −dI/dt (and to f)
@@ -243,13 +262,14 @@ export function lineField(el) {
       text(ctx, 'magnetic field', W.l + 8, W.y - 46, { size: 10.5, weight: 650, color: C.field });
       text(ctx, ac ? 'induced voltage, opposing the change' : 'steady current: the field is constant and induces nothing', W.l + 8, W.y + 76, { size: 10.5, weight: 650, color: ac ? darken(C.phaseB, 0.2) : C.ink3 });
       // traces
-      const A = narrow ? { l: 30, r: w - 16, t: W.y + 110, b: h - 30 } : { l: 70, r: w - 24, t: W.y + 120, b: h - 30 };
+      const A = narrow ? { l: 30, r: w - 16, t: W.y + 128, b: h - 30 } : { l: 70, r: w - 24, t: W.y + 120, b: h - 30 };
       axes(ctx, { box: A, x0: 0, x1: 4, y0: -1.15, y1: 1.15, xticks: [], yticks: [0], yfmt: () => '0', grid: false });
       const pc = [], pe = [];
       for (let s = 0; s <= 200; s++) { const tt = fig.t - 4 + s / 50, p2 = 2 * Math.PI * tt * 0.5; pc.push([A.l + (A.r - A.l) * s / 200, (A.t + A.b) / 2 - (ac ? Math.sin(p2) : 0.8) * (A.b - A.t) / 2.7]); pe.push([A.l + (A.r - A.l) * s / 200, (A.t + A.b) / 2 + (ac ? Math.cos(p2) * Math.min(1, st.f / 60) : 0) * (A.b - A.t) / 2.7]); }
       pathLine(ctx, pc, C.electron, 2.2); pathLine(ctx, pe, C.phaseB, 2.2);
-      text(ctx, 'current', A.l + 6, A.t + 10, { size: 10.5, weight: 650, color: C.electron });
-      text(ctx, narrow ? 'induced voltage: peaks a quarter-cycle off' : 'induced voltage: largest when the current changes fastest, a quarter-cycle off', narrow ? A.l + 6 : A.l + 70, narrow ? A.t + 24 : A.t + 10, { size: 10.5, weight: 650, color: darken(C.phaseB, 0.2) });
+      // on a phone both labels sit above the traces, whose peaks reach almost to the top of the box
+      text(ctx, 'current', A.l + 6, narrow ? A.t - 18 : A.t + 10, { size: 10.5, weight: 650, color: C.electron });
+      text(ctx, narrow ? 'induced voltage: peaks a quarter-cycle off' : 'induced voltage: largest when the current changes fastest, a quarter-cycle off', narrow ? A.l + 6 : A.l + 70, narrow ? A.t - 4 : A.t + 10, { size: 10.5, weight: 650, color: darken(C.phaseB, 0.2) });
       text(ctx, 'time (slowed: one cycle every two seconds)', A.r, A.b + 16, { size: 10, color: C.ink3, align: 'right' });
       geo = { W, xEnd };
     },

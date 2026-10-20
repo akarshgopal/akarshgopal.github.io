@@ -42,7 +42,7 @@ export function timeline(el) {
     draw(ctx, w, h) {
       const narrow = w < 600;
       const box = { l: 46, r: w - 16, t: 26, b: narrow ? h - 190 : h - 150 };
-      const { sx, sy } = axes(ctx, { box, x0: T0, x1: T1, y0: 0, y1: 20, xticks: [-12, -6, 0, 6, 12, 18], xfmt: v => v < 0 ? `${String(24 + v).padStart(2, '0')}:00 D−1` : `${String(v).padStart(2, '0')}:00`, yfmt: v => v, ylabel: 'forecast wind output for 18:00–19:00 on day D (GW)' });
+      const { sx, sy } = axes(ctx, { box, x0: T0, x1: T1, y0: 0, y1: 20, xticks: [-12, -6, 0, 6, 12, 18], xfmt: v => v < 0 ? `${String(24 + v).padStart(2, '0')}:00${narrow && v === -6 ? '' : ' D−1'}` : `${String(v).padStart(2, '0')}:00`, yfmt: v => v, ylabel: 'forecast wind output for 18:00–19:00 on day D (GW)' });
       // phases
       const band = (a, b, col, lab) => { ctx.fillStyle = alpha(col, 0.09); ctx.fillRect(sx(a), box.t, sx(b) - sx(a), box.b - box.t); text(ctx, lab, sx(a) + 4, box.b - 6, { size: 10.5, color: darken(col, 0.2), weight: 600 }); };
       band(T0, DA, C.ink3, narrow ? '' : 'bids');
@@ -72,15 +72,16 @@ export function timeline(el) {
       // ledger
       const L = ledger();
       const ly = box.b + 46; const lx = narrow ? 16 : 46; const lw = w - lx - 16;
-      text(ctx, 'The wind farm’s book for that hour', lx, ly - 10, { size: 12, weight: 650 });
+      text(ctx, 'The portfolio’s book for that hour', lx, ly - 10, { size: 12, weight: 650 });
       const gs = scale(0, 20, lx + 110, lx + lw);
       const row = (i, lab, a, b, col, note) => {
-        const y = ly + 6 + i * 26;
+        const y = ly + 6 + i * (narrow ? 40 : 26);
         text(ctx, lab, lx, y + 13, { size: 11.5, color: C.ink2 });
         if (a == null) { text(ctx, note || '—', lx + 110, y + 13, { size: 11, color: C.ink3 }); return; }
         const x0 = gs(Math.min(a, b)), x1 = gs(Math.max(a, b));
         rrect(ctx, x0, y + 2, Math.max(2, x1 - x0), 16, 4); ctx.fillStyle = col; ctx.fill();
-        text(ctx, note, x1 + 6, y + 14, { size: 11, color: C.ink2 });
+        if (narrow) text(ctx, note, gs(0), y + 32, { size: 11, color: C.ink2 }); // on a phone the note goes under the bar, which can run to the edge
+        else text(ctx, note, x1 + 6, y + 14, { size: 11, color: C.ink2 });
       };
       row(0, 'Day-ahead sold', st.now >= DA ? 0 : null, L.daPos, C.ink2, st.now >= DA ? `${L.daPos.toFixed(1)} GW at the auction price` : 'not yet — bids due by noon');
       const idv = L.idPos;
@@ -98,7 +99,7 @@ export function timeline(el) {
     ro.innerHTML = st.now < DA ? `Bids for tomorrow are due at noon. The forecast for 18:00 tomorrow is still uncertain by about <b>±${(1.64 * at(st.now).sd).toFixed(1)} GW</b>.`
       : st.now < TD ? `${lead.toFixed(1)} hours to delivery. Forecast spread: <b>±${(1.64 * at(st.now).sd).toFixed(1)} GW</b>. Every update can be traded on the intraday market.`
         : st.now < TD + 1 ? 'Delivery. Trading has closed; the grid operator’s reserves cover any remaining mismatch.'
-          : 'Settlement. The wind farm pays (or is paid) the imbalance price for whatever it got wrong.';
+          : 'Settlement. The portfolio pays (or is paid) the imbalance price for whatever it got wrong.';
     fig.invalidate();
   }
   upd();

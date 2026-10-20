@@ -33,7 +33,7 @@ export function network(el) {
   recompute();
   const fig = new Fig(el, {
     label: 'A four-node transmission network. In nodal mode each node has its own price; in zonal mode there is one price and the operator redispatches plants to respect line limits',
-    height: w => w < 600 ? 730 : Math.max(460, Math.min(500, w * 0.52)),
+    height: w => w < 600 ? 770 : Math.max(460, Math.min(500, w * 0.52)),
     animated: true,
     step(dt) {
       st.phase += dt;
@@ -43,9 +43,16 @@ export function network(el) {
       const narrow = w < 600;
       const R = st.res; if (!R || !R.con) { text(ctx, 'no feasible dispatch', 20, 30); return; }
       const nodal = st.mode === 'nodal';
-      const map = narrow ? { x: 20, y: 22, w: w - 40, h: h * 0.5 } : { x: 16, y: 16, w: w * 0.62, h: h - 32 };
+      const map = narrow ? { x: 20, y: 22, w: w - 40, h: 365 } : { x: 16, y: 16, w: w * 0.62, h: h - 32 };
       const P = n => [map.x + NODES[n].x * map.w, map.y + NODES[n].y * map.h];
-      geom = { P, map };
+      geom = { P, map, pills: [] };
+      // each node's text block (demand + generation bars), so the line pills can slide clear of it
+      const nodeBox = n => { const [x, y] = P(n), rr = narrow ? 22 : Math.min(34, map.w * 0.07), below = n === 2; return { rr, below, bx: below ? x - rr - 56 : x + rr + 10, by: below ? y + rr + 22 : y - 26 }; };
+      const labRects = narrow ? [] : NODES.map((nd, n) => { const B = nodeBox(n);
+        const its = R.con.G.map((g, j) => ({ g, q: R.con.x[j] })).filter(o => o.g.node === n && o.g.tech !== 'scarcity');
+        let wd = measure(ctx, `demand ${R.con.D[n].toFixed(0)} GW`, 10.5);
+        its.forEach(o => { wd = Math.max(wd, 65 + measure(ctx, `${TECHS[o.g.tech].short} ${o.q.toFixed(1)} of 00`, 10.5) + (nodal ? 0 : 46)); });
+        return { x0: B.bx - 3, x1: B.bx + wd + 3, y0: B.by - 12, y1: B.by + 8 + its.length * 16 + 3 }; });
       // zonal mode only: a dashed boundary around the whole map marks the single bidding zone
       const pts = NODES.map((_, n) => P(n)), cx0 = pts.reduce((s, p) => s + p[0], 0) / 4;
       if (!nodal) { ctx.save(); rrect(ctx, map.x + 2, map.y + 2, map.w - 4, map.h - 4, 18); ctx.fillStyle = alpha(priceColor(R.zonal), 0.12); ctx.fill(); ctx.setLineDash([6, 5]); ctx.strokeStyle = alpha(C.ink2, 0.5); ctx.lineWidth = 1.5; ctx.stroke(); ctx.restore();
@@ -74,9 +81,12 @@ export function network(el) {
         }
         ctx.restore();
         // capacity pill
-        const mx = (x1 + x2) / 2, my = (y1 + y2) / 2;
         const lab = `${Math.abs(f).toFixed(1)} / ${lim.toFixed(1)} GW` + (over && !narrow ? ` · wanted ${Math.abs(mkt[li]).toFixed(1)}` : '');
         const tw = measure(ctx, lab, 11, 600) + 30;
+        // the pill sits mid-line unless that covers a node's labels; then it slides along the line until clear
+        const tPill = [0.5, 0.56, 0.44, 0.62, 0.38, 0.68, 0.32].find(t => { const px = lerp(x1, x2, t), py = lerp(y1, y2, t);
+          return !labRects.some(r => px + tw / 2 > r.x0 && px - tw / 2 < r.x1 && py + 11 > r.y0 && py - 11 < r.y1); }) ?? 0.5;
+        const mx = lerp(x1, x2, tPill), my = lerp(y1, y2, tPill); geom.pills[li] = [mx, my];
         rrect(ctx, mx - tw / 2, my - 11, tw, 22, 11);
         ctx.fillStyle = li === st.sel ? C.ink : '#fff'; ctx.fill(); ctx.strokeStyle = util > 0.999 ? C.peaker : C.grid2; ctx.lineWidth = 1.5; ctx.stroke();
         text(ctx, '‹', mx - tw / 2 + 9, my + 4, { size: 12, color: li === st.sel ? '#fff' : C.ink3, align: 'center', weight: 700 });
@@ -89,7 +99,7 @@ export function network(el) {
       NODES.forEach((nd, n) => {
         const [x, y] = P(n);
         const price = nodal ? R.lmp[n] : R.zonal;
-        const rr = narrow ? 22 : Math.min(34, map.w * 0.07);
+        const { rr, below, bx, by } = nodeBox(n);
         circle(ctx, x, y, rr + 4, '#fff');
         circle(ctx, x, y, rr, priceColor(price), alpha(C.ink, 0.15), 1);
         const pl = price >= 999 ? 'short!' : '€' + Math.max(0, Math.round(price) === 0 ? 0 : Math.round(price));
@@ -97,8 +107,6 @@ export function network(el) {
         // generation mini-bars
         const G = R.con.G; const xs = R.con.x, xu = R.unc.x;
         const items = narrow ? [] : G.map((g, j) => ({ g, q: xs[j], qu: xu[j] })).filter(o => o.g.node === n && o.g.tech !== 'scarcity');
-        const below = n === 2;
-        const bx = below ? x - 48 : x + rr + 10, by = below ? y + rr + 22 : y - 26;
         text(ctx, nd.name, x, y - rr - 10, { size: 12, color: C.ink, align: 'center', weight: 650, halo: true });
         if (!narrow) text(ctx, `demand ${R.con.D[n].toFixed(0)} GW`, bx, by, { size: 10.5, color: C.ink3, halo: true });
         items.forEach((o, k) => {
@@ -131,7 +139,8 @@ export function network(el) {
         T('Nodal pricing (LMP)', { weight: 650, color: C.ink, size: 13, gap: 22 });
         NODES.forEach((nd, n) => { rrect(ctx, sp.x, yy - 10, 12, 12, 3); ctx.fillStyle = priceColor(R.lmp[n]); ctx.fill(); text(ctx, `${nd.name}: ${R.lmp[n] >= 999 ? 'shortage' : '€' + Math.max(0, Math.round(R.lmp[n])) + '/MWh'}`, sp.x + 18, yy, { size: 12, color: C.ink2 }); yy += 18; });
         yy += 8;
-        const rent = LINES.reduce((s, l, li) => s + Math.abs(R.con.flows[li]) * Math.abs((R.lmp[l.to] - R.lmp[l.from])), 0);
+        // signed: flow from→to times (price at 'to' − price at 'from') = what loads pay minus what generators are paid
+        const rent = LINES.reduce((s, l, li) => s + R.con.flows[li] * (R.lmp[l.to] - R.lmp[l.from]), 0);
         T(`Congestion rent: €${(rent / 1000).toFixed(2)} m per hour`, { size: 11.5 });
         T('(flow × price difference, collected', { size: 11, color: C.ink3, gap: 14 });
         T('by the grid operator)', { size: 11, color: C.ink3 });
@@ -158,9 +167,12 @@ export function network(el) {
         const NC = ['#3f7fb8', '#b9975b', '#d08a5c', '#c2413a'];
         [1, 2, 0, 3].forEach(n => pathLine(ctx, S.pts.filter(q => q.lmp[n] < 999).map(q => [X(q.w), Y(Math.max(0, q.lmp[n]))]), NC[n], n === 3 || n === 0 ? 2.2 : 1.4));
         line(ctx, X(st.windN), top - 3, X(st.windN), top + sh, C.ink, 1.5);
-        const k = S.pts.reduce((b, q, i) => Math.abs(q.w - st.windN) < Math.abs(S.pts[b].w - st.windN) ? i : b, 0), ends = [0, 1, 2, 3].map(n => ({ n, y: Y(clamp(S.pts[k].lmp[n], 0, 170)) })).sort((a, b) => a.y - b.y);
-        for (let i = 1; i < 4; i++) if (ends[i].y - ends[i - 1].y < 11) ends[i].y = ends[i - 1].y + 11;
-        const rt = st.windN < 24; ends.forEach(e => text(ctx, NODES[e.n].id, X(st.windN) + (rt ? 5 : -5), e.y + 4, { size: 11, weight: 700, color: NC[e.n], align: rt ? 'left' : 'right', halo: true }));
+        // node letters at the right end of each line, spread apart vertically (a lead line joins any that had to move)
+        const ends = [0, 1, 2, 3].map(n => { const q = S.pts.filter(p => p.lmp[n] < 999).pop(); return q ? { n, y0: Y(Math.max(0, q.lmp[n])), x0: X(q.w) } : null; }).filter(Boolean).sort((a, b) => a.y0 - b.y0);
+        ends.forEach((e, i) => { e.y = i ? Math.max(e.y0, ends[i - 1].y + 12) : e.y0; });
+        const over = ends.length ? ends[ends.length - 1].y - (top + sh + 2) : 0; if (over > 0) for (let i = ends.length - 1; i >= 0; i--) ends[i].y = Math.min(ends[i].y, (i === ends.length - 1 ? top + sh + 2 : ends[i + 1].y - 12));
+        ends.forEach(e => { const lx = sp.x + sw + 4; if (Math.abs(e.y - e.y0) > 2) line(ctx, e.x0 + 1, e.y0, lx + 2, e.y, alpha(NC[e.n], 0.6), 1);
+          text(ctx, NODES[e.n].id, lx + 4, e.y + 4, { size: 11, weight: 700, color: NC[e.n], halo: true }); });
         text(ctx, '0', sp.x, top + sh + 13, { size: 11, color: C.ink3 }); text(ctx, '30 GW', sp.x + sw, top + sh + 13, { size: 11, color: C.ink3, align: 'right' });
         if (S.onset != null) text(ctx, `a line fills at ${S.onset} GW`, clamp(X(S.onset), sp.x + 60, sp.x + sw - 60), top + sh + 13, { size: 11, color: C.peaker, weight: 650, align: 'center' });
         yy = top + sh + 30;
@@ -209,7 +221,7 @@ export function network(el) {
       if (!geom) return null;
       for (let li = 0; li < LINES.length; li++) {
         const [x1, y1] = geom.P(LINES[li].from), [x2, y2] = geom.P(LINES[li].to);
-        const mx = (x1 + x2) / 2, my = (y1 + y2) / 2;
+        const [mx, my] = geom.pills[li] || [(x1 + x2) / 2, (y1 + y2) / 2];
         if (Math.abs(x - mx) < 56 && Math.abs(y - my) < 14) return { li, x0: x, l0: st.limits[li] };
       }
       return null;

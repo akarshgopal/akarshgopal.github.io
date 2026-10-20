@@ -2,14 +2,16 @@ import { build } from 'esbuild';
 import { cpSync, mkdirSync, rmSync, readFileSync, writeFileSync, existsSync } from 'node:fs';
 import { PAGES, SERIES_TITLE } from './src/series.mjs';
 
-rmSync('dist', { recursive: true, force: true });
-mkdirSync('dist/fonts', { recursive: true });
+// OUT=<dir> builds somewhere else (parallel editors each check their own build)
+const OUT = process.env.OUT || 'dist';
+rmSync(OUT, { recursive: true, force: true });
+mkdirSync(`${OUT}/fonts`, { recursive: true });
 const common = { bundle: true, minify: true, format: 'iife', target: ['es2020'], legalComments: 'eof' };
 // series.js: every 2D figure; hero.js: the three.js generator, loaded only on the pages that show it
-await build({ ...common, entryPoints: ['src/figures.js'], outfile: 'dist/series.js' });
-await build({ ...common, entryPoints: ['src/hero.js'], outfile: 'dist/hero.js' });
-cpSync('src/fonts', 'dist/fonts', { recursive: true });
-cpSync('src/style.css', 'dist/style.css');
+await build({ ...common, entryPoints: ['src/figures.js'], outfile: `${OUT}/series.js` });
+await build({ ...common, entryPoints: ['src/hero.js'], outfile: `${OUT}/hero.js` });
+cpSync('src/fonts', `${OUT}/fonts`, { recursive: true });
+cpSync('src/style.css', `${OUT}/style.css`);
 
 const esc = s => s.replace(/&/g, '&amp;').replace(/</g, '&lt;');
 const label = (p, i) => String(i);
@@ -29,9 +31,12 @@ PAGES.forEach((p, i) => {
   // stable ids for every figure that lacks one
   html = html.replace(/<figure([^>]*?)data-fig="([A-Za-z0-9]+)"([^>]*)>/g, (m, a, name, b) => /\bid=/.test(a + b) ? m : `<figure${a}data-fig="${name}" id="fig-${name}"${b}>`);
   // the page-wide Pause button lives in the series nav, not floating over the text
+  // adjacent footnote markers read as one: "²,³" rather than "²³"
+  html = html.replace(/<\/a><\/sup><sup class="fn">(?=<a )/g, '</a><span class="fn-sep">,</span>');
+  html = html.replace(/<\/a>,(?=<a href="#n\d+">\d+<\/a>(?:<span class="fn-sep">,<\/span>|,|<\/sup>))/g, '</a><span class="fn-sep">,</span>');
   html = html.replace(/<button id="play-toggle"[^>]*>[^<]*<\/button>\n?/, '');
   html = html.replace(/(<main>)/, nav(i) + '\n$1');
   html = html.replace(/(<\/article>)/, pager(i) + '\n$1');
-  writeFileSync(`dist/${p.file}`, html);
+  writeFileSync(`${OUT}/${p.file}`, html);
 });
-console.log('built dist/: ' + PAGES.map(p => p.file).join(', '));
+console.log(`built ${OUT}/: ` + PAGES.map(p => p.file).join(', '));
