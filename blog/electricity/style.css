@@ -34,6 +34,7 @@ header.top { padding-top: 4.5rem; }
 sup.fn { line-height: 0; }
 sup.fn a { font-family: var(--sans); font-size: 0.7em; text-decoration: none; color: var(--ink3); padding: 0 1px; }
 sup.fn a:hover { color: var(--ink); }
+sup.fn .fn-sep { font-family: var(--sans); font-size: 0.7em; color: var(--ink3); }
 .k { font-family: var(--sans); font-size: 0.86em; font-weight: 600; letter-spacing: 0.01em; }
 .c-solar { color: #b27f0d; } .c-wind { color: var(--wind); } .c-gas { color: var(--gas); } .c-coal { color: var(--coal); } .c-lignite { color: var(--lignite); }
 .c-nuclear { color: var(--nuclear); } .c-hydro { color: var(--hydro); } .c-storage { color: var(--storage); } .c-price { color: var(--price); } .c-peaker { color: var(--peaker); }
