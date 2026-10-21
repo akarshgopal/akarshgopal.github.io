@@ -4,6 +4,7 @@ import { C, alpha } from '../lib/colors.js';
 import { text, circle, line, axes, pathLine, measure, scale } from '../lib/draw.js';
 import { controls, segmented } from '../lib/ui.js';
 import { USE } from '../lib/cheaperdata.js';
+import { ENERGY } from '../lib/energydata.js';
 
 const AREAS = [
   { k: 'us', name: 'United States', short: 'US', col: '#3f6fb3' },
@@ -102,4 +103,52 @@ export function centuryTeaser(el) {
   });
 }
 
-export const FIGS = { electricityUse, centuryTeaser };
+// The Henry Adams curve: primary energy per person, 1965–2024 (OWID / Energy Institute), log scale, with the US
+// 1965–73 growth rate carried forward as a dashed line.
+export function henryAdams(el) {
+  const [Y0, Y1] = ENERGY.years;
+  const us = ENERGY.perCap.us, i73 = 1973 - Y0;
+  const pace = Math.pow(us[i73] / us[0], 1 / (1973 - Y0)) - 1;
+  new Fig(el, {
+    label: 'Primary energy used per person in the United States, Germany, China, India and the world, 1965 to 2024, on a log scale. The US and Germany level off in the 1970s; China and India keep climbing.',
+    height: w => w < 600 ? 360 : 380,
+    draw(ctx, w, h) {
+      const narrow = w < 600;
+      const labW = narrow ? 92 : 150;
+      const box = { l: narrow ? 40 : 52, r: w - labW, t: 30, b: h - 30 };
+      const sx = scale(Y0, Y1, box.l, box.r);
+      const lg = Math.log10, sy = scale(lg(1), lg(200), box.b, box.t);
+      const Y = v => sy(lg(v / 1000));
+      for (const v of [1, 3, 10, 30, 100]) { const y = Math.round(sy(lg(v))) + 0.5; line(ctx, box.l, y, box.r, y, C.grid, 1); text(ctx, String(v), box.l - 6, y + 4, { size: 10.5, color: C.ink3, align: 'right' }); }
+      for (const yr of narrow ? [1965, 1995, 2024] : [1965, 1975, 1985, 1995, 2005, 2015, 2024]) text(ctx, yr, sx(yr), box.b + 15, { size: 10.5, color: C.ink3, align: 'center' });
+      text(ctx, 'MWh of primary energy per person per year (log scale)', box.l, box.t - 12, { size: 11, color: C.ink3, weight: 500 });
+      // the old pace, carried on
+      const ext = []; for (let y = 1973; y <= Y1; y++) ext.push([sx(y), Y(us[i73] * Math.pow(1 + pace, y - 1973))]);
+      const yEnd = Y(us[i73] * Math.pow(1 + pace, Y1 - 1973));
+      if (yEnd > box.t) { pathLine(ctx, ext, alpha(AREAS[0].col, 0.55), 1.5, [5, 4]); }
+      else { const cut = ext.filter(p => p[1] >= box.t); pathLine(ctx, cut, alpha(AREAS[0].col, 0.55), 1.5, [5, 4]); }
+      const ex = ext.find(p => p[1] < sy(lg(160))) || ext[ext.length - 1];
+      text(ctx, narrow ? `1965–73 pace, ${(pace * 100).toFixed(1)}%/yr` : `US at its 1965–73 pace (${(pace * 100).toFixed(1)}% a year), carried on`, ex[0] - 6, Math.max(box.t + 12, ex[1]) , { size: 10.5, color: AREAS[0].col, align: 'right', halo: true });
+      const ends = [];
+      for (const a of AREAS) {
+        const s = ENERGY.perCap[a.k];
+        pathLine(ctx, s.map((v, i) => [sx(Y0 + i), Y(v)]), a.col, a.k === 'world' ? 1.6 : 2.4, a.dash);
+        circle(ctx, sx(Y1), Y(s[s.length - 1]), 3.2, a.col);
+        ends.push({ a, y: Y(s[s.length - 1]), v: s[s.length - 1] });
+      }
+      // the US peak
+      const pk = us.indexOf(Math.max(...us)); circle(ctx, sx(Y0 + pk), Y(us[pk]), 3.5, '#fff', AREAS[0].col, 2);
+      text(ctx, `peak, ${Y0 + pk}`, sx(Y0 + pk) + 6, Y(us[pk]) + 15, { size: 10.5, color: AREAS[0].col, weight: 600, halo: true });
+      ends.sort((p, q) => p.y - q.y);
+      const gap = narrow ? 26 : 28;
+      for (let i = 1; i < ends.length; i++) if (ends[i].y < ends[i - 1].y + gap) ends[i].y = ends[i - 1].y + gap;
+      const lx = box.r + 10;
+      for (const e of ends) {
+        text(ctx, narrow ? e.a.short : e.a.name, lx, e.y - 2, { size: 11.5, weight: 650, color: e.a.col === C.ink3 ? C.ink2 : e.a.col });
+        text(ctx, `${Math.round(e.v / 1000)} MWh`, lx, e.y + 12, { size: 10.5, color: C.ink3 });
+      }
+    },
+  });
+}
+
+export const FIGS = { electricityUse, centuryTeaser, henryAdams };
