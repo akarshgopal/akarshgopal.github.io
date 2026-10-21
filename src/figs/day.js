@@ -1,4 +1,4 @@
-// A day on an illustrative Germany-like grid (synthetic load/solar/wind shapes; market model in lib/market.js).
+// A day on a model grid (synthetic load/solar/wind shapes; market model in lib/market.js). gridDay also serves futureDay (opts.futures), noonDay and seasonDay.
 import { Fig } from '../lib/fig.js';
 import { C, alpha, lighten, darken, mix } from '../lib/colors.js';
 import * as D0 from '../lib/draw.js';

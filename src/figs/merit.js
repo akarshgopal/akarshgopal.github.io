@@ -21,7 +21,7 @@ function hatchPattern(ctx) {
 // Australian thermal coal $108.4/t ≈ €13.7/MWh (6,000 kcal/kg). Carbon prices: EU ETS ≈ €75; none in the others.
 const USD_PER_EUR_2025 = 1.13;
 export const REGIONS = {
-  de: { label: 'Germany', name: 'rg-de', legacy: 0.6, mustrun: 6, hydro: 3, coal: 13.7, scale: { nuclear: 0 }, set: { D: 62, wind: 18, solar: 8, gas: 36, co2: 75 } },
+  de: { label: 'Model grid', name: 'rg-de', legacy: 0.6, mustrun: 6, hydro: 3, coal: 13.7, scale: { nuclear: 0 }, set: { D: 62, wind: 18, solar: 8, gas: 36, co2: 75 } },
   coal: { label: 'Coal-heavy (India, China)', name: 'rg-coal', legacy: 0, mustrun: 4, hydro: 10, coal: 13.7, scale: { nuclear: 0.5, lignite: 0.4, coal: 3.4, gas: 0.25, peaker: 0.5 }, set: { D: 70, wind: 8, solar: 10, gas: 36, co2: 0 } },
   gas: { label: 'Gas-heavy (Texas, Gulf)', name: 'rg-gas', legacy: 0, mustrun: 2, hydro: 0, coal: 13.7, scale: { nuclear: 0.6, lignite: 0, coal: 0.6, gas: 2.4, peaker: 1.5 }, set: { D: 70, wind: 20, solar: 10, gas: 10.6, co2: 0 } },
   hydro: { label: 'Hydro-heavy (Brazil, Norway)', name: 'rg-hydro', legacy: 0, mustrun: 3, hydro: 38, coal: 13.7, scale: { nuclear: 0.25, lignite: 0, coal: 0.2, gas: 0.7, peaker: 0.6 }, set: { D: 60, wind: 10, solar: 6, gas: 36, co2: 0 } },
@@ -255,13 +255,20 @@ export function merit(el, opts = {}) {
   segmented(adv, { label: 'Who profits?', options: [{ label: 'Hide', value: false }, { label: 'Show infra-marginal rent', value: true }], value: st.rent, onchange: v => { st.rent = v; upd(); } });
   const ro = readout(el);
   // fix the slider fmt for HTML subscript
+  // the pass-through: what the same hour would clear at with the region's 2025 gas price, every other input unchanged
+  function shock() {
+    const g0 = REGIONS[st.region].set.gas; if (Math.abs(st.gas - g0) < 3) return '';
+    const r0 = clear(supplyBlocks({ ...regionArgs(), gas: g0 }), [{ cap: st.D, price: CAP_PRICE }]), r1 = clear(supplyBlocks(regionArgs()), [{ cap: st.D, price: CAP_PRICE }]);
+    if (r0.price >= CAP_PRICE || r1.price >= CAP_PRICE || Math.abs(r1.price - r0.price) < 1) return '';
+    return `At the 2025 gas price it would be ${M(r0.price, 0)}: every MWh, from every plant, now sells for <b>${M(Math.abs(r1.price - r0.price), 0)} ${r1.price > r0.price ? 'more' : 'less'}</b>. `;
+  }
   function upd() {
-    const { blocks, r } = compute();
+    const { blocks, r } = compute(), sh = r.price < CAP_PRICE ? shock() : '';
     const rev = r.price < CAP_PRICE ? r.price * r.qty / 1000 : NaN; // €m per hour
     const cost = blocks.reduce((s, b) => s + (b.q || 0) * Math.max(0, b.price), 0) / 1000;
     ro.innerHTML = r.price >= CAP_PRICE
       ? `Demand exceeds everything on offer. The price jumps to the cap and the operator must cut load — this is <b>scarcity</b>.`
-      : `Every MWh this hour clears at <b>${M(r.price, 0)}</b>, the running cost of the last plant needed: <b>${TECHS[r.marginal.tech].short}</b>. ` + (st.rent ? `Buyers pay about <b>${M(rev, 1)} m</b> for the hour; generators’ running costs are about ${M(Math.max(0, cost), 1)} m. The difference is the <span class="c-price">infra-marginal rent</span> that pays back power plants’ capital.` : `Every cheaper plant is paid the same price.`);
+      : `Every MWh this hour clears at <b>${M(r.price, 0)}</b>, the running cost of the last plant needed: <b>${TECHS[r.marginal.tech].short}</b>. ` + sh + (st.rent ? `Buyers pay about <b>${M(rev, 1)} m</b> for the hour; generators’ running costs are about ${M(Math.max(0, cost), 1)} m. The difference is the <span class="c-price">infra-marginal rent</span> that pays back power plants’ capital.` : sh ? '' : `Every cheaper plant is paid the same price.`);
     fig.invalidate();
   }
   hint(el, 'slide <span class="c-gas">gas</span> and carbon and watch the blocks swap places; drag anywhere on the chart to move demand.');

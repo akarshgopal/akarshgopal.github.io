@@ -3,134 +3,125 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>The Machine: Electrons, Magnets and Steam · How Electricity Works</title>
-<meta name="description" content="How a current flows, how a spinning magnet makes one, three-phase power, and why most electricity still comes from boiling water.">
+<title>The Machine: Magnets, Steam and the Limits of Heat · Why Did Electricity Stop Getting Cheaper?</title>
+<meta name="description" content="How a spinning magnet makes electricity, why most of it still starts as heat, and the two engines of cheapening, better steam and bigger units, that ran for seventy years and then stalled.">
 <link rel="icon" href="data:,">
 <link rel="stylesheet" href="style.css">
+<script>(function(){var m={"fig-drift":"kilowatt-hour.html#fig-drift","fig-powerEnergy":"kilowatt-hour.html#fig-powerEnergy","power-and-energy":"kilowatt-hour.html#power-and-energy","voltage-is-height":"kilowatt-hour.html#voltage-is-height","s1":"kilowatt-hour.html#current","fig-potential":"kilowatt-hour.html#fig-emfHill","fig-hero3d":"the-machine.html#fig-threePhase","s3":"the-machine.html#heat"};var h=location.hash.slice(1);if(m[h])location.replace(m[h]);})();</script>
 </head>
 <body>
 <main>
 <article>
 <header class="top">
-<h1>The Machine: Electrons, Magnets and Steam</h1>
-<p class="byline">Essay 1 of 9 · by Akarsh Gopal · October 2026</p>
+<h1>The Machine: Magnets, Steam and the Limits of Heat</h1>
+<p class="byline">Essay 3 of 9 · by Akarsh Gopal · October 2026</p>
 </header>
 
-<p class="lede">At the far end of every light switch is a machine the size of a house that turns very slightly harder when you flip it. This essay is about that machine: what a current is, how a spinning magnet makes one, and where the spinning comes from.</p>
+<p class="lede">For eighty years every kilowatt-hour cost less than the one before. Most of that cheapening came from a single machine: a magnet turning inside coils of copper, driven by steam. This essay builds the machine, then follows the two ways it got cheaper and where each one stopped.</p>
 
-<p>It starts with a single electron in a copper wire and ends with a boiler. Everything the later essays build on, from transformers to markets, rests on three ideas from here: voltage times current is power, a changing magnetic field pushes charge, and heat can only ever be turned partly into motion.</p>
+<p><a class="xref" href="cheaper.html">Essay 1</a> showed the American price falling by about 5 per cent a year from 1892 to 1973, and then not falling. <a class="xref" href="kilowatt-hour.html">Essay 2</a> showed what is being bought: energy, carried by charge pushed through a circuit by a voltage. Something has to do the pushing. For nearly all the world’s electricity, that something is a generator, and behind the generator, a fire.</p>
 
 <ol class="toc">
-<li><a href="#s1"><span class="n">1</span>Charge, fields and current</a></li>
-<li><a href="#s2"><span class="n">2</span>Making electricity</a></li>
-<li><a href="#s3"><span class="n">3</span>Where the rotation comes from</a></li>
+<li><a href="#s2"><span class="n">1</span>A magnet, a coil and a shaft</a></li>
+<li><a href="#heat"><span class="n">2</span>Heat into rotation</a></li>
+<li><a href="#scale"><span class="n">3</span>Bigger, and then too big</a></li>
+<li><a href="#world"><span class="n">4</span>Where the rotation comes from today</a></li>
 <li><a href="#notes"><span class="n">·</span>Notes and sources</a></li>
 </ol>
 
-<h2 id="s1"><span class="num">1</span>Charge, fields and current</h2>
+<h2 id="s2"><span class="num">1</span>A magnet, a coil and a shaft</h2>
 
-<p>Every atom in a copper wire has electrons, and in a metal some of those electrons are not attached to any particular atom. They wander through the crystal lattice like a gas, bumping into the vibrating ions, moving in every direction at once at more than a thousand kilometres a second. Because they move in every direction equally, nothing flows. There is no current.</p>
-
-<p>Now connect the wire to a battery. The battery pushes a little extra negative charge onto one end of the wire and pulls some away from the other, and this sets up an <span class="c-field" style="color:#d1495b;font-weight:600">electric field</span> along the whole length of the wire. The field gives each <span class="c-electron">electron</span> a very gentle shove in one direction between collisions. Their random motion is still there, but now it has a tiny drift superimposed on it:</p>
-
-<figure class="fig" data-fig="drift">
-<figcaption><span class="tagline tag-ill">Model</span> Top: free electrons in copper, their thermal jitter slowed enormously. Bottom: the circuit they belong to. The readout computes drift speed and signal delay for a 1.5 mm² copper conductor.</figcaption>
-</figure>
-
-<p>The drift is very slow: in a kettle cable the electrons creep along at a fraction of a millimetre per second, slower than a snail; with alternating current they merely shuffle back and forth by a few micrometres. Yet the lamp lights instantly, because what travels fast is not the electrons but the field. Close the switch and the push runs along the wire at a large fraction of the speed of light, like water in a pipe that is already full.</p>
-
-<p>So <b>electricity is not a substance that gets delivered</b>. The electrons in your wall were there before you plugged anything in and they will be there afterwards. What is delivered is <i>energy</i>, carried by the fields around the wires.</p>
-
-<h3 id="voltage-is-height">Voltage is height</h3>
-
-<p>Picture a circuit as a landscape. The battery or generator is a pump that lifts charge up a hill; the voltage is the height of the hill (one volt is one joule per coulomb). Charge rolls down through a heater, motor or lamp and gives up its energy as heat, motion or light. The copper wires are nearly flat. How much charge flows for a given height is set by the load’s <b>resistance</b>: the current is the voltage divided by it, <i>I = V / R</i>.</p>
-
-<figure class="fig" data-fig="potential">
-<figcaption><span class="tagline tag-ill">Model</span> A simple circuit unrolled into a landscape of electric potential. The source lifts charge by the source voltage; almost all of that height is lost across the load. Current follows Ohm’s law, I = V / R.</figcaption>
-</figure>
-
-<p>The rate at which energy is delivered is power, and it is simply the height of the hill multiplied by how much charge flows down it each second: <i>P = V × I</i>. Double the voltage at the same current and you deliver twice the power. This little equation will come back, in a very consequential way, when we try to move electricity across a country.</p>
-
-<h3 id="power-and-energy">Power and energy</h3>
-
-<p>The two words that cause the most confusion in everything that follows are <b>power</b> and <b>energy</b>. Power is a rate, measured in watts. Energy is an amount, measured in watt-hours or joules. A kettle draws about two kilowatts, but only for a couple of minutes; a fridge draws a twentieth of that, but all day long. Switch on the kettle and watch the meter:</p>
-
-<figure class="fig" data-fig="powerEnergy">
-<figcaption><span class="tagline tag-ill">Model</span> The trace is power, in watts; the meter counts energy, the area under that trace. One second here is one minute of household time. The dashed line is the average power of a household using 3,500 kWh a year.</figcaption>
-</figure>
-
-<p>Your bill charges for energy, in kilowatt-hours. Grids and markets also care about power: how many watts must be available at the worst moment of the year. A household using 3,500 kWh a year averages about 400 W, but occasionally asks for ten times that. Much of the cost of an electricity system is being ready for the moments when everyone asks at once.</p>
-
-<h2 id="s2"><span class="num">2</span>Making electricity</h2>
-
-<p>Batteries make electricity from chemistry, and solar panels make it from light, but nearly all of the world’s electricity has, for more than a century, been made by the effect Michael Faraday discovered in 1831: <b>a changing magnetic field pushes charges around a loop of wire</b>. Move a magnet into a coil and a current flows one way; pull it out and the current flows the other way; hold it still and nothing happens at all.</p>
+<p>A battery pushes charge with chemistry and a solar cell with light, but nearly all of the world’s electricity has, for more than a century, been pushed by the effect Michael Faraday found in 1831: <b>a changing magnetic field pushes charge around a loop of wire</b>. Move a magnet into a coil and a current flows one way; pull it out and it flows the other way; hold the magnet still and nothing happens at all.</p>
 
 <figure class="fig" data-fig="faraday">
 <figcaption><span class="tagline tag-ill">Model</span> A magnet moving through a coil. The meter and the trace show the induced voltage, which follows how quickly the magnetic flux through the coil changes, not how strong the magnet is.</figcaption>
 </figure>
 
-<p>What matters is the <i>rate of change</i>. A faster movement gives a bigger voltage. The direction of the voltage depends on whether the magnetic field threading the coil, its <b>flux</b>, is increasing or decreasing, which is why pushing the magnet in and pulling it out give opposite kicks.</p>
+<p>What matters is the <i>rate of change</i>. A faster movement gives a bigger voltage. The direction depends on whether the magnetic field threading the coil, its <b>flux</b>, is growing or shrinking, which is why pushing the magnet in and pulling it out give opposite kicks. This push is the “height” of <a class="xref" href="kilowatt-hour.html#voltage-is-height">essay 2</a>: a generator is a machine for lifting charge up that hill, over and over.</p>
 
-<p>Pushing a magnet in and out by hand is not a practical way to light a city. Instead, we turn it. Put the same magnet on a shaft inside a coil, seen here end-on, and turn the shaft. As the north pole swings past one side of the coil and then the other, the flux through the coil rises, falls and reverses, over and over. Grab the magnet to turn it yourself, slowly and then fast:</p>
+<p>Pushing a magnet in and out by hand will not light a city. Instead, we turn it. Put the same magnet on a shaft inside a coil, seen here end-on, and turn the shaft. As the north pole swings past one side of the coil and then the other, the flux through the coil rises, falls and reverses. Turn it slowly by hand, and then fast:</p>
 
 <figure class="fig" data-fig="rotor">
 <figcaption><span class="tagline tag-ill">Model</span> A generator seen end-on: the same magnet on a shaft, inside one copper coil whose two sides sit in the slots left and right. Dots and crosses show current coming out of and going into the page. Drawn 60 times slower than real.</figcaption>
 </figure>
 
-<p>Turn it slowly and the voltage is small; turn it fast and it grows, because what counts is how fast the flux changes. Turn it steadily and the voltage traces a smooth wave, a <b>sine</b>, simply because the coil sees the magnet’s pole from a steadily turning angle. One revolution of a two-pole rotor gives one cycle of voltage, so a two-pole machine must spin at exactly 3,000 rpm for 50 Hz and 3,600 rpm for 60 Hz. A slow hydro turbine with many poles turns at a few hundred rpm and makes the same frequency. Grid frequency is locked to the rotational speed of its generators.</p>
+<p>Turned steadily, the voltage traces a smooth wave, a <b>sine</b>, because the coil sees the magnet’s pole from a steadily turning angle. One revolution of a two-pole rotor gives one cycle, so a two-pole machine must spin at exactly 3,000 rpm to make 50 Hz and 3,600 rpm to make 60 Hz. A slow hydro turbine with many poles turns at a few hundred rpm and makes the same frequency. The frequency of a grid is the speed of its generators, which is why <a class="xref" href="balancing.html">essay 5</a> can read the balance of a whole continent off a single number.</p>
 
 <h3 id="three-phases">Three phases</h3>
 
-<p>A single coil’s power pulses: full, nothing, full, nothing, a hundred times a second. Large machines and motors dislike pulsing torque. The fix, standard since the 1890s, is to add two more coils to the same machine, a third of a turn round the stator. The magnet reaches each one a third of a turn later, so each makes the same sine wave, 120° behind the last: <span class="c-A">phase A</span>, <span class="c-B">phase B</span> and <span class="c-C">phase C</span>.</p>
+<p>A single coil’s power pulses: full, nothing, full, nothing, a hundred times a second. Large machines dislike pulsing torque. The fix, standard since the 1890s, is two more coils in the same machine, each a third of a turn round the stator. The magnet reaches each one a third of a turn later, so each makes the same sine wave, 120° behind the last: <span class="c-A">phase A</span>, <span class="c-B">phase B</span> and <span class="c-C">phase C</span>.</p>
 
 <figure class="fig" data-fig="threePhase">
 <figcaption><span class="tagline tag-ill">Model</span> The same generator with three coils, coloured by phase. The other two views add the three voltages, which cancel at every instant, and the three powers into equal loads, which sum to a constant.</figcaption>
 </figure>
 
-<p>Add the three voltages together, then the three powers, and two things follow. First, the three voltages add to exactly zero at every instant, and so do the currents into equal loads, so the three wires serve as each other’s return path and no fourth heavy conductor is needed. Second, the three pulsing power flows add up to a perfectly steady total. A three-phase generator feels a smooth, constant load on its shaft. This is why almost every high-voltage line you have ever seen carries its conductors in threes.</p>
+<p>Add the three voltages together and they make zero at every instant, and so do the currents into equal loads, so the three wires serve as each other’s return path and no heavy fourth conductor is needed. Add the three powers and the pulses fill each other’s gaps: the total is perfectly steady, and the shaft feels a smooth, constant load. This is why almost every high-voltage line carries its conductors in threes.</p>
 
-<p>Put the pieces together and you have the machine at the heart of almost every power station: a magnet turning inside three pairs of coils. A real one is the same arrangement scaled up to hundreds of megawatts, with an electromagnet in place of the permanent magnet.</p>
+<p>That is the machine at the heart of almost every power station: a magnet turning inside three sets of coils. A real one is the same arrangement scaled up to hundreds of megawatts, with an electromagnet in place of the permanent magnet. It is also very good at its job. A large generator turns more than 98 per cent of the mechanical power on its shaft into electricity. If electricity was ever going to get cheaper, it would not be by improving the generator. It would be by finding cheaper rotation.</p>
 
-<figure class="fig showpiece" data-fig="hero3d">
-<figcaption><span class="tagline tag-ill">Model</span> A two-pole, three-phase generator. The rotor is a magnet; each pair of opposite coils is one phase. Drag to look around it.</figcaption>
-</figure>
+<h2 id="heat"><span class="num">2</span>Heat into rotation</h2>
 
-<h2 id="s3"><span class="num">3</span>Where the rotation comes from</h2>
+<p>For most of the twentieth century, and still for most of the world’s electricity today, the rotation has come from heat. Burn coal or gas, or split uranium, boil water into high-pressure steam, and let the steam expand through a turbine that turns the generator. The steam is then condensed back to water by cooling water from a river, the sea or a cooling tower, and pumped back to the boiler.</p>
 
-<p>A generator converts rotation into electricity at better than 98% efficiency. The hard part is getting the rotation, and the world gets it in very different ways.</p>
+<p>Fuel was a power station’s biggest running cost, so the question that decided the price was: how much of the fuel’s heat comes out as electricity? Sadi Carnot answered the hardest version of it in 1824. An engine working between a hot source at absolute temperature <i>T<sub>hot</sub></i> and a cold sink at <i>T<sub>cold</sub></i> can turn at most a fraction <i>1 − T<sub>cold</sub> / T<sub>hot</sub></i> of the heat into work. The rest must go into the cold side. No cleverness gets round this; it follows from the second law of thermodynamics. The only ways to raise the ceiling are hotter steam or colder water.</p>
 
-<h3 id="world">The world’s electricity in one picture</h3>
-
-<p>The world generated about <b>31,900 TWh</b> of electricity in 2025, a third of it in China. Coal is still the largest single source, at a third of the total; solar, a rounding error in 2015, now matches nuclear at about 9%.<sup class="fn"><a href="#n1">1</a></sup></p>
-
-<p>The mixes differ enormously. India runs mostly on coal, the Middle East on gas and Brazil on hydro; Australia gets a fifth of its power from the sun. Germany appears often in this series because its data is unusually open, but it is a small grid by world standards, and where a mechanism plays out differently in Texas, Delhi or São Paulo the figures say so.</p>
-
-<figure class="fig" data-fig="worldMix">
-<figcaption><span class="tagline tag-real">Data</span> Electricity generation by source, 2000–2025 (Ember, CC BY 4.0). The second view shows how each region’s generation changed between 2015 and 2025; “Middle East”, “Africa”, “Latin America” and “ASEAN” are Ember’s regional aggregates.<sup class="fn"><a href="#n1">1</a></sup></figcaption>
-</figure>
-
-<h3 id="heat">Heat</h3>
-
-<p>For most of the twentieth century, and still for the majority of the world’s electricity today, the rotation has come from heat: burn coal or gas, or split uranium, boil water into high-pressure steam, and let the steam expand through a turbine.</p>
-
-<p>Heat engines have a ceiling set by temperature alone. Sadi Carnot showed in 1824 that an engine working between a hot source at absolute temperature <i>T<sub>hot</sub></i> and a cold sink at <i>T<sub>cold</sub></i> can convert at most a fraction <i>1 − T<sub>cold</sub> / T<sub>hot</sub></i> of the heat into work. The rest must be dumped into the cold side — the river, the sea, or the plume above a cooling tower. Hotter steam means a higher ceiling:</p>
+<p>Carnot’s limit is for an ideal engine that runs infinitely slowly. An engine that delivers power at a useful rate does worse. A simple model of one gives <i>1 − √(T<sub>cold</sub> / T<sub>hot</sub>)</i>, and real steam plants land close to it.<sup class="fn"><a href="#n1">1</a></sup></p>
 
 <figure class="fig" data-fig="rankine">
-<figcaption><span class="tagline tag-mixed">Data + model</span> A steam cycle, with fuel heat in, work out and waste heat to the condenser, and a chart of the Carnot limit and a more realistic “endoreversible” estimate as a function of steam temperature. The markers show historical US practice: ~315 °C in the 1920s, a 538–600 °C plateau from the 1960s, ~35% for 1970s subcritical plants, and more than 45% for modern ultra-supercritical units.<sup class="fn"><a href="#n2">2</a></sup></figcaption>
+<figcaption><span class="tagline tag-ill">Model</span> A steam cycle, with fuel heat in, work out and waste heat to the condenser, and a chart of the Carnot limit and the practical estimate, <i>1 − √(T<sub>cold</sub> / T<sub>hot</sub>)</i>, against steam temperature. The shaded band, 538–600 °C, is where steam temperatures stopped for half a century.<sup class="fn"><a href="#n2">2</a></sup></figcaption>
 </figure>
 
-<p>From the 1900s to the 1960s engineers pushed steam from a few hundred degrees to about 540–600 °C, and every step saved coal. Then, around 1960, the climb stopped. The limit was metallurgy, not Carnot: hotter steels crept, cracked and corroded. A typical American coal plant sat near 35% efficiency for decades, a plateau the last essay returns to.</p>
+<p>At 540 °C and 30 °C cooling water, the Carnot ceiling is 63 per cent and the practical estimate 39 per cent. Two-thirds of the fuel’s heat goes up the cooling tower. Raise the steam temperature and both curves climb, so for sixty years engineers chased temperature.</p>
 
-<p>Wind turbines and solar panels skip the heat entirely; they get essays of their own once the grid they feed is in place. First, the power has to leave the power station. A generator makes it at around 20,000 volts, usually far from the people who will use it, and that is where <a class="xref" href="transformers.html">the next essay</a> picks it up.</p>
+<h3 id="how-close">How close real plants got</h3>
+
+<p>Around 1900 an American power station turned about one-twentieth of its coal’s heat into electricity. By 1960 the average plant turned nearly a third.<sup class="fn"><a href="#n3">3</a></sup> That sixfold saving in fuel per kilowatt-hour is the first engine of cheapening, and it came from pushing steam from a couple of hundred degrees to over 500 °C, with higher pressures, reheating between turbine stages and better condensers along the way.</p>
+
+<figure class="fig" data-fig="effCentury">
+<figcaption><span class="tagline tag-mixed">Data + model</span> The share of fuel heat turned into electricity by US fossil steam plants (fleet average; points before 1949 are rougher estimates from coal burned per kilowatt-hour) and by China’s coal fleet since 2000, with two record units. The dashed line is the Carnot limit for the steam temperature of typical new units, with 30 °C cooling water. China’s figures use a lower-heating-value basis, which reads about two points higher than the US basis.<sup class="fn"><a href="#n2">2</a></sup><sup class="fn"><a href="#n3">3</a></sup></figcaption>
+</figure>
+
+<p>Then the line goes flat. From the mid-1960s to today, the average American coal plant has turned about a third of its fuel into electricity. The Carnot ceiling at the same steam temperatures sits near 63 per cent, almost twice as high. Physics had plenty of room left. What stopped was the steam temperature itself.</p>
+
+<p>The reason is metal. Above about 550 °C the steels used for boiler tubes and turbine casings slowly stretch under pressure, a process called creep, and corrode faster. A plant is built to last thirty or forty years, and a few degrees can take years off its life. In 1960 Eddystone 1, near Philadelphia, ran steam at about 650 °C and was the most efficient plant in the world, at around 40 per cent; it spent its life plagued by failures and was run at lower temperatures.<sup class="fn"><a href="#n2">2</a></sup> Utilities drew the lesson and went back to about 540 °C. The plateau was a ceiling of engineering, not of physics.</p>
+
+<p>Two things show it. Gas turbines, whose blades are cooled from inside and coated in ceramics, take their heat at well over 1,000 °C, and combined with a steam cycle on their exhaust they turn about 60 per cent of their fuel into electricity.<sup class="fn"><a href="#n4">4</a></sup> And new nickel-rich steels have let a later generation of “ultra-supercritical” coal units run at 600–620 °C. China built more of them than anyone; its best reach about 47 per cent. Even those sit near the edge of what their steels allow. Each step now buys a point or two, not the factor of six the first sixty years gave.</p>
+
+<h2 id="scale"><span class="num">3</span>Bigger, and then too big</h2>
+
+<p>Fuel was one part of the cost of a kilowatt-hour. The other was the plant itself, and here the engine of cheapening was size.</p>
+
+<p>A boiler, a turbine and a generator twice as large cost much less than twice as much to build, and need hardly more people to run. So the largest units grew from a few tens of megawatts in the 1910s to a few hundred by the 1950s, and reached 1,000 MW in the mid-1960s.<sup class="fn"><a href="#n5">5</a></sup> Each step cut the cost of a kilowatt of capacity. Bigger units also ran hotter and at higher pressure, so the two engines turned together.</p>
+
+<p>Size only pays if someone needs the power. What made it work in America was demand that grew by about 7 per cent a year, doubling roughly every decade, for most of the century before 1973.<sup class="fn"><a href="#n5">5</a></sup> A utility could order the biggest unit yet and know the load would grow into it within a few years.</p>
+
+<p>Both halves broke at about the same time. Units above about 1,000 MW proved harder to build and less reliable: they took longer, broke down more often, and a single outage took a large slice of a utility’s supply with it. Construction costs per kilowatt stopped falling and began to rise. The historian Richard Hirsh calls this <b>technological stasis</b>: by the late 1960s neither bigger nor hotter units were making electricity cheaper.<sup class="fn"><a href="#n5">5</a></sup> Then, after 1973, demand growth itself slowed. What happened to prices when fuel and interest rates jumped on top of the stalled engine is the subject of <a class="xref" href="balancing.html">essay 5</a> and <a class="xref" href="futures.html">essay 9</a>.</p>
+
+<p>The engine did not stop everywhere. China ran it again, decades later and on a larger scale. Its generation grew about 8½ per cent a year from 2000 to 2025, a little faster than America’s before 1973, from 1,356 TWh to 10,506 TWh.<sup class="fn"><a href="#n6">6</a></sup> With demand growing that fast it could build large, efficient coal units in series and retire small, old ones, and the average efficiency of its fleet rose from about 31 per cent to about 40 per cent in twenty years: the first engine of cheapening, still running. But the newest units now sit at the same steel ceiling as everyone else. India’s generation has grown about 5 per cent a year since 2000, and almost three-quarters of the growth has come from coal.<sup class="fn"><a href="#n6">6</a></sup></p>
+
+<h2 id="world"><span class="num">4</span>Where the rotation comes from today</h2>
+
+<p>The world generated about <b>31,900 TWh</b> of electricity in 2025, a third of it in China. Coal is still the largest single source, at a third of the total. Coal, gas, oil, nuclear and biomass, all of them heat engines, together made about 69 per cent. Add hydro and wind, which turn generators directly, and about 91 per cent of the world’s electricity still comes from a magnet turning inside coils. Only solar, 9 per cent of the total, has no moving parts.<sup class="fn"><a href="#n6">6</a></sup></p>
+
+<figure class="fig" data-fig="worldMix">
+<figcaption><span class="tagline tag-real">Data</span> Electricity generation by source, 2000–2025 (Ember, CC BY 4.0). The second view shows the series’ four countries as shares of their own generation; the white line marks the fossil share. The third shows how each region’s generation changed between 2015 and 2025; “Middle East”, “Africa”, “Latin America” and “ASEAN” are Ember’s regional aggregates.<sup class="fn"><a href="#n6">6</a></sup></figcaption>
+</figure>
+
+<p>The four countries this series follows sit at very different points. The United States has swapped much of its coal for gas, which made 40 per cent of its power in 2025. Germany, a small grid by world standards at about 500 TWh, gets 45 per cent from wind and sun. China still makes 55 per cent from coal and India 71 per cent.</p>
+
+<p>So the engine of the twentieth century had two levers: burn less fuel for each kilowatt-hour, and build each unit bigger. By about 1970 steel had stopped the first and unreliability and slowing demand the second. Solar panels and wind turbines restart the engine by a different road, and get essays of their own, <a class="xref" href="solar-pv.html">6</a> and <a class="xref" href="utility-renewables.html">7</a>. First, the power has to leave the power station. A generator makes it at around 20,000 volts, often far from the people who will use it, and that is where <a class="xref" href="transmission.html">essay 4</a> picks it up.</p>
 
 <h2 id="notes">Notes and sources</h2>
 <ol class="notes">
-<li id="n1">Ember, <a href="https://ember-energy.org/data/yearly-electricity-data/">Yearly Electricity Data</a> (global release, downloaded 10 October 2026, CC BY 4.0): generation by source and demand for every country and Ember region, 2000–2025.</li>
-<li id="n2">Steam conditions and efficiency: Yeh &amp; Rubin, “A centurial history of technological change and learning curves for pulverized coal-fired utility boilers”, <i>Energy</i> 32 (2007), <a href="https://doi.org/10.1016/j.energy.2007.03.004">doi:10.1016/j.energy.2007.03.004</a>; R. F. Hirsh, <i>Technology and Transformation in the American Electric Utility Industry</i> (1989).</li>
+<li id="n1">The practical estimate is the efficiency of an engine run for maximum power output: F. L. Curzon and B. Ahlborn, “Efficiency of a Carnot engine at maximum power output”, <i>American Journal of Physics</i> 43 (1975), 22–24, <a href="https://doi.org/10.1119/1.10023">doi:10.1119/1.10023</a>.</li>
+<li id="n2">Steam conditions and the plateau: S. Yeh and E. S. Rubin, “A centurial history of technological change and learning curves for pulverized coal-fired utility boilers”, <i>Energy</i> 32 (2007), <a href="https://doi.org/10.1016/j.energy.2007.03.004">doi:10.1016/j.energy.2007.03.004</a>; R. F. Hirsh, <i>Technology and Transformation in the American Electric Utility Industry</i> (Cambridge University Press, 1989), which also tells the story of Eddystone 1. Typical steam temperatures of new units in the efficiency chart: about 315 °C in 1920, 425 °C in 1930, 480 °C in 1940, 540–565 °C from 1950, back to about 540 °C from 1970, and 600–620 °C for ultra-supercritical units after 2000.</li>
+<li id="n3">US fleet efficiency is 3,412 Btu divided by the average heat rate in Btu per kWh. From 1949: EIA, <i>Annual Energy Review</i>, Table A6, “Approximate heat rates for electricity” (fossil-fuelled steam plants), and for coal plants after 2000 EIA, <i>Electric Power Annual</i>, Table 8.1. Before 1949: coal burned per kWh, <i>Historical Statistics of the United States</i>, and Hirsh (note 2); the 1900 value is approximate. China: coal burned per kWh supplied, China Electricity Council annual statistics, converted at 122.9 grams of standard coal per kWh of heat. Record units: Hirsh (note 2) for Eddystone 1; China Electricity Council and plant operators for the newest double-reheat ultra-supercritical units.</li>
+<li id="n4">Combined-cycle gas plants: manufacturers’ ratings for the largest current gas turbines in combined cycle exceed 60 per cent on a lower-heating-value basis; see IEA, <i>World Energy Outlook</i>, power-generation technology assumptions.</li>
+<li id="n5">Unit sizes, demand growth and stasis: Hirsh (note 2); P. L. Joskow and N. L. Rose, “The effects of technological change, experience, and environmental regulation on the construction cost of coal-burning generating units”, <i>RAND Journal of Economics</i> 16 (1985), <a href="https://economics.mit.edu/sites/default/files/publications/The%20effects%20of%20technological%20change%20experience%20and.pdf">MIT (PDF)</a>.</li>
+<li id="n6">Ember, <a href="https://ember-energy.org/data/yearly-electricity-data/">Yearly Electricity Data</a> (global release, downloaded 10 October 2026, CC BY 4.0): generation by source and demand for every country and Ember region, 2000–2025. Growth rates are compound annual rates of total generation, 2000–2025.</li>
 </ol>
 </article>
 </main>
 <script src="series.js"></script>
-<script src="hero.js"></script>
 </body>
 </html>

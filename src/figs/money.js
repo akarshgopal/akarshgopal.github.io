@@ -232,10 +232,10 @@ export function usCompare(el) {
     label: 'US average retail electricity prices by sector compared with the PJM real-time wholesale price',
     height: w => w < 600 ? 300 : 320,
     draw(ctx, w, h) {
-      const box = { l: 40, r: w - (w < 600 ? 70 : 120), t: 28, b: h - 32 };
+      const box = { l: 40, r: w - (w < 600 ? 104 : 120), t: 28, b: h - 32 };
       const { sx, sy } = axes(ctx, { box, x0: 2016, x1: 2025, y0: 0, y1: 20, yticks: [0, 5, 10, 15, 20], xticks: [2016, 2018, 2020, 2022, 2024], ylabel: '¢/kWh (nominal)' });
       const ser = [['Residential', US.res, C.ink], ['Commercial', US.com, C.ink2], ['Industrial', US.ind, C.ink3]];
-      ser.forEach(([lab, v, col]) => { const pts = US.years.map((y, i) => [sx(y), sy(v[i])]); pathLine(ctx, pts, col, 2); pts.forEach(p => circle(ctx, p[0], p[1], 2.8, col)); text(ctx, `${lab} ${v.at(-1).toFixed(1)}`, sx(2025) + 6, sy(v.at(-1)) + 4, { size: 11, color: col, weight: 600 }); });
+      ser.forEach(([lab, v, col]) => { const pts = US.years.map((y, i) => [sx(y), sy(v[i])]); pathLine(ctx, pts, col, 2); pts.forEach(p => circle(ctx, p[0], p[1], 2.8, col)); text(ctx, `${lab} ${v.at(-1).toFixed(1)}`, sx(2025) + 6, sy(v.at(-1)) + 4, { size: w < 600 ? 10.5 : 11, color: col, weight: 600 }); });
       const pp = PJM.map(([y, v]) => [sx(y), sy(v / 10)]); pathLine(ctx, pp, C.spot, 2.2, [5, 3]); pp.forEach(p => circle(ctx, p[0], p[1], 3, C.spot));
       text(ctx, 'PJM wholesale (real-time LMP)', sx(2019), sy(2.732) + 22, { size: 11, color: C.spot, weight: 600, halo: true });
     },

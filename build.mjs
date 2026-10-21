@@ -14,11 +14,10 @@ cpSync('src/fonts', `${OUT}/fonts`, { recursive: true });
 cpSync('src/style.css', `${OUT}/style.css`);
 
 const esc = s => s.replace(/&/g, '&amp;').replace(/</g, '&lt;');
-const label = (p, i) => String(i);
 
 function nav(cur) {
-  // the landing page is the series title; the list holds the nine essays
-  const items = PAGES.slice(1).map((p, k) => { const i = k + 1; return `<li><a href="${p.file}"${i === cur ? ' aria-current="page"' : ''}><span class="n">${label(p, i)}</span>${esc(p.short)}</a></li>`; }).join('');
+  // the landing page is the series title; the list holds the nine essays, then the deep dives
+  const items = PAGES.slice(1).map((p, k) => { const i = k + 1; return `<li${p.deep ? ' class="deep"' : ''}><a href="${p.file}"${i === cur ? ' aria-current="page"' : ''}><span class="n">${p.deep ? '+' : i}</span>${esc(p.short)}</a></li>`; }).join('');
   return `<nav class="series" aria-label="${SERIES_TITLE}: the series"><div class="series-in"><a class="series-title" href="index.html">${SERIES_TITLE}</a><ol>${items}</ol><button id="play-toggle" type="button" aria-pressed="true" title="Pause all animations">❚❚ Pause</button></div></nav><script>(function(){var a=document.querySelector('nav.series [aria-current=page]');if(a){var o=a.closest('ol');if(o.scrollWidth>o.clientWidth)o.scrollLeft=a.offsetLeft-o.offsetLeft-24;}})();</script>`;
 }
 function pager(cur) {

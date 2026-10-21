@@ -140,8 +140,8 @@ export function offset(el) {
   });
   const ctl = controls(el, 'chips');
   const tog = (k, lab, col) => { const b = button(ctl, lab, () => { st[k] = !st[k]; b.setAttribute('aria-pressed', st[k]); fig.invalidate(); }, { kind: 'chip', color: col, name: k }); b.setAttribute('aria-pressed', st[k]); };
-  tog('engine', 'Efficiency & scale gains continue after 1965', C.storage);
-  tog('fuel', 'Oil & fuel shock 1973', C.gas);
-  tog('infl', 'Interest rates & construction delays', C.network);
-  tog('env', 'Environmental retrofits', C.nuclear);
+  tog('engine', 'Physics & scale: gains continue after 1965', C.storage);
+  tog('fuel', 'Fuel: the 1973 oil shock', C.gas);
+  tog('infl', 'Institutions: interest rates & build delays', C.network);
+  tog('env', 'Institutions: pollution retrofits', C.nuclear);
 }

@@ -1,7 +1,7 @@
 // World generation mix, Ember yearly electricity data (see lib/worlddata.js).
 import { Fig } from '../lib/fig.js';
 import { C, alpha } from '../lib/colors.js';
-import { text, measure, line, clamp, scale, niceTicks } from '../lib/draw.js';
+import { text, measure, line, clamp, scale, niceTicks, pathLine } from '../lib/draw.js';
 import { controls, segmented, readout } from '../lib/ui.js';
 import { WORLD } from '../lib/worlddata.js';
 
@@ -31,6 +31,11 @@ const BARS = WORLD.regions.filter(r => r.id !== 'world');
 
 function region(id) { return WORLD.regions.find(r => r.id === id); }
 
+// The series' four countries, for the small-multiples view.
+const FOUR = ['us', 'germany', 'china', 'india'];
+function fossil(g, i) { return g.coal[i] + g.gas[i] + g.otherFossil[i]; }
+function fourLayout(w) { return w < 600 ? { cols: 1, rows: 4, ph: 150 } : { cols: 2, rows: 2, ph: 196 }; }
+
 function niceCeil(v, parts = 4) {
   if (!(v > 0)) return 1;
   const step0 = v / parts;
@@ -48,7 +53,7 @@ function niceStep(span, parts) {
 }
 
 function legendRowsFor(w) {
-  if (w < 460) return 4;
+  if (w < 330) return 3;
   if (w < 980) return 2;
   return 1;
 }
@@ -139,7 +144,10 @@ export function worldMix(el) {
       const parts = WORLD.sources.filter(s => Math.abs(d[s.id]) >= 0.5).map(s => `${s.label} ${twhSigned(d[s.id])}`);
       return `<b>${r.name}</b>, ${Y0} to ${LATEST}: generation <b>${twhSigned(d.total)} TWh</b>. ${parts.join(', ')}.`;
     }
-    const r = region(st.region);
+    if (st.view === 'four' && !st.hoverId) {
+      return FOUR.map(id => { const g = WORLD.gen[id]; return `<b>${region(id).short}</b> ${twh(g.total[iLast])} TWh, ${pct(fossil(g, iLast), g.total[iLast])} fossil`; }).join('; ') + ` (${LATEST}).`;
+    }
+    const r = region(st.view === 'four' ? st.hoverId : st.region);
     const i = st.hoverYear == null ? iLast : st.hoverYear;
     const g = WORLD.gen[r.id];
     const total = g.total[i];
@@ -154,12 +162,14 @@ export function worldMix(el) {
     height(w) {
       const { top, bottom } = chrome(w);
       if (st.view === 'growth') return top + BARS.length * (w < 600 ? 24 : 28) + bottom + 4;
+      if (st.view === 'four') return top + fourLayout(w).rows * fourLayout(w).ph + bottom - 8;
       return top + (w < 600 ? 248 : 292) + bottom + 4;
     },
     draw(ctx, w, h) {
       const narrow = w < 600;
       const { top, bottom } = chrome(w);
       if (st.view === 'growth') drawGrowth(ctx, w, h, top, bottom, narrow);
+      else if (st.view === 'four') drawFour(ctx, w, h, top, bottom, narrow);
       else drawMix(ctx, w, h, top, bottom, narrow);
     },
   });
@@ -309,8 +319,50 @@ export function worldMix(el) {
     geo = { view: 'growth', box, rows: hitRows, sx };
   }
 
+  // Four countries, each as shares of its own generation, so a 500 TWh grid and a 10,000 TWh grid read alike.
+  function drawFour(ctx, w, h, top, bottom, narrow) {
+    const L = fourLayout(w);
+    const gap = narrow ? 0 : 28, colW = (w - 8 - gap * (L.cols - 1)) / L.cols;
+    const panels = [];
+    FOUR.forEach((id, n) => {
+      const col = n % L.cols, row = Math.floor(n / L.cols);
+      const x0 = 4 + col * (colW + gap), y0 = top + row * L.ph;
+      const box = { l: x0 + 34, r: x0 + colW - 10, t: y0 + 22, b: y0 + L.ph - 34 };
+      const g = WORLD.gen[id];
+      const sx = scale(WORLD.years[0], LATEST, box.l, box.r), sy = scale(0, 100, box.b, box.t);
+      const hot = st.hoverId === id;
+      text(ctx, region(id).name, box.l, y0 + 12, { size: 12.5, weight: 650, color: C.ink, noclamp: true });
+      text(ctx, `${twh(g.total[iLast])} TWh in ${LATEST}`, box.r, y0 + 12, { size: 11, color: C.ink3, align: 'right', noclamp: true });
+      let lower = g.total.map(() => 0);
+      const xs = WORLD.years.map(yr => sx(yr));
+      for (const s of WORLD.sources) {
+        const upper = g[s.id].map((v, i) => lower[i] + 100 * Math.max(0, v) / g.total[i]);
+        ctx.beginPath();
+        upper.forEach((v, i) => (i ? ctx.lineTo(xs[i], sy(Math.min(100, v))) : ctx.moveTo(xs[i], sy(Math.min(100, v)))));
+        for (let i = xs.length - 1; i >= 0; i--) ctx.lineTo(xs[i], sy(Math.min(100, lower[i])));
+        ctx.closePath(); ctx.fillStyle = COLOR[s.id]; ctx.fill();
+        lower = upper;
+      }
+      // the fossil share, as a line on top of the stack
+      pathLine(ctx, WORLD.years.map((yr, i) => [sx(yr), sy(100 * fossil(g, i) / g.total[i])]), '#fff', 1.6);
+      for (const v of [0, 50, 100]) text(ctx, v + '%', box.l - 5, sy(v) + 4, { size: 11, align: 'right', color: C.ink3, noclamp: true });
+      line(ctx, box.l, sy(50) + 0.5, box.r, sy(50) + 0.5, 'rgba(255,255,255,0.42)', 1);
+      for (const yr of [WORLD.years[0], LATEST]) text(ctx, String(yr), sx(yr), box.b + 15, { size: 11, align: yr === LATEST ? 'right' : 'left', color: C.ink3, noclamp: true });
+      if (hot && st.hoverYear != null) line(ctx, sx(WORLD.years[st.hoverYear]), box.t, sx(WORLD.years[st.hoverYear]), box.b, alpha(C.ink, 0.6), 1.25);
+      panels.push({ id, box, sx });
+    });
+    drawLegend(ctx, 8, h - bottom + 34 - 18, w - 8);
+    geo = { view: 'four', panels };
+  }
+
   function pick(x, y) {
     if (!geo) return null;
+    if (geo.view === 'four') {
+      const p = geo.panels.find(p => x >= p.box.l && x <= p.box.r && y >= p.box.t && y <= p.box.b);
+      if (!p) return null;
+      const yr = clamp(Math.round(p.sx.inv(x)), WORLD.years[0], LATEST);
+      return { kind: 'cell', id: p.id, i: WORLD.years.indexOf(yr) };
+    }
     if (geo.view === 'mix') {
       if (x < geo.box.l || x > geo.box.r || y < geo.box.t || y > geo.box.b) return null;
       const yr = clamp(Math.round(geo.sx.inv(x)), WORLD.years[0], LATEST);
@@ -329,8 +381,8 @@ export function worldMix(el) {
   });
 
   function applyHover(obj) {
-    const year = obj && obj.kind === 'year' ? obj.i : null;
-    const id = obj && obj.kind === 'row' ? obj.id : null;
+    const year = obj && (obj.kind === 'year' || obj.kind === 'cell') ? obj.i : null;
+    const id = obj && (obj.kind === 'row' || obj.kind === 'cell') ? obj.id : null;
     if (year === st.hoverYear && id === st.hoverId) return;
     st.hoverYear = year;
     st.hoverId = id;
@@ -339,11 +391,13 @@ export function worldMix(el) {
 
   const ctl = controls(el);
   const ro = readout(el);
-  const sync = () => { ro.innerHTML = describe(); fig.resize(); fig.invalidate(); };
+  const sync = () => { if (regionCtl) regionCtl.style.display = st.view === 'four' ? 'none' : ''; ro.innerHTML = describe(); fig.resize(); fig.invalidate(); };
+  let regionCtl = null;
   segmented(ctl, {
     label: 'Show',
     options: [
       { label: 'Mix over time', value: 'mix', name: 'wm-view-mix' },
+      { label: 'Four countries', value: 'four', name: 'wm-view-four' },
       { label: 'Growth since 2015', value: 'growth', name: 'wm-view-growth' },
     ],
     value: st.view,
@@ -355,5 +409,6 @@ export function worldMix(el) {
     value: st.region,
     onchange: v => { st.region = v; sync(); },
   });
+  regionCtl = ctl.lastElementChild;
   ro.innerHTML = describe();
 }

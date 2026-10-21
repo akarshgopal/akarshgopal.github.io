@@ -233,7 +233,7 @@ export function sunPath(el) {
 /* ---------------- yieldMap ---------------- */
 export function yieldMap(el) {
   const CITIES = (SOLAR.cities || []).map(c => ({ name: c[0], lat: c[1], lon: c[2], fixed: c[3], track: c[4], tilt: c[5], fm: c[6], tm: c[7], db: c[8] }));
-  const st = { sel: CITIES.findIndex(c => c.name === 'Berlin'), hover: -1, show: 'both' }; let geo = null;
+  const st = { sel: CITIES.findIndex(c => c.name === 'Jodhpur'), hover: -1, show: 'both' }; let geo = null;
   const fig = new Fig(el, {
     label: 'Annual output of one kilowatt of solar panels in 28 places around the world, against latitude, for fixed panels and single-axis trackers, with the monthly pattern for a chosen place',
     height: w => w < 600 ? 620 : 420,

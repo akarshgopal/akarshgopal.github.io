@@ -77,7 +77,7 @@ export function learning(el) {
       let lastX = -1e9;
       for (const p of P) if (want.has(p[2])) { const x = sx(p[0]); if (x - lastX < 34 && p !== last) continue; lastX = x; text(ctx, String(p[2]), x + 6, sy(p[1]) - 7, { size: 10.5, color: C.ink2, weight: 600, halo: true }); }
       // fitted learning rate tag
-      text(ctx, `fitted learning rate ${(F.lr * 100).toFixed(0)}% per doubling (${st.win === 'all' ? `${fp[0][2]}–${last[2]}` : `since ${S.recent}`})`, box.r - 4, box.t + 4, { size: 11, color: C.ink2, align: 'right', weight: 600, halo: true });
+      text(ctx, `fitted learning rate ${(F.lr * 100).toFixed(0)}% per doubling (${st.win === 'all' ? `${fp[0][2]}–${last[2]}` : `since ${S.recent}`})`, box.r - 6, box.t + 18, { size: 11, color: C.ink2, align: "right", weight: 600, halo: true });
       if (st.hover) { const p = st.hover; const s = `${p[2]}: ${S.fmt(p[1])} · ${fmtCap(p[0])} installed`; const tw = measure(ctx, s, 11.5, 600) + 16; const bx = clamp(sx(p[0]) + 10, box.l, box.r - tw), by = sy(p[1]) + 12; rrect(ctx, bx, by, tw, 22, 6); ctx.fillStyle = alpha('#fff', 0.95); ctx.fill(); ctx.strokeStyle = C.grid2; ctx.stroke(); text(ctx, s, bx + 8, by + 15, { size: 11.5, weight: 600, color: C.ink }); }
     },
   });

@@ -138,6 +138,8 @@ nav.series li a:hover { background: #ece8de; color: var(--ink); }
 nav.series li a .n { color: var(--ink3); font-variant-numeric: tabular-nums; font-size: 0.92em; }
 nav.series li a[aria-current=page] { background: var(--ink); color: #fff; }
 nav.series li a[aria-current=page] .n { color: #cfcac0; }
+nav.series li.deep { margin-left: 6px; }
+nav.series li.deep a { color: var(--ink3); }
 nav.series li a.planned { color: var(--ink3); }
 nav.series li a small { font-size: 0.82em; color: var(--ink3); }
 nav.series li a[aria-current=page] small { color: #cfcac0; }

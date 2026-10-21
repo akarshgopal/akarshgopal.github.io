@@ -1,4 +1,4 @@
-// Build a power plant: its full cost per MWh (LCOE) against what the section-7 market would pay it.
+// Build a power plant: its full cost per MWh (LCOE) against what essay 5's model market would pay it.
 // Cost side: the LCOE calculator's illustrative inputs (Lazard v19 ranges). Market side: the illustrative
 // day model (lib/market.js) run over weighted representative days, as in the capture-rate figure.
 import { Fig } from '../lib/fig.js';
@@ -11,7 +11,7 @@ import { PRESETS, crf } from './money.js';
 const USD = 1.13; // US$ per € (ECB 2025), as elsewhere in the essay
 const MMBTU_PER_MWH = 3.412;
 const MARKETS = {
-  today: { label: 'Essay 4’s market', gas: 35, co2: 75 },
+  today: { label: 'Essay 5’s market', gas: 35, co2: 75 },
   shock: { label: '2022-style gas shock', gas: 150, co2: 85, imports: 0.001 },
 };
 const DAYS = [['winter', false, 0.25], ['winter', true, 0.08], ['spring', false, 0.36], ['spring', true, 0.14], ['summer', false, 0.12], ['summer', true, 0.05]];

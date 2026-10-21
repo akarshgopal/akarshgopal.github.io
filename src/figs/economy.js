@@ -41,17 +41,18 @@ const GOODS = [
   { k: 'alu', name: 'Primary aluminium', per: 'tonne', kwh: 14000, col: '#8a9bb0', note: '≈14 MWh per tonne at the smelter (IAI world average)', fmt: v => '€' + Math.round(v).toLocaleString('en-US') },
   { k: 'steel', name: 'Green steel (H₂ direct reduction)', per: 'tonne', kwh: 3480, col: '#6f6a64', note: '3.48 MWh per tonne of liquid steel (Vogl et al.)', fmt: v => '€' + Math.round(v).toLocaleString('en-US') },
   { k: 'h2', name: 'Green hydrogen', per: 'kg', kwh: 55, col: '#3fa1a8', note: '≈55 kWh/kg: US DOE status value for today’s electrolyser systems', noteN: '≈55 kWh/kg (US DOE); US target $1/kg all-in', fmt: v => '€' + v.toFixed(2), ref: 'US DOE “Hydrogen Shot” target: $1/kg all-in' },
-  { k: 'efuel', name: 'E-kerosene (power-to-liquid)', per: 'litre', kwh: 27, col: '#b07a3a', note: '≈27 kWh per litre: section 2’s chain, CO₂ from a concentrated source', noteN: '≈27 kWh per litre (section 2’s chain)', fmt: v => '€' + v.toFixed(2) },
+  { k: 'efuel', name: 'E-kerosene (power-to-liquid)', per: 'litre', kwh: 27, col: '#b07a3a', note: '≈27 kWh per litre: the fuels deep dive’s chain, CO₂ from a concentrated source', noteN: '≈27 kWh per litre (fuels deep dive)', fmt: v => '€' + v.toFixed(2) },
   { k: 'water', name: 'Desalinated seawater', per: 'm³', kwh: 3.5, col: C.wind, note: '3–4 kWh/m³ for modern reverse osmosis', fmt: v => '€' + v.toFixed(2) },
   { k: 'gpu', name: 'One H100 GPU for an hour', per: 'GPU-hour', kwh: 10.2 / 8 * 1.3, col: '#6c5bb5', note: 'DGX H100: 10.2 kW for 8 GPUs, × PUE 1.3', fmt: v => '€' + v.toFixed(3) },
   { k: 'home', name: 'A German household’s year', per: 'year', kwh: 3500, col: C.procurement, note: '3,500 kWh — energy only, before grid fees and taxes', fmt: v => '€' + Math.round(v).toLocaleString('en-US') },
 ];
 export function unlock(el) {
-  const de25 = (DATA.emberAnnual.find(r => r[0] === 2025) || [0, 90])[1];
   const st = { p: 60, cur: 'USD' };
   const S = () => st.cur === 'USD' ? '$' : '€', fx = () => st.cur === 'USD' ? USD_PER_EUR[2025] : 1;
-  const MARKS0 = [[50, 'subsidised industrial floor', 'floor'], [87.44, '2026 reference', 'reference'], [de25, 'German day-ahead 2025 avg', 'day-ahead'], [172, 'German SME industry tariff', 'SME'], [370, 'German household', 'household']];
-  const marks = () => MARKS0.map(([v, a, b]) => { const d = Math.round(v * fx()); return [v * fx(), `${a} ${S()}${d}`, `${b} ${S()}${d}`]; });
+  // Business tariffs, Q3 2026, US$/MWh incl. taxes (GlobalPetrolPrices, as in the retailWorld figure), and Germany's subsidised
+  // industrial floor (BAFA, €50/MWh). Marks are held in dollars and shown in euros at the 2025 rate when the toggle says so.
+  const MARKS0 = [[50 * USD_PER_EUR[2025], 'German subsidised industrial floor', 'DE floor'], [109, 'China business', 'CN'], [122, 'India business', 'IN'], [150, 'US business', 'US'], [284, 'Germany business', 'DE']];
+  const marks = () => MARKS0.map(([v, a, b]) => { const d = Math.round(v / USD_PER_EUR[2025] * fx()); return [d, `${a} ${S()}${d}`, `${b} ${S()}${d}`]; });
   let geo = null;
   const fig = new Fig(el, {
     label: 'What a megawatt-hour price unlocks: the electricity cost of a tonne of aluminium or green steel, a kilogram of hydrogen, a litre of e-kerosene, a cubic metre of desalinated water, an hour of a GPU and a household year, as the power price changes',

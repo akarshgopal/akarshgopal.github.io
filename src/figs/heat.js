@@ -100,7 +100,7 @@ export function rankine(el) {
       const { sx, sy } = sc;
       // plateau band
       ctx.fillStyle = alpha(C.coal, 0.08); ctx.fillRect(sx(538), box.t, sx(600) - sx(538), box.b - box.t);
-      text(ctx, '1960s plateau', (sx(538) + sx(600)) / 2, box.b - 30, { size: 10.5, color: C.ink3, align: 'center' });
+      text(ctx, 'steel’s limit', (sx(538) + sx(600)) / 2, box.b - 30, { size: 10.5, color: C.ink3, align: 'center' });
       text(ctx, '538–600 °C', (sx(538) + sx(600)) / 2, box.b - 16, { size: 10.5, color: C.ink3, align: 'center' });
       const tc = st.Tc + K;
       const carnot = [], ca = [];
@@ -108,18 +108,8 @@ export function rankine(el) {
       pathLine(ctx, carnot, C.ink2, 1.5, [5, 4]);
       pathLine(ctx, ca, C.hot, 2.2);
       text(ctx, 'Carnot limit', sx(112), sy(100 * (1 - tc / (112 + K))) - 12, { size: 11, color: C.ink2, align: 'left', halo: true });
-      const peT = narrow ? 250 : 400; // further left on a phone, clear of the 1970s label
+      const peT = narrow ? 250 : 400;
       text(ctx, 'practical estimate', sx(peT), sy(100 * (1 - Math.sqrt(tc / (peT + K)))) + 18, { size: 11, color: C.hot, align: 'left', halo: true });
-      // history points
-      circle(ctx, sx(315), sy(1e-9 + 100 * (1 - Math.sqrt(tc / (315 + K)))), 0, null);
-      line(ctx, sx(315), box.b, sx(315), box.b - 8, C.ink3, 1.5);
-      text(ctx, '1920s ≈315°', sx(315), box.b - 12, { size: 10.5, color: C.ink3, align: 'center' });
-      // the 1970s label sits right of its point, below the practical curve; on a phone both labels shorten (the caption has the full names)
-      circle(ctx, sx(540), sy(35), 4.5, C.coal, '#fff', 1.5);
-      const lab70 = narrow ? ['1970s', '≈35%'] : ['1970s US', 'subcritical ≈35%'];
-      lab70.forEach((s, i) => text(ctx, s, sx(540) + 9, sy(35) + 4 + i * 13, { size: 10.5, color: C.coal, align: 'left', halo: true }));
-      circle(ctx, sx(610), sy(45), 4.5, C.coal, '#fff', 1.5);
-      text(ctx, narrow ? 'modern >45%' : 'modern ultra-supercritical >45%', sx(610) - 8, sy(45) - 10, { size: 10.5, color: C.coal, align: 'right', halo: true });
       // marker
       const e = eff();
       line(ctx, sx(st.Th), box.t, sx(st.Th), box.b, alpha(C.hot, 0.35), 1);
@@ -130,7 +120,7 @@ export function rankine(el) {
   function eff() { const tc = st.Tc + K, th = st.Th + K; return { carnot: 100 * (1 - tc / th), ca: 100 * (1 - Math.sqrt(tc / th)) }; }
   const ctl = controls(el);
   const ro = readout(el);
-  const upd = () => { const e = eff(); ro.innerHTML = `Carnot ceiling <b>${e.carnot.toFixed(0)}%</b>; a realistic plant gets closer to <b>${e.ca.toFixed(0)}%</b> — so each MWh of electricity costs about <b>${(100 / e.ca).toFixed(1)} MWh</b> of fuel heat.`; fig.invalidate(); };
+  const upd = () => { const e = eff(); ro.innerHTML = `Carnot ceiling <b>${e.carnot.toFixed(0)}%</b>; a plant run for power rather than perfection gets nearer <b>${e.ca.toFixed(0)}%</b>, so each MWh of electricity takes about <b>${(100 / e.ca).toFixed(1)} MWh</b> of fuel heat.`; fig.invalidate(); };
   slider(ctl, { label: 'Steam temperature', min: 150, max: 700, step: 5, value: st.Th, color: C.hot, fmt: v => v + ' °C', oninput: v => { st.Th = v; upd(); }, name: 'th' });
   slider(ctl, { label: 'Cooling water', min: 5, max: 50, step: 1, value: st.Tc, color: C.cold, fmt: v => v + ' °C', oninput: v => { st.Tc = v; upd(); } });
   upd();

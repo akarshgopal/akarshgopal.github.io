@@ -55,7 +55,7 @@ export function faraday(el) {
   const DT = 1 / 60; let acc = 0, lastX = st.x;    // the trace is sampled on a fixed timestep, whatever the frame rate
   const fig = new Fig(el, {
     label: 'A bar magnet that can be dragged through a coil of wire, with a meter and a trace of the induced voltage',
-    height: w => Math.max(320, Math.min(440, w * 0.56)),
+    height: w => w >= 640 ? Math.max(300, Math.min(360, w * 0.34)) : 300 + Math.round(w * 0.32),
     animated: true,
     step(dt) {
       acc = Math.min(acc + dt, 0.25);
@@ -77,34 +77,51 @@ export function faraday(el) {
     },
     onResize(w, h) { lines = null; },
     draw(ctx, w, h) {
-      const magLen = Math.min(170, w * 0.26), magT = 30;
-      const cx = w / 2, cy = h * 0.33, span = (w / 2 - magLen / 2 - 10) / 1.05; // the magnet stays inside the drawing at either end of its travel
-      const coilW = span * 0.38 * 2 * 0.5, coilR = Math.min(56, h * 0.13);
+      // Wide: the magnet, coil and meter on the left, the trace on the right. Narrow: stacked, trace at the bottom.
+      const wide = w >= 640;
+      const PW = wide ? Math.round(w * 0.56) : w;                  // width of the apparatus panel
+      const magLen = wide ? Math.min(170, PW * 0.27) : Math.min(150, w * 0.3), magT = wide ? 30 : 26;
+      const cx = PW / 2, cy = wide ? Math.round(h * 0.3) : 78;
+      const span = (PW / 2 - magLen / 2 - 10) / 1.05;               // the magnet stays inside its panel at either end of its travel
+      const coilR = wide ? Math.min(54, h * 0.15) : 42;
+      const gr = wide ? Math.min(40, w * 0.05) : 30;
+      const gy = wide ? h - gr - 34 : cy + coilR + 34 + gr, gx = cx;
       geom = { cx, cy, span, magLen, magT };
       const mx = cx + st.x * span;
       if (!lines || lastHalf !== magLen / 2) { lines = dipoleLines(magLen / 2, 6); lastHalf = magLen / 2; }
-      // field lines
-      ctx.save(); ctx.beginPath(); ctx.rect(0, 0, w, h * 0.62 - 56); ctx.clip(); ctx.translate(mx, cy);
-      // fade the field out before the edge of the drawing instead of cutting it off
-      { const R1 = Math.max(40, Math.min(cy - 4, h * 0.62 - 56 - cy)), g = ctx.createRadialGradient(0, 0, 0, 0, 0, R1);
-        g.addColorStop(0, alpha(C.ink3, 0.42)); g.addColorStop(0.7, alpha(C.ink3, 0.34)); g.addColorStop(1, alpha(C.ink3, 0));
+      // field lines, faded out before the edge of their band
+      const bandB = cy + coilR + 14;
+      ctx.save(); ctx.beginPath(); ctx.rect(0, 0, PW, bandB); ctx.clip(); ctx.translate(mx, cy);
+      { const R1 = Math.max(40, Math.min(cy - 2, bandB - cy) + 18), g = ctx.createRadialGradient(0, 0, 0, 0, 0, R1);
+        g.addColorStop(0, alpha(C.ink3, 0.5)); g.addColorStop(0.7, alpha(C.ink3, 0.36)); g.addColorStop(1, alpha(C.ink3, 0));
         ctx.strokeStyle = g; }
       ctx.lineWidth = 1;
       for (const pts of lines) { ctx.beginPath(); pts.forEach(([x, y], i) => i ? ctx.lineTo(x, y) : ctx.moveTo(x, y)); ctx.stroke(); }
       ctx.restore();
-      // coil back halves
       const xs = i => cx + (i / (LOOPS - 1) - 0.5) * 0.38 * span;
+      // leads from the two ends of the coil down into the meter
+      const topY = gy - gr * 0.8, midY = (cy + coilR + topY) / 2;
+      ctx.save(); ctx.strokeStyle = COPPER; ctx.lineWidth = 3; ctx.lineJoin = 'round';
+      for (const [xe, sgn] of [[xs(0), -1], [xs(LOOPS - 1), 1]]) {
+        const dx = xe - gx;
+        ctx.beginPath(); ctx.moveTo(xe, cy + coilR - 2);
+        if (Math.abs(dx) < gr * 0.85) ctx.lineTo(xe, gy - Math.sqrt((gr + 4) ** 2 - dx * dx) + 3); // straight down into the meter
+        else { ctx.lineTo(xe, midY); ctx.lineTo(gx + sgn * gr * 0.6, midY); ctx.lineTo(gx + sgn * gr * 0.6, topY + 4); }
+        ctx.stroke();
+      }
+      ctx.restore();
+      // coil back halves, magnet, front halves
       const drawHalf = (front) => {
         for (let i = 0; i < LOOPS; i++) {
           const x = xs(i);
           ctx.beginPath(); ctx.ellipse(x, cy, coilR * 0.32, coilR, 0, front ? -Math.PI / 2 : Math.PI / 2, front ? Math.PI / 2 : Math.PI * 1.5);
-          ctx.strokeStyle = front ? COPPER : COPPER_D; ctx.lineWidth = 5; ctx.lineCap = 'round'; ctx.stroke();
+          ctx.strokeStyle = front ? COPPER : COPPER_D; ctx.lineWidth = wide ? 5 : 4; ctx.lineCap = 'round'; ctx.stroke();
         }
       };
       drawHalf(false);
       drawMagnetBar(ctx, mx, cy, magLen, magT);
       drawHalf(true);
-      // current dots on front halves
+      // current dots on the front halves
       const I = st.emf;
       if (Math.abs(I) > 0.01) {
         for (let i = 0; i < LOOPS; i++) {
@@ -115,13 +132,7 @@ export function faraday(el) {
           }
         }
       }
-      // leads down to the meter
-      const gx = cx - span * 0.55, gy = h * 0.62;
-      ctx.strokeStyle = COPPER; ctx.lineWidth = 3;
-      ctx.beginPath(); ctx.moveTo(xs(0), cy + coilR); ctx.lineTo(xs(0), gy - 10); ctx.lineTo(gx + 40, gy - 10); ctx.stroke();
-      ctx.beginPath(); ctx.moveTo(xs(LOOPS - 1), cy + coilR); ctx.lineTo(xs(LOOPS - 1), gy + 6); ctx.lineTo(gx + 40, gy + 6); ctx.stroke();
       // galvanometer
-      const gr = Math.min(48, w * 0.07);
       circle(ctx, gx, gy, gr + 4, '#fff', C.grid2, 1.5);
       ctx.save(); ctx.strokeStyle = C.ink3; ctx.lineWidth = 1;
       for (let k = -4; k <= 4; k++) { const a = -Math.PI / 2 + k * 0.22; ctx.beginPath(); ctx.moveTo(gx + Math.cos(a) * gr * 0.78, gy + 8 + Math.sin(a) * gr * 0.78); ctx.lineTo(gx + Math.cos(a) * gr * 0.92, gy + 8 + Math.sin(a) * gr * 0.92); ctx.stroke(); }
@@ -129,11 +140,11 @@ export function faraday(el) {
       const na = -Math.PI / 2 + clamp(st.emf, -1.2, 1.2) * 0.75;
       line(ctx, gx, gy + 8, gx + Math.cos(na) * gr * 0.86, gy + 8 + Math.sin(na) * gr * 0.86, C.field, 2.5);
       circle(ctx, gx, gy + 8, 3.5, C.ink);
-      text(ctx, 'meter', gx, gy + gr + 22, { size: 11, color: C.ink3, align: 'center' });
-      // trace
-      const box = { l: gx + gr + 70, r: w - 18, t: gy - 44, b: h - 26 };
+      text(ctx, 'meter', gx, gy + gr + 20, { size: 11, color: C.ink3, align: 'center' });
+      // trace of the induced voltage
+      const box = wide ? { l: PW + 34, r: w - 18, t: 34, b: h - 34 } : { l: 26, r: w - 14, t: gy + gr + 52, b: h - 26 };
       const { sx, sy } = axes(ctx, { box, x0: 0, x1: 360, y0: -1.4, y1: 1.4, yticks: [0], xticks: [], yfmt: () => '0' });
-      text(ctx, 'induced voltage', box.l, box.b + 16, { size: 11, color: C.field, weight: 550 });
+      text(ctx, 'induced voltage', box.l, box.t - 12, { size: 11, color: C.field, weight: 550 });
       pathLine(ctx, st.hist.map((v, i) => [sx(i + 360 - st.hist.length), sy(v)]), C.field, 2);
       text(ctx, 'time →', box.r, box.b + 16, { size: 11, color: C.ink3, align: 'right' });
       if (!st.auto && !st.dragging) text(ctx, 'drag the magnet ↔', mx, cy - magT - 14, { size: 12, color: C.ink2, align: 'center', weight: 550, halo: true });

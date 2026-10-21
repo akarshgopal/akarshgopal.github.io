@@ -3,23 +3,23 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Transformers: The Quiet Bottleneck · How Electricity Works</title>
+<title>Deep Dive: Transformers · Why Did Electricity Stop Getting Cheaper?</title>
 <meta name="description" content="An interactive explainer of power transformers: induction and flux, hysteresis and eddy-current losses, efficiency, cooling and insulation ageing, three-phase vector groups, tap changers, the family from pole-top units to generator step-ups, the 2020s supply crunch, resilience and solid-state transformers.">
 <link rel="icon" href="data:,">
 <link rel="stylesheet" href="style.css">
-<script>(function(){var m={"fig-threePhase":"#fig-vectorGroups"};var h=location.hash.slice(1);if(m[h])location.replace(m[h]);})();</script>
+<script>(function(){var m={"fig-threePhase":"the-machine.html#fig-threePhase"};var h=location.hash.slice(1);if(m[h])location.replace(m[h]);})();</script>
 </head>
 <body>
 <main>
 <article>
 <header class="top">
-<h1>Transformers: The Quiet Bottleneck</h1>
-<p class="byline">Essay 2 of 9 · by Akarsh Gopal · October 2026</p>
+<h1>Deep Dive: Transformers</h1>
+<p class="byline">Deep dive · by Akarsh Gopal · October 2026</p>
 </header>
 
 <p class="lede">Almost every unit of electricity you use has passed through four or five transformers on its way to you. They have no moving parts, routinely last forty years, and the best waste less than a quarter of one per cent of the power through them. Since 2020 they have also become one of the scarcest parts of the energy transition: in 2024 a large one took three years to arrive.<sup class="fn"><a href="#n1">1</a></sup></p>
 
-<p>This essay starts with why the generator’s voltage has to change at all, then opens the box: the ideas from the 1830s and 1880s that make it work, where its losses go, the heat that sets its lifetime, how its windings are wired and its voltage held, the family from pole-top cans to generator step-ups, and how a boringly available product became a bottleneck.</p>
+<p>This deep dive extends <a class="xref" href="transmission.html">essay 4, Wires</a>, which carries a condensed version of its first three sections and of the shortage. Here they are in full, with the rest of the box opened: the heat that sets a transformer’s lifetime, how its windings are wired and its voltage held, the family from pole-top cans to generator step-ups, and how a boringly available product became the quiet bottleneck of the network.</p>
 
 <ol class="toc">
 <li><a href="#s4"><span class="n">1</span>Why change the voltage</a></li>
@@ -37,18 +37,18 @@
 
 <h2 id="s4"><span class="num">1</span>Why change the voltage</h2>
 
-<p>Power stations are rarely where the people are. China’s coal, wind and sun are in the far west, its factories on the east coast. Brazil’s great dams are in the Amazon, its demand in São Paulo and Rio. Germany’s wind blows on the North Sea coast, far from its southern industry. Moving electricity hundreds or thousands of kilometres runs into resistance. A wire with resistance <i>R</i> carrying current <i>I</i> turns <i>I²R</i> watts into heat. For a fixed amount of power, <i>P = V × I</i> from <a class="xref" href="the-machine.html#voltage-is-height">the first essay</a>, raising the voltage lowers the current — and the losses fall with the <i>square</i> of the current:</p>
+<p>Power stations are rarely where the people are. China’s coal, wind and sun are in the far west, its factories on the east coast. Brazil’s great dams are in the Amazon, its demand in São Paulo and Rio. Germany’s wind blows on the North Sea coast, far from its southern industry. Moving electricity hundreds or thousands of kilometres runs into resistance. A wire with resistance <i>R</i> carrying current <i>I</i> turns <i>I²R</i> watts into heat. For a fixed amount of power, <i>P = V × I</i> from <a class="xref" href="kilowatt-hour.html#power-and-energy">essay 2</a>, raising the voltage lowers the current — and the losses fall with the <i>square</i> of the current:</p>
 
 <figure class="fig" data-fig="losses">
 <figcaption><span class="tagline tag-ill">Model</span> Sending power down a line with 0.03 Ω per km per conductor. The glow of the conductors shows the heat lost. Losses scale as P² R / V²: ten times the voltage means a hundredth of the loss.</figcaption>
 </figure>
 
-<p>At household voltage a few hundred megawatts would melt the wires. At 380 kV, the backbone voltage of much of Europe, the figure’s gigawatt crosses 300 km on one circuit losing about 6%; spread over two circuits, as German grid operators usually build such lines, about 3%.<sup class="fn"><a href="#n2">2</a></sup></p>
+<p>At household voltage a few hundred megawatts would melt the wires. At 380 kV, the backbone voltage of much of Europe, the figure’s gigawatt crosses 300 km on one circuit losing about 6%; spread over two circuits, as German grid operators usually build such lines, about 3%.<sup class="fn"><a href="#n2">2</a></sup> India’s 765 kV backbone and China’s 1,000 kV lines push the same arithmetic further, as <a class="xref" href="transmission.html#why-high-voltage">essay 4</a> shows.</p>
 
 <p>High voltage is dangerous in a home and expensive in a generator, so the voltage has to change along the way. Alternating current makes that easy, with a <b>transformer</b>: two coils on a shared iron core. Twenty times the turns gives twenty times the voltage and a twentieth of the current.</p>
 
 <figure class="fig" data-fig="transformer">
-<figcaption><span class="tagline tag-ill">Model</span> The generator of <a class="xref" href="the-machine.html#s2">the first essay</a> wired to a transformer: two coils on a shared iron core. Voltage changes by the turns ratio and current by its inverse, so power in equals power out, minus about half a per cent.</figcaption>
+<figcaption><span class="tagline tag-ill">Model</span> The generator of <a class="xref" href="the-machine.html#s2">essay 3</a> wired to a transformer: two coils on a shared iron core. Voltage changes by the turns ratio and current by its inverse, so power in equals power out, minus about half a per cent.</figcaption>
 </figure>
 
 <p>A generator’s 21 kV is stepped up to 380 kV for the journey, then down in stages to 230 V at the socket.</p>
@@ -69,7 +69,7 @@
 
 <p>The equation also explains why transformers are big. Engineers want few turns, because copper is costly and resistive, so they push <i>B</i> to 1.6–1.7 teslas in modern steel, not far below where it saturates at about 2. At 50 or 60 Hz that leaves one way to reach high voltage: a thick core. Raise the frequency and the core can shrink, the idea behind the solid-state transformer at the end.</p>
 
-<p>Switch the supply to DC and the transformer stops working: the flux rises once and stays, nothing is induced, and only the copper’s resistance limits the current. That is why Edison’s DC networks could not use transformers, and why <a class="xref" href="the-machine.html#voltage-is-height">alternating current won</a> once Zipernowsky, Bláthy and Déri at the Ganz works in Budapest built practical closed-core transformers in 1885. A small DC offset on top of the AC is a milder form of the same problem, and it returns in <a href="#resilience">section 9</a>.</p>
+<p>Switch the supply to DC and the transformer stops working: the flux rises once and stays, nothing is induced, and only the copper’s resistance limits the current. That is why Edison’s DC networks could not use transformers, and why alternating current won once Zipernowsky, Bláthy and Déri at the Ganz works in Budapest built practical closed-core transformers in 1885. A small DC offset on top of the AC is a milder form of the same problem, and it returns in <a href="#resilience">section 9</a>.</p>
 
 <h2 id="losses"><span class="num">3</span>Core and copper losses</h2>
 
@@ -108,7 +108,7 @@
 
 <h2 id="three-phase"><span class="num">5</span>Three phases, stars and deltas</h2>
 
-<p>The grid is <a class="xref" href="the-machine.html#fig-threePhase">three-phase</a>: each generator has three coils a third of a turn apart, making three voltages 120° apart. A three-phase transformer has a limb, and a winding, per phase. Take the three windings out and there are two ways to connect them. Join one end of each at a common point and you have a <b>star</b> (Y); join them end to end in a loop and you have a <b>delta</b> (D).</p>
+<p>The grid is <a class="xref" href="the-machine.html#fig-threePhase">three-phase</a> (essay 3): each generator has three coils a third of a turn apart, making three voltages 120° apart. A three-phase transformer has a limb, and a winding, per phase. Take the three windings out and there are two ways to connect them. Join one end of each at a common point and you have a <b>star</b> (Y); join them end to end in a loop and you have a <b>delta</b> (D).</p>
 
 <figure class="fig" data-fig="windings">
 <figcaption><span class="tagline tag-ill">Model</span> Three windings, one colour per phase, joined in star (with neutral N) or delta to the line conductors A, B and C.</figcaption>
@@ -194,7 +194,7 @@
 
 <p>So the copper-and-iron box keeps winning in the bulk grid while power electronics spread at its edges: HVDC converter stations, trains, fast chargers, data centres and electrolysers that need DC anyway, and the inverters of every solar farm and battery. The likely future is not fewer transformers but many more, and more of them next to a converter.</p>
 
-<p>The next essay follows the power out of the substation, along the <a class="xref" href="transmission.html">transmission lines</a> that link the whole system together.</p>
+<p>The transformer is one of the costs the cheapening engine of solar, wind and batteries does not touch: copper, steel and skilled hands, bought by every network that wants to connect them. <a class="xref" href="transmission.html#line-physics">Essay 4</a> follows the power out of the substation, along the lines that link the whole system together.</p>
 
 
 <h2 id="notes">Notes and sources</h2>

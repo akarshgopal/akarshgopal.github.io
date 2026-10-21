@@ -287,11 +287,11 @@ export function powerEnergy(el) {
       text(ctx, 'right now', mx + 59, my + 114, { size: 11, color: C.ink3, align: 'center' });
       text(ctx, (total() / 1000).toFixed(2) + ' kW', mx + 59, my + 134, { size: 18, color: C.ink, align: 'center', weight: 600 });
       // where the metered energy went: split bar by appliance
-      if (kWh > 1e-6 && h > 220) { let x = mx; const by = my + 150; text(ctx, 'energy by appliance', mx, by - 4, { size: 9.5, color: C.ink3 });
+      if (kWh > 1e-6 && h > 220) { let x = mx; const by = my + 158; text(ctx, 'energy by appliance', mx, by - 4, { size: 9.5, color: C.ink3 });
         const top = APP.reduce((a, b) => kWhA[b.k] > kWhA[a.k] ? b : a);
         for (const a of APP) { const ww = 118 * kWhA[a.k] / kWh; if (ww > 0.3) { ctx.fillStyle = ACOL[a.k]; ctx.fillRect(x, by, ww, 9); x += ww; } }
         text(ctx, `${top.label}: ${Math.round(kWhA[top.k] / kWh * 100)}%`, mx, by + 22, { size: 10, color: darken(ACOL[top.k], 0.35), weight: 600 }); }
-      text(ctx, '1 s here = 1 min', mx + 59, h - 12, { size: 10.5, color: C.ink3, align: 'center' });
+      if (w >= 600) text(ctx, '1 s here = 1 min', mx + 59, h - 12, { size: 10.5, color: C.ink3, align: 'center' });
     },
   });
   const ctl = controls(el);

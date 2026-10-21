@@ -46,11 +46,12 @@ export function losses(el) {
       const r = calc();
       const ground = h * 0.66;
       line(ctx, 10, ground, w - 10, ground, C.grid2, 1.5);
-      plant(ctx, 18, ground);
+      const narrow = w < 600, ps = narrow ? 0.6 : 1; // on a phone the plant and city shrink so the line keeps room
+      ctx.save(); ctx.translate(narrow ? 8 : 18, ground); ctx.scale(ps, ps); plant(ctx, 0, 0); ctx.restore();
       const lit = clamp(1 - r.frac, 0, 1);
-      city(ctx, w - 128, ground, 110, lit);
+      city(ctx, narrow ? w - 82 : w - 128, ground, narrow ? 72 : 110, lit);
       // towers
-      const x0 = 120, x1 = w - 140; const nT = Math.max(3, Math.round((x1 - x0) / 120));
+      const x0 = narrow ? 72 : 120, x1 = narrow ? w - 96 : w - 140; const nT = Math.max(3, Math.round((x1 - x0) / 120));
       const towers = []; for (let i = 0; i <= nT; i++) towers.push(x0 + (x1 - x0) * i / nT);
       const tH = 70;
       for (const tx of towers) {
@@ -96,10 +97,10 @@ export function losses(el) {
   });
   const ctl = controls(el);
   const ro = readout(el);
-  const upd = () => { const r = calc(); ro.innerHTML = `Current in each wire: <b>${r.I >= 1000 ? (r.I / 1000).toFixed(1) + ' kA' : r.I.toFixed(0) + ' A'}</b>. Heat lost: <b>${r.loss >= 1e4 ? '∞' : r.loss.toFixed(r.loss < 10 ? 1 : 0)} MW</b> of the ${st.MW} MW sent. Losses fall with the <i>square</i> of voltage.`; fig.invalidate(); };
+  const upd = () => { const r = calc(); ro.innerHTML = `Current in each wire: <b>${r.I >= 1000 ? (r.I / 1000).toFixed(1) + ' kA' : r.I.toFixed(0) + ' A'}</b>. Heat lost: <b>${r.loss >= 1e4 ? '∞' : (r.loss < 10 ? r.loss.toFixed(1) : Math.round(r.loss).toLocaleString('en'))} MW</b> of the ${st.MW.toLocaleString('en')} MW sent. Losses fall with the <i>square</i> of voltage.`; fig.invalidate(); };
   slider(ctl, { label: 'Line voltage', min: 0, max: VOLTS.length - 1, step: 1, value: st.vi, color: C.network, fmt: v => VOLTS[v] + ' kV', oninput: v => { st.vi = v; upd(); }, name: 'kv' });
   slider(ctl, { label: 'Distance', min: 10, max: 800, step: 10, value: st.km, color: C.ink2, fmt: v => v + ' km', oninput: v => { st.km = v; upd(); } });
-  slider(ctl, { label: 'Power sent', min: 50, max: 2000, step: 50, value: st.MW, color: C.storage, fmt: v => v + ' MW', oninput: v => { st.MW = v; upd(); } });
+  slider(ctl, { label: 'Power sent', min: 50, max: 2000, step: 50, value: st.MW, color: C.storage, fmt: v => v.toLocaleString('en') + ' MW', oninput: v => { st.MW = v; upd(); } });
   upd();
 }
 
