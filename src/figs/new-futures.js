@@ -19,12 +19,12 @@ export function kardashev(el) {
   const yearsTo = (p, g) => Math.log(p / P1) / Math.log(1 + g / 100);
   const fig = new Fig(el, {
     label: `World energy use as power on a logarithmic scale from 1 to 1,000 terawatts: about ${Math.round(P1 / 1e12)} TW in ${Y1}, 0.73 on the Kardashev scale; Type I is 10,000 TW and the sunlight reaching the Earth about 174,000 TW`,
-    height: w => w < 600 ? 230 : 210,
+    height: w => w < 600 ? 230 : Math.max(210, Math.round(w / 3.9)),
     draw(ctx, w, h) {
       const narrow = w < 600;
       const box = { l: 18, r: w - 18 };
       const lg = Math.log10, sx = scale(12, 17.4, box.l, box.r);
-      const y = narrow ? 112 : 104;
+      const y = narrow ? 112 : Math.round(h / 2);
       // the power axis (top) and the Kardashev rating (below), one scale
       line(ctx, sx(12), y, sx(17.4), y, C.grid2, 1.5);
       for (let e = 12; e <= 17; e++) {
