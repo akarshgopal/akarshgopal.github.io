@@ -59,13 +59,13 @@
 
 <h2 id="relay" data-level="H9 H8"><span class="num">2</span>A switch that throws a switch</h2>
 
-<p>A light switch needs a hand; a relay needs only a current. Telephone exchanges were built from relays by the million. In his 1937 master’s thesis at MIT, Claude Shannon showed that circuits of relays obey the algebra of logic that George Boole had written down in 1854: contacts one after the other behave like AND, contacts side by side like OR.<sup class="fn"><a href="#n101">1</a></sup> Wire two relays both ways below.</p>
+<p>A light switch needs a hand; a relay needs only a current. Telephone exchanges were built from relays by the million. In his 1937 master’s thesis at MIT, Claude Shannon showed that circuits of relays obey the algebra of logic that George Boole had written down in 1854: contacts one after the other behave like AND, contacts side by side like OR.<sup class="fn"><a href="#n1">1</a></sup> Wire two relays both ways below.</p>
 
 <figure class="fig" data-fig="relayLogic" id="fig-relayLogic">
 <figcaption><span class="tagline tag-ill">Model</span> Two relays drawn as mechanisms. Each key energises a <b class="c-blue">coil</b>, which pulls an <b class="c-blue">armature</b> that closes a contact; the lamp runs from a separate battery through those contacts. Series wiring is AND; side-by-side is OR. Timing and geometry are schematic.</figcaption>
 </figure>
 
-<p>The important part is easy to miss: the keys never touch the lamp’s circuit. The lamp’s current comes from its own battery, and it could just as well feed the coils of other relays, so one switch can drive several more and logic can be stacked as deep as you like. Konrad Zuse’s Z3 of 1941 used about 2,600 relays this way.<sup class="fn"><a href="#n102">2</a></sup> The catch is the lever. It has mass, so it takes milliseconds to move, and it wears.</p>
+<p>The important part is easy to miss: the keys never touch the lamp’s circuit. The lamp’s current comes from its own battery, and it could just as well feed the coils of other relays, so one switch can drive several more and logic can be stacked as deep as you like. Konrad Zuse’s Z3 of 1941 used about 2,600 relays this way.<sup class="fn"><a href="#n2">2</a></sup> The catch is the lever. It has mass, so it takes milliseconds to move, and it wears.</p>
 
 
 <p>Here is that stack as a mechanism: A’s contact throws B’s coil. No second key.</p>
@@ -76,9 +76,9 @@
 
 <h2 id="tape" data-level="H7"><span class="num">3</span>Rules on a tape</h2>
 
-<p>An adder does one thing. The leap that made computers was a machine that could be told what to do. Charles Babbage proposed a mechanical Difference Engine to the Astronomical Society (later the Royal Astronomical Society) in 1822 and later designed a far more general Analytical Engine, programmed with punched cards; neither was finished in his lifetime.<sup class="fn"><a href="#n2">2</a></sup> In 1843 Ada Lovelace published notes on the Analytical Engine that include a step-by-step method for computing Bernoulli numbers, usually counted as the first published program, and the observation that such a machine could manipulate symbols of any kind, not only numbers.<sup class="fn"><a href="#n2">2</a></sup></p>
+<p>An adder does one thing. The leap that made computers was a machine that could be told what to do. Charles Babbage proposed a mechanical Difference Engine to the Astronomical Society (later the Royal Astronomical Society) in 1822 and later designed a far more general Analytical Engine, programmed with punched cards; neither was finished in his lifetime.<sup class="fn"><a href="#n3">3</a></sup> In 1843 Ada Lovelace published notes on the Analytical Engine that include a step-by-step method for computing Bernoulli numbers, usually counted as the first published program, and the observation that such a machine could manipulate symbols of any kind, not only numbers.<sup class="fn"><a href="#n3">3</a></sup></p>
 
-<p>In 1936 Alan Turing asked what it means for anything to be computable at all, and answered with a machine so simple it fits in a figure: a tape of squares, a head that reads and writes one square at a time, and a short table of rules.<sup class="fn"><a href="#n3">3</a></sup></p>
+<p>In 1936 Alan Turing asked what it means for anything to be computable at all, and answered with a machine so simple it fits in a figure: a tape of squares, a head that reads and writes one square at a time, and a short table of rules.<sup class="fn"><a href="#n4">4</a></sup></p>
 
 <figure class="fig" data-fig="turingTape" id="fig-turingTape">
 <figcaption><span class="tagline tag-ill">Model</span> A Turing machine with four rules that adds one to a binary number. The blue head reads the square under it, looks up the rule for its current state and that symbol, and acts. Write your own number by tapping squares.</figcaption>
@@ -97,10 +97,9 @@
 <h2 id="notes">Notes and sources</h2>
 <ol class="notes">
 <li id="n1">C. E. Shannon, “A Symbolic Analysis of Relay and Switching Circuits”, MIT master’s thesis (1937), published in <i>Transactions of the AIEE</i> 57 (1938); G. Boole, <i>An Investigation of the Laws of Thought</i> (1854).</li>
-<li id="n101">C. E. Shannon, “A Symbolic Analysis of Relay and Switching Circuits”, MIT master’s thesis (1937), published in <i>Transactions of the AIEE</i> 57 (1938); G. Boole, <i>An Investigation of the Laws of Thought</i> (1854).</li>
-<li id="n102">H. Zuse, <a href="https://horst-zuse.hier-im-netz.de/Konrad_Zuse_index_english_html/rechner_z3.html">“Z3”</a> (completed May 1941, about 2,600 relays, destroyed in 1943; a replica is in the Deutsches Museum, Munich).</li>
-<li id="n2">C. Babbage, letter to Sir Humphry Davy on the application of machinery to calculating tables, 3 July 1822, and “Observations on the application of machinery to the computation of mathematical tables”, <i>Memoirs of the Astronomical Society</i> 1 (1822); the Analytical Engine was designed from 1834; A. A. Lovelace, translator’s notes to L. F. Menabrea, “Sketch of the Analytical Engine”, <i>Scientific Memoirs</i> 3 (1843), Note G.</li>
-<li id="n3">A. M. Turing, “On Computable Numbers, with an Application to the Entscheidungsproblem”, <i>Proceedings of the London Mathematical Society</i> s2-42 (1936–37). The four-rule incrementer in the figure is our own example.</li>
+<li id="n2">H. Zuse, <a href="https://horst-zuse.hier-im-netz.de/Konrad_Zuse_index_english_html/rechner_z3.html">“Z3”</a> (completed May 1941, about 2,600 relays, destroyed in 1943; a replica is in the Deutsches Museum, Munich).</li>
+<li id="n3">C. Babbage, letter to Sir Humphry Davy on the application of machinery to calculating tables, 3 July 1822, and “Observations on the application of machinery to the computation of mathematical tables”, <i>Memoirs of the Astronomical Society</i> 1 (1822); the Analytical Engine was designed from 1834; A. A. Lovelace, translator’s notes to L. F. Menabrea, “Sketch of the Analytical Engine”, <i>Scientific Memoirs</i> 3 (1843), Note G.</li>
+<li id="n4">A. M. Turing, “On Computable Numbers, with an Application to the Entscheidungsproblem”, <i>Proceedings of the London Mathematical Society</i> s2-42 (1936–37). The four-rule incrementer in the figure is our own example.</li>
 </ol>
 
 <footer class="colophon">
