@@ -93,10 +93,10 @@
 
 <h2 id="distance" data-level="H5"><span class="num">6</span>The cost of distance</h2>
 
-<p>Here is the reason behind all of the above, in picojoules. In 2014 Mark Horowitz of Stanford tabulated the energy of basic operations on a 45 nm chip. Adding two numbers cost a fraction of a picojoule. Reading a number from memory on another chip cost hundreds. In the figure, <b class="c-blue">arithmetic</b> is blue and <b class="c-green">moving data</b> green.<sup class="fn"><a href="#n7">7</a></sup></p>
+<p>Here is the reason behind all of the above, in picojoules, drawn on a package map. In 2014 Mark Horowitz of Stanford tabulated the energy of basic operations on a 45 nm chip. Adding two numbers cost a fraction of a picojoule. Reading a number from memory on another chip cost hundreds. Follow the path: <b class="c-yellow">register</b> → <b class="c-green">SRAM</b> → <b class="c-green">HBM</b> (still DRAM dies beside the logic die) → <b class="c-violet">NVLink</b>.<sup class="fn"><a href="#n7">7</a></sup></p>
 
 <figure class="fig" data-fig="dataDistance" id="fig-dataDistance">
-<figcaption><span class="tagline tag-real">Published figures</span> Energy per operation on a 45 nm process, from M. Horowitz (ISSCC 2014) as tabulated by Han et al. (2015).<sup class="fn"><a href="#n7">7</a></sup> Newer processes are cheaper across the board, but the ratio between arithmetic and off-chip memory has stayed large. The lower bar is our arithmetic: a float multiply and add plus one DRAM read shared over the reuse you choose.</figcaption>
+<figcaption><span class="tagline tag-mixed">Published figures + schematic map</span> Package layout is schematic, not to scale. Energies: Horowitz (ISSCC 2014) via Han et al. (2015), 45 nm, 32-bit — SRAM 5 pJ, DRAM 640 pJ, float multiply 3.7 pJ.<sup class="fn"><a href="#n7">7</a></sup> HBM uses the DRAM-class cite (stacked DRAM beside the die), not a separate invented number. NVLink shows Epoch’s 900 GB/s bandwidth only. The reuse control shares one DRAM read across that many multiply-adds.</figcaption>
 </figure>
 
 <details class="peek" id="peek-ladder" data-level="H6" data-title="The memory ladder">
@@ -111,6 +111,12 @@
 
 
 <p>Moving one number from off-chip memory costs over a hundred times as much as multiplying it, so how often each fetched number is reused, not how fast the multiplier is, decides how efficient a chip is. An accelerator is designed around distance. The systolic array keeps numbers in neighbouring cells; large on-chip memories keep the working set close; and the main memory itself has moved next to the processor. <b>High-bandwidth memory</b> (HBM) stacks DRAM chips on top of each other and places them beside the processor in the same package, joined by thousands of short wires. An H100 reads its 80 GB of HBM3 at 3.35 TB/s.<sup class="fn"><a href="#n2">2</a></sup> Three companies make HBM: SK hynix and Samsung in South Korea and Micron in the United States.</p>
+
+<p>Leave the package and the same map becomes a hop between chips. Two packages, one <b class="c-violet">NVLink</b>:</p>
+
+<figure class="fig" data-fig="nvlinkPair" id="fig-nvlinkPair">
+<figcaption><span class="tagline tag-ill">Model</span> Reuses the package map: two dies with HBM and NVLink pads, pulse crossing at Epoch’s 900 GB/s bandwidth (no invented pJ). Mid-crossing by default.</figcaption>
+</figure>
 
 <h2 id="scaleout" data-level="H4 H3"><span class="num">7</span>More than one chip</h2>
 

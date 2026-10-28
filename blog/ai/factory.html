@@ -49,19 +49,25 @@
 
 <h2 id="heat" data-level="H3 H2"><span class="num">2</span>Getting the heat out</h2>
 
-<p>Every one of those watts leaves the chip as heat, and it has to be carried out of the building as fast as it arrives. For decades that was the job of air: cold air blown through the front of the rack, hot air out the back. Air is a poor carrier: it is light, and holds little heat per litre. Try 120 kW in the figure below and the <b class="c-cyan">air duct</b> grows to well over a metre across, while the <b class="c-cyan">water pipe</b> stays a few centimetres. Nvidia’s GB200 racks are instead cooled by liquid that runs through manifolds in the rack to cold plates on the CPUs and GPUs; one such rack draws about 120 kW, roughly three times the rack of four DGX servers above.<sup class="fn"><a href="#n3">3</a></sup></p>
+<p>Every one of those watts leaves the chip as heat, and it has to be carried out of the building as fast as it arrives. For decades that was the job of air: cold air blown through the front of the rack, hot air out the back. Air is a poor carrier. Nvidia’s GB200 racks instead push liquid through manifolds to <b class="c-cyan">cold plates</b> sitting on the CPUs and GPUs; one such rack draws about 120 kW, roughly three times the rack of four DGX servers above.<sup class="fn"><a href="#n3">3</a></sup> In the figure, water runs through a channel over the <b class="c-orange">die</b>; slow the flow and the outlet warms by ΔT = P / (ṁ·c).</p>
 
 <figure class="fig" data-fig="coolantFlow" id="fig-coolantFlow">
-<figcaption><span class="tagline tag-ill">Model</span> The flow of air or water needed to carry a rack’s heat for the chosen temperature rise, from Q = ρ c<sub>p</sub> V̇ ΔT with textbook properties of air and water at room temperature.<sup class="fn"><a href="#n6">6</a></sup> Circle sizes are cross-sections drawn to one scale, for air moving at 3 m/s and water at 2 m/s, which are typical speeds we assumed. Real racks need ducts and fans for the whole room, not one pipe.</figcaption>
+<figcaption><span class="tagline tag-ill">Model</span> A schematic cold plate over a die. Outlet temperature rise from P = ṁ·c·ΔT with textbook water properties (ρ ≈ 997 kg/m³, c ≈ 4,180 J/(kg·K)).<sup class="fn"><a href="#n6">6</a></sup> Flow is a total for the chosen heat load (many plates at rack scale), not a measured manifold curve. The readout also compares the air volume that would give the same ΔT. Geometry is illustrative, not to scale.</figcaption>
 </figure>
 
 <p>The numbers make the case alone. A litre of water stores about 3,500 times as much heat per degree as a litre of air, so a pipe a few centimetres wide does the work of a duct over a metre across. The heat still has to go somewhere: the warm water runs to a heat exchanger and from there to cooling towers or dry coolers outside, which is where much of a data centre’s water use comes from.</p>
 
-<details class="math"><summary>The maths: how much coolant</summary>
-<p>A coolant with density ρ and specific heat c<sub>p</sub>, flowing at V̇ cubic metres a second and warming by ΔT, carries heat at the rate</p>
-<p class="eq">Q = ρ c<sub>p</sub> V̇ ΔT.</p>
-<p>For air, ρ c<sub>p</sub> ≈ 1.2 × 1,005 ≈ 1,206 J per m³ per kelvin; for water, ≈ 997 × 4,180 ≈ 4.17 million. To remove Q = 120 kW with a 12 °C rise, air needs V̇ = 120,000 / (1,206 × 12) ≈ 8.3 m³/s; water needs 120,000 / (4.17×10⁶ × 12) ≈ 0.0024 m³/s, about 144 litres a minute. The ratio, about 3,460, is just the ratio of the two ρ c<sub>p</sub>.</p>
+<details class="math"><summary>The maths: outlet rise</summary>
+<p>A mass flow ṁ of coolant with specific heat c, warming by ΔT, carries heat at</p>
+<p class="eq">P = ṁ c ΔT, so ΔT = P / (ṁ c).</p>
+<p>For water, c ≈ 4,180 J/(kg·K) and 1 L/min ≈ 0.0166 kg/s. A 700 W H100 at 1 L/min rises by about 10 °C; a 120 kW rack at 50 L/min rises by about 34 °C. The same ΔT in air needs roughly 3,500 times the volume flow, because water’s ρ c is that much larger per litre.</p>
 </details>
+
+<p>Follow the same die and plate one step further. Warm water leaves the plate, crosses a <b class="c-cyan">CDU</b> or heat exchanger, and the heat is rejected outdoors — cooling towers or dry coolers. That facility loop is still schematic here; the next figure sizes its share of the bill as PUE.</p>
+
+<figure class="fig" data-fig="heatLoop" id="fig-heatLoop">
+<figcaption><span class="tagline tag-ill">Model</span> Heat path reusing the cold-plate object: die → plate → CDU/exchanger → outdoor reject, with a warm return. Layout is schematic, not a site drawing. Mid-loop by default.</figcaption>
+</figure>
 
 <h2 id="pue" data-level="H1"><span class="num">3</span>The overhead</h2>
 

@@ -116,10 +116,10 @@
 
 <h2 id="litho" data-level="H10"><span class="num">5</span>Printing with light</h2>
 
-<p>Chips are printed like photographs. Light shines through a mask, a lens shrinks the pattern, and the image falls on a wafer coated with a light-sensitive resist. Where the light lands the resist is washed away, and the silicon underneath can be etched or doped. The question is how fine a line a lens can print, and the answer was worked out for microscopes in the nineteenth century: the image of a sharp edge is blurred by about the wavelength of the light divided by the lens’s numerical aperture.</p>
+<p>Chips are printed like photographs. Light shines through a <b class="c-green">mask</b>, a lens shrinks the pattern, and the image falls on a <b class="c-green">wafer</b> coated with light-sensitive <b class="c-green">resist</b>. Where the light lands the resist is washed away, and the silicon underneath can be etched or doped. The question is how fine a line a lens can print, and the answer was worked out for microscopes in the nineteenth century: the image of a sharp edge is blurred by about the wavelength of the light divided by the lens’s numerical aperture.</p>
 
 <figure class="fig" data-fig="litho" id="fig-litho">
-<figcaption><span class="tagline tag-ill">Model</span> The image of equal lines and gaps through an ideal lens with incoherent light, from the lens’s modulation transfer function, and a resist that keeps whatever is darker than half. The 193 nm immersion and both EUV apertures are ASML’s;<sup class="fn"><a href="#n10">10</a></sup> those for the older tools are typical values and approximate. Real tools use tricks of illumination and masks that this model leaves out.</figcaption>
+<figcaption><span class="tagline tag-ill">Model</span> Light through a chrome mask onto photoresist on a wafer. The intensity profile is the ideal incoherent modulation transfer function; the resist keeps features while contrast stays above a schematic threshold, and edges blur as half-pitch nears λ/(4·NA). The 193 nm immersion and both EUV apertures are ASML’s;<sup class="fn"><a href="#n10">10</a></sup> older-tool apertures are typical and approximate. Real tools use illumination and mask tricks this model leaves out.</figcaption>
 </figure>
 
 <p>The industry’s path was to shorten the wavelength: from the 436 nm blue line of mercury lamps to 248 nm and 193 nm ultraviolet lasers, and then to fill the gap between lens and wafer with water, which raises the aperture above 1. The optics put a hard floor at about 36 nm for 193 nm light, and in production the best immersion scanner is specified at 38–40 nm;<sup class="fn"><a href="#n10">10</a></sup> anything finer has to be split between two or more exposures. Extreme ultraviolet light at 13.5 nm, made by hitting droplets of molten tin with a laser, is so readily absorbed that it must travel in vacuum and be steered with mirrors. Only one company sells EUV machines: ASML in the Netherlands, with optics made by Zeiss in Germany. Its high-NA tools, with an aperture of 0.55, print lines down to 8 nm.<sup class="fn"><a href="#n10">10</a></sup></p>
@@ -131,6 +131,12 @@
 <p class="eq">half-pitch = k₁ λ / NA,</p>
 <p>where k₁ depends on the illumination, the mask and the resist. For incoherent light the image contrast falls to zero at k₁ = 0.25, the limit the figure uses, and no single exposure can print finer. For 193 nm immersion at NA 1.35 that gives about 36 nm, against the 38 nm (k₁ ≈ 0.27) and 40 nm (k₁ ≈ 0.28) that ASML specifies for production; for EUV at NA 0.33, about 10 nm; at NA 0.55, about 6 nm. Factories work at k₁ of roughly 0.3 or more.</p>
 </details>
+
+<p>That mask image does not paint the whole wafer at once. It lands in one <b class="c-yellow">exposure field</b> — about 26 by 33 mm on ASML’s tools — and the stage steps. An H100-sized die nearly fills that window, which is the bridge into yield.</p>
+
+<figure class="fig" data-fig="exposureField" id="fig-exposureField">
+<figcaption><span class="tagline tag-ill">Model</span> The same 300 mm wafer family as printing with light / yield. Yellow window ≈26 × 33 mm scanner field (ASML, cited in note 10). H100 area 814 mm² for scale. Field drifts slightly mid-action.</figcaption>
+</figure>
 
 <h2 id="yield" data-level="H10 H5"><span class="num">6</span>Why big chips cost so much</h2>
 
