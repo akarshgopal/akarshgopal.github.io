@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Price of a Flip · Can AI outgrow the planet’s power grid?</title>
+<meta name="description" content="An interactive explainer: how cheaply a bit can flip, from vacuum tubes to 2 nm transistors, why Dennard scaling ended, and what that means for the energy AI can spend.">
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<button id="play-toggle" type="button" aria-pressed="true" title="Pause all animations">❚❚ Pause</button>
+<nav class="series" aria-label="Can AI outgrow the planet’s power grid?: the series"><div class="series-in"><a class="series-title" href="index.html">Can AI outgrow the planet’s power grid?</a><ol><li><a href="index.html"><span class="n">Start</span>The question</a></li><li><a href="yardstick.html"><span class="n">1</span>The yardstick</a></li><li><a href="rules.html"><span class="n">2</span>Rules</a></li><li><a href="flip.html" aria-current="page"><span class="n">3</span>The flip</a></li><li><a href="parallel.html"><span class="n">4</span>Parallel</a></li><li><a href="model.html"><span class="n">5</span>A model</a></li><li><a href="language.html"><span class="n">6</span>Language</a></li><li><a href="scaling.html"><span class="n">7</span>Scaling</a></li><li><a href="data.html"><span class="n">8</span>The data</a></li><li><a href="demand.html"><span class="n">9</span>The demand</a></li><li><a href="factory.html"><span class="n">10</span>The factory</a></li><li><a href="orbital.html"><span class="n">11</span>Orbital</a></li><li><a href="verdict.html"><span class="n">12</span>The verdict</a></li><li><a href="essay.html"><span class="n">13</span>The short tour</a></li></ol></div></nav><script>(function(){var a=document.querySelector('nav.series [aria-current=page]');if(a){var o=a.closest('ol');if(o.scrollWidth>o.clientWidth)o.scrollLeft=a.offsetLeft-o.offsetLeft-24;}})();</script>
+<main>
+<article>
+<header class="top">
+<h1>The Price of a Flip</h1>
+<p class="byline">Can AI outgrow the planet’s power grid? · a deep dive · from a vacuum tube to a leak · written for Akarsh Gopal, October 2026</p>
+</header>
+<details class="spine"><summary>Timeline, 1822–2026</summary><ol><li><a href="essay.html#s2"><span class="y">1822</span><span class="w" title="outside the US">◆</span>Babbage proposes the Difference Engine</a></li><li><a href="essay.html#s2"><span class="y">1843</span><span class="w" title="outside the US">◆</span>Lovelace publishes the first program, for the Analytical Engine</a></li><li><a href="essay.html#s2"><span class="y">1936</span><span class="w" title="outside the US">◆</span>Turing: a machine that can imitate any other</a></li><li><a href="essay.html#s1"><span class="y">1937</span>Shannon: relay circuits do Boolean logic</a></li><li><a href="essay.html#s3"><span class="y">1941</span><span class="w" title="outside the US">◆</span>Zuse’s Z3, a programmable relay computer</a></li><li><a href="model.html#perceptron"><span class="y">1943</span>McCulloch and Pitts: a neuron as a switch</a></li><li><a href="essay.html#s3"><span class="y">1946</span>ENIAC: 17,468 tubes, 150 kW</a></li><li><a href="essay.html#s3"><span class="y">1947</span>The transistor, Bell Labs</a></li><li><a href="essay.html#s7"><span class="y">1958</span>Rosenblatt’s perceptron</a></li><li><a href="essay.html#s3"><span class="y">1959</span>The MOSFET (Atalla and Kahng) and the planar chip</a></li><li><a href="essay.html#s4"><span class="y">1965</span>Moore’s observation</a></li><li><a href="model.html#xor"><span class="y">1969</span>Minsky and Papert’s Perceptrons</a></li><li><a href="essay.html#s4"><span class="y">1971</span><span class="w" title="outside the US">◆</span>Intel 4004, made for Busicom of Japan</a></li><li><a href="essay.html#s4"><span class="y">1974</span>Dennard’s scaling rules</a></li><li><a href="essay.html#s5"><span class="y">1976</span>Cray-1</a></li><li><a href="model.html#backprop"><span class="y">1986</span>Backpropagation popularised</a></li><li><a href="language.html#convolution"><span class="y">1989</span>LeCun’s convolutional network reads zip codes</a></li><li><a href="language.html#sequences"><span class="y">1997</span><span class="w" title="outside the US">◆</span>LSTM (Hochreiter and Schmidhuber)</a></li><li><a href="essay.html#s4"><span class="y">~2005</span>Dennard scaling ends; clock speeds stall</a></li><li><a href="essay.html#s6"><span class="y">2007</span>CUDA lets GPUs run general code</a></li><li><a href="essay.html#s10"><span class="y">2009</span>ImageNet</a></li><li><a href="essay.html#s5"><span class="y">2011</span><span class="w" title="outside the US">◆</span>K computer tops the TOP500</a></li><li><a href="essay.html#s10"><span class="y">2012</span><span class="w" title="outside the US">◆</span>AlexNet, trained on two gaming GPUs</a></li><li><a href="essay.html#s11"><span class="y">2017</span>“Attention Is All You Need”</a></li><li><a href="essay.html#s12"><span class="y">2020</span>Scaling laws; GPT-3; Fugaku tops the TOP500</a></li><li><a href="essay.html#s12"><span class="y">2022</span>Chinchilla; H100; ChatGPT</a></li><li><a href="essay.html#s14"><span class="y">2024</span>100,000-GPU clusters; a 1,500 MW data-centre load drops off the Virginia grid</a></li><li><a href="essay.html#s14"><span class="y">2025</span><span class="w" title="outside the US">◆</span>IEA: data centres used 415 TWh in 2024</a></li></ol></details>
+
+<p class="lede">Hold a glass bulb with three metal parts inside: a hot filament, a plate, and a mesh between them. A small voltage on the mesh steers a large current from filament to plate. That <b>triode</b>, invented in 1906, was the first switch with no moving parts. ENIAC would later pack 17,468 of them into a room that drew 150 kilowatts.<sup class="fn"><a href="#n3">3</a></sup> Today the same job is done by a transistor a few dozen atoms across, and a chip the size of a postage stamp holds more of them than Earth has people. This page asks how cheap that flip got, and why it stopped getting cheaper.</p>
+
+<p>The <a class="xref" href="rules.html">Rules</a> page showed that two switches can add, and that a program is a pattern of flips. This page opens the switch itself, from the vacuum tube to 2&nbsp;nm silicon, and hands the efficiency floor to the Act&nbsp;1 meter.</p>
+
+
+<ol class="toc">
+<li><a href="#tube"><span class="n">1</span>No moving parts</a></li>
+<li><a href="#mosfet"><span class="n">2</span>A switch made of silicon</a></li>
+<li><a href="#tick"><span class="n">3</span>The price of a tick</a></li>
+<li><a href="#dark"><span class="n">4</span>When the voltage stopped falling</a></li>
+<li><a href="#litho"><span class="n">5</span>Printing with light</a></li>
+<li><a href="#yield"><span class="n">6</span>Why big chips cost so much</a></li>
+<li><a href="#recap"><span class="n">7</span>Smaller, until it got hot</a></li>
+<li><a href="#final"><span class="n"></span>Final words</a></li>
+</ol>
+
+<h2 id="tube" data-level="H9"><span class="num">1</span>No moving parts</h2>
+
+<p>A <b>vacuum tube</b> switches a current without anything moving. A heated <b class="c-orange">cathode</b> boils <b class="c-blue">electrons</b> off into a vacuum; a positive plate collects them; and between the two a wire mesh, the grid, decides how many get through. Make the grid a few volts negative and it pushes the electrons back. Lee de Forest filed a patent on this three-electrode tube, the Audion, in 1907.<sup class="fn"><a href="#n3">3</a></sup></p>
+
+<figure class="fig" data-fig="triode" id="fig-triode">
+<figcaption><span class="tagline tag-ill">Model</span> A triode with its plate at +250 V and an amplification factor of 20, using the textbook three-halves power law for the plate current; the electrons are drawn for illustration. The heater bar is not to scale. It only shows that the heater draws power whatever the grid is doing.</figcaption>
+</figure>
+
+<p>A few volts on the grid control a current driven by the 250 V plate, so the tube is a switch and an amplifier with no moving parts. It switches in microseconds rather than milliseconds, a thousand times faster than a lever, and that is why the first electronic computers used tubes: Colossus at Bletchley Park from 1944, and ENIAC, with 17,468 tubes, in 1946. But the heater burns power whether the tube is switching or not, and a hot filament eventually fails. ENIAC drew about 150 kW, and the <a class="xref" href="essay.html#s3">short tour</a> works out that every addition cost it about 30 joules.<sup class="fn"><a href="#n4">4</a></sup></p>
+
+<details class="math"><summary>The maths: the triode</summary>
+<p>Below saturation, the plate current of an idealised triode follows the Child–Langmuir law,</p>
+<p class="eq">I ≈ K (V<sub>g</sub> + V<sub>p</sub> / μ)<sup>3/2</sup>,</p>
+<p>where V<sub>g</sub> is the grid voltage, V<sub>p</sub> the plate voltage and μ the amplification factor. The current stops when V<sub>g</sub> = −V<sub>p</sub>/μ: with V<sub>p</sub> = 250 V and μ = 20, at −12.5 V. A change of one volt on the grid does as much as a change of μ volts on the plate, which is why a tube amplifies.</p>
+</details>
+
+<h2 id="mosfet" data-level="H9"><span class="num">2</span>A switch made of silicon</h2>
+
+<p>The transistor replaced the hot cathode with a crystal. In the MOSFET, made at Bell Labs by Mohamed Atalla and Dawon Kahng in 1959, a metal plate, the gate, sits on a thin layer of insulating glass above the silicon.<sup class="fn"><a href="#n5">5</a></sup> Put a positive voltage on the <b class="c-blue">gate</b> and it draws electrons up to the surface, forming a thin conducting <b class="c-blue">channel</b> between the source and the drain. Remove the voltage and the channel closes. Nothing heats, nothing moves, and the switch can be made very small.</p>
+
+<figure class="fig" data-fig="mosfet" id="fig-mosfet">
+<figcaption><span class="tagline tag-ill">Model</span> A MOSFET in cross-section and its current against gate voltage on a logarithmic scale, from a standard smooth model of a transistor (the EKV form) at room temperature, with a slope of 71 mV per tenfold change below threshold. Currents are relative to the transistor fully on, with its gate at an assumed 0.7 V supply (the gate of a logic circuit never goes above the supply); a real transistor’s numbers depend on its size and process.</figcaption>
+</figure>
+
+<details class="peek" id="peek-inverter" data-level="H8" data-title="Two transistors make a gate">
+<summary>Look inside: <b>a gate is two transistors that are never both on</b></summary>
+<div class="peek-body">
+<p>Pair an n-type transistor, which conducts when its gate is high, with a p-type, which conducts when it is low, and join their gates. A high input shuts the p-type and opens the n-type, which pulls the output to ground; a low input does the reverse. Either way one is shut, so no current runs from supply to ground. Only halfway between, while the input crosses, are both partly open. A chip therefore spends its energy on switching and almost none on holding still.</p>
+<figure class="fig" data-fig="cmosInverter" id="fig-cmosInverter">
+<figcaption><span class="tagline tag-ill">Model</span> A NOT gate, same model and 0.7 V supply as above.</figcaption>
+</figure>
+<p class="peek-end">Every adder in the next sections is built from pairs like this.</p>
+</div>
+</details>
+
+
+<p>The logarithmic plot holds the problem that ended the free lunch. Below its <b>threshold voltage</b> a transistor does not switch off cleanly; the current falls by a factor of ten for every 60 to 70 millivolts, and it cannot fall faster. That slope is set by the temperature of the electrons, not by engineering: at room temperature it can never be steeper than about 60 mV per decade.<sup class="fn"><a href="#n6">6</a></sup> So the threshold has to sit a few hundred millivolts above zero to keep the “off” current small, and the supply voltage has to sit well above the threshold to make “on” strong. Lower the threshold to save voltage and the off-leak climbs tenfold with every step.</p>
+
+<details class="math"><summary>The maths: the subthreshold slope</summary>
+<p>Below threshold, electrons cross the barrier between source and channel by thermal energy, so the current follows a Boltzmann factor, I ∝ exp(q V<sub>g</sub> / n k T). The gate voltage needed for a tenfold change, the subthreshold swing, is</p>
+<p class="eq">S = n (k T / q) ln 10 ≈ n × 59.5 mV at 300 K,</p>
+<p>with n ≥ 1 describing how well the gate controls the channel. The figure uses n = 1.2, giving 71 mV per decade.</p>
+</details>
+
+<h2 id="tick" data-level="H9 H8"><span class="num">3</span>The price of a tick</h2>
+
+<p>The silicon gate could be made smaller with every generation, and the switches multiplied. In 1963 Frank Wanlass and Chih-Tang Sah of Fairchild presented <b>CMOS</b>, a pair of complementary transistors in which one is always off, so that no current flows except while switching.<sup class="fn"><a href="#n7">7</a></sup> The energy then goes into filling and emptying the charge bucket of the <a class="xref" href="essay.html#fig-flipEnergy">short tour’s water analogy</a>, ½CV² per flip. Here is that cost measured across fifty years of real processors, each <b class="c-orange">dot</b> one group of chips.</p>
+
+<figure class="fig" data-fig="joulesPerTick" id="fig-joulesPerTick">
+<figcaption><span class="tagline tag-real">Real data, derived</span> Typical power divided by transistor count and clock frequency, from Karl Rupp’s Microprocessor Trend Data (CC BY 4.0).<sup class="fn"><a href="#n8">8</a></sup> Each dot is a three-year window: the geometric means of the chips in it, so dot size shows how many chips. Not every transistor switches on every tick, and leakage counts too, so this is the power per transistor per tick, not the energy of one flip. Dashed lines are least-squares fits before and after 2005.</figcaption>
+</figure>
+
+<details class="peek" id="peek-landauer" data-level="H7" data-title="The Landauer gap">
+<summary>Look inside: <b>how far a real operation is from kT ln 2</b></summary>
+<div class="peek-body">
+<p>Erasing one bit cannot cost less than kT ln 2 ≈ 2.87×10⁻²¹ J at room temperature. A modern GPU FLOP sits about a million times above that; a DRAM read, a billion; a whole prompt, many more. The gap is the headroom left for the efficiency slider — large, but not infinite, and memory traffic eats most of it first.</p>
+<figure class="fig" data-fig="landauerGap" id="fig-landauerGap">
+<figcaption><span class="tagline tag-mixed">Physics + <b>DERIVED</b></span> Landauer kT ln 2 at 300 K. H100 J/FLOP = 700 W ÷ 989 TFLOP/s (<b>derived</b>, not a vendor Wh/FLOP claim). DRAM: Horowitz 2014. Prompt: Google 0.24 Wh.</figcaption>
+</figure>
+</div>
+</details>
+
+
+<p>Before 2005 the cost per transistor per tick fell by about a third every year; since then it has kept falling, more slowly. Before 2005 the voltage fell with every shrink, and since energy goes as the square of the voltage, that counted twice. After 2005 the voltage could hardly fall further, for the reason of the previous section, and only the bucket kept shrinking.</p>
+
+<h2 id="dark" data-level="H9 H10"><span class="num">4</span>When the voltage stopped falling</h2>
+
+<p>The <a class="xref" href="essay.html#fig-dennard">short tour’s chart</a> shows the result from outside: clock speeds stopped rising near 4 GHz and power flattened at about a hundred watts, while the transistor count kept doubling. Run the arithmetic forward and something strange happens. Each new generation still doubles the number of transistors on a chip of the same size, but each now uses only about 30% less power at the same clock, where 50% would be needed to keep the chip’s total power flat. At the same power, not all of them can be on at once: below, the <b class="c-yellow">lit</b> cores are the ones the power budget allows.</p>
+
+<figure class="fig" data-fig="darkSilicon" id="fig-darkSilicon">
+<figcaption><span class="tagline tag-ill">Model</span> A chip of fixed area and power. Each node step doubles the number of cores; with the voltage stuck, each core’s power falls only by a factor of √2 (smaller capacitance alone), so the share that can run at once falls by √2 each time. Real chips do better by lowering clocks and voltages where they can and by switching parts off.</figcaption>
+</figure>
+
+<p>This is <b>dark silicon</b>. A 2011 study by Hadi Esmaeilzadeh and colleagues projected that, at fixed power, 21% of a chip would have to stay off at the 22 nm node and more than half at 8 nm.<sup class="fn"><a href="#n9">9</a></sup> The industry’s answers are the ones that matter for AI. Spend the transistors on specialised circuits that do one job very efficiently and sit idle otherwise. Spend them on many slow, simple units instead of a few fast ones. And make the work itself cheaper per flip, by using fewer bits. The <a class="xref" href="parallel.html">Parallel</a> post shows how a GPU does all three.</p>
+
+<details class="math"><summary>The maths: power density after Dennard</summary>
+<p>Shrinking all lengths by k ≈ √2 per generation doubles the transistors per area and divides each transistor’s capacitance by k. With the voltage V and clock f fixed, the power per transistor, α C V² f, falls only by k, while the count rises by k². The power per area therefore grows by k per generation, and at a fixed power budget the active fraction falls as k<sup>−g</sup> after g generations: about 25% after four steps.</p>
+</details>
+
+<h2 id="litho" data-level="H10"><span class="num">5</span>Printing with light</h2>
+
+<p>Chips are printed like photographs. Light shines through a <b class="c-green">mask</b>, a lens shrinks the pattern, and the image falls on a <b class="c-green">wafer</b> coated with light-sensitive <b class="c-green">resist</b>. Where the light lands the resist is washed away, and the silicon underneath can be etched or doped. The question is how fine a line a lens can print, and the answer was worked out for microscopes in the nineteenth century: the image of a sharp edge is blurred by about the wavelength of the light divided by the lens’s numerical aperture.</p>
+
+<figure class="fig" data-fig="litho" id="fig-litho">
+<figcaption><span class="tagline tag-ill">Model</span> Light through a chrome mask onto photoresist on a wafer. The intensity profile is the ideal incoherent modulation transfer function; the resist keeps features while contrast stays above a schematic threshold, and edges blur as half-pitch nears λ/(4·NA). The 193 nm immersion and both EUV apertures are ASML’s;<sup class="fn"><a href="#n10">10</a></sup> older-tool apertures are typical and approximate. Real tools use illumination and mask tricks this model leaves out.</figcaption>
+</figure>
+
+<p>The industry’s path was to shorten the wavelength: from the 436 nm blue line of mercury lamps to 248 nm and 193 nm ultraviolet lasers, and then to fill the gap between lens and wafer with water, which raises the aperture above 1. The optics put a hard floor at about 36 nm for 193 nm light, and in production the best immersion scanner is specified at 38–40 nm;<sup class="fn"><a href="#n10">10</a></sup> anything finer has to be split between two or more exposures. Extreme ultraviolet light at 13.5 nm, made by hitting droplets of molten tin with a laser, is so readily absorbed that it must travel in vacuum and be steered with mirrors. Only one company sells EUV machines: ASML in the Netherlands, with optics made by Zeiss in Germany. Its high-NA tools, with an aperture of 0.55, print lines down to 8 nm.<sup class="fn"><a href="#n10">10</a></sup></p>
+
+<p>Which brings us to the name. TSMC in Taiwan began volume production of its “2 nm” process, N2, in late 2025,<sup class="fn"><a href="#n11">11</a></sup> but nothing on such a chip is 2 nm wide. Node names began drifting away from any physical feature in the late 1990s and are now labels for a generation; researchers have proposed counting transistors per square millimetre instead.<sup class="fn"><a href="#n12">12</a></sup></p>
+
+<details class="math"><summary>The maths: the resolution limit</summary>
+<p>The smallest half-pitch (the width of one line or gap) a lens of numerical aperture NA can print with wavelength λ is usually written</p>
+<p class="eq">half-pitch = k₁ λ / NA,</p>
+<p>where k₁ depends on the illumination, the mask and the resist. For incoherent light the image contrast falls to zero at k₁ = 0.25, the limit the figure uses, and no single exposure can print finer. For 193 nm immersion at NA 1.35 that gives about 36 nm, against the 38 nm (k₁ ≈ 0.27) and 40 nm (k₁ ≈ 0.28) that ASML specifies for production; for EUV at NA 0.33, about 10 nm; at NA 0.55, about 6 nm. Factories work at k₁ of roughly 0.3 or more.</p>
+</details>
+
+<p>That mask image does not paint the whole wafer at once. It lands in one <b class="c-yellow">exposure field</b> — about 26 by 33 mm on ASML’s tools — and the stage steps. An H100-sized die nearly fills that window, which is the bridge into yield.</p>
+
+<figure class="fig" data-fig="exposureField" id="fig-exposureField">
+<figcaption><span class="tagline tag-ill">Model</span> The same 300 mm wafer family as printing with light / yield. Yellow window ≈26 × 33 mm scanner field (ASML, cited in note 10). H100 area 814 mm² for scale. Field drifts slightly mid-action.</figcaption>
+</figure>
+
+<h2 id="yield" data-level="H10 H5"><span class="num">6</span>Why big chips cost so much</h2>
+
+<p>A wafer 300 mm across is printed with as many copies of a chip as fit. A speck of dust or a flaw in the crystal anywhere in a chip can ruin it, so the chance that a chip works falls with its area. The largest chips are near the largest area a lithography tool can expose at once, about 26 by 33 mm; Nvidia’s H100 is 814 mm². Below, <b class="c-blue">blue</b> dies work and <b class="c-orange">orange</b> ones caught a defect.<sup class="fn"><a href="#n13">13</a></sup></p>
+
+<figure class="fig" data-fig="yieldDie" id="fig-yieldDie">
+<figcaption><span class="tagline tag-ill">Model</span> A 300 mm wafer tiled with square dies, and defects scattered at random at the density you choose (the dots). A die with any defect counts as lost. The yield formula is the simplest one, Poisson: Y = e<sup>−AD</sup>. Dies cut by the wafer’s edge are not counted. The defect densities are illustrative, not any factory’s.</figcaption>
+</figure>
+
+<p>Yield falls exponentially with area, so a chip twice the size costs more than twice as much per working copy. The way out is to make big chips from small ones: <b>chiplets</b>, tested separately and joined in one package. Nvidia’s Blackwell GPUs are two dies, each as large as a lithography tool can print, joined by a 10 TB/s link so that they act as one.<sup class="fn"><a href="#n14">14</a></sup></p>
+
+<details class="math"><summary>The maths: Poisson yield</summary>
+<p>If defects land at random with an average density D per unit area, the number in a die of area A is Poisson-distributed with mean AD, and the chance it has none is</p>
+<p class="eq">Y = e<sup>−AD</sup>.</p>
+<p>At D = 0.1 per cm², a 1 cm² die works 90% of the time and an 8 cm² die 45% of the time. Splitting the large die into four 2 cm² chiplets gives each an 82% chance, and any four good ones can be combined.</p>
+</details>
+
+<h2 id="recap" data-level="H9"><span class="num">7</span>Smaller, until it got hot</h2>
+
+<p>The switch went from a grid steering electrons in a vacuum, to a gate pulling a channel open in silicon. Each step was faster, smaller and cheaper per flip, and for thirty years the shrinking came with a falling voltage that made every flip cheaper by the square. When the voltage hit the floor set by the leak, size kept falling but heat became the limit.</p>
+
+<p>That is the turn this series hangs on. If more transistors can no longer run faster, they have to run in parallel, and do work that needs as little energy, and as few trips to memory, as possible.</p>
+
+<h2 id="final" data-level="H9">Final words</h2>
+
+<p>Somewhere in the device showing you this page, billions of these switches are flipping billions of times a second. None of them clicks, and none is wider than a few dozen atoms. Yet each still does exactly what Shannon’s relays did in 1937: one signal decides whether another gets through. Everything else in this series, the multiplying, the learning and the buildings full of heat, is that single act repeated at a scale nobody in 1937 could have pictured.</p>
+
+<p>The <a class="xref" href="parallel.html">Parallel</a> post follows the turn into the GPU. On the index meter, this page sets the <b>efficiency floor</b>: how cheap a flip can get, and when that cheapness stops.</p>
+
+<h2 id="notes">Notes and sources</h2>
+<ol class="notes">
+<li id="n1">C. E. Shannon, “A Symbolic Analysis of Relay and Switching Circuits”, MIT master’s thesis (1937), published in <i>Transactions of the AIEE</i> 57 (1938); G. Boole, <i>An Investigation of the Laws of Thought</i> (1854).</li>
+<li id="n2">H. Zuse, <a href="https://horst-zuse.hier-im-netz.de/Konrad_Zuse_index_english_html/rechner_z3.html">“Z3”</a> (completed May 1941, about 2,600 relays, destroyed in 1943; a replica is in the Deutsches Museum, Munich).</li>
+<li id="n3">L. de Forest, “Space telegraphy”, US patent 879,532, filed January 1907, granted February 1908.</li>
+<li id="n4">ENIAC: 17,468 vacuum tubes, about 150 kW, 5,000 additions a second, from the University of Michigan, <a href="https://cse.engin.umich.edu/stories/75-years-of-the-eniac">“75 years of the ENIAC”</a>, and the National Museum of the United States Army, <a href="https://www.thenmusa.org/armyinnovations/innovationeniaccomputer/">ENIAC</a>. Our 30 J per addition is 150 kW ÷ 5,000 per second. Colossus: B. J. Copeland (ed.), <i>Colossus: The Secrets of Bletchley Park’s Codebreaking Computers</i>, Oxford University Press (2006).</li>
+<li id="n5">Computer History Museum, <i>The Silicon Engine</i>: <a href="https://www.computerhistory.org/siliconengine/invention-of-the-point-contact-transistor/">1947, invention of the point-contact transistor</a>; <a href="https://www.computerhistory.org/siliconengine/metal-oxide-semiconductor-mos-transistor-demonstrated/">1960, metal-oxide-semiconductor transistor demonstrated</a> (Atalla and Kahng, 1959); <a href="https://www.computerhistory.org/siliconengine/invention-of-the-planar-manufacturing-process/">1959, invention of the “planar” manufacturing process</a>.</li>
+<li id="n6">S. M. Sze and K. K. Ng, <i>Physics of Semiconductor Devices</i>, 3rd ed., Wiley (2007), chapter 6. The figure’s model is from C. C. Enz, F. Krummenacher and E. A. Vittoz, “An analytical MOS transistor model valid in all regions of operation”, <i>Analog Integrated Circuits and Signal Processing</i> 8, 83–114 (1995).</li>
+<li id="n7">F. M. Wanlass and C. T. Sah, “Nanowatt logic using field-effect metal-oxide semiconductor triodes”, ISSCC (1963); US patent 3,356,858 (1967).</li>
+<li id="n8">K. Rupp, <a href="https://github.com/karlrupp/microprocessor-trend-data">Microprocessor Trend Data</a> (CC BY 4.0), 50yrs files: transistors, frequency and typical power. Our derivation pairs the geometric means of each series within three-year windows, because the files do not link values chip by chip.</li>
+<li id="n9">H. Esmaeilzadeh, E. Blem, R. St. Amant, K. Sankaralingam and D. Burger, <a href="https://research.cs.wisc.edu/vertical/papers/2011/isca11-darksilicon.pdf">“Dark silicon and the end of multicore scaling”</a>, ISCA 2011: “at 22 nm, 21% of a fixed-size chip must be powered off, and at 8 nm, this number grows to more than 50%”.</li>
+<li id="n10">ASML, <a href="https://www.asml.com/en/products/euv-lithography-systems">EUV lithography systems</a>: 13.5 nm light; NXE systems NA 0.33; EXE (High NA) systems NA 0.55, resolution 8 nm. The 36 nm single-exposure limit at NA 1.35 is the k₁ = 0.25 floor for 193 nm water immersion. Production resolution: ASML, <a href="https://www.asml.com/en/products/duv-lithography-systems/twinscan-nxt2000i">TWINSCAN NXT:2000i</a>, NA 1.35, “production resolutions down to 40 nm (C-quad) and 38 nm (dipole)”.</li>
+<li id="n11">TSMC began risk production of N2 in July 2024 and volume production in the fourth quarter of 2025, as reported in its quarterly results; summarised in <a href="https://en.wikipedia.org/wiki/2_nm_process">“2 nm process”</a>, Wikipedia.</li>
+<li id="n12">H.-S. P. Wong et al., “A density metric for semiconductor technology”, <i>Proceedings of the IEEE</i> 108(4), 478–482 (2020).</li>
+<li id="n13">Epoch AI, <a href="https://epoch.ai/data/machine-learning-hardware">Machine Learning Hardware</a> (CC BY): H100 SXM5 die size 814 mm².</li>
+<li id="n14">Nvidia, <a href="https://www.nvidia.com/en-us/data-center/technologies/blackwell-architecture/">Blackwell architecture</a>: 208 billion transistors; “two reticle-limited dies connected by a 10 terabytes per second (TB/s) chip-to-chip interconnect”.</li>
+</ol>
+
+<footer class="colophon">
+<p>Figures marked <span class="tagline tag-real" style="font-size:.7rem;padding:1px 6px;border-radius:99px">Real data</span> use the cited sources. Figures marked <span class="tagline tag-ill" style="font-size:.7rem;padding:1px 6px;border-radius:99px">Model</span> are simplified models built to show a mechanism, and their numbers should not be quoted as facts. Fonts: Literata and Inter (SIL Open Font License).</p>
+</footer>
+<nav class="pager" aria-label="Previous and next in the series"><a class="prev" href="rules.html"><small>← Previous</small>Rules: Switch, Gate, Adder, Program</a><a class="next" href="parallel.html"><small>Next →</small>Parallel: Why GPUs Won</a></nav>
+</article>
+</main>
+<script>window.STACK={"S0":[{"f":"index.html","id":"question","t":"Two questions, one machine"},{"f":"index.html","id":"verdict","t":"Act 1: will inference become the biggest use of energy?"},{"f":"index.html","id":"map","t":"The case, as a map"},{"f":"index.html","id":"start","t":"Where to start"},{"f":"index.html","id":"final","t":"Final words"},{"f":"index.html","id":"notes","t":"Notes and sources"},{"f":"yardstick.html","id":"sinks","t":"Where 55 TWh sits","alt":1},{"f":"yardstick.html","id":"flow","t":"From primary to the meter","alt":1},{"f":"yardstick.html","id":"rungs","t":"Three rungs"},{"f":"yardstick.html","id":"final","t":"Final words"},{"f":"language.html","id":"nexttoken","t":"Predicting the next word","alt":1},{"f":"demand.html","id":"ladder","t":"Tokens per task"},{"f":"demand.html","id":"jevons","t":"When cheaper means more"},{"f":"demand.html","id":"agents","t":"Agents asking agents"},{"f":"demand.html","id":"final","t":"Final words"},{"f":"orbital.html","id":"star","t":"Coda: star-mind","alt":1},{"f":"verdict.html","id":"act1","t":"Act 1: the three rungs"},{"f":"verdict.html","id":"trip","t":"Tripwires"},{"f":"verdict.html","id":"final","t":"Final words"},{"f":"essay.html","id":"final","t":"Final words"}],"S1":[{"f":"language.html","id":"nexttoken","t":"Predicting the next word"},{"f":"language.html","id":"final","t":"Final words"},{"f":"scaling.html","id":"inference","t":"After training"},{"f":"scaling.html","id":"peek-serving","t":"Serving and the KV cache","peek":1},{"f":"demand.html","id":"ladder","t":"Tokens per task","alt":1},{"f":"demand.html","id":"peek-wh-tokens","t":"Why Wh ≠ tokens","peek":1},{"f":"factory.html","id":"flat","t":"Why it never sleeps","alt":1},{"f":"essay.html","id":"s13","t":"What a megawatt-hour buys","alt":1}],"S2":[{"f":"model.html","id":"perceptron","t":"A neuron is a line"},{"f":"model.html","id":"xor","t":"The pattern one line cannot draw"},{"f":"model.html","id":"final","t":"Final words"},{"f":"language.html","id":"recap","t":"What changed, and what did not"},{"f":"essay.html","id":"s7","t":"Learning instead of programming"}],"S3":[{"f":"language.html","id":"convolution","t":"One small filter, used everywhere"},{"f":"language.html","id":"sequences","t":"Reading one word at a time"},{"f":"language.html","id":"attention","t":"Attention: a lookup you can blur"},{"f":"language.html","id":"peek-transformer","t":"One transformer block","peek":1},{"f":"scaling.html","id":"peek-moe","t":"Mixture of experts","peek":1},{"f":"essay.html","id":"s9","t":"Layers"},{"f":"essay.html","id":"s11","t":"Attention"}],"S4":[{"f":"parallel.html","id":"matmul","t":"A layer is a matrix multiply"}],"S5":[{"f":"parallel.html","id":"threads","t":"Thousands of threads","alt":1}],"S6":[{"f":"model.html","id":"backprop","t":"Passing the blame backwards"}],"S7":[{"f":"model.html","id":"backprop","t":"Passing the blame backwards","alt":1},{"f":"model.html","id":"descent","t":"Better ways downhill"},{"f":"language.html","id":"overfit","t":"Learning the noise"},{"f":"scaling.html","id":"powerlaw","t":"A straight line on a log plot"},{"f":"scaling.html","id":"knobs","t":"Three knobs, one budget"},{"f":"scaling.html","id":"overtrain","t":"Training past the optimum"},{"f":"scaling.html","id":"frontier","t":"The frontier’s slope"},{"f":"scaling.html","id":"datawall","t":"The data wall"},{"f":"scaling.html","id":"bill","t":"The bill"},{"f":"scaling.html","id":"recap","t":"What the bet is"},{"f":"scaling.html","id":"final","t":"Final words"},{"f":"data.html","id":"flywheel","t":"The data flywheel"},{"f":"data.html","id":"final","t":"Final words"},{"f":"factory.html","id":"swing","t":"A load that breathes","alt":1},{"f":"essay.html","id":"s8","t":"Rolling downhill"},{"f":"essay.html","id":"s10","t":"Data, and 2012"},{"f":"essay.html","id":"s12","t":"Scaling"}],"H0":[{"f":"index.html","id":"question","t":"Two questions, one machine","alt":1},{"f":"index.html","id":"verdict","t":"Act 1: will inference become the biggest use of energy?","alt":1},{"f":"index.html","id":"act2","t":"Act 2: what if the grid can’t?"},{"f":"index.html","id":"coda","t":"A coda: one star"},{"f":"index.html","id":"final","t":"Final words","alt":1},{"f":"yardstick.html","id":"sinks","t":"Where 55 TWh sits"},{"f":"yardstick.html","id":"flow","t":"From primary to the meter"},{"f":"yardstick.html","id":"rungs","t":"Three rungs","alt":1},{"f":"yardstick.html","id":"moving","t":"The bar moves"},{"f":"yardstick.html","id":"final","t":"Final words","alt":1},{"f":"factory.html","id":"swing","t":"A load that breathes"},{"f":"factory.html","id":"grid","t":"Plugging in a city"},{"f":"factory.html","id":"regions","t":"Where the terawatt-hours go"},{"f":"factory.html","id":"recap","t":"What it adds up to"},{"f":"factory.html","id":"final","t":"Final words"},{"f":"orbital.html","id":"need","t":"Power needed"},{"f":"orbital.html","id":"physics","t":"Sunlight and heat"},{"f":"orbital.html","id":"mass","t":"Mass per kilowatt"},{"f":"orbital.html","id":"launch","t":"Launch price"},{"f":"orbital.html","id":"only","t":"Only, or not?"},{"f":"orbital.html","id":"star","t":"Coda: star-mind"},{"f":"orbital.html","id":"final","t":"Final words"},{"f":"verdict.html","id":"act1","t":"Act 1: the three rungs","alt":1},{"f":"verdict.html","id":"act2","t":"Act 2: 100× and beyond"},{"f":"verdict.html","id":"final","t":"Final words","alt":1},{"f":"essay.html","id":"s13","t":"What a megawatt-hour buys"},{"f":"essay.html","id":"s14","t":"The factory and the grid"},{"f":"essay.html","id":"final","t":"Final words","alt":1}],"H1":[{"f":"scaling.html","id":"bill","t":"The bill","alt":1},{"f":"factory.html","id":"pue","t":"The overhead"},{"f":"factory.html","id":"flat","t":"Why it never sleeps"},{"f":"factory.html","id":"recap","t":"What it adds up to","alt":1},{"f":"orbital.html","id":"physics","t":"Sunlight and heat","alt":1},{"f":"essay.html","id":"s14","t":"The factory and the grid","alt":1}],"H2":[{"f":"factory.html","id":"heat","t":"Getting the heat out","alt":1},{"f":"factory.html","id":"peek-powerchain","t":"The power chain","peek":1}],"H3":[{"f":"parallel.html","id":"scaleout","t":"More than one chip","alt":1},{"f":"factory.html","id":"heat","t":"Getting the heat out"}],"H4":[{"f":"parallel.html","id":"scaleout","t":"More than one chip"}],"H5":[{"f":"flip.html","id":"yield","t":"Why big chips cost so much","alt":1},{"f":"parallel.html","id":"distance","t":"The cost of distance"},{"f":"factory.html","id":"chip","t":"Seven hundred watts on a postage stamp"},{"f":"essay.html","id":"s6","t":"Many slow hands","alt":1}],"H6":[{"f":"parallel.html","id":"roofline","t":"The roof and the slope"},{"f":"parallel.html","id":"systolic","t":"Passing numbers hand to hand","alt":1},{"f":"parallel.html","id":"threads","t":"Thousands of threads"},{"f":"parallel.html","id":"peek-ladder","t":"The memory ladder","peek":1},{"f":"parallel.html","id":"recap","t":"Why GPUs won"},{"f":"parallel.html","id":"final","t":"Final words"},{"f":"essay.html","id":"s6","t":"Many slow hands"},{"f":"essay.html","id":"s10","t":"Data, and 2012","alt":1}],"H7":[{"f":"rules.html","id":"sum","t":"A sum made of switches","alt":1},{"f":"rules.html","id":"tape","t":"Rules on a tape"},{"f":"rules.html","id":"final","t":"Final words"},{"f":"flip.html","id":"peek-landauer","t":"The Landauer gap","peek":1},{"f":"parallel.html","id":"systolic","t":"Passing numbers hand to hand"},{"f":"parallel.html","id":"precision","t":"Fewer bits"},{"f":"essay.html","id":"s1","t":"A sum made of switches","alt":1},{"f":"essay.html","id":"s2","t":"Rules on a tape"},{"f":"essay.html","id":"s5","t":"A joule per operation"}],"H8":[{"f":"rules.html","id":"sum","t":"A sum made of switches"},{"f":"rules.html","id":"relay","t":"A switch that throws a switch","alt":1},{"f":"flip.html","id":"peek-inverter","t":"Two transistors make a gate","peek":1},{"f":"flip.html","id":"tick","t":"The price of a tick","alt":1},{"f":"essay.html","id":"s1","t":"A sum made of switches"}],"H9":[{"f":"rules.html","id":"relay","t":"A switch that throws a switch"},{"f":"flip.html","id":"tube","t":"No moving parts"},{"f":"flip.html","id":"mosfet","t":"A switch made of silicon"},{"f":"flip.html","id":"tick","t":"The price of a tick"},{"f":"flip.html","id":"dark","t":"When the voltage stopped falling"},{"f":"flip.html","id":"recap","t":"Smaller, until it got hot"},{"f":"flip.html","id":"final","t":"Final words"},{"f":"essay.html","id":"s3","t":"Faster switches, and what a flip costs"},{"f":"essay.html","id":"s4","t":"Moore, Dennard and the heat wall","alt":1}],"H10":[{"f":"flip.html","id":"dark","t":"When the voltage stopped falling","alt":1},{"f":"flip.html","id":"litho","t":"Printing with light"},{"f":"flip.html","id":"yield","t":"Why big chips cost so much"},{"f":"essay.html","id":"s4","t":"Moore, Dennard and the heat wall"}]};</script>
+<script src="app.js"></script>
+</body>
+</html>
