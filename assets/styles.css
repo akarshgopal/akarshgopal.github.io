@@ -83,6 +83,8 @@ code { font: .86em/1 var(--mono); letter-spacing: 0; background: color-mix(in sr
 
 /* ---------- shared type ---------- */
 .eyebrow { font-size: .8125rem; color: var(--muted); letter-spacing: -0.005em; font-variant-numeric: tabular-nums; }
+.badge-wip { display: inline-block; margin-left: .45rem; padding: .12rem .45rem; border: 1px solid var(--line-strong); border-radius: 999px; font-size: .6875rem; font-weight: 560; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); vertical-align: .1em; }
+.w-name .badge-wip { margin-left: .35rem; font-family: var(--sans); font-size: .625rem; letter-spacing: .05em; }
 .lede { font-size: clamp(1.125rem, 1.05rem + .35vw, 1.3rem); line-height: 1.5; color: var(--muted); letter-spacing: -0.016em; max-width: 34rem; text-wrap: pretty; }
 .prose { max-width: var(--measure); color: var(--text-2); }
 .prose p + p { margin-top: 1em; }
