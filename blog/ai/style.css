@@ -117,7 +117,8 @@ table.mini th:first-child, table.mini td:first-child { text-align: left; }
 
 @media (max-width: 640px) {
   body { font-size: 17px; line-height: 1.62; }
-  main { padding: 0 16px 5rem; }
+  /* stack pill (~36) + Pause (~32) + gap: keep last lines/cards clear of fixed pills */
+  main { padding: 0 16px 10rem; }
   figure.fig, figure.fig.showpiece, figure.fig.narrow { --figw: calc(100vw - 12px); padding: 0; }
   .canvas-wrap { border-radius: 9px; }
   .controls, .readout, .figfoot { margin-left: 6px; margin-right: 6px; }
@@ -125,9 +126,12 @@ table.mini th:first-child, table.mini td:first-child { text-align: left; }
   .ctl.slider { max-width: none; flex-basis: 100%; }
   .toc { columns: 1; }
   h2 { margin-top: 2.6em; }
+  nav.pager { margin-bottom: 2.5rem; }
 }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
-@media (max-width: 640px) { #play-toggle { right: 8px; bottom: 8px; padding: 5px 10px; font-size: 0.72rem; opacity: 0.85; } }
+@media (max-width: 640px) { #play-toggle { right: 8px; bottom: 12px; padding: 5px 10px; font-size: 0.72rem; opacity: 0.85; }
+  nav.pager { margin-bottom: 3.5rem; }
+  footer { padding-bottom: 1rem; } }
 
 /* series navigation */
 nav.series { font-family: var(--sans); font-size: 0.8rem; background: rgba(253,253,252,0.94); border-bottom: 1px solid var(--grid2); }
@@ -157,12 +161,16 @@ a.xref::after { content: '↗'; font-family: var(--sans); font-size: 0.72em; col
 .plan h3 .num { color: var(--ink3); margin-right: 0.6em; font-variant-numeric: tabular-nums; }
 .eq { font-family: var(--serif); font-style: italic; text-align: center; margin: 1em auto; }
 @media (max-width: 640px) {
-  nav.series .series-in { padding: 8px 10px; gap: 4px 10px; }
-  nav.series ol { flex-wrap: nowrap; overflow-x: auto; max-width: 100%; scrollbar-width: none; }
-  nav.series ol::-webkit-scrollbar { display: none; }
+  nav.series { overflow-x: clip; }
+  nav.series .series-in { padding: 8px 10px; gap: 4px 10px; min-width: 0; flex-wrap: nowrap; }
+  nav.series .series-title { flex: none; }
+  nav.series ol { flex: 1 1 0; min-width: 0; flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+  nav.series ol::-webkit-scrollbar { display: none; width: 0; height: 0; }
   nav.pager { grid-template-columns: 1fr; }
   nav.pager a.next { grid-column: 1; }
 }
+/* Never let a stray wide child force a page-level horizontal scrollbar */
+html, body { overflow-x: clip; max-width: 100%; }
 
 /* select control (solar yield map) */
 .ctl.selectctl { display: flex; flex-direction: column; gap: 6px; }
@@ -250,8 +258,8 @@ details.math p { margin: 0.6em 0; }
 .three-wrap { position: relative; background: var(--stage); }
 .three-wrap canvas { display: block; outline-offset: -3px; }
 .l3d { position: absolute; left: 0; top: 0; pointer-events: none; white-space: nowrap; font: 650 12px/1.2 Inter, system-ui, sans-serif; color: var(--ink); text-shadow: 0 0 3px var(--stage), 0 0 3px var(--stage), 0 0 2px var(--stage); }
-.l3d-white { color: #fff; text-shadow: 0 0 3px #3a2560, 0 0 3px #3a2560, 0 0 2px #3a2560; }
-.l3d-yellow { color: #f2c14e; text-shadow: 0 0 3px #3a2560, 0 0 3px #3a2560, 0 0 2px #3a2560; }
+.l3d-white { color: #fff; background: rgba(58,37,96,0.72); padding: 1px 5px; border-radius: 4px; text-shadow: none; }
+.l3d-yellow { color: #f2c14e; background: rgba(58,37,96,0.72); padding: 1px 5px; border-radius: 4px; text-shadow: none; }
 .nowebgl { padding: 2em; color: var(--ink2); }
 
 /* ---- stack ruler (src/lib/stack.js) ---- */
@@ -276,13 +284,22 @@ aside.stack .stk-row:hover:not(.none) { background: color-mix(in srgb, var(--c) 
 aside.stack .stk-row:focus-visible { outline: 2px solid var(--ink2); outline-offset: 1px; }
 aside.stack .stk-tip { position: absolute; z-index: 2; transform: translateY(-50%); background: var(--ink); color: #fff; font-size: 0.74rem; line-height: 1.35; padding: 6px 9px; border-radius: 8px; width: max-content; max-width: 15rem; opacity: 0; pointer-events: none; transition: opacity .12s; }
 aside.stack .stk-tip.on { opacity: 1; }
-/* wide: a thin ruler in the left margin, always open */
-aside.stack.wide { left: 8px; top: 50%; transform: translateY(-50%); width: 104px; }
+/* wide: thin ruler in left margin. Main gets a real gutter at the same
+   breakpoint so article/ledger never sit under this fixed panel. Opaque/blur
+   panel so any remaining edge cannot ghost-over text. */
+aside.stack.wide {
+  left: 8px; top: 50%; transform: translateY(-50%); width: 104px;
+  padding: 10px 6px 10px 4px; border-radius: 12px;
+  background: rgba(253, 253, 252, 0.94);
+  border: 1px solid var(--grid2);
+  box-shadow: 0 1px 8px rgba(0, 0, 0, 0.06);
+  backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+}
 aside.stack.wide .stk-pill { display: none; }
 aside.stack.wide .stk-panel { display: flex; gap: 6px; }
 aside.stack.wide .stk-col { flex: 1 1 0; min-width: 0; }
 /* compact: a pill bottom-left that opens a two-column sheet */
-aside.stack.compact { left: 12px; bottom: 14px; }
+aside.stack.compact { left: 10px; bottom: 12px; }
 aside.stack.compact.tucked { opacity: 0; pointer-events: none; }
 aside.stack.compact .stk-pill { display: inline-flex; align-items: center; gap: 7px; height: 36px; padding: 0 12px; border-radius: 99px; border: 1px solid var(--grid2); background: rgba(253,253,252,0.94); font: inherit; font-size: 0.78rem; color: var(--ink2); cursor: pointer; box-shadow: 0 1px 6px rgba(0,0,0,.08); }
 aside.stack.compact .stk-pill b { color: var(--ink); font-weight: 700; } aside.stack.compact .stk-glyph { font-size: 1.1em; line-height: 1; }
@@ -370,10 +387,15 @@ a.cm-node:focus-visible { outline: 3px solid var(--blue); outline-offset: 2px; }
   .cm-node { padding: 7px 10px 8px; gap: 1px; } .cm-k { font-size: 0.64rem; }
   .cm-edges { display: none; }
 }
-@media (min-width: 1260px) and (min-height: 560px) { figure.fig.showpiece { --figw: min(68rem, calc(100vw - 252px)); } }
+@media (min-width: 1260px) and (min-height: 560px) {
+  /* Reserve left gutter for fixed stack ruler (left:8 + width:104 ≈ 112). */
+  main { padding-left: 128px; }
+  figure.fig.showpiece { --figw: min(68rem, calc(100vw - 252px)); }
+}
 
 /* ---- scenario ledger table ---- */
-table.ledger { width: 100%; border-collapse: collapse; font-family: var(--sans); font-size: 0.88rem; margin: 1.2em 0 1.6em; }
+/* auto L/R: do not wipe article > * centering (old 0 side margins pinned the table under the stack ruler) */
+table.ledger { width: 100%; border-collapse: collapse; font-family: var(--sans); font-size: 0.88rem; margin: 1.2em auto 1.6em; }
 table.ledger th, table.ledger td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--grid); }
 table.ledger th { color: var(--ink2); font-weight: 650; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.04em; }
 table.ledger td:first-child { color: var(--ink2); font-weight: 550; }
