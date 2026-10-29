@@ -66,7 +66,7 @@
 <p>How do you actually reuse a number? In 1978 H. T. Kung and Charles Leiserson at Carnegie Mellon proposed the <b>systolic array</b>: a grid of simple cells, each of which multiplies the two numbers it receives, adds the product to its own total and passes the numbers on to its neighbours, like a heart pumping blood.<sup class="fn"><a href="#n3">3</a></sup> Inputs enter from the edges, staggered in time, and every number is used once by every cell it passes. Below, the <b class="c-green">inputs</b> and <b class="c-cyan">weights</b> are the same numbers as in the first figure.</p>
 
 <figure class="fig" data-fig="systolic" id="fig-systolic">
-<figcaption><span class="tagline tag-ill">Model</span> A 4 × 4 output-stationary systolic array multiplying the same two matrices as the first figure. Inputs (green) enter from the left and weights (cyan) from the top, each row and column delayed one tick more than the last, and every number moves one cell per tick. Each cell shows its running total; a cell lights up in the tick that a pair meets in it, and turns solid blue when its total is final. The animation plays once when it scrolls into view; one tick is slowed to about a second.</figcaption>
+<figcaption><span class="tagline tag-ill">Model</span> A 4 × 4 output-stationary systolic array multiplying the same two matrices as the first figure. <span class="c-green">Inputs</span> enter from the left and <span class="c-cyan">weights</span> from the top, each row and column delayed one tick more than the last, and every number moves one cell per tick. Each cell keeps a running total: it glows <span class="c-yellow">yellow</span> when a pair meets and warms to <span class="c-orange">orange</span> as its sum fills in.</figcaption>
 </figure>
 
 <p>No cell ever goes back to memory. Google’s first Tensor Processing Unit, in its data centres from 2015, built its matrix unit as a 256 × 256 systolic array of 65,536 multiply-add cells working on 8-bit numbers.<sup class="fn"><a href="#n4">4</a></sup> Where the 4 × 4 array above uses each number it reads four times, an array that size uses each one 256 times. Nvidia added similar matrix units, which it calls Tensor Cores, to its GPUs from the V100 of 2017. Look back at the roofline: every TPU and GPU on it is mostly these arrays, surrounded by the memory that feeds them.</p>
@@ -93,10 +93,10 @@
 
 <h2 id="distance" data-level="H5"><span class="num">6</span>The cost of distance</h2>
 
-<p>Here is the reason behind all of the above, in picojoules, drawn on a package map. In 2014 Mark Horowitz of Stanford tabulated the energy of basic operations on a 45 nm chip. Adding two numbers cost a fraction of a picojoule. Reading a number from memory on another chip cost hundreds. Follow the path: <b class="c-yellow">register</b> → <b class="c-green">SRAM</b> → <b class="c-green">HBM</b> (still DRAM dies beside the logic die) → <b class="c-violet">NVLink</b>.<sup class="fn"><a href="#n7">7</a></sup></p>
+<p>Here is the reason behind all of the above, in picojoules, drawn on a package map. In 2014 Mark Horowitz of Stanford tabulated the energy of basic operations on a 45 nm chip. Adding two numbers cost a fraction of a picojoule. Reading a number from memory on another chip cost hundreds. On the map a number travels from <b class="c-green">HBM</b> (still DRAM dies beside the logic die) through <b class="c-green">SRAM</b> to a <b class="c-yellow">register</b> beside the arithmetic; the bars give each step’s cost, to scale.<sup class="fn"><a href="#n7">7</a></sup></p>
 
 <figure class="fig" data-fig="dataDistance" id="fig-dataDistance">
-<figcaption><span class="tagline tag-mixed">Published figures + schematic map</span> Package layout is schematic, not to scale. Energies: Horowitz (ISSCC 2014) via Han et al. (2015), 45 nm, 32-bit — SRAM 5 pJ, DRAM 640 pJ, float multiply 3.7 pJ.<sup class="fn"><a href="#n7">7</a></sup> HBM uses the DRAM-class cite (stacked DRAM beside the die), not a separate invented number. NVLink shows Epoch’s 900 GB/s bandwidth only. The reuse control shares one DRAM read across that many multiply-adds.</figcaption>
+<figcaption><span class="tagline tag-mixed">Published figures + schematic</span> The package from above: a number travels from <span class="c-green">HBM</span> through <span class="c-green">SRAM</span> to a <span class="c-yellow">register</span> beside the <span class="c-blue">arithmetic</span>. Bars are drawn to scale (linear pJ). Energies: Horowitz (ISSCC 2014, 45 nm) as tabulated by Han et al. 2015, Table 1. A 32-bit float multiply is 3.7 pJ and a float add 0.9 pJ, so one multiply-add is their sum, 4.6 pJ. A 32-bit SRAM read is 5 pJ and a 32-bit DRAM read 640 pJ. The reuse line is 4.6 + 640 ÷ reuse: the arithmetic, plus the DRAM read shared across the uses. The map is schematic, not to scale.<sup class="fn"><a href="#n7">7</a></sup></figcaption>
 </figure>
 
 <details class="peek" id="peek-ladder" data-level="H6" data-title="The memory ladder">
@@ -115,7 +115,7 @@
 <p>Leave the package and the same map becomes a hop between chips. Two packages, one <b class="c-violet">NVLink</b>:</p>
 
 <figure class="fig" data-fig="nvlinkPair" id="fig-nvlinkPair">
-<figcaption><span class="tagline tag-ill">Model</span> Reuses the package map: two dies with HBM and NVLink pads, pulse crossing at Epoch’s 900 GB/s bandwidth (no invented pJ). Mid-crossing by default.</figcaption>
+<figcaption><span class="tagline tag-ill">Model</span> The same package map, twice, joined by <span class="c-violet">NVLink</span>. 900 GB/s is the H100 SXM5’s intranode (NVLink 4) bandwidth in Epoch AI’s Machine Learning Hardware dataset<sup class="fn"><a href="#n2">2</a></sup> (both directions together, so 450 GB/s each way). Time = data ÷ 450 GB/s, a lower bound that ignores latency and protocol overhead. Bandwidth only: no energy figure is claimed. The map is schematic.</figcaption>
 </figure>
 
 <h2 id="scaleout" data-level="H4 H3"><span class="num">7</span>More than one chip</h2>
@@ -161,6 +161,7 @@
 <nav class="pager" aria-label="Previous and next in the series"><a class="prev" href="flip.html"><small>← Previous</small>The Price of a Flip</a><a class="next" href="model.html"><small>Next →</small>A Model Is a Function You Can Tune</a></nav>
 </article>
 </main>
+<script src="three3d.js?v=mvti9vme"></script>
 <script src="app.js"></script>
 </body>
 </html>

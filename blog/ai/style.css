@@ -250,9 +250,9 @@ html, body { overflow-x: clip; max-width: 100%; }
 /* One footer line under each figure: how to use it (muted) and the ⓘ data toggle, which opens the sources and
    assumptions (the former caption). A native <details>, so it is keyboard-reachable and readable by screen readers. */
 figcaption.figfoot { display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 14px; margin: 6px 4px 0; font-family: var(--sans); font-size: 0.78rem; line-height: 1.45; color: var(--ink3); max-width: none; }
-.figfoot .fig-hint { flex: 1 1 18rem; margin: 0; font-size: inherit; color: var(--ink3); transition: opacity .4s; }
+.figfoot .fig-hint { flex: 1 1 18rem; margin: 0; font-size: 0.92em; color: var(--ink3); opacity: 0.85; transition: opacity .4s; }
 .figfoot .fig-hint b { color: var(--ink2); font-weight: 600; }
-.figfoot .fig-hint.done { opacity: .75; }
+.figfoot .fig-hint.done { opacity: .45; }
 details.figdata { flex: 0 1 auto; margin-left: auto; }
 details.figdata > summary { cursor: pointer; list-style: none; display: inline-flex; align-items: center; gap: 5px; min-height: 28px; padding: 1px 10px; border-radius: 99px; border: 1px solid var(--grid2); color: var(--ink2); white-space: nowrap; user-select: none; }
 details.figdata > summary::-webkit-details-marker { display: none; }
@@ -315,9 +315,9 @@ details.math p { margin: 0.6em 0; }
 .deepdive.d-switch { border-color: var(--on); } .deepdive.d-parallel { border-color: var(--compute); } .deepdive.d-scaling { border-color: var(--memory); }
 .readout .credit { font-size: 0.8em; color: var(--ink3); } .readout .credit a { color: inherit; } ol.credits { margin: 6px 0 0; padding-left: 1.4em; font-size: 0.92em; }
 /* 3D stage: labels sit on the object, positioned by projection */
-.three-wrap { position: relative; background: var(--stage); }
+.three-wrap { position: relative; background: transparent; }
 .three-wrap canvas { display: block; outline-offset: -3px; }
-.l3d { position: absolute; left: 0; top: 0; pointer-events: none; white-space: nowrap; font: 650 12px/1.2 Inter, system-ui, sans-serif; color: var(--ink); text-shadow: 0 0 3px var(--stage), 0 0 3px var(--stage), 0 0 2px var(--stage); }
+.l3d { position: absolute; left: 0; top: 0; pointer-events: none; white-space: nowrap; font: 650 13.5px/1.25 Inter, system-ui, sans-serif; color: var(--ink); text-shadow: 0 0 4px var(--stage), 0 0 4px var(--stage), 0 0 3px var(--stage); }
 .l3d-white { color: #fff; background: rgba(58,37,96,0.72); padding: 1px 5px; border-radius: 4px; text-shadow: none; }
 .l3d-yellow { color: #f2c14e; background: rgba(58,37,96,0.72); padding: 1px 5px; border-radius: 4px; text-shadow: none; }
 .nowebgl { padding: 2em; color: var(--ink2); }
@@ -338,6 +338,7 @@ details.peek .peek-body > p { font-size: 0.97rem; line-height: 1.6; margin: 0.4e
 details.peek .peek-body p.peek-end { font-style: italic; color: var(--ink2); margin: 0.5em 0 0; }
 details.peek figure.fig { --figw: 100%; margin: 0.6rem 0 0.4rem; width: 100%; }
 details.peek .canvas-wrap { background: var(--stage); }
+details.peek .three-wrap { background: transparent; } /* W8: no grey card behind 3D peeks */
 @media (max-width: 640px) { details.peek { margin-left: -6px; margin-right: -6px; } details.peek > summary { padding-right: 10px; } details.peek .peek-body { padding: 2px 10px 12px; } details.peek > summary .pk-lv { display: none; } }
 
 /* ---- verdict meters (index) ---- */
