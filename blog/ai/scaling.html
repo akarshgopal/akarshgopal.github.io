@@ -67,10 +67,10 @@
 
 <h2 id="overtrain" data-level="S7"><span class="num">3</span>Training past the optimum</h2>
 
-<p>“Compute-optimal” means the lowest loss for the training budget. But a model is trained once and then used, possibly by millions of people, and every answer costs arithmetic in proportion to its size. A smaller model trained on far more tokens than the optimum costs more to train for the same loss but much less to run. Since Chinchilla the field has moved that way. Each <b class="c-blue">dot</b> is a notable language model, and the black steps show how fast: the median notable language model saw about 3 tokens per parameter in 2021, 20 in 2023 and 47 in 2025.</p>
+<p>“Compute-optimal” means the lowest loss for the training budget. But a model is trained once and then used, possibly by millions of people, and every answer costs arithmetic in proportion to its size. A smaller model trained on far more <b class="c-green">tokens</b> than the optimum costs more to train for the same loss but much less to run. Since Chinchilla the field has moved that way. Each <b class="c-blue">dot</b> is a notable language model; the black steps track the median <b class="c-green">tokens</b> per <b class="c-blue">parameter</b>: about 3 in 2021, 20 in 2023 and 47 in 2025.</p>
 
 <figure class="fig" data-fig="tokensPerParam" id="fig-tokensPerParam">
-<figcaption><span class="tagline tag-real">Real data</span> Training dataset size divided by parameter count for language models in Epoch AI’s Notable AI Models data (CC BY), 2017 onwards.<sup class="fn"><a href="#n4">4</a></sup> Dataset sizes are Epoch’s estimates and mostly in tokens; for some older models they count words, and ratios below 0.1, which usually mean the dataset was counted in documents or examples, are left out. Mixture-of-experts models are counted by their total parameters. The black steps are the median of each calendar year with at least five models (the 2026 step has six).</figcaption>
+<figcaption><span class="tagline tag-mixed">Real data + cited rule of thumb</span> Training tokens per parameter for notable language models since 2017 (log scale), with the yearly median and the <span class="c-violet">~20:1 compute-optimal</span> line (Chinchilla). Every dot is a real model: all 211 language-domain rows of Epoch AI’s Notable AI Models with both a parameter count and a training-dataset size (“Training dataset size (total)”, mostly tokens) published from 2017, ratio ≥ 0.1, nothing synthetic or jittered. Placed at publication date. About one in five dataset sizes is Epoch’s own estimate (see its “dataset size notes”).<sup class="fn"><a href="#n4">4</a></sup> Built by <code>scripts/make_ai_data.py</code> from <code>research/raw/notable_ai_models.csv</code>. Tap a dot to name the model.</figcaption>
 </figure>
 
 <p>Meta’s Llama 3.1 405B saw about 15.6 trillion tokens, nearly 40 per parameter; many smaller models have seen hundreds or thousands per parameter.<sup class="fn"><a href="#n4">4</a></sup> That choice ties scaling to the rest of this series. It trades training compute for cheaper serving, and it eats training data faster, which is the subject of section 5.</p>
@@ -190,6 +190,7 @@
 <nav class="pager" aria-label="Previous and next in the series"><a class="prev" href="language.html"><small>← Previous</small>Language: Tokens to Next Word</a><a class="next" href="data.html"><small>Next →</small>The Data: Scale of the Collection</a></nav>
 </article>
 </main>
+<script src="three3d.js?v=mvti9vmh"></script>
 <script src="app.js"></script>
 </body>
 </html>

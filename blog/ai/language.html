@@ -107,7 +107,7 @@
 <div class="peek-body">
 <p>A transformer block is four stages in a row. Tokens become vectors, look at each other, pass through a feed-forward MLP, and become next-token odds. The MLP usually dominates the arithmetic. A dense forward pass costs about two FLOPs per parameter per token — the unit the demand page multiplies.</p>
 <figure class="fig" data-fig="transformerBlock" id="fig-transformerBlock">
-<figcaption><span class="tagline tag-ill">Model</span> Relative costs are schematic; the 2N rule is the standard forward-pass count.</figcaption>
+<figcaption><span class="tagline tag-ill">Model</span> Relative costs are schematic weights (1 : 4 : 8 : 1 → 7 / 29 / 57 / 7%), not a measured model. The 2 : 1 split between MLP and attention follows the per-layer FLOP count in Kaplan et al. 2020, Table 1 (<a href="https://arxiv.org/abs/2001.08361">arXiv:2001.08361</a>), for a feed-forward width of 4 × the model width at short context. Attention’s share grows with context length. The embed and unembed bars are illustrative, and the real unembed cost depends on vocabulary size. The 2N rule is the standard forward-pass count.<sup class="fn"><a href="#n24">24</a></sup></figcaption>
 </figure>
 </div>
 </details>
@@ -194,6 +194,7 @@
 <nav class="pager" aria-label="Previous and next in the series"><a class="prev" href="model.html"><small>← Previous</small>A Model Is a Function You Can Tune</a><a class="next" href="scaling.html"><small>Next →</small>Scaling: The Bet That Loss Is Predictable</a></nav>
 </article>
 </main>
+<script src="three3d.js?v=mvti9vmh"></script>
 <script src="app.js"></script>
 </body>
 </html>
