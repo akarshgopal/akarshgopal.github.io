@@ -33,14 +33,14 @@ export function network(el) {
   recompute();
   const fig = new Fig(el, {
     label: 'A four-node transmission network. In nodal mode each node has its own price; in zonal mode there is one price and the operator redispatches plants to respect line limits',
-    height: w => w < 600 ? 770 : Math.max(460, Math.min(500, w * 0.52)),
+    height: w => w < 860 ? 770 : Math.max(460, Math.min(500, w * 0.52)),
     animated: true,
     step(dt) {
       st.phase += dt;
       if (st.day && st.playing) { const q0 = Math.floor(st.hour * 4); st.hour = (st.hour + dt * 2) % 24; if (Math.floor(st.hour * 4) !== q0) { hourSl && hourSl.set(Math.floor(st.hour * 4) / 4); recompute(false); upd(); } }
     },
     draw(ctx, w, h) {
-      const narrow = w < 600;
+      const narrow = w < 860; // stacked layout: map above, panel below
       const R = st.res; if (!R || !R.con) { text(ctx, 'no feasible dispatch', 20, 30); return; }
       const nodal = st.mode === 'nodal';
       const map = narrow ? { x: 20, y: 22, w: w - 40, h: 365 } : { x: 16, y: 16, w: w * 0.62, h: h - 32 };

@@ -24,7 +24,7 @@ function moment(p) {
 }
 
 // wide screens show the power-flow strip beside the day chart instead of under it (see .day-pair in style.css)
-const sideBySide = () => typeof matchMedia !== 'undefined' && matchMedia('(min-width: 1000px)').matches;
+const sideBySide = () => typeof matchMedia !== 'undefined' && matchMedia('(min-width: 1220px)').matches;
 export function gridDay(el, opts = {}) {
   const futures = !!opts.futures;
   // Default: a spring Sunday with about the solar Germany now has installed (~110 GW), so midday prices dip below zero.

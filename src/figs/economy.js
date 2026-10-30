@@ -79,7 +79,7 @@ export function unlock(el) {
         if (i % 2 === 0) { ctx.fillStyle = alpha(C.bg, 0.6); ctx.fillRect(0, y, w, rowH); }
         const ly = narrow ? y + rowH / 2 - 3 : y + rowH / 2 - 3;
         text(ctx, g.name, narrow ? 16 : 18, ly, { size: 12.5, weight: 650, color: C.ink });
-        text(ctx, narrow && g.noteN ? g.noteN : g.note, narrow ? 16 : 18, ly + 14, { size: 10, color: C.ink3 });
+        text(ctx, w < 900 && g.noteN ? g.noteN : g.note, narrow ? 16 : 18, ly + 14, { size: 10, color: C.ink3 });
         const vs = `${g.fmt(cost).replace('€', S())} / ${g.per}`;
         if (narrow) text(ctx, vs, vx, ly, { size: 12, weight: 700, color: darken(g.col, 0.3), align: 'right' });
         else {

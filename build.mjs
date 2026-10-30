@@ -16,9 +16,17 @@ cpSync('src/style.css', `${OUT}/style.css`);
 const esc = s => s.replace(/&/g, '&amp;').replace(/</g, '&lt;');
 
 function nav(cur) {
-  // the landing page is the series title; the list holds the nine essays, then the deep dives
-  const items = PAGES.slice(1).map((p, k) => { const i = k + 1; return `<li${p.deep ? ' class="deep"' : ''}><a href="${p.file}"${i === cur ? ' aria-current="page"' : ''}><span class="n">${p.deep ? '+' : i}</span>${esc(p.short)}</a></li>`; }).join('');
-  return `<nav class="series" aria-label="${SERIES_TITLE}: the series"><div class="series-in"><a class="series-title" href="index.html">${SERIES_TITLE}</a><ol>${items}</ol><button id="play-toggle" type="button" aria-pressed="true" title="Pause all animations">❚❚ Pause</button></div></nav><script>(function(){var a=document.querySelector('nav.series [aria-current=page]');if(a){var o=a.closest('ol');if(o.scrollWidth>o.clientWidth)o.scrollLeft=a.offsetLeft-o.offsetLeft-24;}})();</script>`;
+  // left rail on wide screens, a drawer behind a "Series" button on narrower ones (the site-wide pattern)
+  let deepSeen = false;
+  const items = PAGES.slice(1).map((p, k) => {
+    const i = k + 1, cls = p.deep ? (deepSeen ? 'deep' : (deepSeen = true, 'deep deep-first')) : '';
+    return `<li${cls ? ` class="${cls}"` : ''}><a href="${p.file}"${i === cur ? ' aria-current="page"' : ''}><span class="n">${p.deep ? '+' : i}</span>${esc(p.short)}</a></li>`;
+  }).join('');
+  const here = cur === 0 ? 'Start' : PAGES[cur].short;
+  const drawer = `<script>(function(){var n=document.querySelector('nav.series'),b=n&&n.querySelector('.series-toggle'),p=n&&n.querySelector('.series-in'),s=document.querySelector('.series-scrim');if(!b||!p)return;function set(o){n.classList.toggle('open',o);b.setAttribute('aria-expanded',String(o));document.body.classList.toggle('series-open',o);}b.addEventListener('click',function(){set(!n.classList.contains('open'));});if(s)s.addEventListener('click',function(){set(false);});document.addEventListener('keydown',function(e){if(e.key==='Escape')set(false);});var a=n.querySelector('[aria-current=page]');if(a)try{a.scrollIntoView({block:'nearest'});}catch(e){}})();</script>`;
+  return `<nav class="series" aria-label="${SERIES_TITLE}: the series"><button type="button" class="series-toggle" aria-expanded="false" aria-controls="series-panel"><span class="series-toggle-icon" aria-hidden="true">☰</span><span class="series-toggle-label">Series</span><span class="series-here">${esc(here)}</span></button>`
+    + `<div class="series-in" id="series-panel"><a class="series-title" href="index.html">${SERIES_TITLE}</a><ol>${items}</ol></div><button id="play-toggle" type="button" aria-pressed="true" title="Pause all animations">❚❚ Pause</button></nav>`
+    + `<button type="button" class="series-scrim" aria-label="Close the series menu" tabindex="-1"></button>\n${drawer}`;
 }
 function pager(cur) {
   const prev = PAGES[cur - 1], next = PAGES[cur + 1];

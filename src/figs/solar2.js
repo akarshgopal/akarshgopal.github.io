@@ -242,7 +242,7 @@ export function yieldMap(el) {
       const box = narrow ? { l: 48, r: w - 44, t: 34, b: 330 } : { l: 56, r: w * 0.62, t: 34, b: h - 42 };
       const { sx, sy } = axes(ctx, { box, x0: -40, x1: 72, y0: 400, y1: 3200, yticks: [500, 1000, 1500, 2000, 2500, 3000], xticks: [-30, 0, 30, 60], xfmt: v => v === 0 ? '0°' : Math.abs(v) + '°' + (v > 0 ? 'N' : 'S'), yfmt: v => v.toLocaleString('en-US'), ylabel: 'kWh per year from 1 kWp', xlabel: narrow ? '' : 'latitude' });
       for (const v of [500, 1000, 1500, 2000, 2500, 3000]) text(ctx, (v / 8760 * 100).toFixed(0) + '%', box.r + 6, sy(v) + 4, { size: 10.5, color: C.ink3 });
-      text(ctx, 'capacity factor', box.r + 2, box.t - 10, { size: 10.5, color: C.ink3, align: narrow ? 'right' : 'left' });
+      text(ctx, 'capacity factor', box.r + 2, box.t - 10, { size: 10.5, color: C.ink3, align: w < 900 ? 'right' : 'left' });
       geo = { sx, sy, box };
       CITIES.forEach((c, i) => {
         const x = sx(c.lat), sel = i === st.sel || i === st.hover;
