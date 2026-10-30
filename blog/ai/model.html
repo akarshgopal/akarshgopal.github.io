@@ -84,7 +84,7 @@
 
 <p>Drag a weight with a long <b class="c-violet">violet</b> bar and the error moves a lot; drag one with a short bar and it hardly moves. The bars are exactly that sensitivity: raise a weight by 0.1 and the error changes by about a tenth of its blame. The step button uses all six at once. The same idea scales unchanged: a model with a hundred billion weights does one forward pass to get its answers, one backward pass to get a hundred billion blame numbers, and nudges every weight.</p>
 
-<p>The method was found several times. Seppo Linnainmaa described the general way to compute such derivatives backwards through a calculation in his 1970 master’s thesis in Helsinki; Paul Werbos proposed using it to train neural networks in his 1974 Harvard thesis. It became widely known in 1986, when David Rumelhart, Geoffrey Hinton and Ronald Williams showed in <i>Nature</i> that networks trained this way learned useful internal features by themselves.<sup class="fn"><a href="#n4">4</a></sup> They called it back-propagating errors, and the name stuck.</p>
+<p>The method was found several times. Seppo Linnainmaa described the general way to compute such derivatives backwards through a calculation in his 1970 master’s thesis in Helsinki; Paul Werbos sketched using it to train neural networks in his 1974 Harvard thesis and set it out for networks in full in 1982. It became widely known in 1986, when David Rumelhart, Geoffrey Hinton and Ronald Williams showed in <i>Nature</i> that networks trained this way learned useful internal features by themselves.<sup class="fn"><a href="#n4">4</a></sup> They called it back-propagating errors, and the name stuck.</p>
 
 <details class="math"><summary>The maths: the chain rule, backwards</summary>
 <p>For the figure’s network, with hᵢ = tanh(zᵢ), output o = σ(v₁h₁ + v₂h₂) and error E = ½(o − t)², the chain rule gives</p>
@@ -127,7 +127,7 @@
 <li id="n1">W. S. McCulloch and W. Pitts, “A logical calculus of the ideas immanent in nervous activity”, <i>Bulletin of Mathematical Biophysics</i> 5, 115–133 (1943).</li>
 <li id="n2">F. Rosenblatt, “The perceptron: a probabilistic model for information storage and organization in the brain”, <i>Psychological Review</i> 65(6), 386–408 (1958). The July 1958 IBM 704 demonstration, the 50 trials and the <i>New York Times</i> headline are from M. Lefkowitz, <a href="https://news.cornell.edu/stories/2019/09/professors-perceptron-paved-way-ai-60-years-too-soon">“Professor’s perceptron paved the way for AI – 60 years too soon”</a>, Cornell Chronicle, 25 September 2019. Convergence theorem: A. B. J. Novikoff, “On convergence proofs for perceptrons”, Symposium on the Mathematical Theory of Automata (1962).</li>
 <li id="n3">M. Minsky and S. Papert, <i>Perceptrons: An Introduction to Computational Geometry</i>, MIT Press (1969).</li>
-<li id="n4">S. Linnainmaa, master’s thesis, University of Helsinki (1970), on the reverse accumulation of rounding errors; P. J. Werbos, <i>Beyond Regression</i>, PhD thesis, Harvard University (1974); D. E. Rumelhart, G. E. Hinton and R. J. Williams, “Learning representations by back-propagating errors”, <i>Nature</i> 323, 533–536 (1986).</li>
+<li id="n4">S. Linnainmaa, master’s thesis, University of Helsinki (1970), on the reverse accumulation of rounding errors; P. J. Werbos, <i>Beyond Regression</i>, PhD thesis, Harvard University (1974); P. J. Werbos, “Applications of advances in nonlinear sensitivity analysis”, in R. Drenick and F. Kozin (eds.), <i>System Modeling and Optimization</i>, Springer (1982); on the history, J. Schmidhuber, <a href="https://people.idsia.ch/~juergen/who-invented-backpropagation.html">“Who invented backpropagation?”</a>; D. E. Rumelhart, G. E. Hinton and R. J. Williams, “Learning representations by back-propagating errors”, <i>Nature</i> 323, 533–536 (1986).</li>
 <li id="n5">B. T. Polyak, “Some methods of speeding up the convergence of iteration methods”, <i>USSR Computational Mathematics and Mathematical Physics</i> 4(5), 1–17 (1964). G. Goh, <a href="https://distill.pub/2017/momentum/">“Why Momentum Really Works”</a>, <i>Distill</i> (2017): with momentum the ball can overshoot and oscillate across a narrow valley while it speeds up along the floor; how fast it settles depends on the step size, β and the ratio of the valley’s curvatures.</li>
 <li id="n6">H. Robbins and S. Monro, “A stochastic approximation method”, <i>Annals of Mathematical Statistics</i> 22(3), 400–407 (1951).</li>
 <li id="n7">D. P. Kingma and J. Ba, <a href="https://arxiv.org/abs/1412.6980">“Adam: A Method for Stochastic Optimization”</a> (2014; ICLR 2015).</li>
@@ -139,7 +139,7 @@
 <nav class="pager" aria-label="Previous and next in the series"><a class="prev" href="parallel.html"><small>← Previous</small>Parallel: Why GPUs Won</a><a class="next" href="language.html"><small>Next →</small>Language: Tokens to Next Word</a></nav>
 </article>
 </main>
-<script src="three3d.js?v=mvut2yc7"></script>
+<script src="three3d.js?v=mvuvpt9f"></script>
 <script src="app.js"></script>
 </body>
 </html>
