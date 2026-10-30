@@ -96,10 +96,10 @@
 
 <p>In 2014 Dzmitry Bahdanau, Kyunghyun Cho and Yoshua Bengio gave a translation network a way to look back. Instead of squeezing a whole sentence into one memory, at each output word it could glance at every input word and choose which to draw on.<sup class="fn"><a href="#n17">17</a></sup> In 2017 a team mostly at Google went further and dropped the step-by-step memory entirely. Their transformer is built from that glance alone, which they called <b>attention</b>.<sup class="fn"><a href="#n18">18</a></sup></p>
 
-<p>Attention works like a lookup table, but blurred. Every word carries a <b>key</b>, a short list of numbers saying what kind of thing it is, here just two: how much of a creature it is and how much of a place. A word that needs information sends out a <b>query</b> saying what it is looking for. The query is compared with every key, and each match decides how much that word contributes. In “the cat sat on the mat because it was tired”, “it” is looking for a creature, and “tired” confirms it.</p>
+<p>Attention works like a lookup table, but blurred. Every word carries a <b>key</b>, a short list of numbers saying what kind of thing it is, here just two: how much of a creature it is and how much of a place. A word that needs information sends out a <b>query</b> saying what it is looking for. The query is compared with the keys, and each match decides how much that word contributes. In “the tired cat sat on the mat because it”, “it” is looking for a creature: “cat” matches best, and “tired” adds to it. A model trained to predict the next word must not peek at the words it is predicting, so each word may only look at itself and the words before it, a rule called the <b>causal mask</b>.<sup class="fn"><a href="#n18">18</a></sup></p>
 
 <figure class="fig" data-fig="qkv" id="fig-qkv">
-<figcaption><span class="tagline tag-ill">Model</span> Two-number keys for each word, set by hand to show the idea, drawn as grey arrows on the compass; the yellow arrow is the selected word’s query. Each bar is the softmax of the query’s dot product with that word’s key. A real transformer learns keys and queries with hundreds of numbers each, and runs dozens of such lookups side by side in every layer.</figcaption>
+<figcaption><span class="tagline tag-ill">Model</span> Two-number keys for each word, set by hand to show the idea, drawn as grey arrows on the compass; the yellow arrow is the selected word’s query. Each bar is the softmax of the query’s dot product with that word’s key, taken over the selected word and the words before it; later words are greyed out by the causal mask. A real transformer learns keys and queries with hundreds of numbers each, and runs dozens of such lookups side by side in every layer.</figcaption>
 </figure>
 
 <details class="peek" id="peek-transformer" data-level="S3" data-title="One transformer block">
@@ -115,12 +115,12 @@
 
 <p>Point the query towards “a creature” and the bar over “cat” grows; swing it up towards “a place” and “mat” takes over. Shorten the arrow and the attention spreads out evenly; lengthen it and it snaps onto one word. Each word then takes in a weighted mix of the other words’ information, its <b>values</b>, and so comes out of the layer knowing something about its context. “It” leaves knowing it means the cat.</p>
 
-<p>Nothing in this waits for anything else. Every word’s query can be compared with every word’s key at the same moment, which on a GPU is one large multiplication of two tables of numbers, exactly the arithmetic it is built for. Distance does not matter either: the first word is as easy to reach from the fourteenth as the thirteenth is. A transformer stacks many layers of attention, each followed by a small network applied to every word separately. Nearly every large language model since 2018, from GPT and BERT to Llama, is built this way.</p>
+<p>Nothing in this waits for anything else. Every word’s query can be compared with the keys of all the words before it at the same moment, which on a GPU is one large multiplication of two tables of numbers, exactly the arithmetic it is built for. Distance does not matter either: the first word is as easy to reach from the fourteenth as the thirteenth is. A transformer stacks many layers of attention, each followed by a small network applied to every word separately. Nearly every large language model since 2018, from GPT and BERT to Llama, is built this way.</p>
 
 <details class="math"><summary>The maths: scaled dot-product attention</summary>
 <p>Stack the queries, keys and values of all n words into matrices Q, K (n × d) and V. Then</p>
 <p class="eq">Attention(Q, K, V) = softmax(Q Kᵀ / √d) V,</p>
-<p>where softmax turns each row of scores into weights that are positive and sum to 1. Dividing by √d keeps the scores from growing with the number of dimensions; in the figure the arrow’s length plays that role, as a sharpness setting. Q, K and V are each the word vectors multiplied by a learned matrix. The cost grows as n² · d, every word against every word, which is why long contexts are expensive.</p>
+<p>where softmax turns each row of scores into weights that are positive and sum to 1. In a language model the scores of later words are set to −∞ first, the causal mask, so their weights are 0. Dividing by √d keeps the scores from growing with the number of dimensions; in the figure the arrow’s length plays that role, as a sharpness setting. Q, K and V are each the word vectors multiplied by a learned matrix. The cost grows as n² · d, every word against every word, which is why long contexts are expensive.</p>
 </details>
 
 
@@ -194,7 +194,7 @@
 <nav class="pager" aria-label="Previous and next in the series"><a class="prev" href="model.html"><small>← Previous</small>A Model Is a Function You Can Tune</a><a class="next" href="scaling.html"><small>Next →</small>Scaling: The Bet That Loss Is Predictable</a></nav>
 </article>
 </main>
-<script src="three3d.js?v=mvti9vmh"></script>
+<script src="three3d.js?v=mvut2yc8"></script>
 <script src="app.js"></script>
 </body>
 </html>

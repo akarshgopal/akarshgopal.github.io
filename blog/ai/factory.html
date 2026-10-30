@@ -63,10 +63,10 @@
 <p>For water, c ≈ 4,180 J/(kg·K) and 1 L/min ≈ 0.0166 kg/s. A 700 W H100 at 1 L/min rises by about 10 °C; a 120 kW rack at 50 L/min rises by about 34 °C. The same ΔT in air needs roughly 3,500 times the volume flow, because water’s ρ c is that much larger per litre.</p>
 </details>
 
-<p>Follow the same die and plate one step further. Warm water leaves the plate, crosses a <b class="c-cyan">CDU</b> or heat exchanger, and the heat is rejected outdoors — cooling towers or dry coolers. That facility loop is still schematic here; the next figure sizes its share of the bill as PUE.</p>
+<p>Follow the same die and plate one step further. Warm coolant leaves the plate for a <b class="c-cyan">CDU</b>, a heat exchanger, and comes back cooled; that closed circuit is the technology cooling loop (TCS). On the far side of the exchanger a second loop of facility water (FWS) carries the heat outdoors to cooling towers or dry coolers and returns cooled in turn. That facility loop is still schematic here; the next figure sizes its share of the bill as PUE.</p>
 
 <figure class="fig" data-fig="heatLoop" id="fig-heatLoop">
-<figcaption><span class="tagline tag-ill">Model</span> Heat path reusing the cold-plate object: <span class="c-orange">die</span> → <span class="c-cyan">plate</span> → <span class="c-blue">CDU</span> → <span class="c-green">outdoor reject</span>, with a warm return. Layout is schematic, not a site drawing. </figcaption>
+<figcaption><span class="tagline tag-ill">Model</span> Heat path reusing the cold-plate object: <span class="c-orange">die</span> → <span class="c-cyan">plate</span> → <span class="c-blue">CDU</span> → <span class="c-green">outdoor reject</span>. The die conducts into the plate; two loops share the CDU, TCS on the server side and FWS on the facility side, each with a <span class="c-orange">warm</span> outbound leg and a <span class="c-cyan">cooled</span> return. Layout is schematic, not a site drawing. </figcaption>
 </figure>
 
 <h2 id="pue" data-level="H1"><span class="num">3</span>The overhead</h2>
@@ -82,9 +82,9 @@
 <details class="peek" id="peek-powerchain" data-level="H2" data-title="The power chain">
 <summary>Look inside: <b>from the grid down to the die</b></summary>
 <div class="peek-body">
-<p>A watt crosses a site transformer, a UPS, a server power supply and a voltage regulator before it reaches the silicon. Each step loses a few percent as heat. Stacked, they are much of the PUE overhead above 1.0 — and why “chip watts” understate what the meter sees.</p>
+<p>A watt crosses a site transformer, a UPS, a server power supply and a voltage regulator before it reaches the silicon. Each step loses a few percent as heat. PUE is metered at the servers’ plugs, so only the transformer and UPS count as overhead; the power supply and regulator, the two biggest losses, are filed as IT load. The bulk of the overhead is cooling, which sits beside the chain rather than in it. Either way, “chip watts” understate what the meter sees.</p>
 <figure class="fig" data-fig="powerChain" id="fig-powerChain">
-<figcaption><span class="tagline tag-ill">Model</span> Round-number stage losses; real sites vary. The megawatt-hour figure above sizes the same overhead as one number.</figcaption>
+<figcaption><span class="tagline tag-ill">Model</span> Round-number stage losses; real sites vary. Cooling and the rest is whatever PUE leaves after the transformer and UPS, for PUE between the two reported values.<sup class="fn"><a href="#n7">7</a></sup> The megawatt-hour figure above sizes the same overhead as one number.</figcaption>
 </figure>
 </div>
 </details>
@@ -177,7 +177,7 @@
 <nav class="pager" aria-label="Previous and next in the series"><a class="prev" href="demand.html"><small>← Previous</small>The Demand: Who Asks, How Often?</a><a class="next" href="orbital.html"><small>Next →</small>Orbital Compute: Is Space the Only Answer?</a></nav>
 </article>
 </main>
-<script src="three3d.js?v=mvti9vmj"></script>
+<script src="three3d.js?v=mvut2yc9"></script>
 <script src="app.js"></script>
 </body>
 </html>
