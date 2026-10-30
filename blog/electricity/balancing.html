@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Balancing the Grid: Fifty Hertz and the Markets That Keep It · Why Did Electricity Stop Getting Cheaper?</title>
+<meta name="description" content="How a grid stays at fifty (or sixty) hertz second by second, how the merit order decides which plants run and lets the last plant needed set the price for all, and how markets work in time and in space, with a real day on the Texas grid.">
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<nav class="series" aria-label="Why Did Electricity Stop Getting Cheaper?: the series"><button type="button" class="series-toggle" aria-expanded="false" aria-controls="series-panel"><span class="series-toggle-icon" aria-hidden="true">☰</span><span class="series-toggle-label">Series</span><span class="series-here">Balance</span></button><div class="series-in" id="series-panel"><a class="series-title" href="index.html">Why Did Electricity Stop Getting Cheaper?</a><ol><li><a href="cheaper.html"><span class="n">1</span>Cheaper, then not</a></li><li><a href="kilowatt-hour.html"><span class="n">2</span>A kilowatt-hour</a></li><li><a href="the-machine.html"><span class="n">3</span>The machine</a></li><li><a href="transmission.html"><span class="n">4</span>Wires</a></li><li><a href="balancing.html" aria-current="page"><span class="n">5</span>Balance</a></li><li><a href="solar-pv.html"><span class="n">6</span>Solar</a></li><li><a href="utility-renewables.html"><span class="n">7</span>Wind</a></li><li><a href="price.html"><span class="n">8</span>Costs</a></li><li><a href="futures.html"><span class="n">9</span>Cheaper again?</a></li><li class="deep deep-first"><a href="transformers.html"><span class="n">+</span>Transformers</a></li><li class="deep"><a href="synthetic-fuels.html"><span class="n">+</span>Fuels</a></li></ol></div><button id="play-toggle" type="button" aria-pressed="true" title="Pause all animations">❚❚ Pause</button></nav><button type="button" class="series-scrim" aria-label="Close the series menu" tabindex="-1"></button>
+<script>(function(){var n=document.querySelector('nav.series'),b=n&&n.querySelector('.series-toggle'),p=n&&n.querySelector('.series-in'),s=document.querySelector('.series-scrim');if(!b||!p)return;function set(o){n.classList.toggle('open',o);b.setAttribute('aria-expanded',String(o));document.body.classList.toggle('series-open',o);}b.addEventListener('click',function(){set(!n.classList.contains('open'));});if(s)s.addEventListener('click',function(){set(false);});document.addEventListener('keydown',function(e){if(e.key==='Escape')set(false);});var a=n.querySelector('[aria-current=page]');if(a)try{a.scrollIntoView({block:'nearest'});}catch(e){}})();</script>
+<main>
+<article>
+<header class="top">
+<h1>Balancing the Grid: Fifty Hertz and the Markets That Keep It</h1>
+<p class="byline">Essay 5 of 9 · by Akarsh Gopal · October 2026</p>
+</header>
+
+<p class="lede">The grid stores almost no energy. Every second, the power going in must match the power coming out, across a whole continent, and the only buffer is the spin of the generators themselves.</p>
+
+<p>We now have <a class="xref" href="the-machine.html">the machine</a> and <a class="xref" href="transmission.html">the wires</a>. This essay asks who decides, from moment to moment, which machines run, and what everyone pays for it. In the first seconds the answer is physics. Over hours it is a rule, the merit order, and that rule is the third piece of our answer: the price of electricity is set by the last plant needed, so when its fuel gets dearer, every kilowatt-hour does.</p>
+
+<ol class="toc">
+<li><a href="#s5"><span class="n">1</span>Fifty hertz, or sixty</a></li>
+<li><a href="#grid-forming"><span class="n">2</span>Grid-forming inverters</a></li>
+<li><a href="#s7"><span class="n">3</span>The merit order: the last plant sets the price</a></li>
+<li><a href="#s6"><span class="n">4</span>A day on the grid</a></li>
+<li><a href="#s8"><span class="n">5</span>Markets in time</a></li>
+<li><a href="#s9"><span class="n">6</span>Markets in space</a></li>
+<li><a href="#notes"><span class="n">·</span>Notes and sources</a></li>
+</ol>
+
+<h2 id="s5"><span class="num">1</span>Fifty hertz, or sixty</h2>
+
+<p>Continental Europe, from Portugal to Turkey, is a single synchronous machine. So is India, whose regional grids were joined into one in 2013, and so is the eastern two-thirds of North America. Texas runs its own, kept deliberately apart from its neighbours. In each of these areas, thousands of generators like the one in <a class="xref" href="the-machine.html#fig-threePhase">essay 3</a> turn in lockstep, their magnetic fields locked to each other through the wires.</p>
+
+<p>At every instant, generation must equal consumption plus losses. When they differ, the difference comes, in the first seconds, from the only store there is: the kinetic energy of all those spinning rotors. If consumption wins, the rotors slow and the frequency falls. Frequency is therefore a live measurement of balance across the whole area, reported by every socket. Europe, India and China run at 50 Hz; the United States, Canada and most of the Americas at 60 Hz. The physics is the same at either; the model below runs at 50.<sup class="fn"><a href="#n1">1</a></sup></p>
+
+<figure class="fig showpiece" data-fig="frequency" id="fig-frequency">
+<figcaption><span class="tagline tag-ill">Model</span> A simplified 300 GW synchronous area at 50 Hz, with parameters chosen to resemble Continental Europe; not a grid operator’s model. The rotors are drawn under a strobe flashing 50 times a second, so at exactly 50 Hz they look frozen and below it they drift backwards.<sup class="fn"><a href="#n1">1</a></sup></figcaption>
+</figure>
+
+<p>The figure opens as one large power station, a gigawatt, drops off the grid without warning. The rotors slip, the frequency dips, and the reserves catch it well clear of trouble. Several things happen, on different clocks.</p>
+
+<p><b>In the first instant</b>, nothing but physics responds. The missing power is drawn from the rotating mass of every machine on the grid, and the frequency starts to fall at a rate set by how much rotating mass there is: the <span class="c-freq">inertia</span>. Some <b>load relief</b> appears on its own, because many motors draw slightly less power when they turn slightly slower.</p>
+
+<p><b>Within seconds</b> the <b>primary reserve</b> wakes up. Selected plants and batteries measure frequency locally and raise output in proportion to the deviation, with no instruction from anyone. The fall stops at the <i>nadir</i>, about 49.92 Hz in this model (49.76 Hz for the 3 GW design incident). By design, primary reserve only holds the frequency at a new, slightly low level.</p>
+
+<p><b>Over minutes</b>, the <b>secondary reserve</b> takes over. A controller at the grid operator sees the persistent error and dispatches more generation until the frequency is back at exactly 50.000 Hz, freeing the primary reserve for the next incident. After fifteen minutes or so, slower reserves and the market replace the lost plant for good.</p>
+
+<p>Continental Europe is designed to survive the sudden loss of three gigawatts, roughly two large nuclear units. Losing fifteen is far beyond the design case. Primary reserve is overwhelmed, the frequency falls through 49.0 Hz, and automatic relays disconnect slices of customers so the rest can survive. That is how Europe survived its split in November 2006, when a line switching in northern Germany cascaded into three islands.</p>
+
+<p>Texas came closer in February 2021. During Winter Storm Uri, frozen gas supply and frozen plants took so much generation off its small synchronous grid that the frequency fell to about 59.3 Hz, and operators cut demand by up to 20 GW to hold it there. The grid survived; millions of homes went without power for days in freezing weather, and more than two hundred people died.<sup class="fn"><a href="#n2">2</a></sup> Reserves catch a lost plant. They cannot catch a fleet that fails together.</p>
+
+<h2 id="grid-forming"><span class="num">2</span>Grid-forming inverters</h2>
+
+<p>Large spinning machines provide <span class="c-freq">inertia</span> for free. Wind, solar and batteries connect through power electronics instead, and most of those inverters today are <b>grid-following</b>: they measure the grid’s voltage and frequency and inject current to match, like a dancer following a partner. They add no inertia, so as they replace coal and gas, a trip like the one in <a class="xref" href="#fig-frequency">section 1</a> makes the frequency fall faster and deeper. A <b>grid-forming</b> inverter sets its own voltage and frequency and pushes back at once when the grid moves, much like a synchronous machine, provided it has stored energy to draw on, typically a battery.</p>
+
+<figure class="fig" data-fig="gridForming" id="fig-gridForming">
+<figcaption><span class="tagline tag-ill">Model</span> Frequency after a 1 GW plant trips in a 30 GW system, by share of inverter-based output and how much of it is grid-forming.<sup class="fn"><a href="#n3">3</a></sup> Illustrative numbers, not a particular grid.</figcaption>
+</figure>
+
+<p>As the inverter share rises with no grid-forming plant, the fall steepens and deepens; past a point the frequency hits the load-shedding threshold before reserves respond. Add grid-forming capacity, or batteries that inject power within a second, and stability returns, mostly without fuel. That is why Britain and Australia, with high wind and solar shares on smallish grids, buy inertia (some of it from synchronous condensers, spinning machines that generate nothing) and grid-forming capability, and why grid codes increasingly demand it.</p>
+
+<p>Spinning machines also held <em>voltage</em> steady for free, by absorbing and supplying reactive power. On 28 April 2025, mainland Spain and Portugal blacked out within seconds. ENTSO-E’s expert panel found no single cause: oscillations earlier that day, too little dynamic voltage control and renewable plants set not to respond to voltage, among other weaknesses, let voltage climb until plants tripped in a cascade, Europe’s first overvoltage blackout. Its main recommendation is to require new generators, wind and solar included, to control voltage actively.<sup class="fn"><a href="#n4">4</a></sup> The inverters can do it; until recently the rules did not ask them to.</p>
+
+<h2 id="s7"><span class="num">3</span>The merit order: the last plant sets the price</h2>
+
+<p>Frequency tells the grid, second by second, whether supply matches demand. Most of that matching is arranged in advance. Which plants should run tomorrow at six in the evening? In most liberalised markets, from Europe’s day-ahead auction to Texas and Australia, every generator submits, for every hour (or quarter-hour) of tomorrow, how much it is willing to produce at what price, and every buyer submits how much it wants to buy. An algorithm stacks the offers from cheapest to dearest, the <b>merit order</b>, and finds where supply meets demand.<sup class="fn"><a href="#n5">5</a></sup></p>
+
+<p>What does a plant offer? In a competitive market, roughly its <b>short-run marginal cost</b>: what one more megawatt-hour costs it to make right now. For wind and solar that is close to zero, since the fuel is free (below zero for plants paid a subsidy whatever the price); for nuclear it is low; for a fossil plant it is mostly fuel, plus carbon permits where carbon is priced. A model grid’s offers for one hour, in the order they arrived:</p>
+
+<figure class="fig" data-fig="meritStack" id="fig-meritStack">
+<figcaption><span class="tagline tag-ill">Model</span> One hour of offers from an illustrative fleet.<sup class="fn"><a href="#n6">6</a></sup></figcaption>
+</figure>
+
+<p>Sorted cheapest first, the offers form a staircase: the supply curve. Demand is a vertical line, how much the grid needs this hour. Every plant to the left of it runs; every plant to the right waits. And everyone who runs is paid the same price, the offer of the last plant needed. This is <b>uniform pricing</b>, or pay-as-clear. When demand crosses the edge of a block, the price jumps, not just for the extra megawatt-hours but for all of them.</p>
+
+<p>Why not pay each plant what it bid? Because then nobody would bid their real cost. A wind farm that expects gas to set the price would bid just under it, and so would everyone else: roughly the same price, but with everyone guessing and dearer plants sometimes running ahead of cheaper ones. Pay-as-clear makes bidding your true cost the sensible strategy.</p>
+
+<p>Now let the wind blow. A wind farm’s offer sits at the bottom of the stack, so more wind does not add a block at the top: it widens a block at the bottom and pushes every other plant to the right.</p>
+
+<figure class="fig" data-fig="meritWind" id="fig-meritWind">
+<figcaption><span class="tagline tag-ill">Model</span> The same hour and fleet, with <span class="c-wind">wind</span> output as a handle on the chart. The readout compares the price with what it would be with no wind at all.</figcaption>
+</figure>
+
+<p>The demand line now crosses the staircase lower down, at a cheaper plant. This is the <b>merit-order effect</b>: wind and solar lower the price in the hours they produce, for everyone who sells in those hours, themselves included.</p>
+
+<p>Last, the fuel. A fossil plant’s height is its fuel price divided by its efficiency, plus the carbon price times its emissions. Lignite burns cheap fuel but emits about twice as much CO₂ per unit of heat as gas, so its block climbs steeply with the carbon price. The full market, with both prices:</p>
+
+<figure class="fig showpiece sticky-canvas" data-fig="merit" id="fig-merit">
+<figcaption><span class="tagline tag-ill">Model</span> The same illustrative market with fuel and carbon prices. Height is running cost: fuel price ÷ efficiency, plus CO₂ price × emissions ÷ efficiency, plus variable costs. Hatched blocks are subsidised renewables that bid below zero. The model grid has a carbon price and some wind and solar on fixed tariffs, as in much of Europe; the other presets rescale the same fleet to the 2025 mix of coal-, gas-, hydro- and solar-heavy regions.<sup class="fn"><a href="#n6">6</a></sup> Mechanisms, not calibrated models of any country.</figcaption>
+</figure>
+
+<p>At low carbon prices lignite and coal undercut <span class="c-gas">gas</span>; as carbon rises, gas slides ahead of coal, while lignite climbs fastest. This <i>fuel switch</i> is how a carbon price changes what burns, hour by hour.</p>
+
+<p>Now raise the gas price and watch what does <em>not</em> change. The wind farms, the nuclear units, the coal plants: none of their costs move. But as long as a gas plant is the last one needed, the price paid to all of them rises by the full amount. A fuel that supplies a fraction of the energy sets the price of all of it. With gas at around $170 per megawatt-hour of heat, where it stood in Europe for much of 2022, the marginal plant in most hours was gas-fired, and its cost set the price for everyone, including wind farms whose costs hadn’t changed at all.</p>
+
+<p>Every plant below the marginal one is paid the clearing price but spends only its own running cost. The gap, its <i>infra-marginal rent</i>, is normally how plants with low running costs pay back the cost of building them. In 2022 the rents were extraordinary, and governments taxed them.</p>
+
+<p>The same rule, in a cruder form, is why 1973–74 hit so hard. American utilities then were regulated monopolies, not markets, and charged customers their average cost rather than the last plant’s. But they too dispatched their plants cheapest first, and most passed fuel costs straight into bills through <i>fuel-adjustment clauses</i>. When the price of oil quadrupled and other fuels rose with it, the increase reached every kilowatt-hour within months.<sup class="fn"><a href="#n7">7</a></sup> <a class="xref" href="futures.html">Essay 9</a> sets that shock beside the stalled engine of essay 3.</p>
+
+<p>One more thing the merit order does not do: pay for being there. A peaker needed fifty hours a year earns only in those hours, and a plant kept for the coldest night of the decade may earn nothing for years. Reliability is bought separately. Texas lets the price rise as high as $5,000/MWh in the scarcest hours and leaves it to those hours to pay for spare capacity (an “energy-only” market); PJM in the eastern US and Britain hold auctions that pay plants to be available years ahead; regulated utilities build to a reserve margin and put the cost in the tariff.<sup class="fn"><a href="#n8">8</a></sup> Either way, the cost of firm capacity sits beside the energy price, not inside it. It is one of the costs that <a class="xref" href="price.html">essay 8</a> adds up.</p>
+
+<h2 id="s6"><span class="num">4</span>A day on the grid</h2>
+
+<p>Zoom out from one hour to a whole day and the balancing problem changes. Demand has a shape: low at night, a morning ramp, a working-day plateau, an early-evening peak. Solar is a hump at noon and wind wanders over hours and days. Whatever they don’t cover, something else must: the <b>residual load</b>, demand minus wind and solar.</p>
+
+<figure class="fig showpiece" data-fig="gridDay" id="fig-gridDay">
+<figcaption><span class="tagline tag-ill">Model</span> A synthetic spring Sunday on the model grid of the previous section, without nuclear, cleared every 15 minutes by its merit order. Demand, wind and solar are stylised, not measured; pale dashed areas are curtailed. The strip beside it (below, on a phone) shows where the chosen moment’s power comes from and where it goes.</figcaption>
+</figure>
+
+<p>The figure opens at 13:00 with 110 GW of solar panels installed, more than twice the Sunday demand. The residual load has all but vanished, the price sits below zero, and some wind and solar is switched off because nobody can use it. As the sun sets, the residual load ramps steeply back up, the thermal plants return, and the evening price climbs to what gas costs. With less solar installed, the noon price recovers.</p>
+
+<p>The shapes in the model are stylised, but they are not invented. The Texas grid operator, ERCOT, reports its output hour by hour to the US Energy Information Administration, and three days from that record show the same pattern on a real grid of about the same size.</p>
+
+<figure class="fig showpiece" data-fig="ercotDay" id="fig-ercotDay">
+<figcaption><span class="tagline tag-real">Data</span> Hourly generation by source on the Texas grid (ERCOT), stacked cheapest-to-run first, against demand (solid line) and demand minus wind and solar (dashed). Battery charging is drawn below zero; while batteries charge, generation runs above demand. Three days: a spring Sunday with among the highest wind and solar shares in the record, the highest-demand hour from January 2024 to September 2026, and the winter peak of 2025. Central time.<sup class="fn"><a href="#n9">9</a></sup></figcaption>
+</figure>
+
+<p>On Sunday 22 March 2026, wind and solar supplied 63 per cent of Texas’s electricity over the day and 85 per cent of it at ten in the morning. Batteries soaked up part of the morning surplus and returned it at sunset, when gas generation more than doubled to follow the dashed line back up. On 22 July demand reached 91 GW, and after sunset batteries supplied 11 GW, about an eighth of demand. On a cold February morning in 2025 the peak came before sunrise, and gas carried it. Whenever gas is the last plant needed, as it is through these evenings, its fuel sets the price for every megawatt-hour in Texas.</p>
+
+<p>California named the shape. Its grid operator, CAISO, drew the <i>duck curve</i> in 2013: a midday belly of net demand that deepens every year, then a steep evening neck. In 2024 it curtailed 3.4 TWh of wind and solar, almost all of it solar and most of it in spring, when sunshine is strong and air conditioners are off.<sup class="fn"><a href="#n10">10</a></sup></p>
+
+<p>Negative prices are not a glitch either. Germany’s day-ahead market had 573 negative hours in 2025, up from 457 the year before.<sup class="fn"><a href="#n11">11</a></sup> Some producers are paid per kilowatt-hour whatever the market price (many older solar panels are on fixed feed-in tariffs), and some plants are expensive to stop and restart. Both will pay to keep producing.</p>
+
+<p>The noon dip has an awkward consequence for solar itself. Every panel produces in the same hours as every other panel, so the more there are, the lower the price in exactly those hours, and the less each new panel earns. <a class="xref" href="solar-pv.html#capture">Essay 6</a> measures that fall for solar and <a class="xref" href="utility-renewables.html#cannibalisation">essay 7</a> for wind: the engine that makes energy cheaper also makes cheap energy worth less.</p>
+
+<aside class="deepdive">What a flat 24-hour load, like a training cluster, does to this day is in the AI series’ <a class="xref" href="../ai/factory.html#flat">AI Factory</a>.</aside>
+
+<h2 id="s8"><span class="num">5</span>Markets in time</h2>
+
+<p>The day-ahead auction clears once, around noon, for all of tomorrow. But tomorrow is uncertain. A wind portfolio that sold 9 GW for 18:00 may learn by morning that the wind will be weaker than forecast.</p>
+
+<p>So electricity is traded in a sequence of markets, each closer to real time.<sup class="fn"><a href="#n12">12</a></sup> The <b>day-ahead auction</b> sets most of tomorrow’s schedule and the price quoted in the news. The <b>intraday market</b> lets traders adjust as forecasts improve, until shortly before delivery. After that, the grid operator activates <b>balancing reserves</b> and charges each party an <b>imbalance price</b> for its error. Follow one portfolio’s hour through them:</p>
+
+<figure class="fig" data-fig="timeline" id="fig-timeline">
+<figcaption><span class="tagline tag-ill">Model</span> One delivery hour seen from the day before. The blue band is a synthetic wind forecast for 18:00–19:00 on day D, narrowing as delivery approaches; the book below shows what the portfolio has sold in each market.</figcaption>
+</figure>
+
+<p>American markets, ERCOT among them, organise the same physics differently: a day-ahead market, then a <b>real-time market</b> that clears every five minutes, whose price settles every deviation from the day-ahead schedule.<sup class="fn"><a href="#n13">13</a></sup> Same problem, different labels.</p>
+
+<p>Two extremes bracket everything else. On a sunny, windy holiday the market is oversupplied and prices go negative, in Europe down to the auction floor of about −$570/MWh at worst. In a cold, dark, windless week almost every plant is needed, and the price is set by the dearest peakers, or by what buyers will accept to stop consuming. Both kinds of hours are becoming more frequent, and a market of mostly zero-cost wind and solar is increasingly decided by them. We return to <a class="xref" href="futures.html#the-dark-week">the dark week</a> in essay 9.</p>
+
+<h2 id="s9"><span class="num">6</span>Markets in space</h2>
+
+<p>The merit order treats the grid as a copper plate; <a class="xref" href="transmission.html#congestion">essay 4</a> showed it isn’t. Cheap power gets stuck behind a full line, and operators pay to work around it. Once a line fills, one price no longer fits the whole network.</p>
+
+<figure class="fig showpiece" data-fig="network" id="fig-network">
+<figcaption><span class="tagline tag-ill">Model</span> A four-node network solved with a DC power-flow approximation and a small linear program that minimises generation cost within the line limits. Generator costs and capacities are illustrative.</figcaption>
+</figure>
+
+<p>The figure opens in <b>nodal</b> mode, with the northern <span class="c-wind">wind</span> just high enough to fill the West–South line, so the four prices have already split. One notch less wind and they merge; more, and they fork further: power is trapped in the north, where wind is curtailed and the price can fall to zero, and scarce in the south, where a local peaker must run. These <b>locational marginal prices</b> show where new generation, storage or demand is worth most. This is how ERCOT and the other large US markets work, with a price at every one of thousands of nodes.<sup class="fn"><a href="#n14">14</a></sup> What loads pay beyond what generators receive is the operator’s <i>congestion rent</i>.</p>
+
+<p>Switch to <b>zonal</b>, which is how Europe, Australia’s NEM and Japan work. Germany and Luxembourg form one bidding zone with one price, from the North Sea coast to the Alps. The market clears as if the grid were a copper plate, the resulting flows break the line limits, and the operators fix them afterwards by <a class="xref" href="transmission.html#congestion"><b>redispatch</b></a>. Its cost never shows up in the wholesale price; it is spread over everyone’s network charges, one of the ways the cost of the energy transition has moved into the regulated part of the bill.</p>
+
+<p>Neither system is free. Nodal pricing is efficient but makes customers in some places pay more; zonal pricing keeps one price but hides the cost of the grid in a shared charge and blunts the signal for where to build. Splitting Germany into a northern and a southern zone is one of the live debates of European market design; for now Berlin has chosen one zone and more lines.</p>
+
+<p>Most of the world’s electricity is not sold on a spot exchange at all. In India, state distribution companies buy most of their power under long-term contracts and schedule their contracted plants cheapest first by running cost, a merit order without an auction; power exchanges, the largest of them IEX, clear a smaller share in day-ahead and real-time auctions much like Europe’s. China’s provincial dispatch centres long gave each coal plant a roughly equal quota of operating hours rather than running the cheapest first. Reforms since 2015 have moved more power to contracts and, since 2017, to provincial spot markets that clear by merit order, starting with pilots such as Guangdong and Shanxi.<sup class="fn"><a href="#n8">8</a></sup></p>
+
+<figure class="fig" data-fig="marketDesigns" id="fig-marketDesigns">
+<figcaption><span class="tagline tag-real">Data</span> A simplified classification of how electricity systems are organised, with examples. Many countries mix models (India has exchanges, China is adding provincial spot markets). Price caps: ERCOT’s high system-wide offer cap and the AEMC’s NEM market price cap for 2025–26.<sup class="fn"><a href="#n8">8</a></sup></figcaption>
+</figure>
+
+<p>Whatever the design, the rule underneath is the same: the last plant needed sets the price, so the price follows its fuel, while being there for the worst hour is paid for some other way. For most of the twentieth century the last plant needed burned coal, oil or gas. <a class="xref" href="solar-pv.html">Essay 6</a> follows a plant whose running cost is zero and whose building cost has fallen faster than anything since the steam turbine: the engine restarts, with solar.</p>
+
+
+<h2 id="notes">Notes and sources</h2>
+<ol class="notes">
+<li id="n1">In the model, primary reserve delivers its full ±3 GW at a 200 mHz deviation, secondary reserve slowly restores 50 Hz, and below 49.0 Hz automatic load shedding disconnects blocks of customers; Europe’s rules allow at most 800 mHz of instantaneous deviation. North America, most of South America, Saudi Arabia, Korea, Taiwan and western Japan run at 60 Hz; Europe, India, China, most of Africa and Australia at 50 Hz. India’s southern grid was synchronised with the rest of the country in December 2013 (Grid Controller of India). Frequency containment, restoration and replacement reserves (FCR, aFRR, mFRR) and the Continental Europe reference incident are defined in the EU system operation guideline administered by ENTSO-E: <a href="https://www.entsoe.eu/">entsoe.eu</a>. Live data: <a href="https://transparency.entsoe.eu/">ENTSO-E Transparency Platform</a>. The simulation’s inertia, damping and controller gains are simplified.</li>
+<li id="n2">FERC, NERC and Regional Entity Staff, <i>The February 2021 Cold Weather Outages in Texas and the South Central United States</i> (November 2021): frequency, load shed and causes of the generation outages; deaths: Texas Department of State Health Services, final count of deaths related to the February 2021 winter storm.</li>
+<li id="n3">Frequency model: synchronous generators contribute an inertia constant of 5 s, grid-forming inverters a virtual 4 s, grid-following inverters nothing. Frequency containment reserve of 1.5 GW is fully active at 200 mHz, ramping over about 20 s (Continental Europe requires full activation within 30 s); load falls about 2 per cent per hertz; optional fast frequency response delivers 0.6 GW within a second.</li>
+<li id="n4">ENTSO-E Expert Panel, <a href="https://www.entsoe.eu/publications/blackout/28-april-2025-iberian-blackout/"><i>Grid incident in Spain and Portugal on 28 April 2025 — Final report</i></a>.</li>
+<li id="n5">EPEX SPOT, “Basics of the power market”, <a href="https://www.epexspot.com/en/basicspowermarket">epexspot.com</a>. The coupled European day-ahead auction (SDAC) runs the Euphemia algorithm; the harmonised price floor is −€500/MWh, about −$570/MWh.</li>
+<li id="n6">The fleet and its regional presets: the model grid has no nuclear, a carbon price at the EU ETS level (about $85/t, its 2025 level) and part of its wind and solar on fixed tariffs. The other presets rescale the same fleet to the 2025 generation mix of coal-heavy (India, China), gas-heavy (Texas, the Gulf), hydro-heavy (Brazil, Norway) and solar-heavy (California, Australia) regions (Ember, note 15), with no carbon price. World Bank, <a href="https://thedocs.worldbank.org/en/doc/74e8be41ceb20fa0da750cda2f6b9e4e-0050012026/related/CMO-Pink-Sheet-April-2026.pdf">Commodity Markets “Pink Sheet”</a>, 2025 annual averages: US natural gas (Henry Hub) $3.53/MMBtu, Europe (TTF) $11.96, Japan LNG $12.04, Australian coal $108.4/t. The merit-order model works in euros at the ECB 2025 average of US$1.13/€ and displays US dollars; coal at 6,000 kcal/kg. The “2025 gas price” in the readout is the preset’s.</li>
+<li id="n7">On fuel-adjustment clauses and the 1970s: Richard F. Hirsh, <i>Technology and Transformation in the American Electric Utility Industry</i> (Cambridge University Press, 1989), and Paul L. Joskow, “Inflation and Environmental Concern: Structural Change in the Process of Public Utility Price Regulation”, <i>Journal of Law and Economics</i> 17 (1974).</li>
+<li id="n8">ERCOT system-wide offer cap of US$5,000/MWh (PUCT, 2023); NEM market price cap A$20,300/MWh for 2025–26: AEMC, <a href="https://www.aemc.gov.au/news-centre/media-releases/aemc-updates-market-price-cap-2025-26">“AEMC updates market price cap for 2025-26”</a> (27 February 2025); PJM Reliability Pricing Model and the GB Capacity Market. India: Ministry of Power, merit order despatch portal (MERIT), and Indian Energy Exchange. China: “Opinions on Further Deepening the Reform of the Electric Power System” (State Council Document No. 9, 2015), NDRC and NEA spot-market pilots (2017); IEA, <a href="https://www.iea.org/reports/electricity-market-report-2023">Electricity Market Report</a>.</li>
+<li id="n9">US EIA, Form EIA-930 Hourly Electric Grid Monitor, balancing authority ERCO, net generation by energy source, demand and interchange, via Catalyst Cooperative PUDL (downloaded October 2026). Hourly energy in MWh is the average power over the hour. Battery charging and discharging are reported separately from October 2024; “other” (hydro, biomass, oil) and net imports over the DC ties are a few hundred megawatts and are drawn together. The record searched runs from January 2024 to September 2026. EIA-930 has no prices. Data file: <code>scripts/make_ercot_data.py</code>.</li>
+<li id="n10">US EIA, <a href="https://www.eia.gov/todayinenergy/detail.php?id=65364">Solar and wind power curtailments are increasing in California</a> (2025), from CAISO curtailment reports; CAISO, <a href="https://www.caiso.com/about/our-business/managing-the-evolving-grid">Managing the evolving grid</a> (the duck curve).</li>
+<li id="n11">FfE, “German electricity prices on EPEX Spot 2024”, <a href="https://www.ffe.de/en/publications/german-electricity-prices-on-epex-spot-2024/">ffe.de</a>, and “… in 2025”, <a href="https://www.ffe.de/en/publications/german-electricity-prices-on-the-epex-spot-exchange-in-2025/">ffe.de</a>; Bundesnetzagentur SMARD, day-ahead price DE-LU (filter 4169), <a href="https://www.smard.de/en/marketdata">smard.de</a>.</li>
+<li id="n12">EPEX SPOT (note 5); Bundesnetzagentur and SMARD: <a href="https://www.smard.de/">smard.de</a>; ACER: <a href="https://www.acer.europa.eu/">acer.europa.eu</a>. The forecast fan in the timeline figure is synthetic.</li>
+<li id="n13">FERC, <i>Energy Primer</i>, <a href="https://ferc.gov/sites/default/files/2020-05/energy-primer.pdf">ferc.gov (PDF)</a>; <a href="https://www.ferc.gov/understanding-energy-markets">Understanding energy markets</a>.</li>
+<li id="n14">FERC, <i>Energy Primer</i> (note 13), on locational marginal pricing in the US organised markets; ERCOT moved from a zonal to a nodal market in December 2010. Redispatch and congestion management in Germany: <a href="https://www.bundesnetzagentur.de/">Bundesnetzagentur</a>; on zonal and nodal design and the German bidding-zone debate, see ACER (note 12).</li>
+<li id="n15">Ember, <a href="https://ember-energy.org/data/yearly-electricity-data/">Yearly Electricity Data</a> (global release, downloaded 10 October 2026, CC BY 4.0): generation by source and demand for every country and Ember region, 2000–2025.</li>
+</ol>
+<nav class="pager" aria-label="Previous and next in the series"><a class="prev" href="transmission.html"><small>← Previous</small>Wires: The Network That Decides What Gets Built</a><a class="next" href="solar-pv.html"><small>Next →</small>Solar: The Engine Restarts</a></nav>
+</article>
+</main>
+<script src="series.js"></script>
+</body>
+</html>
