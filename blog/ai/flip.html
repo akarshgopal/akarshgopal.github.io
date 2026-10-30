@@ -62,9 +62,9 @@
 <details class="peek" id="peek-inverter" data-level="H8" data-title="Two transistors make a gate">
 <summary>Look inside: <b>a gate is two transistors that are never both on</b></summary>
 <div class="peek-body">
-<p>Pair an n-type transistor, which conducts when its gate is high, with a p-type, which conducts when it is low, and join their gates. A high input shuts the p-type and opens the n-type, which pulls the output to ground; a low input does the reverse. Either way one is shut, so no current runs from supply to ground. Only halfway between, while the input crosses, are both partly open. A chip therefore spends its energy on switching and almost none on holding still.</p>
+<p>Pair an n-type transistor, which conducts when its gate is high, with a p-type, which conducts when it is low, and join their gates. A high input shuts the p-type and opens the n-type, which pulls the output to ground; a low input does the reverse. At rest one is always shut, so only a tiny leak flows. The real cost is the wire and next gate the output drives, a small <b class="c-yellow">capacitor</b>. Each rise fills it from the supply, each fall dumps it to ground, and ½CV² turns to heat each time. The brief burst while both are half open adds only a little.</p>
 <figure class="fig" data-fig="cmosInverter" id="fig-cmosInverter">
-<figcaption><span class="tagline tag-ill">Model</span> CMOS inverter: <span class="c-blue">pMOS</span> over <span class="c-blue">nMOS</span>; the schematic shows which switch is shut; the plots show the output voltage and the supply current (log scale) as you slide Input, with the <span class="c-orange">shoot-through</span> spike where both are half-on. Same EKV-style model as the MOSFET figure: 0.7 V supply, 0.35 V threshold, 71 mV per decade.</figcaption>
+<figcaption><span class="tagline tag-ill">Model</span> CMOS inverter: <span class="c-blue">pMOS</span> over <span class="c-blue">nMOS</span>; the schematic shows which switch is shut and how full the <span class="c-yellow">load capacitor</span> (~1 fF, order of magnitude) is; the plots show the output voltage and the supply current (log scale) as you slide Input, with the small <span class="c-orange">shoot-through</span> spike where both are half-on. Same EKV-style model as the MOSFET figure: 0.7 V supply, 0.35 V threshold, 71 mV per decade.</figcaption>
 </figure>
 <p class="peek-end">Every adder in the next sections is built from pairs like this.</p>
 </div>
@@ -90,9 +90,9 @@
 <details class="peek" id="peek-landauer" data-level="H7" data-title="The Landauer gap">
 <summary>Look inside: <b>how far a real operation is from kT ln 2</b></summary>
 <div class="peek-body">
-<p>Erasing one bit cannot cost less than kT ln 2 ≈ 2.87×10⁻²¹ J at room temperature. A modern GPU FLOP sits about a million times above that; a DRAM read, a billion; a whole prompt, many more. The gap is the headroom left for the efficiency slider — large, but not infinite, and memory traffic eats most of it first.</p>
+<p>Erasing one bit cannot cost less than kT ln 2 ≈ 2.87×10⁻²¹ J at room temperature. One logic gate switching costs roughly a femtojoule, a few hundred thousand times that. A modern GPU FLOP, hundreds of such switches, sits a few hundred million times above it (≈7×10⁻¹³ J); a 64-bit DRAM read, about 5×10¹¹ times; a whole prompt, many more. The gap is the headroom left for the efficiency slider — large, but not infinite, and memory traffic eats most of it first.</p>
 <figure class="fig" data-fig="landauerGap" id="fig-landauerGap">
-<figcaption><span class="tagline tag-mixed">Physics + <b>DERIVED</b></span> Landauer kT ln 2 at 300 K. H100 J/FLOP = 700 W ÷ 989 TFLOP/s (<b>derived</b>, not a vendor Wh/FLOP claim). DRAM: Horowitz 2014. Prompt: Google 0.24 Wh.</figcaption>
+<figcaption><span class="tagline tag-mixed">Physics + <b>DERIVED</b></span> Landauer kT ln 2 at 300 K. Gate switch: ~1 fJ, order of magnitude (Frank et al., Sandia, from IRDS models). H100 J/FLOP = 700 W ÷ 989 TFLOP/s (<b>derived</b>, not a vendor Wh/FLOP claim). DRAM: Horowitz 2014. Prompt: Google 0.24 Wh.</figcaption>
 </figure>
 </div>
 </details>
@@ -119,7 +119,7 @@
 <p>Chips are printed like photographs. Light shines through a <b class="c-green">mask</b>, a lens shrinks the pattern, and the image falls on a <b class="c-green">wafer</b> coated with light-sensitive <b class="c-green">resist</b>. Where the light lands the resist is washed away, and the silicon underneath can be etched or doped. The question is how fine a line a lens can print, and the answer was worked out for microscopes in the nineteenth century: the image of a sharp edge is blurred by about the wavelength of the light divided by the lens’s numerical aperture.</p>
 
 <figure class="fig" data-fig="litho" id="fig-litho">
-<figcaption><span class="tagline tag-ill">Model</span> <span class="c-yellow">Light</span> through a chrome <span class="c-grey">mask</span> onto <span class="c-green">photoresist</span> on a wafer. The intensity profile is the ideal incoherent modulation transfer function; the resist keeps features while contrast stays above a schematic threshold, and edges blur as half-pitch nears λ/(4·NA). The 193 nm immersion and both EUV apertures are ASML’s;<sup class="fn"><a href="#n10">10</a></sup> older-tool apertures are typical and approximate. Real tools use illumination and mask tricks this model leaves out.</figcaption>
+<figcaption><span class="tagline tag-ill">Model</span> <span class="c-yellow">Light</span> through a chrome <span class="c-grey">mask</span> onto <span class="c-green">photoresist</span> on a wafer. The intensity profile is a two-beam image under off-axis (dipole) illumination: contrast holds until the first diffracted order starts to miss the lens near k₁ ≈ 0.28 and is gone at k₁ = 0.25. The resist keeps features while contrast stays above a schematic 40%, so 193 nm immersion prints 38 nm as ASML specifies, and edges blur as half-pitch nears λ/(4·NA). The 193 nm immersion and both EUV apertures are ASML’s;<sup class="fn"><a href="#n10">10</a></sup> older-tool apertures are typical and approximate. Only ArF immersion has a water film; EUV runs in vacuum off a reflective mask and mirrors, which the 3D view shows and the flat view draws straight through.</figcaption>
 </figure>
 
 <p>The industry’s path was to shorten the wavelength: from the 436 nm blue line of mercury lamps to 248 nm and 193 nm ultraviolet lasers, and then to fill the gap between lens and wafer with water, which raises the aperture above 1. The optics put a hard floor at about 36 nm for 193 nm light, and in production the best immersion scanner is specified at 38–40 nm;<sup class="fn"><a href="#n10">10</a></sup> anything finer has to be split between two or more exposures. Extreme ultraviolet light at 13.5 nm, made by hitting droplets of molten tin with a laser, is so readily absorbed that it must travel in vacuum and be steered with mirrors. Only one company sells EUV machines: ASML in the Netherlands, with optics made by Zeiss in Germany. Its high-NA tools, with an aperture of 0.55, print lines down to 8 nm.<sup class="fn"><a href="#n10">10</a></sup></p>
@@ -129,7 +129,7 @@
 <details class="math"><summary>The maths: the resolution limit</summary>
 <p>The smallest half-pitch (the width of one line or gap) a lens of numerical aperture NA can print with wavelength λ is usually written</p>
 <p class="eq">half-pitch = k₁ λ / NA,</p>
-<p>where k₁ depends on the illumination, the mask and the resist. For incoherent light the image contrast falls to zero at k₁ = 0.25, the limit the figure uses, and no single exposure can print finer. For 193 nm immersion at NA 1.35 that gives about 36 nm, against the 38 nm (k₁ ≈ 0.27) and 40 nm (k₁ ≈ 0.28) that ASML specifies for production; for EUV at NA 0.33, about 10 nm; at NA 0.55, about 6 nm. Factories work at k₁ of roughly 0.3 or more.</p>
+<p>where k₁ depends on the illumination, the mask and the resist. Even with the best off-axis illumination the image contrast falls to zero at k₁ = 0.25, the limit the figure uses, and no single exposure can print finer. For 193 nm immersion at NA 1.35 that gives about 36 nm, against the 38 nm (k₁ ≈ 0.27) and 40 nm (k₁ ≈ 0.28) that ASML specifies for production; for EUV at NA 0.33, about 10 nm; at NA 0.55, about 6 nm. Factories work at k₁ of roughly 0.3 or more.</p>
 </details>
 
 <p>That mask image does not paint the whole wafer at once. It lands in one <b class="c-yellow">exposure field</b> — about 26 by 33 mm on ASML’s tools — and the stage steps. An H100-sized die nearly fills that window, which is the bridge into yield.</p>
@@ -190,7 +190,7 @@
 <nav class="pager" aria-label="Previous and next in the series"><a class="prev" href="rules.html"><small>← Previous</small>Rules: Switch, Gate, Adder, Program</a><a class="next" href="parallel.html"><small>Next →</small>Parallel: Why GPUs Won</a></nav>
 </article>
 </main>
-<script src="three3d.js?v=mvti9vmd"></script>
+<script src="three3d.js?v=mvut2yc6"></script>
 <script src="app.js"></script>
 </body>
 </html>
