@@ -1,13 +1,17 @@
-# What a US kilowatt-hour pays for, 1991 on: every investor-owned utility's FERC Form 1 accounts (via Catalyst
-# Cooperative's PUDL), summed, split into fuel, bought power, the rest of generation, wires, customer service and
-# overheads, taxes; applied to the average residential price (EIA-861 via PUDL from 2001; before that EIA's Annual
-# Energy Review Table 8.10, kept in scripts/data/) and put in 2025 dollars (CPI-U).
-# Usage: python3 -P scripts/make_us_bill_data.py <dir with the PUDL parquet files and cpiai.csv>
-# Capital costs (depreciation and the return on capital) are split by function in proportion to each function's
-# depreciation, a proxy for its share of the capital base. Writes src/lib/usbilldata.js.
-# 1991-93 (before FERC Form 1 is in PUDL): the same accounts as published by EIA, Financial Statistics of Major U.S.
-# Investor-Owned Electric Utilities 1995 (scripts/data/eia_finstats_iou_1991_1995.csv); it has no depreciation by
-# function, so those years split capital with the shares of the first PUDL year (1994).
+# What a US kilowatt-hour pays for, 1969 on: the investor-owned utilities' accounts, split into fuel, bought power, the
+# rest of generation, wires, customer service and overheads, taxes; applied to the average residential price and put
+# in 2025 dollars (CPI-U). Usage: python3 -P scripts/make_us_bill_data.py <dir with the PUDL parquet files and cpiai.csv>
+# Writes src/lib/usbilldata.js.
+#
+# Accounts. 1994 on: every investor-owned utility's FERC Form 1 (via Catalyst Cooperative's PUDL), summed. Before that,
+# the same Uniform System of Accounts as composites published by the regulator (scripts/data/): FPC/EIA, Statistics of
+# Privately Owned Electric Utilities (1969-78); EIA, Financial Statistics of Selected / Major Investor-Owned Electric
+# Utilities (1979-82, 1985-89, 1991-93). 1983, 1984 and 1990: EEI's Statistical Yearbook, which nets out sales between
+# affiliated utilities and gives fuel but not purchased power; those years are put on EIA's basis (see from_eei).
+# Capital (depreciation plus the return on capital) is split by function in proportion to each function's depreciation
+# (Form 1 schedule 336). Before 1994 there is no depreciation by function, so the split uses plant in service by
+# function, scaled so that in 1994 it gives the depreciation shares.
+# Prices: EIA-861 via PUDL from 2001; before that EIA, Annual Energy Review 2011, Table 8.10.
 import sys, csv, json, collections
 import pyarrow.parquet as pq
 
@@ -41,11 +45,33 @@ for r in csv.DictReader(open(f'{D}/cpiai.csv')): cpi[int(r['Date'][:4])].append(
 cpi = {y: sum(v) / len(v) for y, v in cpi.items()}
 base = cpi[2025]
 
-# EIA Financial Statistics, 1991-1995 (thousand dollars), for the years before PUDL's FERC Form 1
-fs = collections.defaultdict(dict)
-_fs = [l.strip().split(',') for l in open('scripts/data/eia_finstats_iou_1991_1995.csv') if not l.startswith('#')]
-for row in _fs[1:]:
-    for y, v in zip(_fs[0][1:], row[1:]): fs[int(y)][row[0]] = float(v)
+def wide(path, scale):
+    # a scripts/data CSV with one row per item and one column per year -> {year: {item: dollars}}
+    rows_ = [l.strip().split(',') for l in open(path) if not l.startswith('#')]
+    out_ = collections.defaultdict(dict)
+    for r in rows_[1:]:
+        for y, v in zip(rows_[0][1:], r[1:]):
+            if v != '': out_[int(y)][r[0]] = float(v) * scale
+    return out_
+
+# published composites, Form 1 accounts, thousand dollars: {year: (items, source)}
+FS = {}
+for f, src in (('fpc_privately_owned_1969_1978', 'fpc'), ('eia_finstats_1979_1982', 'eia-finstats'),
+               ('eia_finstats_1985_1989', 'eia-finstats'), ('eia_finstats_iou_1991_1995', 'eia-finstats')):
+    for y, d in wide(f'scripts/data/{f}.csv', 1e3).items(): FS[y] = (d, src)
+EEI = wide('scripts/data/eei_yearbook_1982_1990.csv', 1e6)
+
+def lerp(y, pts):
+    # linear interpolation in a {year: value} dict; the nearest end outside its range
+    lo = max((k for k in pts if k <= y), default=None); hi = min((k for k in pts if k >= y), default=None)
+    if lo is None or hi is None or lo == hi: return pts[hi if lo is None else lo]
+    return pts[lo] + (pts[hi] - pts[lo]) * (y - lo) / (hi - lo)
+
+def fuel_of(f): return f['fuel_steam'] + f['fuel_nuclear'] + f['fuel_other']
+# other generation O&M (production expenses less fuel and bought power), in the years EIA/FPC publish it
+OG = {y: d['power_production_total'] - fuel_of(d) - d['purchased_power'] for y, (d, _) in FS.items()}
+def plant3(f): return (f['plant_production'], f['plant_transmission'] + f['plant_distribution'], f['plant_general'] + f['plant_intangible'])
+PLANT = {y: plant3(d) for y, (d, _) in FS.items()}
 
 PROD = ('steam_production', 'nuclear_production', 'hydraulic_production_conventional', 'hydraulic_production_pumped_storage', 'other_production')
 def dshares(d):
@@ -53,31 +79,54 @@ def dshares(d):
     do = d['general'] + d['intangible'] + d['common_plant_electric']
     return dg, dw, do
 
-def from_finstats(f, shares):
-    # same groups as the Form 1 path below, from EIA's published composite accounts
-    fuel = f['fuel_steam'] + f['fuel_nuclear'] + f['fuel_other']
-    bought = f['purchased_power']
+def split(cap, shares, gen_om, wires_om, over_om):
+    sg, sw, so = shares
+    return {'gen': gen_om + cap * sg, 'wires': wires_om + cap * sw, 'over': over_om + cap * so}
+
+def from_composite(f, shares):
+    # the same groups as the Form 1 path below, from a published composite (thousand-dollar accounts)
+    fuel = fuel_of(f); bought = f['purchased_power']
     gen_om = f['power_production_total'] - fuel - bought
     wires_om = f['transmission_total'] + f['distribution_total']
     over_om = f['customer_accounts_total'] + f['customer_service_total'] + f['sales_total'] + f['admin_general_total']
-    assert abs(f['power_production_total'] + wires_om + over_om - f['om_total']) < 5
+    assert abs(f['power_production_total'] + wires_om + over_om - f['om_total']) < 5e3
     taxes = (f['taxes_other_than_income'] + f['federal_income_taxes'] + f['other_income_taxes'] + f['deferred_income_taxes']
              - f['deferred_income_taxes_credit'] + f['investment_tax_credit_adj'])
-    dt = f['depreciation'] + f['amortization']
-    cap = dt + f['net_operating_income']
-    sg, sw, so = shares
-    return f['operating_revenues'], {'fuel': fuel, 'bought': bought, 'gen': gen_om + cap * sg, 'wires': wires_om + cap * sw,
-                                     'over': over_om + cap * so, 'taxes': taxes}
+    cap = f['depreciation'] + f['amortization'] + f['net_operating_income']
+    return f['operating_revenues'], {'fuel': fuel, 'bought': bought, **split(cap, shares, gen_om, wires_om, over_om), 'taxes': taxes}
+
+def from_eei(y, e, shares, k=None, og=None):
+    # EEI nets out sales between affiliated utilities, from revenue and from bought power alike: EIA's revenue is a
+    # steady 7.6-8.1% higher (1982, 1985, 1990), and EEI's other lines match EIA's within 1-2%. Put the netted sales X
+    # back into both (k interpolated between those years), and take bought power as production expenses less fuel
+    # less the rest of generation O&M, interpolated between the neighbouring EIA/FPC years.
+    if k is None: k = lerp(y, {yy: v['eia_operating_revenues'] / v['operating_revenues'] for yy, v in EEI.items() if 'eia_operating_revenues' in v})
+    if og is None: og = lerp(y, OG)
+    rev = e['operating_revenues'] * k; X = rev - e['operating_revenues']
+    fuel = e['fuel']; bought = e['production'] + X - fuel - og
+    over_om = e['customer_accounts'] + e['customer_service'] + e['sales'] + e['admin_general']
+    taxes = e['taxes_other_than_income'] + e['federal_income_taxes'] + e['other_income_taxes'] + e['deferred_income_taxes'] + e['investment_tax_credit_adj']
+    dt = e['depreciation'] + e['amortization']
+    noi = e['operating_revenues'] - e['om_total'] - dt - taxes
+    return rev, {'fuel': fuel, 'bought': bought, **split(dt + noi, shares, og, e['transmission_distribution'], over_om), 'taxes': taxes}
 
 out = []
 first = min(om)
 _dg, _dw, _do = dshares(dep[first]); _dt = _dg + _dw + _do
 SH0 = (_dg / _dt, _dw / _dt, _do / _dt)
-for y in sorted(set(om) | {y for y in fs if y < first}):
+# before 1994: plant in service by function, scaled so that 1994's plant shares give 1994's depreciation shares
+_p = PLANT[first]; F = [SH0[i] / (_p[i] / sum(_p)) for i in range(3)]
+def pshares(y):
+    p = [lerp(y, {yy: v[i] for yy, v in PLANT.items()}) * F[i] for i in range(3)]
+    return tuple(x / sum(p) for x in p)
+
+early = sorted({y for y in FS if y < first} | {y for y in EEI if y < first and y not in FS})
+for y in sorted(set(om) | set(early)):
     if not ((y in res and res[y][1] > 0) or y in aer): continue
-    if y < first:
-        rev, parts = from_finstats(fs[y], SH0)
-        src = 'eia-finstats'
+    if y < first and y in FS:
+        rev, parts = from_composite(FS[y][0], pshares(y)); src = FS[y][1]
+    elif y < first:
+        rev, parts = from_eei(y, EEI[y], pshares(y)); src = 'eei'
     else:
         o, i, d = om[y], inc[y], dep[y]
         rev = i['operating_revenues']
@@ -104,15 +153,24 @@ for y in sorted(set(om) | {y for y in fs if y < first}):
                 'parts': {k: round(real * v / total, 2) for k, v in parts.items()}})
     print(y, f'{price:5.2f}¢ nominal {real:5.2f}¢ (2025$)  accounted {total / rev:5.1%}', {k: f'{v / total:4.0%}' for k, v in parts.items()})
 
-# the seam: EIA's published composite (major IOUs) against PUDL's Form 1 sum (all respondents) where both exist
-for y in sorted(fs):
-    if y < first or y not in om: continue
-    rev, p = from_finstats(fs[y], SH0); t = sum(p.values())
-    row = next(r for r in out if r['y'] == y); rt = sum(row['parts'].values())
-    print(f'seam {y}: EIA FinStats vs PUDL shares', {k: f"{p[k] / t:4.0%}/{row['parts'][k] / rt:4.0%}" for k in p})
+def shares_of(parts):
+    t = sum(parts.values()); return {k: v / t for k, v in parts.items()}
+def show(label, a_, b_):
+    print(label, {k: f"{a_[k]:4.0%}/{b_[k]:4.0%}" for k in a_})
+# checks: EIA's composite against PUDL's Form 1 sum (1994-95); EEI against EIA where both exist, with k and the rest of
+# generation O&M interpolated as if the year were missing (1982: from 1981 and 1985, k from 1985; 1985: from 1982
+# and 1989, k from 1982 and 1990)
+for y in (1994, 1995):
+    row = next(r for r in out if r['y'] == y)
+    show(f'check {y} EIA composite vs PUDL:', shares_of(from_composite(FS[y][0], SH0)[1]), shares_of(row['parts']))
+for y, nb in ((1982, (1981, 1985)), (1985, (1982, 1989))):
+    og = lerp(y, {n: OG[n] for n in nb})
+    k = lerp(y, {yy: v['eia_operating_revenues'] / v['operating_revenues'] for yy, v in EEI.items() if 'eia_operating_revenues' in v and yy != y})
+    show(f'check {y} EEI-based vs EIA:', shares_of(from_eei(y, EEI[y], pshares(y), k, og)[1]), shares_of(from_composite(FS[y][0], pshares(y))[1]))
+print('capital split 1969, 1980, 1993 (plants, wires, overheads):', [tuple(round(x, 3) for x in pshares(y)) for y in (1969, 1980, 1993)], 'Form 1 1994:', tuple(round(x, 3) for x in SH0))
 
 open('src/lib/usbilldata.js', 'w').write(
-    '// What the average US residential kWh paid for, in 2025 cents: investor-owned utilities’ FERC Form 1 accounts and\n'
-    '// EIA-861 prices (both via Catalyst Cooperative PUDL); before 1994 EIA Financial Statistics of Major U.S. Investor-Owned\n'
-    '// Electric Utilities; before 2001 EIA Annual Energy Review prices; CPI-U. Made by scripts/make_us_bill_data.py.\n'
+    '// What the average US residential kWh paid for, in 2025 cents: investor-owned utilities’ accounts (FERC Form 1 via\n'
+    '// Catalyst Cooperative PUDL from 1994; FPC, EIA and EEI composites before), EIA-861 / Annual Energy Review prices,\n'
+    '// CPI-U. Made by scripts/make_us_bill_data.py from the sources in scripts/data/.\n'
     'export const USBILL = ' + json.dumps(out, separators=(',', ':')) + ';\n')

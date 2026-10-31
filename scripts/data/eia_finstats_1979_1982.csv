@@ -1,0 +1,32 @@
+# EIA, Financial Statistics of Selected Electric Utilities 1982 (DOE/EIA-0437(82)), "1982 Privately Owned Electric
+# Utility Statistics": Table 3 (income, electric), Table 27 (electric O&M expenses), Table 17 (electric utility plant in
+# service); 1979-1982, thousand nominal dollars. Full text: https://www.osti.gov/biblio/7028400 (servlets/purl/7028400).
+# Read from the page images (the PDF's text layer has OCR slips); every column checked against the printed totals.
+item,1982,1981,1980,1979
+operating_revenues,109960535,102301091,87061552,72851121
+depreciation,7312259,6685664,6069053,5611774
+amortization,299580,228624,115788,87391
+taxes_other_than_income,7164117,6566874,5860043,5282020
+federal_income_taxes,2772183,1626581,1157951,590588
+other_income_taxes,709193,368314,298498,241534
+deferred_income_taxes,4968650,4467463,3762215,2872308
+deferred_income_taxes_credit,3337505,2299345,1820043,1027089
+investment_tax_credit_adj,2326263,1415081,988541,1107468
+net_operating_income,18187648,16259482,13637206,11845406
+fuel_steam,34388714,35582564,30039986,24897129
+fuel_nuclear,1439878,1318610,1060880,832390
+fuel_other,607274,842561,861621,764798
+purchased_power,10520818,10070281,7894002,6033709
+power_production_total,56182476,55322557,46870706,37405229
+transmission_total,1080914,958055,831502,763521
+distribution_total,3683996,3248475,2959059,2604153
+customer_accounts_total,2108191,1856019,1589969,1399824
+customer_service_total,516191,396221,295347,237523
+sales_total,33043,30590,28447,35907
+admin_general_total,5958753,5169911,4421764,3795886
+om_total,69563564,66981827,56996794,46242043
+plant_intangible,80936,52755,34472,31681
+plant_production,117504517,108629438,100264723,89381817
+plant_transmission,36272340,34189479,32031196,30084930
+plant_distribution,69153022,64885208,60822944,57041319
+plant_general,6753582,6118195,5473554,4866597

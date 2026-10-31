@@ -2,74 +2,67 @@
 
 Last session: 21–31 October 2026. This file is the starting point for the next session.
 
-## 1. The next task: take the US price decomposition back to 1960
+## 1. Done 31 Oct 2026: the US price decomposition now runs 1969–2025
 
-Essay 9 (`src/pages/futures.html`, section "Where the savings went", figure `billSplit`) splits the average US
-household kWh into what it pays for, **1991–2025** (extended from 2001 on 31 Oct 2026), in 2025 dollars:
+Essay 9 (`src/pages/futures.html`, "Where the savings went", figure `billSplit`) splits the average US household kWh
+into what it pays for, **1969–2025**, in 2025 dollars (¢/kWh):
 
-| ¢/kWh, 2025 $ | 1991 | 2001 | 2025 |
-|---|---|---|---|
-| Fuel and bought power | 6.3 | 8.2 | 4.9 |
-| Running and paying for plants | 5.1 | 2.3 | 2.5 |
-| Wires (transmission + distribution) | 2.8 | 2.0 | 5.7 |
-| Customer service, overheads | 2.3 | 1.6 | 2.6 |
-| Taxes | 2.5 | 1.4 | 1.5 |
-| Total | 19.0 | 15.6 | 17.2 |
+| | 1969 | 1973 | 1981 | 1983 | 1988 | 2000 | 2025 |
+|---|---|---|---|---|---|---|---|
+| Fuel and bought power | 4.4 | 5.4 | 10.3 | 9.3 | 6.8 | 7.1 | 4.9 |
+| Running and paying for plants | 3.8 | 3.8 | 4.2 | 5.1 | 5.8 | 3.2 | 2.5 |
+| Wires | 5.0 | 4.2 | 3.0 | 3.3 | 3.0 | 1.9 | 5.7 |
+| Customer service, overheads | 2.2 | 1.9 | 1.8 | 2.1 | 2.3 | 1.8 | 2.6 |
+| Taxes | 3.8 | 2.8 | 2.6 | 3.5 | 2.6 | 1.4 | 1.5 |
+| Total | 19.3 | 18.1 | 21.9 | 23.3 | 20.4 | 15.4 | 17.2 |
 
-Sources now: 1994–2025 FERC Form 1 via PUDL; 1991–93 EIA *Financial Statistics of Major U.S. IOUs 1995*
-(`scripts/data/eia_finstats_iou_1991_1995.csv`, capital split with 1994's depreciation shares; 1994–95 overlap agrees
-within 1 point); residential prices 2001+ EIA-861 via PUDL, 1960–2000 EIA AER Table 8.10
-(`scripts/data/eia_aer_t810_prices.csv`, already covers 1960). Coverage 94.5–105% of revenue (1997 is the low year).
-Each row carries `src` (`ferc1` / `eia-finstats`) for a seam marker once coarser sources are added.
+Sources (all in `scripts/data/`, each with its provenance in a header comment; `src` on each row of
+`src/lib/usbilldata.js` says which was used):
+- 1994–2025 FERC Form 1 via PUDL (`ferc1`).
+- 1969–78 FPC/EIA *Statistics of Privately Owned Electric Utilities 1978*, Tables 24/28/30 (archive.org) (`fpc`).
+- 1979–82 EIA *Financial Statistics of Selected Electric Utilities 1982*, Tables 3/27/17 (OSTI 7028400);
+  1985–89 the 1989 IOU edition, Tables 5/10/26 (archive.org); 1991–93 the 1995 edition (eia.gov) (`eia-finstats`).
+- 1983, 1984, 1990 EEI *Statistical Yearbook* 1985 and 1990 (archive.org) (`eei`). EEI nets out sales between
+  affiliates and has no purchased power: revenue scaled by EIA/EEI (1.076–1.081 in 1982, 1985, 1990, interpolated),
+  bought power = production + affiliate sales − fuel − other generation O&M (interpolated from EIA years).
+  Leave-one-out checks (1982, 1985) reproduce EIA's shares within 1 point.
+- Capital split before 1994: plant in service by function, scaled so 1994's plant shares give 1994's depreciation
+  shares. 1994–95 overlap (EIA composite vs PUDL): shares within 1 point.
+- Prices: EIA-861 2001+; EIA AER Table 8.10 before (1960+ available).
+Scanned tables were read from page images and every column checked against the printed totals (the script also
+asserts the O&M lines add up). The script prints the checks.
 
-Still missing: **utility cost structure 1960–1990.** EIA's own archive of the *Financial Statistics* series starts with
-the 1995 edition (`eia.gov/electricity/archive/0437951.pdf`; 1996, 1998, 1999 also there). Older editions and the
-predecessor FPC/EIA *Statistics of Privately Owned Electric Utilities in the United States* exist at:
-archive.org (e.g. `archive.org/details/statisticsofpriv1978unse`), OSTI (`osti.gov/biblio/5764721` 1978,
-`osti.gov/biblio/6121153` 1981, `osti.gov/biblio/10114582` 1990), HathiTrust (`catalog.hathitrust.org/Record/009048732`),
-and Census *Historical Statistics of the US*, ch. S (income account of privately owned utilities to 1970). On 31 Oct
-these hosts were all blocked (archive.org, www.osti.gov, www2.census.gov, babel.hathitrust.org). EIA's *Changing
-Structure of the Electric Power Industry 1970–1991* (`eia.gov/electricity/archive/0562.pdf`) has only anchors: fuel was
-77, 84 and 67% of power production expenses for major IOUs in 1970, 1980 and 1990 (footnote 63), and Table C6 gives
-utility generation by fuel and fossil fuel prices 1970–91.
-
-### What is needed
-1. ~~Average residential price, nominal, 1960–2000~~ — done (AER Table 8.10, in `scripts/data/`).
-2. **Utility cost structure before 1991** (1991–93 now from the 1995 *Financial Statistics*). Candidate sources, best first:
-   - FPC / FERC / EIA, *Statistics of Privately Owned Electric Utilities in the United States* (annual, 1937–1980s)
-     and its successor EIA *Financial Statistics of Major U.S. Investor-Owned Electric Utilities* (1980s–2003):
-     operating revenue, fuel, purchased power, O&M by function, depreciation, taxes, net operating income — the same
-     categories as Form 1. Often on HathiTrust / Google Books / EIA archive (`eia.gov/electricity/` and
-     webharvest.gov archives of `eia.doe.gov`).
-   - EEI *Statistical Yearbook of the Electric Utility Industry* (historical; harder to get).
-   - Hirsh (1989) and Joskow (1974, 1985) for qualitative anchors.
-   A few benchmark years (1960, 1965, 1970, 1973, 1975, 1980, 1985, 1990) are enough if annual data is not available;
-   say so in the caption.
-3. **CPI-U** (1960+ fine): already used, from `https://raw.githubusercontent.com/datasets/cpi-us/main/data/cpiai.csv`.
+Not done / possible next steps:
+- **1960–68**: needs an FPC *Statistics of Privately Owned Electric Utilities* edition from 1968–72 (its ten-year
+  tables would cover 1959–68). Only on HathiTrust (Cloudflare bot check blocks automated access) and Google Books.
+  A person could download the PDF and drop it in; the extraction pattern is as above. *Historical Statistics of the
+  US* (Census, ch. S 133–146) and the *Statistical Abstract* have only revenue and net income, not the split.
+- Optionally show the 1960–68 total price as a line before the stack (AER prices are already in `scripts/data/`).
+- Essay 9 §1 could cite the real shares next to the toy `offset` model (the subsection right after it now does).
 
 ### How the current numbers are made (keep the method consistent)
 `scripts/make_us_bill_data.py <data dir>` → `src/lib/usbilldata.js`. Inputs (PUDL, public S3, reachable):
 `https://s3.us-west-2.amazonaws.com/pudl.catalyst.coop/stable/<table>.parquet` for
 `core_ferc1__yearly_operating_expenses_sched320`, `core_ferc1__yearly_income_statements_sched114`,
-`core_ferc1__yearly_depreciation_summary_sched336`, `core_eia861__yearly_sales`, plus `cpiai.csv` above.
+`core_ferc1__yearly_depreciation_summary_sched336`, `core_eia861__yearly_sales`, plus `cpiai.csv`
+(`https://raw.githubusercontent.com/datasets/cpi-us/main/data/cpiai.csv`); the pre-1994 inputs are in `scripts/data/`.
 Method: sum all investor-owned utilities; fuel = accounts 501 + 518 + 547; bought power = 555; other generation O&M
 = power production expenses − fuel − bought; wires O&M = transmission + regional market + distribution; overheads =
 customer accounts + customer service + sales + A&G; taxes = taxes other than income + income taxes (current,
 deferred net, ITC); return = revenue − utility operating expenses (the reported net-operating-income row is empty
 before 2021); depreciation + return are split by function in proportion to depreciation by function. Shares of
 revenue are applied to the EIA-861 average residential price (revenue ÷ MWh of bundled + energy-only service).
-Checks: categories sum to 97–105% of revenue every year. Python needs `pyarrow` (`pip install --user pyarrow`; run
-scripts with `python3 -P`).
-Pre-1994 sources will have coarser categories; map them onto the same five groups and mark the seam in the figure.
+Checks: categories sum to 94.5–105% of revenue every year (1997 is the low year). Python needs `pyarrow`
+(`pip install --user pyarrow`; run scripts with `python3 -P`, from the repo root). The seams are documented in the
+caption and note rather than drawn in the figure, since the overlap checks agree within a point.
 
 ### Where it shows up
 Figure `billSplit` in `src/figs/new-futures.js` (US/Germany switch), prose and note in `futures.html`
-(`#where-the-savings-went`). If the series reaches 1970, essay 1 (`cheaper.html`) and the landing page should point
-to it, and essay 9's §1 ("four layers") can cite real shares instead of the toy alone.
+(`#where-the-savings-went`). Essay 1 (`cheaper.html`, after the price curve) and the landing page point to it.
 
 ## 2. Network access the task needs
-eia.gov and www.eia.gov were allowed on 31 Oct. Still needed for 1960–90: **archive.org, www.osti.gov,
-www2.census.gov, babel.hathitrust.org**. Earlier list — reachable: GitHub (incl. raw), PUDL S3, Ember's GCS bucket,
+eia.gov, archive.org, www.osti.gov and www2.census.gov were allowed on 31 Oct. babel.hathitrust.org answers with a
+Cloudflare bot check (not a network block). Earlier list — reachable: GitHub (incl. raw), PUDL S3, Ember's GCS bucket,
 PyPI/npm. Blocked then: eia.gov (now allowed), fred.stlouisfed.org, bls.gov, gutenberg.org, smard.de, grid-india.in, iexindia.com, nea.gov.cn,
 HathiTrust. **Allow at least `eia.gov` and `www.eia.gov`** (and ideally `babel.hathitrust.org`, `fred.stlouisfed.org`).
 WebSearch worked (snippets only); WebFetch is bound by the same network allowlist.
@@ -105,8 +98,7 @@ WebSearch worked (snippets only); WebFetch is bound by the same network allowlis
   value falls as share rises; (5) the costs the engine does not touch — wires, firming, capital, taxes — now
   dominate. Essay 9's new decomposition is the quantified version of (4)+(5) for the US.
 - Four countries (US, Germany, China, India) replace Germany as the default.
-- PR #20 (the "Where the savings went" section, 2001–2025) merged 31 Oct. The 1991 extension is in this source but
-  not yet deployed to the site.
+- PR #20 (the "Where the savings went" section, 2001–2025) merged 31 Oct; the 1969 extension was deployed after it.
 - Layout: site-wide left rail on ≥960 px, drawer on phones (from master); Pause sits in the nav (master floated it
   over figures). The drawer drops `backdrop-filter` when open (otherwise the fixed panel is trapped in the bar).
 

@@ -1,0 +1,26 @@
+# Edison Electric Institute, Statistical Yearbook of the Electric Utility Industry 1985 (Tables 71-72, for 1982-1985)
+# and 1990 (Tables 72-73, for 1990, preliminary): investor-owned electric utilities, electric department, million
+# nominal dollars, intercompany transactions eliminated. Scans: https://archive.org/details/micro_IA40706923_0443 and
+# https://archive.org/details/micro_IA40706940_0280. Used only for 1983, 1984 and 1990 (no EIA composite at hand);
+# 1982 and 1985 calibrate them against EIA. EEI gives fuel but not purchased power; deferred taxes are the sum of the
+# two rows printed (property and non-property related to 1985; federal and state in 1990). 1990 also has "deferred
+# expenses" (-323), kept with amortization. eia_operating_revenues (million dollars) are EIA's figures for the same
+# years, from the EIA editions in this folder and, for 1990, footnote 1 to Table 3 of EIA's 1995 edition.
+item,1982,1983,1984,1985,1990
+operating_revenues,101693,109446,120090,125547,146211
+depreciation,7301,8016,8792,9736,14535
+amortization,287,354,457,566,514
+taxes_other_than_income,7151,7790,8507,8902,11406
+federal_income_taxes,2853,2845,3857,4637,6198
+other_income_taxes,715,566,705,712,1026
+deferred_income_taxes,1587,4494,4701,4533,1842
+investment_tax_credit_adj,2298,1828,2113,1964,-201
+production,48010,48408,52288,53068,59191
+fuel,36627,36174,37697,36635,32184
+transmission_distribution,4721,5143,5614,6005,7206
+customer_accounts,2109,2224,2383,2537,3221
+customer_service,512,643,745,760,1144
+sales,34,37,47,65,209
+admin_general,5855,6437,7084,7865,10607
+om_total,61242,62892,68161,70300,81577
+eia_operating_revenues,109960.535,,,135267.733,157278.537

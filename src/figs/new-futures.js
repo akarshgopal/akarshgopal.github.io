@@ -63,7 +63,7 @@ export function kardashev(el) {
   upd();
 }
 
-// What a household kilowatt-hour pays for, over time: the US from utilities' FERC Form 1 accounts, 1991 on (2025 dollars),
+// What a household kilowatt-hour pays for, over time: the US from utilities' accounts, 1969 on (2025 dollars),
 // Germany from BDEW's price components (each year's euro cents at that year's ECB rate).
 const SPLIT = {
   us: {
@@ -90,7 +90,7 @@ const SPLIT = {
 export function billSplit(el) {
   const st = { c: 'us' };
   const fig = new Fig(el, {
-    label: 'What a household kilowatt-hour pays for, by year: in the United States 1991 to 2025 fuel, bought power and plants together fell while wires doubled; in Germany 2015 to 2026 energy, network and taxes and levies',
+    label: 'What a household kilowatt-hour pays for, by year: in the United States 1969 to 2025 fuel and bought power jumped in the 1970s, plant costs rose in the 1980s, and wires have tripled since 2000; in Germany 2015 to 2026 energy, network and taxes and levies',
     height: w => w < 600 ? 470 : 380,
     draw(ctx, w, h) {
       const S = SPLIT[st.c], narrow = w < 600;
@@ -132,7 +132,7 @@ export function billSplit(el) {
       }
       // end labels, pushed apart
       ends.sort((p, q) => p.y - q.y);
-      const gap = narrow ? 24 : 26;
+      const gap = narrow ? 24 : 30;
       for (let i = 1; i < ends.length; i++) if (ends[i].y < ends[i - 1].y + gap) ends[i].y = ends[i - 1].y + gap;
       const over = ends[ends.length - 1].y - (box.b - 4); if (over > 0) ends.forEach(e => e.y -= over);
       const lx = box.r + 10;
@@ -149,8 +149,10 @@ export function billSplit(el) {
     const S = SPLIT[st.c], r0 = S.rows[0], r1 = S.rows[S.rows.length - 1], y0 = S.years[0], y1 = S.years[S.years.length - 1];
     const tot = r => S.layers.reduce((s, L) => s + L.v(r), 0);
     const L = k => S.layers.find(l => l.k === k);
+    const at = (k, pick) => S.rows.reduce((b, r) => (pick(L(k).v(r), L(k).v(b)) ? r : b));
+    const top = S.rows.reduce((b, r) => (tot(r) > tot(b) ? r : b)), fuelTop = at('energy', (a, b) => a > b), wireLow = at('wires', (a, b) => a < b);
     ro.innerHTML = st.c === 'us'
-      ? `From ${y0} to ${y1} the average American household paid <b>${tot(r0).toFixed(1)}¢</b>, then <b>${tot(r1).toFixed(1)}¢</b> a kWh in 2025 dollars. Making the power (fuel, bought power and plants) fell from ${(L('energy').v(r0) + L('gen').v(r0)).toFixed(1)}¢ to ${(L('energy').v(r1) + L('gen').v(r1)).toFixed(1)}¢; wires rose from ${L('wires').v(r0).toFixed(1)}¢ to <b>${L('wires').v(r1).toFixed(1)}¢</b>.`
+      ? `An average American household kWh cost <b>${tot(r0).toFixed(1)}¢</b> in ${y0}, ${tot(top).toFixed(1)}¢ at its ${top.y} peak and <b>${tot(r1).toFixed(1)}¢</b> in ${y1}, in 2025 dollars. Fuel and bought power peaked at ${L('energy').v(fuelTop).toFixed(1)}¢ in ${fuelTop.y}; wires fell to ${L('wires').v(wireLow).toFixed(1)}¢ in ${wireLow.y} and are now <b>${L('wires').v(r1).toFixed(1)}¢</b>.`
       : `In ${y1} a German household paid <b>${tot(r1).toFixed(1)}¢</b> a kWh: ${L('energy').v(r1).toFixed(1)}¢ for energy and sales, ${L('wires').v(r1).toFixed(1)}¢ for the network and <b>${L('taxes').v(r1).toFixed(1)}¢</b> in taxes and levies.`;
     fig.invalidate();
   };

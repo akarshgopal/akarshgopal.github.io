@@ -1,5 +1,6 @@
 # EIA, Financial Statistics of Major U.S. Investor-Owned Electric Utilities 1995, DOE/EIA-0437(95)/1 (December 1996),
-# Table 6 (composite income statement, electric) and Table 11 (electric O&M expenses); thousand nominal dollars.
+# Table 6 (composite income statement, electric), Table 11 (electric O&M expenses) and Table 28 (electric utility plant
+# in service at December 31); thousand nominal dollars.
 # https://www.eia.gov/electricity/archive/0437951.pdf
 item,1995,1994,1993,1992,1991
 operating_revenues,183655263,179307260,176354365,169488035,166803843
@@ -27,3 +28,8 @@ customer_service_total,1922475,1955991,1852267,1531369,1451507
 sales_total,348345,231589,203291,198647,203230
 admin_general_total,13372577,14515496,13497534,11766327,11542687
 om_total,103647980,105129788,103775143,99466938,97958171
+plant_intangible,2782616,2407804,1796716,1185525,1308540
+plant_production,304976249,298165745,291688220,281044948,276162123
+plant_transmission,63453706,61218749,58955742,56930355,54700027
+plant_distribution,155515304,147574321,139694183,132246417,124789547
+plant_general,23734691,23055928,22848191,20523396,18022428
