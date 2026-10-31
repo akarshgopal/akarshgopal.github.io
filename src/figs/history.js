@@ -97,12 +97,12 @@ export function historyChart(el) {
 // ---------------------------------------------------------------- the cost-offset toy (illustrative)
 export function offset(el) {
   const st = { engine: false, fuel: true, infl: true, env: true };
-  const Y0 = 1950, Y1 = 1990;
+  const Y0 = 1950, Y1 = 1990, STOP = 1970; // the accounts show the real price falling until about 1970
   const model = (o) => {
     // illustrative: real cost index = fuel part + capital part (+ retrofit)
     const out = []; let fuelPer = 0.45, capPer = 0.55; // shares in 1950
     for (let y = Y0; y <= Y1; y += 0.25) {
-      const learn = y < 1965 || o.engine ? 1 : 0;
+      const learn = y < STOP || o.engine ? 1 : 0;
       const dt = 0.25;
       fuelPer *= Math.exp(-(learn ? 0.015 : 0.002) * dt); // efficiency gains cut fuel per kWh
       capPer *= Math.exp(-(learn ? 0.03 : -0.005) * dt);  // scale economies cut capital per kWh (or reverse)
@@ -134,13 +134,13 @@ export function offset(el) {
         base = cur;
       }
       pathLine(ctx, m.map(r => [sx(r[0]), sy(r[1])]), C.ink, 2.4);
-      line(ctx, sx(1965), box.t, sx(1965), box.b, alpha(C.ink, 0.3), 1, [2, 3]); text(ctx, 'stasis begins', sx(1965) + 4, box.t + 10, { size: 10.5, color: C.ink3 });
+      line(ctx, sx(STOP), box.t, sx(STOP), box.b, alpha(C.ink, 0.3), 1, [2, 3]); text(ctx, 'stasis begins', sx(STOP) + 4, box.t + 10, { size: 10.5, color: C.ink3 });
       let lx = box.l + 8; for (const [, col, lab] of layers) { ctx.fillStyle = alpha(col, 0.5); ctx.fillRect(lx, box.b - 16, 10, 10); lx += 14; text(ctx, lab, lx, box.b - 7, { size: 10.5, color: C.ink2 }); lx += measure(ctx, lab, 10.5) + 12; }
     },
   });
   const ctl = controls(el, 'chips');
   const tog = (k, lab, col) => { const b = button(ctl, lab, () => { st[k] = !st[k]; b.setAttribute('aria-pressed', st[k]); fig.invalidate(); }, { kind: 'chip', color: col, name: k }); b.setAttribute('aria-pressed', st[k]); };
-  tog('engine', 'Physics & scale: gains continue after 1965', C.storage);
+  tog('engine', 'Physics & scale: gains continue after 1970', C.storage);
   tog('fuel', 'Fuel: the 1973 oil shock', C.gas);
   tog('infl', 'Institutions: interest rates & build delays', C.network);
   tog('env', 'Institutions: pollution retrofits', C.nuclear);

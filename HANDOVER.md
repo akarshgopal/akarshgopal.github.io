@@ -48,8 +48,13 @@ Not done / possible next steps:
   committed on `electricity-source`, **not yet deployed to master**: task 7 of the integration brief). Earlier years
   would need FPC volumes from the 1940s; *Historical Statistics of the US* (Census, ch. S 133–146) and the
   *Statistical Abstract* have only revenue and net income, not the split.
-- The toy model in essay 9 §1 stops the engine in 1965, and essay 1 §5 calls wires and taxes costs that "do not fall";
-  the 1951–69 accounts show both falling as fast as generation (see `fpc-extract/integration/PHASE2.md`).
+- ~~Contradicted passages~~ **Fixed 31 Oct 2026** to follow the 1951–69 accounts (every layer fell 43–53%, the real
+  price fell until about 1970): the toy `offset` model in essay 9 §1 (`src/figs/history.js`, `STOP`) now stops the
+  engine in 1970, not 1965, and the text says prices with engine + shocks are "back to about their 1970 level" by
+  1990 (model: 0.647 in 1970, 0.654 in 1990); essay 1 §5 now says wires, offices and taxes per kWh fell anyway while
+  growth was fast and stopped when it slowed; the essay 9 conclusion credits better machines *and* a growing market.
+  Left as is: the-machine.html "by the late 1960s neither bigger nor hotter units were making electricity cheaper"
+  (about new units, Hirsh) and transmission.html's lede (the engine of better plants "did little" for wires).
 - Essay 9 §1 could cite the real shares next to the toy `offset` model (the subsection right after it now does).
 
 ### How the current numbers are made (keep the method consistent)
