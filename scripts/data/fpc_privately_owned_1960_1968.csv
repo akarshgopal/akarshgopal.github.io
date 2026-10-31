@@ -1,0 +1,44 @@
+# FPC, Statistics of Privately Owned Electric Utilities in the United States, 1972: Classes A and B Companies, Table 12 (income, electric), Table 18 (electric O&M expenses), Table 21 (electric utility plant in service); data years 1962-1968 (income 1959-1968). Source: https://books.google.com/books?id=Ar6IVVeFyEYC
+# FPC, Statistics of Electric Utilities in the United States, 1965, Classes A and B Privately Owned Companies, Table 11 (income), Table 17 (O&M), Table 20 (plant); data years 1955-1961 (income 1955-1958). Source: https://books.google.com/books?id=tZi2hdDrkCUC
+# FPC, same title, 1961, Table 18 (income), Table 20 (O&M), Table 21 (plant); data years 1951-1954. Source: https://books.google.com/books?id=x1_ROuyegAsC
+# 1951-1968 data years, thousand nominal dollars. Each year is from the latest edition that prints it. Read from page images (Claude Opus); every year passes the four arithmetic checks exactly.
+# operating_revenues = printed operating revenues + income from electric utility plant leased to others, and net_operating_income = printed "Total electric utility operating income", to match the 1969-78 series (1978 ed.), which folds leased-plant income in (1969 overlap: +1 / 0).
+# depreciation: before 1970 the tables print one "Depreciation and amortization expense" line; it is here, and amortization is empty.
+# other_income_taxes 1951-1960: empty; printed "(1) Included with taxes other than income taxes", so taxes_other_than_income includes them in those years.
+# deferred_income_taxes 1951-52, deferred_income_taxes_credit 1951-57 and investment_tax_credit_adj 1951-63 are printed as dashes (none) and given as 0.
+# fuel_nuclear 1958-1960: empty; the 1965 ed. says nuclear is "included in steam power production expenses" then (fn 2), so it is inside fuel_steam. No nuclear lines (0) before 1958.
+# customer_service_total = 0 (account did not exist); customer accounts and sales are printed separately throughout.
+# Uniform System of Accounts revision effective Jan 1, 1961: 1961+ not fully comparable with earlier years (e.g. distribution expense 1961 < 1960).
+# Coverage: 1959-60 and 1962-69 include Alaska and Hawaii; 1961 includes Hawaii; 1958 includes Alaska.
+# Revisions: 1958-60 steam fuel raised in the 1965 ed. vs the 1961 ed. (+1,470/+2,245/+2,774; steam totals unchanged); 1961 operation/maintenance split shifted by 153 (total unchanged). Later editions used.
+# plant_general 1965 = 1,685,983 from the 1965 ed.; the 1972 ed. misprints 1,635,983 (its own lines and total in service imply 1,685,983).
+# 1958 customer_accounts_total 270,852 is printed in both editions and fits the O&M total, but its printed components sum to 270,652.
+# Integration notes: revenue and operating income include leased-plant income (as the 1969-78 file); 1965 general plant from the 1965 vol. (PDF p41), the 1972 vol. misprints it (p52); 1958 customer accounts 270,852 as printed. Empty cells = 0 in make_us_bill_data.py (the account is inside another line, so nothing is lost or counted twice).
+item,1968,1967,1966,1965,1964,1963,1962,1961,1960,1959,1958,1957,1956,1955,1954,1953,1952,1951
+operating_revenues,16542092,15228046,14377307,13403195,12675868,12020622,11394097,10668773,10118235,9500149,8711210,8311390,7782955,7201875,6552005,6169600,5663480,5242212
+depreciation,1854618,1723983,1611338,1522157,1429627,1351527,1251656,1160671,1080189,994475,904424,826255,768642,697932,627579,559680,508039,472295
+amortization,,,,,,,,,,,,,,,,,,
+taxes_other_than_income,1732667,1575749,1450069,1340855,1267806,1191108,1118033,1048712,1019598,955820,848127,773566,705354,644772,581698,526944,483026,527934
+federal_income_taxes,1522250,1374136,1423407,1359584,1358472,1300920,1243512,1183670,1102739,1012965,874729,866997,864202,864047,769036,769598,728404,611500
+other_income_taxes,78082,69975,64405,60419,57266,52775,50638,48631,,,,,,,,,,
+deferred_income_taxes,120796,99763,89914,91831,103117,143255,168106,184329,205347,219194,218744,199174,178424,115952,77066,29178,0,0
+deferred_income_taxes_credit,57456,54543,50475,48620,46325,39386,32419,28296,22180,13944,5471,0,0,0,0,0,0,0
+investment_tax_credit_adj,75515,71829,53510,53245,53655,0,0,0,0,0,0,0,0,0,0,0,0,0
+net_operating_income,3764135,3552384,3320772,3107156,2879399,2771507,2593210,2346139,2201634,2042425,1855342,1708246,1610060,1500182,1350015,1223909,1104644,975860
+fuel_steam,2615146,2336063,2210910,1979368,1872374,1750864,1670647,1597989,1516875,1447392,1328377,1368916,1223644,1089799,974672,1001641,908357,852006
+fuel_nuclear,25066,17057,14569,14152,13261,12091,5166,4189,,,,0,0,0,0,0,0,0
+fuel_other,29935,11981,6429,3828,2203,1930,2030,1632,1884,1958,2139,3353,3222,3204,3319,4334,4094,4263
+purchased_power,960954,864144,794672,702760,623214,593657,550078,492124,442862,407994,400114,394771,383387,375877,327256,324426,327261,328937
+power_production_total,4519608,4050803,3783293,3401795,3164912,2975468,2825223,2664462,2509194,2381561,2221541,2246643,2068605,1898084,1718977,1726278,1607789,1528614
+transmission_total,231679,208730,194060,181374,174848,164854,161007,150637,151627,144762,131726,123574,115875,110326,105050,101491,94792,80283
+distribution_total,1049953,995410,935320,895858,863478,810698,779249,747272,761941,720419,684928,657705,626781,587405,574410,534593,494087,456093
+customer_accounts_total,417886,391347,376243,361711,351613,335594,318553,307875,300546,285253,270852,252652,237786,220818,210554,198258,184901,168835
+customer_service_total,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+sales_total,289194,273777,263288,240936,225458,208032,191056,175141,171645,159400,143785,134268,125280,114847,108101,100465,92014,85785
+admin_general_total,943165,894703,862163,834894,792542,754270,726273,679530,635955,597819,562483,522310,481946,447510,429519,399206,365784,335013
+om_total,7451485,6814770,6414367,5916568,5572851,5248916,5001361,4724917,4530908,4289214,4015315,3937152,3656273,3378990,3146611,3060291,2839367,2654623
+plant_intangible,20764,21545,22065,22899,23510,23714,23058,22963,22649,22602,22795,21504,21161,21047,22855,22256,22726,22409
+plant_production,27938348,26118205,24310408,23475503,22456840,21545128,20672834,19560452,18400638,16934429,15220881,13555454,12694352,12002851,10751468,9516344,8390777,7688677
+plant_transmission,12616832,11478682,10255356,9438082,8766969,8295860,7739360,7181400,6776764,6315078,5835279,5234476,4781973,4463437,4090774,3610362,3212478,2865436
+plant_distribution,27229474,25436609,23838144,22396278,21120361,19952358,18780894,17691787,16714834,15466183,14431903,13450077,12323436,11257879,10279638,9428595,8647535,7952124
+plant_general,2053614,1894221,1770919,1685983,1586029,1502766,1415201,1332372,1278826,1194618,1116860,1051157,985165,923574,853645,767624,715758,660241

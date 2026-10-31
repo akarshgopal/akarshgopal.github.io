@@ -63,7 +63,7 @@ export function kardashev(el) {
   upd();
 }
 
-// What a household kilowatt-hour pays for, over time: the US from utilities' accounts, 1969 on (2025 dollars),
+// What a household kilowatt-hour pays for, over time: the US from utilities' accounts, 1951 on (2025 dollars),
 // Germany from BDEW's price components (each year's euro cents at that year's ECB rate).
 const SPLIT = {
   us: {
@@ -90,7 +90,7 @@ const SPLIT = {
 export function billSplit(el) {
   const st = { c: 'us' };
   const fig = new Fig(el, {
-    label: 'What a household kilowatt-hour pays for, by year: in the United States 1969 to 2025 fuel and bought power jumped in the 1970s, plant costs rose in the 1980s, and wires have tripled since 2000; in Germany 2015 to 2026 energy, network and taxes and levies',
+    label: 'What a household kilowatt-hour pays for, by year: in the United States 1951 to 2025 every part fell until about 1970, then fuel and bought power jumped in the 1970s, plant costs rose in the 1980s, and wires have tripled since 2000; in Germany 2015 to 2026 energy, network and taxes and levies',
     height: w => w < 600 ? 470 : 380,
     draw(ctx, w, h) {
       const S = SPLIT[st.c], narrow = w < 600;
@@ -103,7 +103,6 @@ export function billSplit(el) {
       for (let v = 0; v <= ymax; v += 10) { const y = Math.round(sy(v)) + 0.5; line(ctx, box.l, y, box.r, y, v ? C.grid : C.grid2, 1); text(ctx, v + '¢', box.l - 6, y + 4, { size: 10.5, color: C.ink3, align: 'right' }); }
       const step = y1 - y0 > 15 ? (narrow ? 10 : 5) : (narrow ? 4 : 2);
       const t0 = y1 - y0 > 15 ? Math.ceil(y0 / step) * step : y0;
-      if (t0 - y0 >= 3) text(ctx, y0, sx(y0), box.b + 15, { size: 10.5, color: C.ink3, align: 'center' });
       for (let y = t0; y <= y1; y += step) text(ctx, y, sx(y), box.b + 15, { size: 10.5, color: C.ink3, align: 'center' });
       text(ctx, S.unit, box.l, box.t - 12, { size: 11, color: C.ink3, weight: 500 });
       // stacked layers
@@ -150,9 +149,12 @@ export function billSplit(el) {
     const tot = r => S.layers.reduce((s, L) => s + L.v(r), 0);
     const L = k => S.layers.find(l => l.k === k);
     const at = (k, pick) => S.rows.reduce((b, r) => (pick(L(k).v(r), L(k).v(b)) ? r : b));
-    const top = S.rows.reduce((b, r) => (tot(r) > tot(b) ? r : b)), fuelTop = at('energy', (a, b) => a > b), wireLow = at('wires', (a, b) => a < b);
+    const fuelTop = at('energy', (a, b) => a > b), wireLow = at('wires', (a, b) => a < b);
+    // the low before the fuel peak and the high after it (the first year is the overall high)
+    const low = S.rows.filter(r => r.y <= fuelTop.y).reduce((b, r) => (tot(r) < tot(b) ? r : b), r0);
+    const top = S.rows.filter(r => r.y > low.y).reduce((b, r) => (tot(r) > tot(b) ? r : b), r1);
     ro.innerHTML = st.c === 'us'
-      ? `An average American household kWh cost <b>${tot(r0).toFixed(1)}¢</b> in ${y0}, ${tot(top).toFixed(1)}¢ at its ${top.y} peak and <b>${tot(r1).toFixed(1)}¢</b> in ${y1}, in 2025 dollars. Fuel and bought power peaked at ${L('energy').v(fuelTop).toFixed(1)}¢ in ${fuelTop.y}; wires fell to ${L('wires').v(wireLow).toFixed(1)}¢ in ${wireLow.y} and are now <b>${L('wires').v(r1).toFixed(1)}¢</b>.`
+      ? `An average American household kWh cost <b>${tot(r0).toFixed(1)}¢</b> in ${y0}, ${tot(low).toFixed(1)}¢ in ${low.y}, ${tot(top).toFixed(1)}¢ in ${top.y} and <b>${tot(r1).toFixed(1)}¢</b> in ${y1}, in 2025 dollars. Fuel and bought power peaked at ${L('energy').v(fuelTop).toFixed(1)}¢ in ${fuelTop.y}; wires fell to ${L('wires').v(wireLow).toFixed(1)}¢ in ${wireLow.y} and are now <b>${L('wires').v(r1).toFixed(1)}¢</b>.`
       : `In ${y1} a German household paid <b>${tot(r1).toFixed(1)}¢</b> a kWh: ${L('energy').v(r1).toFixed(1)}¢ for energy and sales, ${L('wires').v(r1).toFixed(1)}¢ for the network and <b>${L('taxes').v(r1).toFixed(1)}¢</b> in taxes and levies.`;
     fig.invalidate();
   };

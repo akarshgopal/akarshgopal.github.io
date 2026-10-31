@@ -1,5 +1,7 @@
 # Handoff: put the 1951–68 accounts into the series and ship it
 
+**Status (31 Oct 2026): done.** The 1951–68 data are in `scripts/data/fpc_privately_owned_1960_1968.csv` and in essay 9 (see `HANDOVER.md` §1); deploy to master (task 7) not yet done.
+
 Paste everything below the line into a Claude session that has a shell, network access and push rights to
 `akarshgopal/akarshgopal.github.io`. Attach or paste the 1951–68 CSV produced from `docs/HANDOFF-1960s.md`
 (and, if you have it, that run's four-part write-up).

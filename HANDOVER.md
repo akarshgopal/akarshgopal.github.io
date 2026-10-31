@@ -2,23 +2,33 @@
 
 Last session: 21–31 October 2026. This file is the starting point for the next session.
 
-## 1. Done 31 Oct 2026: the US price decomposition now runs 1969–2025
+## 1. Done 31 Oct 2026: the US price decomposition now runs 1951–2025
 
 Essay 9 (`src/pages/futures.html`, "Where the savings went", figure `billSplit`) splits the average US household kWh
-into what it pays for, **1969–2025**, in 2025 dollars (¢/kWh):
+into what it pays for, **1951–2025**, in 2025 dollars (¢/kWh):
 
-| | 1969 | 1973 | 1981 | 1983 | 1988 | 2000 | 2025 |
-|---|---|---|---|---|---|---|---|
-| Fuel and bought power | 4.4 | 5.4 | 10.3 | 9.3 | 6.8 | 7.1 | 4.9 |
-| Running and paying for plants | 3.8 | 3.8 | 4.2 | 5.1 | 5.8 | 3.2 | 2.5 |
-| Wires | 5.0 | 4.2 | 3.0 | 3.3 | 3.0 | 1.9 | 5.7 |
-| Customer service, overheads | 2.2 | 1.9 | 1.8 | 2.1 | 2.3 | 1.8 | 2.6 |
-| Taxes | 3.8 | 2.8 | 2.6 | 3.5 | 2.6 | 1.4 | 1.5 |
-| Total | 19.3 | 18.1 | 21.9 | 23.3 | 20.4 | 15.4 | 17.2 |
+| | 1951 | 1955 | 1960 | 1965 | 1969 | 1973 | 1981 | 1983 | 1988 | 2000 | 2025 |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| Fuel and bought power | 8.4 | 6.9 | 5.5 | 4.9 | 4.4 | 5.4 | 10.3 | 9.3 | 6.8 | 7.1 | 4.9 |
+| Running and paying for plants | 6.7 | 6.5 | 5.6 | 4.9 | 3.8 | 3.8 | 4.2 | 5.1 | 5.8 | 3.2 | 2.5 |
+| Wires | 9.1 | 8.5 | 7.2 | 6.4 | 5.0 | 4.2 | 3.0 | 3.3 | 3.0 | 1.9 | 5.7 |
+| Customer service, overheads | 4.8 | 4.2 | 3.6 | 3.1 | 2.2 | 1.9 | 1.8 | 2.1 | 2.3 | 1.8 | 2.6 |
+| Taxes | 8.1 | 7.6 | 6.5 | 5.2 | 3.8 | 2.8 | 2.6 | 3.5 | 2.6 | 1.4 | 1.5 |
+| Total | 37.0 | 33.9 | 28.3 | 24.5 | 19.3 | 18.1 | 21.9 | 23.3 | 20.4 | 15.4 | 17.2 |
+
+1951–69: every layer fell 43–53 per cent and kept a nearly constant share of revenue, so the accounts show the whole
+business getting cheaper together, not a saving concentrated in generation (layers are shares × the residential
+price, not independent unit costs). The fall did not slow before 1969. Analysis: `fpc-extract/integration/PHASE1.md`
+(outside the repo).
 
 Sources (all in `scripts/data/`, each with its provenance in a header comment; `src` on each row of
 `src/lib/usbilldata.js` says which was used):
 - 1994–2025 FERC Form 1 via PUDL (`ferc1`).
+- 1951–68 FPC *Statistics of (Privately Owned) Electric Utilities*, Classes A and B, 1961 ed. Tables 18/20/21
+  (1951–54, `books.google.com/books?id=x1_ROuyegAsC`), 1965 ed. Tables 11/17/20 (1955–61; income 1955–58,
+  `tZi2hdDrkCUC`), 1972 ed. Tables 12/18/21 (1962–68; income 1959–68, `Ar6IVVeFyEYC`), in
+  `scripts/data/fpc_privately_owned_1960_1968.csv` (`fpc`; name kept for the script). Revenue includes leased-plant
+  income as in the 1978 ed.; USoA revised 1961 (no break at layer level). Read from page images; all checks residual 0.
 - 1969–78 FPC/EIA *Statistics of Privately Owned Electric Utilities 1978*, Tables 24/28/30 (archive.org) (`fpc`).
 - 1979–82 EIA *Financial Statistics of Selected Electric Utilities 1982*, Tables 3/27/17 (OSTI 7028400);
   1985–89 the 1989 IOU edition, Tables 5/10/26 (archive.org); 1991–93 the 1995 edition (eia.gov) (`eia-finstats`).
@@ -28,23 +38,18 @@ Sources (all in `scripts/data/`, each with its provenance in a header comment; `
   Leave-one-out checks (1982, 1985) reproduce EIA's shares within 1 point.
 - Capital split before 1994: plant in service by function, scaled so 1994's plant shares give 1994's depreciation
   shares. 1994–95 overlap (EIA composite vs PUDL): shares within 1 point.
-- Prices: EIA-861 2001+; EIA AER Table 8.10 before (1960+ available).
+- Prices: EIA-861 2001+; EIA AER Table 8.10 1960–2000; before 1960 Historical Statistics S 116 × 1.0626 (Table 8.10/S 116
+  over 1960–70), `scripts/data/hist_stats_s116_residential_price.csv`.
 Scanned tables were read from page images and every column checked against the printed totals (the script also
 asserts the O&M lines add up). The script prints the checks.
 
 Not done / possible next steps:
-- **1960–68**: needs an FPC *Statistics of Privately Owned Electric Utilities* edition from 1968–72 (its ten-year
-  tables would cover 1959–68). Only on HathiTrust (Cloudflare bot check blocks automated access) and Google Books,
-  which has full-view volumes dated 1972 (`books.google.com/books?id=Ar6IVVeFyEYC`), 1974 (`4Rpp6hwgar8C`) and 1976
-  (`ZfdFzhzMwm4C`) but answers this environment's downloads with a CAPTCHA. A person can download the PDF in a
-  browser. `docs/HANDOFF-1960s.md` is a self-contained brief for a Claude conversation given the PDFs: it returns
-  `scripts/data/fpc_privately_owned_1960_1968.csv`, which the script loads if present (no PDFs in git).
-  **Status (31 Oct):** that extraction is done for 1951–68 (all checks residual 0; the CSV is with the owner, not
-  yet in git). The script is ready for it (empty cells = 0; pre-1960 prices from Historical Statistics S 116,
-  `scripts/data/hist_stats_s116_residential_price.csv`). The remaining steps, as a brief for another Claude session:
-  `docs/HANDOFF-1951-integration.md`. *Historical Statistics of the
-  US* (Census, ch. S 133–146) and the *Statistical Abstract* have only revenue and net income, not the split.
-- Optionally show the 1960–68 total price as a line before the stack (AER prices are already in `scripts/data/`).
+- ~~**1960–68**~~ **Done 31 Oct 2026** for 1951–68 (`docs/HANDOFF-1960s.md`, `docs/HANDOFF-1951-integration.md`;
+  committed on `electricity-source`, **not yet deployed to master**: task 7 of the integration brief). Earlier years
+  would need FPC volumes from the 1940s; *Historical Statistics of the US* (Census, ch. S 133–146) and the
+  *Statistical Abstract* have only revenue and net income, not the split.
+- The toy model in essay 9 §1 stops the engine in 1965, and essay 1 §5 calls wires and taxes costs that "do not fall";
+  the 1951–69 accounts show both falling as fast as generation (see `fpc-extract/integration/PHASE2.md`).
 - Essay 9 §1 could cite the real shares next to the toy `offset` model (the subsection right after it now does).
 
 ### How the current numbers are made (keep the method consistent)

@@ -1,5 +1,7 @@
 # Handoff: extract 1960–68 US utility accounts from the FPC volumes
 
+**Status (31 Oct 2026): done.** The 1951–68 data are in `scripts/data/fpc_privately_owned_1960_1968.csv` and in essay 9 (see `HANDOVER.md` §1).
+
 Paste everything below the line into a Claude conversation (API or claude.ai) **together with the PDF(s)**. The answer
 is a single CSV of a few KB. Save it as `scripts/data/fpc_privately_owned_1960_1968.csv` on the `electricity-source`
 branch. `scripts/make_us_bill_data.py` picks it up automatically if it exists. Do not commit the PDFs.
