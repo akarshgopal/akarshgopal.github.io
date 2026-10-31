@@ -2,30 +2,40 @@
 
 Last session: 21–31 October 2026. This file is the starting point for the next session.
 
-## 1. The next task: take the US price decomposition back to 1970
+## 1. The next task: take the US price decomposition back to 1960
 
 Essay 9 (`src/pages/futures.html`, section "Where the savings went", figure `billSplit`) splits the average US
-household kWh into what it pays for, 2001–2025, in 2025 dollars:
+household kWh into what it pays for, **1991–2025** (extended from 2001 on 31 Oct 2026), in 2025 dollars:
 
-| ¢/kWh, 2025 $ | 2001 | 2025 |
-|---|---|---|
-| Fuel and bought power | 8.2 | 4.9 |
-| Running and paying for plants | 2.3 | 2.5 |
-| Wires (transmission + distribution) | 2.0 | 5.7 |
-| Customer service, overheads | 1.6 | 2.6 |
-| Taxes | 1.4 | 1.5 |
-| Total | 15.7 | 17.2 |
+| ¢/kWh, 2025 $ | 1991 | 2001 | 2025 |
+|---|---|---|---|
+| Fuel and bought power | 6.3 | 8.2 | 4.9 |
+| Running and paying for plants | 5.1 | 2.3 | 2.5 |
+| Wires (transmission + distribution) | 2.8 | 2.0 | 5.7 |
+| Customer service, overheads | 2.3 | 1.6 | 2.6 |
+| Taxes | 2.5 | 1.4 | 1.5 |
+| Total | 19.0 | 15.6 | 17.2 |
 
-It starts in 2001 only because the residential price series reachable last time (EIA-861 via PUDL) starts there.
-The series' question is about the break around 1970–73, so the goal is to extend the decomposition to cover it:
-**1960 (or earlier) to 2025**, ideally showing the fall to 1970, the jump in fuel after 1973, the capital (nuclear,
-interest rates) bulge of the late 1970s–80s, and the wires growth since.
+Sources now: 1994–2025 FERC Form 1 via PUDL; 1991–93 EIA *Financial Statistics of Major U.S. IOUs 1995*
+(`scripts/data/eia_finstats_iou_1991_1995.csv`, capital split with 1994's depreciation shares; 1994–95 overlap agrees
+within 1 point); residential prices 2001+ EIA-861 via PUDL, 1960–2000 EIA AER Table 8.10
+(`scripts/data/eia_aer_t810_prices.csv`, already covers 1960). Coverage 94.5–105% of revenue (1997 is the low year).
+Each row carries `src` (`ferc1` / `eia-finstats`) for a seam marker once coarser sources are added.
+
+Still missing: **utility cost structure 1960–1990.** EIA's own archive of the *Financial Statistics* series starts with
+the 1995 edition (`eia.gov/electricity/archive/0437951.pdf`; 1996, 1998, 1999 also there). Older editions and the
+predecessor FPC/EIA *Statistics of Privately Owned Electric Utilities in the United States* exist at:
+archive.org (e.g. `archive.org/details/statisticsofpriv1978unse`), OSTI (`osti.gov/biblio/5764721` 1978,
+`osti.gov/biblio/6121153` 1981, `osti.gov/biblio/10114582` 1990), HathiTrust (`catalog.hathitrust.org/Record/009048732`),
+and Census *Historical Statistics of the US*, ch. S (income account of privately owned utilities to 1970). On 31 Oct
+these hosts were all blocked (archive.org, www.osti.gov, www2.census.gov, babel.hathitrust.org). EIA's *Changing
+Structure of the Electric Power Industry 1970–1991* (`eia.gov/electricity/archive/0562.pdf`) has only anchors: fuel was
+77, 84 and 67% of power production expenses for major IOUs in 1970, 1980 and 1990 (footnote 63), and Table C6 gives
+utility generation by fuel and fossil fuel prices 1970–91.
 
 ### What is needed
-1. **Average residential price, nominal, 1960–2000** (and ideally all-sector). EIA *Annual Energy Review* Table 8.10
-   ("Average Retail Prices of Electricity", 1960–2011) or EIA *Monthly Energy Review* Table 9.8; the project already
-   has the 1892–1970 real series and post-1973 nominal points in `src/figs/history.js` (sources in essay 1 notes).
-2. **Utility cost structure before 1994** (FERC Form 1 in PUDL starts in 1994). Candidate sources, best first:
+1. ~~Average residential price, nominal, 1960–2000~~ — done (AER Table 8.10, in `scripts/data/`).
+2. **Utility cost structure before 1991** (1991–93 now from the 1995 *Financial Statistics*). Candidate sources, best first:
    - FPC / FERC / EIA, *Statistics of Privately Owned Electric Utilities in the United States* (annual, 1937–1980s)
      and its successor EIA *Financial Statistics of Major U.S. Investor-Owned Electric Utilities* (1980s–2003):
      operating revenue, fuel, purchased power, O&M by function, depreciation, taxes, net operating income — the same
@@ -35,7 +45,7 @@ interest rates) bulge of the late 1970s–80s, and the wires growth since.
    - Hirsh (1989) and Joskow (1974, 1985) for qualitative anchors.
    A few benchmark years (1960, 1965, 1970, 1973, 1975, 1980, 1985, 1990) are enough if annual data is not available;
    say so in the caption.
-3. **CPI-U**: already used, from `https://raw.githubusercontent.com/datasets/cpi-us/main/data/cpiai.csv`.
+3. **CPI-U** (1960+ fine): already used, from `https://raw.githubusercontent.com/datasets/cpi-us/main/data/cpiai.csv`.
 
 ### How the current numbers are made (keep the method consistent)
 `scripts/make_us_bill_data.py <data dir>` → `src/lib/usbilldata.js`. Inputs (PUDL, public S3, reachable):
@@ -58,8 +68,9 @@ Figure `billSplit` in `src/figs/new-futures.js` (US/Germany switch), prose and n
 to it, and essay 9's §1 ("four layers") can cite real shares instead of the toy alone.
 
 ## 2. Network access the task needs
-The last environment blocked most hosts. Reachable: GitHub (incl. raw), PUDL S3, Ember's GCS bucket, PyPI/npm.
-Blocked: eia.gov, fred.stlouisfed.org, bls.gov, gutenberg.org, smard.de, grid-india.in, iexindia.com, nea.gov.cn,
+eia.gov and www.eia.gov were allowed on 31 Oct. Still needed for 1960–90: **archive.org, www.osti.gov,
+www2.census.gov, babel.hathitrust.org**. Earlier list — reachable: GitHub (incl. raw), PUDL S3, Ember's GCS bucket,
+PyPI/npm. Blocked then: eia.gov (now allowed), fred.stlouisfed.org, bls.gov, gutenberg.org, smard.de, grid-india.in, iexindia.com, nea.gov.cn,
 HathiTrust. **Allow at least `eia.gov` and `www.eia.gov`** (and ideally `babel.hathitrust.org`, `fred.stlouisfed.org`).
 WebSearch worked (snippets only); WebFetch is bound by the same network allowlist.
 
@@ -94,8 +105,8 @@ WebSearch worked (snippets only); WebFetch is bound by the same network allowlis
   value falls as share rises; (5) the costs the engine does not touch — wires, firming, capital, taxes — now
   dominate. Essay 9's new decomposition is the quantified version of (4)+(5) for the US.
 - Four countries (US, Germany, China, India) replace Germany as the default.
-- **PR #20 (open)**: the "Where the savings went" section and `billSplit` figure. Merge it, or fold the 1970 extension
-  into it.
+- PR #20 (the "Where the savings went" section, 2001–2025) merged 31 Oct. The 1991 extension is in this source but
+  not yet deployed to the site.
 - Layout: site-wide left rail on ≥960 px, drawer on phones (from master); Pause sits in the nav (master floated it
   over figures). The drawer drops `backdrop-filter` when open (otherwise the fixed panel is trapped in the bar).
 
