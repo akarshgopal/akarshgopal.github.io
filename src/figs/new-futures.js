@@ -4,7 +4,7 @@ import { C, alpha } from '../lib/colors.js';
 import { text, circle, line, pathLine, scale } from '../lib/draw.js';
 import { controls, slider, readout, segmented } from '../lib/ui.js';
 import { ENERGY } from '../lib/energydata.js';
-import { USBILL } from '../lib/usbilldata.js';
+import { USBILL, USSALES } from '../lib/usbilldata.js';
 import { DATA } from '../lib/data.js';
 import { USD_PER_EUR } from '../lib/currency.js';
 
@@ -162,4 +162,78 @@ export function billSplit(el) {
   upd();
 }
 
-export const FIGS = { kardashev, billSplit };
+// Sales against price: the same US utilities, kWh sold (1951 = 1) against the real price of a household kWh or its
+// wires part, both on log scales, one dot a year. Sales before 1960 and in 1994–2001 rest on a weaker basis (lighter).
+const SP = USSALES.map(s => { const r = USBILL.find(b => b.y === s.y); return { y: s.y, i: s.i, rough: !!s.rough, price: r.real, wires: r.parts.wires }; });
+const SP_LAB = { // label offsets in px from the dot, by width and series: [dx, dy, align, leader]
+  wide: {
+    price: { 1951: [3, 17, 'left'], 1969: [-7, 14, 'right'], 1973: [0, 17, 'center'], 1983: [0, -10, 'center'], 2000: [8, 17, 'left'], 2007: [34, 4, 'left', 1], 2025: [7, -9, 'left'] },
+    wires: { 1951: [4, -8, 'left'], 1969: [5, -9, 'left'], 1973: [-5, 15, 'right'], 1983: [0, 19, 'center'], 2000: [7, 14, 'left'], 2007: [9, 4, 'left'], 2025: [9, 4, 'left'] },
+  },
+  narrow: {
+    price: { 1951: [3, 17, 'left'], 1969: [-6, 14, 'right'], 1973: [0, 17, 'center'], 1983: [0, -10, 'center'], 2000: [0, 18, 'center'], 2007: [-14, 15, 'right', 1], 2025: [0, -10, 'center'] },
+    wires: { 1951: [4, -8, 'left'], 1969: [4, -9, 'left'], 1973: [-5, 15, 'right'], 1983: [-5, 15, 'right'], 2000: [6, 14, 'left'], 2007: [8, 4, 'left'], 2025: [8, 4, 'left'] },
+  },
+};
+export function salesPrice(el) {
+  const st = { s: 'price', hover: null, pts: [] };
+  const at = y => SP.find(p => p.y === y);
+  const S = { price: { lab: 'whole price', col: C.ink }, wires: { lab: 'wires', col: C.network } };
+  const fig = new Fig(el, {
+    label: `Kilowatt-hours sold by US investor-owned utilities against the real price of a household kilowatt-hour, both on log scales, 1951 to 2025: from 1951 to 1969 sales rose ${at(1969).i.toFixed(1)} times while the price fell from ${at(1951).price.toFixed(0)} to ${at(1969).price.toFixed(0)} cents along a straight line; it went flat in 1970 to 1973, rose to ${at(1983).price.toFixed(0)} cents in 1983 and fell back by 2000; since 2007 sales have stood still at about ${at(2025).i.toFixed(0)} times 1951 while the wires part rose from ${at(2007).wires.toFixed(1)} to ${at(2025).wires.toFixed(1)} cents`,
+    height: w => w < 600 ? 360 : 400,
+    draw(ctx, w, h) {
+      const narrow = w < 600, ln = Math.log;
+      const box = { l: narrow ? 30 : 40, r: w - (narrow ? 12 : 24), t: 30, b: h - (narrow ? 40 : 42) };
+      const sx0 = scale(ln(0.9), ln(15), box.l, box.r), sy0 = scale(ln(1.5), ln(42), box.b, box.t);
+      const sx = v => sx0(ln(v)), sy = v => sy0(ln(v));
+      for (const v of [2, 3, 5, 10, 20, 40]) { const y = Math.round(sy(v)) + 0.5; line(ctx, box.l, y, box.r, y, C.grid, 1); text(ctx, v + '¢', box.l - 6, y + 4, { size: 10.5, color: C.ink3, align: 'right' }); }
+      for (const v of [1, 2, 3, 5, 10]) { const x = Math.round(sx(v)) + 0.5; line(ctx, x, box.t, x, box.b, C.grid, 1); text(ctx, v + '×', x, box.b + 15, { size: 10.5, color: C.ink3, align: 'center' }); }
+      line(ctx, box.l, box.b + 0.5, box.r, box.b + 0.5, C.grid2, 1);
+      text(ctx, narrow ? '¢ per household kWh, 2025 $, log scale' : '¢ per household kWh, 2025 dollars, log scale', box.l, box.t - 12, { size: 11, color: C.ink3, weight: 500 });
+      text(ctx, narrow ? 'kWh sold, 1951 = 1, log scale' : 'kWh sold by the same utilities, 1951 = 1, log scale', box.r, box.b + 32, { size: 11, color: C.ink3, weight: 500, align: 'right' });
+      // the other series, faint, for reference
+      const other = st.s === 'price' ? 'wires' : 'price';
+      pathLine(ctx, SP.map(p => [sx(p.i), sy(p[other])]), alpha(S[other].col, 0.16), 1.4);
+      text(ctx, S[other].lab, sx(1) + 8, sy(SP[0][other]) + 4, { size: 10.5, color: alpha(S[other].col, 0.5), weight: 600, halo: true });
+      // the chosen series: segments and dots, lighter where the sales estimate is rough
+      const col = S[st.s].col;
+      st.pts = SP.map(p => ({ p, x: sx(p.i), y: sy(p[st.s]) }));
+      for (let k = 1; k < st.pts.length; k++) {
+        const a = st.pts[k - 1], b = st.pts[k], rough = a.p.rough || b.p.rough;
+        line(ctx, a.x, a.y, b.x, b.y, alpha(col, rough ? 0.3 : 0.75), rough ? 1.2 : 1.6);
+      }
+      for (const q of st.pts) circle(ctx, q.x, q.y, narrow ? 2.4 : 2.8, q.p.rough ? C.paper : col, alpha(col, q.p.rough ? 0.5 : 1), 1.2);
+      for (const [yr, [dx, dy, align, lead]] of Object.entries(SP_LAB[narrow ? 'narrow' : 'wide'][st.s])) {
+        const q = st.pts.find(t => t.p.y === +yr);
+        if (lead) line(ctx, q.x + Math.sign(dx) * 3, q.y + Math.sign(dy) * 2, q.x + dx - Math.sign(dx) * 2, q.y + dy - 4, alpha(col, 0.55), 1);
+        text(ctx, yr, q.x + dx, q.y + dy, { size: 10.5, weight: 650, color: col, align, halo: true });
+      }
+      if (st.hover) {
+        const q = st.pts.find(t => t.p.y === st.hover);
+        circle(ctx, q.x, q.y, 6, 'rgba(0,0,0,0)', C.price, 2);
+      }
+    },
+  });
+  const ctl = controls(el);
+  const ro = readout(el);
+  const pct = v => (v < 0 ? '−' : '+') + Math.abs(Math.round(v * 100)) + '%';
+  const upd = () => {
+    const a = at(1951), b = at(1969), c = at(2007), d = at(2025), p = st.hover && at(st.hover), p5 = p && at(p.y - 5);
+    const g = (Math.pow(b.i / a.i, 1 / (b.y - a.y)) - 1) * 100;
+    ro.innerHTML = p
+      ? `<b>${p.y}</b>: sales <b>${p.i.toFixed(1)}×</b> 1951${p5 ? `, <b>${pct(p.i / p5.i - 1)}</b> on ${p5.y}` : ''}${p.rough ? ' (a rougher estimate)' : ''}. A household kWh cost <b>${p.price.toFixed(1)}¢</b> in 2025 dollars, <b>${p.wires.toFixed(1)}¢</b> of it for the wires.`
+      : `From ${a.y} to ${b.y} sales grew <b>${b.i.toFixed(1)}×</b>, ${g.toFixed(1)}% a year, and ${st.s === 'price' ? 'the price' : 'the wires part'} fell from ${a[st.s].toFixed(1)}¢ to <b>${b[st.s].toFixed(1)}¢</b>. From ${c.y} to ${d.y} sales ${Math.abs(d.i / c.i - 1) < 0.03 ? `stayed at about ${d.i.toFixed(0)}×` : `went from ${c.i.toFixed(1)}× to ${d.i.toFixed(1)}×`}, while the price went from ${c.price.toFixed(1)}¢ to ${st.s === 'price' ? '<b>' : ''}${d.price.toFixed(1)}¢${st.s === 'price' ? '</b>' : ''} and the wires from ${c.wires.toFixed(1)}¢ to ${st.s === 'wires' ? '<b>' : ''}${d.wires.toFixed(1)}¢${st.s === 'wires' ? '</b>' : ''}.`;
+    fig.invalidate();
+  };
+  const near = r => (x, y) => { let best = null, bd = r * r; for (const q of st.pts) { const dd = (q.x - x) ** 2 + (q.y - y) ** 2; if (dd < bd) { bd = dd; best = q.p.y; } } return best; };
+  fig.interact({
+    hit: near(16), touchHit: near(10), cursor: 'crosshair',
+    hover: o => { if (o !== st.hover) { st.hover = o; upd(); } },
+    down: o => { st.hover = o; upd(); },
+  });
+  segmented(ctl, { label: 'Show', value: st.s, name: 'show', options: [{ label: 'Whole price', value: 'price', name: 'price' }, { label: 'Wires only', value: 'wires', name: 'wires' }], onchange: v => { st.s = v; upd(); } });
+  upd();
+}
+
+export const FIGS = { kardashev, billSplit, salesPrice };

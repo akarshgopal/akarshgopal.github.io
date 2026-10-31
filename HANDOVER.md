@@ -2,6 +2,43 @@
 
 Last session: 21–31 October 2026. This file is the starting point for the next session.
 
+## 0. Done 31 Oct 2026 (later): growth as the second engine, and the "Sales against price" figure
+
+**Thesis reframe.** Prices fell for eighty years because the business grew into its costs: better machines cut the
+cost of making power, and sales that doubled about every eight to ten years let everything else grow more slowly than
+the power sold. 1951–69 (investor-owned utilities): sales ×4.4 (+8.6%/yr), real wires spend ×2.5, so wires, overheads
+and taxes per kWh fell about as fast as fuel and plants. The real price stopped falling in **1970**, while sales still
+grew 6.6%/yr to 1973 (machines and fuel, not demand); after 1973 slower growth still carried wires per kWh down to
+**~2000** (1.9¢) because wires spend stood still; since 2007 sales are flat and real wires spend rose ×1.85, so the
+wires part went 2.9 → 5.7¢. Wires spending was never "fixed"; it grew at ~0.6 of the pace of sales. The return on
+plant rose slightly (5.1% → 5.45%), so "profit rates came down" was wrong; taxes fell through income tax.
+Verification and the passage list: `fpc-extract/thesis/DRAFT.md`, applied as in `fpc-extract/thesis/APPLY.md`
+(outside the repo). Text changed: cheaper.html §4 intro list and §5 ¶1, ¶2, ¶4; futures.html §1 "Scale" and the
+lesson, "Where the savings went" (two sentences), the network bullet, the conclusion, the toy-model caption;
+the-machine.html §3 ¶3–4 and §4 close; transmission.html opening and close; history.js 1949 and 1968 cards and the toy
+button ("Machines & growth: gains continue after 1970"; `STOP = 1970` unchanged).
+
+**Figure `salesPrice`** (`src/figs/new-futures.js`, after `billSplit` in futures.html): log-log connected scatter, one
+dot a year, kWh sold (1951 = 1) against the real household price or (toggle) its wires part; the other series faint
+for reference; rough sales years drawn as hollow, lighter dots; hover/tap a dot for year, index, % change on five
+years earlier, price and wires. Data: `USSALES` in `src/lib/usbilldata.js` (same script; `USBILL` unchanged).
+
+**Sales index method** (`scripts/make_us_bill_data.py`, end): 1951–93 operating revenue ÷ AER Table 8.10 *total*
+(all-sector) price; 1951–59 the residential price (S 116 scaled) × the 1960–62 total/residential ratio (0.692);
+1994–2000 chained on US generation (`src/lib/cheaperdata.js` `USE.us.gen`, OWID — so `make_cheaper_data.py` must have
+run first); 2001+ PUDL `core_eia861__yearly_sales` `sales_mwh`, `entity_type == 'Investor Owned'`, `service_type` in
+(bundled, delivery), scaled at 2001 to join the chain. `rough: 1` on 1951–59 and 1994–2001. Key values: 1969 4.44,
+1973 5.74, 1983 7.40, 2000 11.21, 2007 11.08, 2025 11.07.
+
+**Caveats.** The index before 2001 is a derived proxy (revenue ÷ price; the price is on both axes, so part of any
+negative slope is built in); AER prices before 1984 are printed to 0.1¢, so year-to-year changes are noisy (±3–6%) —
+quote multi-year changes only. 1951–59 depends on a moving total/residential price ratio (growth may be overstated by
+up to ~1 point/yr). 1985–93 implied growth (2.4%/yr) is below generation (3.2%/yr). Form 1 revenue in 1994–2001
+includes wholesale trading, hence the generation bridge. FERC1 sums jump in 2000–01 and EIA-861 IOU delivered falls 6%
+in 2002: avoid 2000–02 as endpoints. The price layers are residential, sales are all classes; coverage is
+investor-owned utilities only (~¾ of US sales). No interest-rate series in the repo.
+Possible next step: a toy model in which growth runs to 1973 and tapers (DRAFT §2.2), not built.
+
 ## 1. Done 31 Oct 2026: the US price decomposition now runs 1951–2025
 
 Essay 9 (`src/pages/futures.html`, "Where the savings went", figure `billSplit`) splits the average US household kWh
@@ -53,8 +90,7 @@ Not done / possible next steps:
   engine in 1970, not 1965, and the text says prices with engine + shocks are "back to about their 1970 level" by
   1990 (model: 0.647 in 1970, 0.654 in 1990); essay 1 §5 now says wires, offices and taxes per kWh fell anyway while
   growth was fast and stopped when it slowed; the essay 9 conclusion credits better machines *and* a growing market.
-  Left as is: the-machine.html "by the late 1960s neither bigger nor hotter units were making electricity cheaper"
-  (about new units, Hirsh) and transmission.html's lede (the engine of better plants "did little" for wires).
+  (Both later revised by the growth reframe, §0: wires per kWh did not stop falling until ~2000.)
 - Essay 9 §1 could cite the real shares next to the toy `offset` model (the subsection right after it now does).
 
 ### How the current numbers are made (keep the method consistent)
@@ -99,6 +135,8 @@ WebSearch worked (snippets only); WebFetch is bound by the same network allowlis
     sibling AI series on the site; check them against `blog/ai/` in the site repo instead.
   - `node scripts/audit-local.mjs 1440,1280,1024,390 --page=<file>.html` (layout audit with the pre-installed
     Chromium at `/opt/pw-browsers/chromium`; `--stress` pushes sliders to extremes).
+    If that Chromium is missing, run a temporary copy with `executablePath: '/usr/bin/google-chrome'` and
+    `--no-sandbox` from the repo root (it imports `playwright` from `node_modules`), then delete the copy.
   - Look at every changed figure in page context at 1280 and 390 px (a small Playwright script that scrolls a
     `[data-fig=name]` to the top third and screenshots the viewport).
 - Notes: `python3 scripts/renumber-post.py src/pages/<file>.html` renumbers notes by first citation (check
@@ -109,8 +147,9 @@ WebSearch worked (snippets only); WebFetch is bound by the same network allowlis
 - Title "Why Did Electricity Stop Getting Cheaper?", subtitle "How electricity works, in nine essays".
   Nine essays + two deep dives (`src/series.mjs`): cheaper, kilowatt-hour, the-machine, transmission (Wires),
   balancing, solar-pv, utility-renewables (Wind), price (Costs), futures; deep dives transformers, synthetic-fuels.
-- The argument, in five pieces: (1) an engine of productivity (hotter, bigger plants) made power cheaper; (2) it
-  stalled around 1970 (materials ceiling well below Carnot; unit size limits; slower demand); (3) the merit order
+- The argument, in five pieces: (1) two engines made power cheaper: better machines (hotter, bigger plants) and fast
+  growth in use, which spread wires, offices and taxes over ever more kWh; (2) the machines stalled around 1970
+  (materials ceiling well below Carnot; unit size limits) as fuel turned dearer, and growth slowed after 1973; (3) the merit order
   passed the 1970s fuel shocks straight through; (4) solar, wind and batteries restarted the engine for energy, but
   value falls as share rises; (5) the costs the engine does not touch — wires, firming, capital, taxes — now
   dominate. Essay 9's new decomposition is the quantified version of (4)+(5) for the US.

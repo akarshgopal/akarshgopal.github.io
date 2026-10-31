@@ -15,9 +15,9 @@ const LANES = [
 const EVENTS = [
   { y: 1882, lane: 'scale', t: 'Pearl Street', d: 'Edison’s first central station in Manhattan: DC, a few hundred customers, a walkable service area.' },
   { y: 1925, lane: 'physics', t: '~315 °C steam', d: 'Typical US steam inlet temperatures in the 1920s were around 600 °F (≈315 °C). Hotter steam means a higher Carnot ceiling.' },
-  { y: 1949, lane: 'scale', t: 'Demand +7¾%/yr', d: 'From 1949 to 1973 US electricity demand grew roughly 7¾% a year — doubling about every nine years — so every new plant could be bigger than the last.' },
+  { y: 1949, lane: 'scale', t: 'Demand +7¾%/yr', d: 'From 1949 to 1973 US electricity demand grew roughly 7¾% a year — doubling about every nine years — so every new plant could be bigger than the last, and the wires carried ever more power.' },
   { y: 1962, lane: 'physics', t: '538–600 °C plateau', d: 'By the 1960s inlet temperatures reached ~1,000–1,100 °F (538–600 °C) and stalled: the steels of the day could not take more heat without creep and corrosion.' },
-  { y: 1968, lane: 'scale', t: 'Units > 1,000 MW', d: 'Units pushed past ~1,000 MW ran into reliability, construction and maintenance problems; the economies of scale that had paid for decades of price cuts reversed (Hirsh’s “technological stasis”).' },
+  { y: 1968, lane: 'scale', t: 'Units > 1,000 MW', d: 'Units pushed past ~1,000 MW ran into reliability, construction and maintenance problems; the economies of scale that had paid for much of the price cuts reversed (Hirsh’s “technological stasis”).' },
   { y: 1970, lane: 'inst', t: 'Clean Air Act', d: 'The 1970 Clean Air Act and its follow-ons required controls such as scrubbers — about 15% added to coal unit capital cost; with cooling towers about 20% (Joskow & Rose).' },
   { y: 1973, lane: 'fuel', t: 'Oil embargo', d: 'Oil was 16.9% of US generation in 1973 (314 of 1,861 TWh). Crude went from about $3 to $12 a barrel between Sept 1973 and Jan 1974, and fuel-adjustment clauses passed it straight through.' },
   { y: 1975, lane: 'inst', t: 'Nuclear schedules 7 → 12 yrs', d: 'Construction schedules for US reactors stretched from about 7 to 12 years; interest and escalation came to dominate costs. Why is contested — Cohen blames a regulatory ratchet, others legitimate safety learning; Lovering et al. show France and Korea fared better.' },
@@ -140,7 +140,7 @@ export function offset(el) {
   });
   const ctl = controls(el, 'chips');
   const tog = (k, lab, col) => { const b = button(ctl, lab, () => { st[k] = !st[k]; b.setAttribute('aria-pressed', st[k]); fig.invalidate(); }, { kind: 'chip', color: col, name: k }); b.setAttribute('aria-pressed', st[k]); };
-  tog('engine', 'Physics & scale: gains continue after 1970', C.storage);
+  tog('engine', 'Machines & growth: gains continue after 1970', C.storage);
   tog('fuel', 'Fuel: the 1973 oil shock', C.gas);
   tog('infl', 'Institutions: interest rates & build delays', C.network);
   tog('env', 'Institutions: pollution retrofits', C.nuclear);

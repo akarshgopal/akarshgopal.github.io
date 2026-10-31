@@ -122,6 +122,7 @@ def from_eei(y, e, shares, k=None, og=None):
     return rev, {'fuel': fuel, 'bought': bought, **split(dt + noi, shares, og, e['transmission_distribution'], over_om), 'taxes': taxes}
 
 out = []
+REV = {}  # operating revenue, nominal dollars, for the sales index below
 first = min(om)
 _dg, _dw, _do = dshares(dep[first]); _dt = _dg + _dw + _do
 SH0 = (_dg / _dt, _dw / _dt, _do / _dt)
@@ -158,6 +159,7 @@ for y in sorted(set(om) | set(early)):
         gen = gen_om + cap * dg / dt; wires = wires_om + cap * dw / dt; over = over_om + cap * do / dt
         parts = {'fuel': fuel, 'bought': bought, 'gen': gen, 'wires': wires, 'over': over, 'taxes': taxes}
     total = sum(parts.values())
+    REV[y] = rev
     price = res[y][0] / res[y][1] / 10 if y in res and res[y][1] > 0 else aer[y]  # ¢/kWh nominal
     real = price * base / cpi[y]
     out.append({'y': y, 'src': src, 'nom': round(price, 2), 'real': round(real, 2), 'cover': round(total / rev, 3),
@@ -181,8 +183,33 @@ for y, nb in ((1982, (1981, 1985)), (1985, (1982, 1989))):
 print('S 116 price scale (Table 8.10 / S 116, 1960-70):', round(S116_K, 4))
 print('capital split 1969, 1980, 1993 (plants, wires, overheads):', [tuple(round(x, 3) for x in pshares(y)) for y in (1969, 1980, 1993)], 'Form 1 1994:', tuple(round(x, 3) for x in SH0))
 
+# kWh sold by the same utilities, as an index (1951 = 1). 1951-93: operating revenue over the average price of all US
+# retail sales (Table 8.10 'total'; before 1960 the residential price above times the 1960-62 total/residential ratio).
+# 1993-2001: chained on US generation (src/lib/cheaperdata.js USE.us.gen, from make_cheaper_data.py), because Form 1
+# revenue then carries wholesale trading that inflates revenue over price. 2001 on: EIA-861 sales on investor-owned
+# wires (bundled and delivery-only rows), chained at 2001. 1951-59 and 1994-2001 are rough.
+import re
+tot = {int(r['year']): float(r['total']) for r in csv.DictReader(l for l in open('scripts/data/eia_aer_t810_prices.csv') if not l.startswith('#'))}
+RAT = sum(tot[y] / aer[y] for y in (1960, 1961, 1962)) / 3
+use = json.loads(re.search(r'USE = (\{.*\});', open('src/lib/cheaperdata.js').read(), re.S).group(1))
+gen = {use['years'][0] + i: v for i, v in enumerate(use['us']['gen'])}
+iou = collections.defaultdict(float)
+for r in rows('core_eia861__yearly_sales', ['report_date', 'entity_type', 'service_type', 'sales_mwh']):
+    if r['entity_type'] == 'Investor Owned' and r['service_type'] in ('bundled', 'delivery'): iou[r['report_date'].year] += r['sales_mwh'] or 0
+kwh = {y: REV[y] / (tot[y] if y in tot else aer[y] * RAT) for y in REV if y <= 1993}  # dollars / (¢/kWh): a relative scale
+for y in range(1994, 2001): kwh[y] = kwh[1993] * gen[y] / gen[1993]
+k01 = kwh[1993] * gen[2001] / gen[1993] / iou[2001]
+for y in REV:
+    if y >= 2001: kwh[y] = iou[y] * k01
+sales = [{'y': y, 'i': round(kwh[y] / kwh[1951], 3), **({'rough': 1} if y < 1960 or 1994 <= y <= 2001 else {})} for y in sorted(kwh)]
+assert [s['y'] for s in sales] == [r['y'] for r in out]
+print('sales index 1951, 1969, 1973, 2000, 2007, 2025:', [next(s['i'] for s in sales if s['y'] == y) for y in (1951, 1969, 1973, 2000, 2007, 2025)], '; total/residential 1960-62:', round(RAT, 3))
+
 open('src/lib/usbilldata.js', 'w').write(
     '// What the average US residential kWh paid for, in 2025 cents: investor-owned utilities’ accounts (FERC Form 1 via\n'
     '// Catalyst Cooperative PUDL from 1994; FPC, EIA and EEI composites before), EIA-861 / Annual Energy Review prices,\n'
     '// CPI-U. Made by scripts/make_us_bill_data.py from the sources in scripts/data/.\n'
-    'export const USBILL = ' + json.dumps(out, separators=(',', ':')) + ';\n')
+    'export const USBILL = ' + json.dumps(out, separators=(',', ':')) + ';\n'
+    '// kWh sold by the same utilities, 1951 = 1: revenue over the average all-sector retail price to 1993, US generation\n'
+    '// 1994-2000, EIA-861 sales on their wires from 2001. rough: 1951-59 and 1994-2001, a weaker basis.\n'
+    'export const USSALES = ' + json.dumps(sales, separators=(',', ':')) + ';\n')
