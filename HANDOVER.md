@@ -37,7 +37,8 @@ Not done / possible next steps:
   tables would cover 1959–68). Only on HathiTrust (Cloudflare bot check blocks automated access) and Google Books,
   which has full-view volumes dated 1972 (`books.google.com/books?id=Ar6IVVeFyEYC`), 1974 (`4Rpp6hwgar8C`) and 1976
   (`ZfdFzhzMwm4C`) but answers this environment's downloads with a CAPTCHA. A person can download the PDF in a
-  browser and commit it (e.g. `docs/sources/`); the extraction pattern is as above. *Historical Statistics of the
+  browser. `docs/HANDOFF-1960s.md` is a self-contained brief for a Claude conversation given the PDFs: it returns
+  `scripts/data/fpc_privately_owned_1960_1968.csv`, which the script loads if present (no PDFs in git). *Historical Statistics of the
   US* (Census, ch. S 133–146) and the *Statistical Abstract* have only revenue and net income, not the split.
 - Optionally show the 1960–68 total price as a line before the stack (AER prices are already in `scripts/data/`).
 - Essay 9 §1 could cite the real shares next to the toy `offset` model (the subsection right after it now does).

@@ -56,8 +56,12 @@ def wide(path, scale):
 
 # published composites, Form 1 accounts, thousand dollars: {year: (items, source)}
 FS = {}
-for f, src in (('fpc_privately_owned_1969_1978', 'fpc'), ('eia_finstats_1979_1982', 'eia-finstats'),
-               ('eia_finstats_1985_1989', 'eia-finstats'), ('eia_finstats_iou_1991_1995', 'eia-finstats')):
+import os
+# fpc_privately_owned_1960_1968 is optional (see docs/HANDOFF-1960s.md); it only adds years the others lack
+for f, src in (('fpc_privately_owned_1960_1968', 'fpc'), ('fpc_privately_owned_1969_1978', 'fpc'),
+               ('eia_finstats_1979_1982', 'eia-finstats'), ('eia_finstats_1985_1989', 'eia-finstats'),
+               ('eia_finstats_iou_1991_1995', 'eia-finstats')):
+    if not os.path.exists(f'scripts/data/{f}.csv'): continue
     for y, d in wide(f'scripts/data/{f}.csv', 1e3).items(): FS[y] = (d, src)
 EEI = wide('scripts/data/eei_yearbook_1982_1990.csv', 1e6)
 
