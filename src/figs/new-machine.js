@@ -15,14 +15,14 @@ import { controls, slider, readout } from '../lib/ui.js';
 //  - Steam temperature of typical new large units: Yeh & Rubin (2007), Hirsh (1989).
 // ---------------------------------------------------------------------------
 const K = 273.15, TC = 30;                           // condenser at 30 °C throughout
-const US = [[1900, 5], [1920, 9], [1925, 13], [1930, 17], [1940, 20], [1945, 20], [1949, 22.7], [1950, 24.3], [1955, 29.2], [1960, 31.7],
+const US = [[1900, 3.7], [1920, 8.7], [1925, 12.7], [1930, 16.2], [1940, 19.2], [1944, 20.2], [1949, 22.7], [1950, 24.3], [1955, 29.2], [1960, 31.7],
   [1965, 32.6], [1970, 32.5], [1975, 32.8], [1980, 32.8], [1985, 33.0], [1990, 32.8], [1995, 33.0], [2000, 33.4], [2010, 32.7], [2020, 32.6]];
 const US_ROUGH = 1949;                               // points before this are from coal per kWh, not heat rates
 const CN = [[2000, 31.4], [2005, 33.2], [2010, 36.9], [2015, 39.0], [2020, 40.2]];
 const STEAM = [[1920, 315], [1925, 370], [1930, 425], [1940, 480], [1950, 540], [1955, 566], [1965, 566], [1970, 540], [2000, 540], [2005, 600], [2015, 620], [2025, 620]];
 const BEST = [
   { y: 1960, e: 40, lab: ['Eddystone 1, 1960:', 'best US unit ≈40%'], short: ['Eddystone 1', '≈40%'] },
-  { y: 2015, e: 47, lab: ['China’s newest', 'units ≈47%'], short: ['China’s best', '≈47%'] },
+  { y: 2022, e: 49.4, lab: ['Pingshan II, 2022:', '49.4% (Chinese basis)'], short: ['Pingshan II', '49.4%'] },
 ];
 const carnot = T => 100 * (1 - (TC + K) / (T + K));
 const at = (arr, yr) => {
@@ -38,7 +38,7 @@ export function effCentury(el) {
   const st = { year: 1960 };
   const CN_COL = C.peaker;
   const fig = new Fig(el, {
-    label: 'Efficiency of steam power plants from 1900 to 2020: the US fleet average rose from about 5 per cent to about 33 per cent by the 1960s and then stayed there, well below the Carnot limit for the steam temperatures of each era; China’s fleet rose to about 40 per cent by 2020.',
+    label: 'Efficiency of steam power plants from 1900 to 2020: the US fleet average rose from about 4 per cent to about 33 per cent by the 1960s and then stayed there, well below the Carnot limit for the steam temperatures of each era; China’s fleet rose to about 40 per cent by 2020.',
     height: w => w < 600 ? 360 : Math.max(330, Math.min(390, w * 0.38)),
     draw(ctx, w, h) {
       const narrow = w < 600;
