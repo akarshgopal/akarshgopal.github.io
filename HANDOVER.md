@@ -64,7 +64,10 @@ HathiTrust. **Allow at least `eia.gov` and `www.eia.gov`** (and ideally `babel.h
 WebSearch worked (snippets only); WebFetch is bound by the same network allowlist.
 
 ## 3. Repositories and build
-- **Source** (this repo): `electricity-explainer` — esbuild static site. `pnpm install`, then `node build.mjs`
+- **Source** (this repo): `electricity-explainer`, kept on the **`electricity-source` branch of
+  `akarshgopal/akarshgopal.github.io`** (an unrelated history; it never merges into `master`). Clone it with
+  `git clone -b electricity-source --single-branch https://github.com/akarshgopal/akarshgopal.github.io electricity-explainer`
+  and push work back to that branch. An esbuild static site. `pnpm install`, then `node build.mjs`
   (`OUT=<dir> node build.mjs` builds elsewhere). Pages `src/pages/*.html`, order and titles `src/series.mjs`,
   figures `src/figs/*.js` registered in `src/figures.js` (each essay has its own `src/figs/new-<key>.js`).
 - **Site**: `akarshgopal/akarshgopal.github.io`, GitHub Pages from `master`. Deploy = copy `dist/*.html`,
