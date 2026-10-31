@@ -1,0 +1,27 @@
+# US Bureau of the Census, Historical Statistics of the United States, Colonial Times to 1970 (1975), Series S 116:
+# residential service, average price, all consumption, cents per kWh (nominal); source EEI. Read from the page image of
+# https://www2.census.gov/library/publications/1975/compendia/hist_stats_colonial-1970/hist_stats_colonial-1970p2-chS.pdf
+# (PDF p17). 1960 is marked as a break (Alaska and Hawaii included from 1960). Used only before 1960 (EIA's Annual
+# Energy Review Table 8.10 starts in 1960), scaled to it over the 1960-70 overlap.
+year,residential
+1970,2.10
+1969,2.09
+1968,2.12
+1967,2.17
+1966,2.20
+1965,2.25
+1964,2.31
+1963,2.37
+1962,2.41
+1961,2.45
+1960,2.47
+1959,2.51
+1958,2.54
+1957,2.56
+1956,2.61
+1955,2.65
+1954,2.70
+1953,2.74
+1952,2.77
+1951,2.81
+1950,2.88

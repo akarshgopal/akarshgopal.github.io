@@ -3,6 +3,8 @@
 # plant in service); 1969-1978, thousand nominal dollars. Scan: https://archive.org/details/statisticsofpriv1978unse
 # 1973 revenue 29,104,494 is from Table 26 (Table 24's OCR reads 29,104,404; the table's own arithmetic confirms ...494).
 # Customer service and information expenses were a separate account only from 1976 (before, in customer accounts/sales).
+# 1972 distribution plant 38,243,823 is as revised in this edition (marked revised; its lines add to it); the 1972
+# edition printed 36,284,983. 1973 is also a revised figure. Later editions win where they differ.
 # Intangible plant 1978 from EIA, Financial Statistics of Selected Electric Utilities 1982, Table 17 (illegible here).
 item,1978,1977,1976,1975,1974,1973,1972,1971,1970,1969
 operating_revenues,65427274,58864961,50552806,44598107,37224736,29104494,25354868,22321874,19791066,18026095

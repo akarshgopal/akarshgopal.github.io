@@ -11,7 +11,8 @@
 # Capital (depreciation plus the return on capital) is split by function in proportion to each function's depreciation
 # (Form 1 schedule 336). Before 1994 there is no depreciation by function, so the split uses plant in service by
 # function, scaled so that in 1994 it gives the depreciation shares.
-# Prices: EIA-861 via PUDL from 2001; before that EIA, Annual Energy Review 2011, Table 8.10.
+# Prices: EIA-861 via PUDL from 2001; before that EIA, Annual Energy Review 2011, Table 8.10; before 1960 Historical
+# Statistics of the US, series S 116, scaled to Table 8.10 over 1960-70.
 import sys, csv, json, collections
 import pyarrow.parquet as pq
 
@@ -39,6 +40,11 @@ for r in rows('core_eia861__yearly_sales', ['report_date', 'customer_class', 'se
 
 # before 2001 (no EIA-861 in PUDL): EIA Annual Energy Review Table 8.10, average residential price, nominal ¢/kWh
 aer = {int(r['year']): float(r['residential']) for r in csv.DictReader(l for l in open('scripts/data/eia_aer_t810_prices.csv') if not l.startswith('#'))}
+# before 1960: Historical Statistics series S 116 (EEI), scaled to Table 8.10 over their 1960-70 overlap
+s116 = {int(r['year']): float(r['residential']) for r in csv.DictReader(l for l in open('scripts/data/hist_stats_s116_residential_price.csv') if not l.startswith('#'))}
+_ov = [y for y in s116 if y in aer]
+S116_K = sum(aer[y] for y in _ov) / sum(s116[y] for y in _ov)
+for y, v in s116.items(): aer.setdefault(y, v * S116_K)
 
 cpi = collections.defaultdict(list)
 for r in csv.DictReader(open(f'{D}/cpiai.csv')): cpi[int(r['Date'][:4])].append(float(r['Index']))
@@ -71,10 +77,10 @@ def lerp(y, pts):
     if lo is None or hi is None or lo == hi: return pts[hi if lo is None else lo]
     return pts[lo] + (pts[hi] - pts[lo]) * (y - lo) / (hi - lo)
 
-def fuel_of(f): return f['fuel_steam'] + f['fuel_nuclear'] + f['fuel_other']
+def fuel_of(f): return f.get('fuel_steam', 0) + f.get('fuel_nuclear', 0) + f.get('fuel_other', 0)
 # other generation O&M (production expenses less fuel and bought power), in the years EIA/FPC publish it
 OG = {y: d['power_production_total'] - fuel_of(d) - d['purchased_power'] for y, (d, _) in FS.items()}
-def plant3(f): return (f['plant_production'], f['plant_transmission'] + f['plant_distribution'], f['plant_general'] + f['plant_intangible'])
+def plant3(f): return (f['plant_production'], f['plant_transmission'] + f['plant_distribution'], f['plant_general'] + f.get('plant_intangible', 0))
 PLANT = {y: plant3(d) for y, (d, _) in FS.items()}
 
 PROD = ('steam_production', 'nuclear_production', 'hydraulic_production_conventional', 'hydraulic_production_pumped_storage', 'other_production')
@@ -89,6 +95,7 @@ def split(cap, shares, gen_om, wires_om, over_om):
 
 def from_composite(f, shares):
     # the same groups as the Form 1 path below, from a published composite (thousand-dollar accounts)
+    f = collections.defaultdict(float, f)  # an empty cell is an account that was not reported separately (0)
     fuel = fuel_of(f); bought = f['purchased_power']
     gen_om = f['power_production_total'] - fuel - bought
     wires_om = f['transmission_total'] + f['distribution_total']
@@ -171,6 +178,7 @@ for y, nb in ((1982, (1981, 1985)), (1985, (1982, 1989))):
     og = lerp(y, {n: OG[n] for n in nb})
     k = lerp(y, {yy: v['eia_operating_revenues'] / v['operating_revenues'] for yy, v in EEI.items() if 'eia_operating_revenues' in v and yy != y})
     show(f'check {y} EEI-based vs EIA:', shares_of(from_eei(y, EEI[y], pshares(y), k, og)[1]), shares_of(from_composite(FS[y][0], pshares(y))[1]))
+print('S 116 price scale (Table 8.10 / S 116, 1960-70):', round(S116_K, 4))
 print('capital split 1969, 1980, 1993 (plants, wires, overheads):', [tuple(round(x, 3) for x in pshares(y)) for y in (1969, 1980, 1993)], 'Form 1 1994:', tuple(round(x, 3) for x in SH0))
 
 open('src/lib/usbilldata.js', 'w').write(
