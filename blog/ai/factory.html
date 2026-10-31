@@ -105,7 +105,7 @@
 <figcaption><span class="tagline tag-ill">Model</span> The cost per hour of one megawatt of DGX H100 servers: a $269,000 server for each 10.2 kW, written off over four years and converted at $1.13 per euro, against the electricity for that megawatt at the price you choose and a PUE of 1.09–1.56.<sup class="fn"><a href="#n8">8</a></sup> The server price is an analyst figure and the four-year life is our assumption; financing, buildings and staff are left out, and would only raise the hardware side.</figcaption>
 </figure>
 
-<p>At the wholesale prices most of Europe pays most of the time, the electricity is a fraction of what the idle hardware loses. Pausing only pays for itself somewhere above €400–600 per MWh, prices that wholesale markets reach only in rare hours of scarcity. So the servers run day and night, and a training run of several months takes the same power at three in the morning as at six in the evening. To a grid that is both easy and hard: easy because it is predictable, hard because it never gives way when supply is short. What a flat 24-hour load does to a model day is in the electricity series’ <a class="xref" href="../electricity/index.html#fig-gridDay">grid-day figure</a>.</p>
+<p>At the wholesale prices most of Europe pays most of the time, the electricity is a fraction of what the idle hardware loses. Pausing only pays for itself somewhere above €400–600 per MWh, prices that wholesale markets reach only in rare hours of scarcity. So the servers run day and night, and a training run of several months takes the same power at three in the morning as at six in the evening. To a grid that is both easy and hard: easy because it is predictable, hard because it never gives way when supply is short. What a flat 24-hour load does to a model day is in the electricity series’ <a class="xref" href="../electricity/balancing.html#fig-gridDay">grid-day figure</a>.</p>
 
 <details class="math"><summary>The maths: the break-even price</summary>
 <p>A server of price S drawing P kW, written off over T hours, costs S / (P T) per kWh of its own consumption whether it runs or not. With S = $269,000, P = 10.2 kW and T = 4 × 8,760 h, that is $0.753 per kWh, or €666 per MWh at $1.13 to the euro. Running costs electricity price p times PUE per MWh of IT load, so stopping saves money only when p × PUE &gt; 666, that is p &gt; 666 / PUE: about €611 at PUE 1.09 and €427 at 1.56. The write-off is paid either way; pausing saves the electricity but throws away an hour of work that cost at least this much hardware to produce, so the comparison is between p × PUE and the value of that hour, of which €666 is a floor.</p>
@@ -121,13 +121,13 @@
 <figcaption><span class="tagline tag-ill">Model</span> A simplified training rhythm: eight seconds of computing, two of exchanging results, and a four-second pause every thirty seconds to save a checkpoint. Full power is the server draw, 1.275 kW per GPU; while waiting only the GPUs’ own 700 W drops, and cooling and the building are left out because they cannot follow sub-second steps. The GPU power drawn while waiting is not published, so it is a slider; real schedules are faster and messier. Only the size of the swing is the point.</figcaption>
 </figure>
 
-<p>For a grid this is unusual. Households and factories switch on and off independently, and their millions of small changes average out. A training cluster is one load that changes all at once. In the <a class="xref" href="../electricity/index.html#fig-frequency">electricity series</a> we saw that every sudden imbalance between supply and demand shows up in the frequency; a step of tens of megawatts is small next to a large power station tripping, but it repeats every few seconds, and clusters are growing. Meta calls it an ongoing challenge. Possible remedies include batteries on site, keeping the GPUs busy while they wait, or limiting how fast the power may change.</p>
+<p>For a grid this is unusual. Households and factories switch on and off independently, and their millions of small changes average out. A training cluster is one load that changes all at once. In the <a class="xref" href="../electricity/balancing.html#fig-frequency">electricity series</a> we saw that every sudden imbalance between supply and demand shows up in the frequency; a step of tens of megawatts is small next to a large power station tripping, but it repeats every few seconds, and clusters are growing. Meta calls it an ongoing challenge. Possible remedies include batteries on site, keeping the GPUs busy while they wait, or limiting how fast the power may change.</p>
 
 <aside class="deepdive d-parallel">Why thousands of chips must stop and exchange results in step, and how much time that takes, is worked through in <a class="xref" href="parallel.html#scaleout">Parallel: from one chip to thousands</a>.</aside>
 
 <h2 id="grid" data-level="H0"><span class="num">6</span>Plugging in a city</h2>
 
-<p>Put many servers together and the numbers leave the scale of buildings. xAI’s Memphis cluster (100,000 H100s, September 2024) needed about 150 MW; the company ran gas turbines on site while it waited for a grid connection.<sup class="fn"><a href="#n5">5</a></sup> Loads this size behave like power stations in reverse — see the electricity series’ <a class="xref" href="../electricity/index.html#fig-frequency">frequency figure</a>.</p>
+<p>Put many servers together and the numbers leave the scale of buildings. xAI’s Memphis cluster (100,000 H100s, September 2024) needed about 150 MW; the company ran gas turbines on site while it waited for a grid connection.<sup class="fn"><a href="#n5">5</a></sup> Loads this size behave like power stations in reverse — see the electricity series’ <a class="xref" href="../electricity/balancing.html#fig-frequency">frequency figure</a>.</p>
 
 <p>On 10 July 2024 a fault on a 230 kV line in northern Virginia dipped the voltage six times in 82 seconds. About 1,500 MW of data centres switched to backup at once; frequency rose to 60.047 Hz.<sup class="fn"><a href="#n9">9</a></sup> NERC wrote it up as a warning: a block of load as large as a big plant can vanish in seconds.</p>
 
@@ -177,7 +177,7 @@
 <nav class="pager" aria-label="Previous and next in the series"><a class="prev" href="demand.html"><small>← Previous</small>The Demand: Who Asks, How Often?</a><a class="next" href="orbital.html"><small>Next →</small>Orbital Compute: Is Space the Only Answer?</a></nav>
 </article>
 </main>
-<script src="three3d.js?v=mvuvpt9h"></script>
+<script src="three3d.js?v=mvwc8790"></script>
 <script src="app.js"></script>
 </body>
 </html>
