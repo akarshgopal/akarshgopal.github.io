@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>What a Kilowatt-Hour Is: Charge, Voltage and Heat · Why Did Electricity Stop Getting Cheaper?</title>
+<meta name="description" content="What is actually sold as a kilowatt-hour: charge and current, voltage as the height of an energy hill, resistance as electrons colliding with a hot lattice, and the difference between power and energy.">
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<nav class="series" aria-label="Why Did Electricity Stop Getting Cheaper?: the series"><button type="button" class="series-toggle" aria-expanded="false" aria-controls="series-panel"><span class="series-toggle-icon" aria-hidden="true">☰</span><span class="series-toggle-label">Series</span><span class="series-here">A kilowatt-hour</span></button><div class="series-in" id="series-panel"><a class="series-title" href="index.html">Why Did Electricity Stop Getting Cheaper?</a><ol><li><a href="cheaper.html"><span class="n">1</span>Cheaper, then not</a></li><li><a href="kilowatt-hour.html" aria-current="page"><span class="n">2</span>A kilowatt-hour</a></li><li><a href="the-machine.html"><span class="n">3</span>The machine</a></li><li><a href="transmission.html"><span class="n">4</span>Wires</a></li><li><a href="balancing.html"><span class="n">5</span>Balance</a></li><li><a href="solar-pv.html"><span class="n">6</span>Solar</a></li><li><a href="utility-renewables.html"><span class="n">7</span>Wind</a></li><li><a href="price.html"><span class="n">8</span>Costs</a></li><li><a href="futures.html"><span class="n">9</span>Cheaper again?</a></li><li class="deep deep-first"><a href="transformers.html"><span class="n">+</span>Transformers</a></li><li class="deep"><a href="synthetic-fuels.html"><span class="n">+</span>Fuels</a></li></ol></div><button id="play-toggle" type="button" aria-pressed="true" title="Pause all animations">❚❚ Pause</button></nav><button type="button" class="series-scrim" aria-label="Close the series menu" tabindex="-1"></button>
+<script>(function(){var n=document.querySelector('nav.series'),b=n&&n.querySelector('.series-toggle'),p=n&&n.querySelector('.series-in'),s=document.querySelector('.series-scrim');if(!b||!p)return;function set(o){n.classList.toggle('open',o);b.setAttribute('aria-expanded',String(o));document.body.classList.toggle('series-open',o);}b.addEventListener('click',function(){set(!n.classList.contains('open'));});if(s)s.addEventListener('click',function(){set(false);});document.addEventListener('keydown',function(e){if(e.key==='Escape')set(false);});var a=n.querySelector('[aria-current=page]');if(a)try{a.scrollIntoView({block:'nearest'});}catch(e){}})();</script>
+<main>
+<article>
+<header class="top">
+<h1>What a Kilowatt-Hour Is: Charge, Voltage and Heat</h1>
+<p class="byline">Essay 2 of 9 · by Akarsh Gopal · October 2026</p>
+</header>
+
+<p class="lede">Every electricity bill is a count of kilowatt-hours. To ask why they stopped getting cheaper, it helps to know what one is: what moves in the wire, what pushes it, and where the energy goes on the way.</p>
+
+<p>This essay starts with a single electron in a copper wire and ends with the meter. Three ideas from here run through the rest of the series. Voltage is a height, an amount of energy per unit of charge. Resistance turns some of that energy into heat wherever current flows. And power, the rate, is not the same thing as energy, the amount you pay for.</p>
+
+<ol class="toc">
+<li><a href="#current"><span class="n">1</span>Charge and current</a></li>
+<li><a href="#voltage-is-height"><span class="n">2</span>Voltage is height</a></li>
+<li><a href="#resistance"><span class="n">3</span>Resistance is collisions</a></li>
+<li><a href="#power-and-energy"><span class="n">4</span>Power and energy</a></li>
+<li><a href="#losses"><span class="n">5</span>Heat in the wires</a></li>
+<li><a href="#kilowatt-hour"><span class="n">6</span>What a kilowatt-hour is worth</a></li>
+<li><a href="#notes"><span class="n">·</span>Notes and sources</a></li>
+</ol>
+
+<h2 id="current"><span class="num">1</span>Charge and current</h2>
+
+<p>Every atom in a copper wire has electrons, and in a metal some of those electrons are not attached to any particular atom. They wander through the crystal lattice like a gas, bumping into the vibrating ions, moving in every direction at once at more than a thousand kilometres a second.<sup class="fn"><a href="#n1">1</a></sup> Because they move in every direction equally, nothing flows. There is no current.</p>
+
+<p>Each electron carries a tiny, fixed amount of negative <b>charge</b>. Charge is counted in coulombs; one coulomb is the charge of about six billion billion electrons. A <b>current</b> is charge flowing past a point, and one ampere is one coulomb a second.</p>
+
+<p>Now connect the wire to a battery. The battery pushes a little extra negative charge onto one end of the wire and pulls some away from the other, and this sets up an <span class="c-field" style="color:#d1495b;font-weight:600">electric field</span> along the whole length of the wire. The field gives each <span class="c-electron">electron</span> a very gentle shove in one direction between collisions. Their random motion is still there, but now it has a tiny drift superimposed on it:</p>
+
+<figure class="fig" data-fig="drift" id="fig-drift">
+<figcaption><span class="tagline tag-ill">Model</span> Above: free electrons in copper, their thermal jitter slowed enormously. Below: the circuit they belong to. The readout computes drift speed and signal delay for a 1.5 mm² copper conductor.<sup class="fn"><a href="#n1">1</a></sup></figcaption>
+</figure>
+
+<p>The drift is very slow: in a kettle cable the electrons creep along at a fraction of a millimetre per second, slower than a snail; with alternating current they merely shuffle back and forth by a few micrometres. Yet the lamp lights at once, because what travels fast is not the electrons but the field. Close the switch and the push runs along the wire at a large fraction of the speed of light, like water in a pipe that is already full.</p>
+
+<p>So <b>electricity is not a substance that gets delivered</b>. The electrons in your wall were there before you plugged anything in and they will be there afterwards. What is delivered is <i>energy</i>. The rest of this essay follows it: how the battery gives it to the charges, and how the charges give it up.</p>
+
+<h2 id="voltage-is-height"><span class="num">2</span>Voltage is height</h2>
+
+<p>A ball at the top of a hill has energy it can give up by rolling down. Charge in a circuit is similar. A battery, or a generator, is a pump: inside it, chemistry or magnetism pushes each charge “uphill”, against the field, and hands it energy. Outside, the charge runs back down through the circuit and gives that energy away.</p>
+
+<p>The height of the hill is the <b>voltage</b>. It is measured in energy per unit of charge: one volt means each coulomb carries one joule. A 12-volt battery lifts every coulomb that passes through it by 12 joules. The push a battery gives is often called its <i>electromotive force</i>, or EMF, though it is not a force at all; it is this height.</p>
+
+<p>The figure lays a simple circuit, a battery, two wires and a lamp, flat on the floor, and raises each point of it by the energy a charge carries there. The colour of each charge shows the same thing.<sup class="fn"><a href="#n2">2</a></sup></p>
+
+<figure class="fig" data-fig="emfHill" id="fig-emfHill">
+<figcaption><span class="tagline tag-ill">Model</span> A circuit as a landscape. The dashed loop on the floor is the circuit as wired; the height of the track above it is the energy carried by each charge (volts). The battery lifts every charge by its voltage; the charges lose almost all of that height in the lamp. The lamp is a fixed 12 Ω.</figcaption>
+</figure>
+
+<p>Two things in the picture matter later. First, the <span class="c-field" style="color:#d1495b;font-weight:600">field</span> is the steepness of the hill: the volts lost per metre. Where the track is steep, as through the lamp, the field is strong and the charges give up energy quickly. Where it is nearly flat, as along the copper wires, they give up very little. Second, a taller hill pushes harder, and more charge flows each second: double the voltage and, through the same lamp, the current doubles too.</p>
+
+<p>Why does the lamp take nearly all of the height, and the wires almost none? That is a question about what slows charge down.</p>
+
+<h2 id="resistance"><span class="num">3</span>Resistance is collisions</h2>
+
+<p>Go back into the copper. Between collisions the field speeds each electron up a little; then it hits an ion of the lattice, gives up what it gained, and starts again. Every collision hands energy to the lattice, which vibrates a little more. A lattice vibrating more is, by definition, hotter. This is what a wire’s <b>resistance</b> is: how hard the charge must be pushed to keep it moving through the collisions. And it is why every current makes heat.</p>
+
+<p>Three things make a conductor resist more. A <b>longer</b> one has more lattice to cross, so it needs more push for the same current. A <b>thinner</b> one has fewer lanes for the same flow, so each electron must drift faster and is stopped more often. A <b>hotter</b> one has ions vibrating harder, so collisions come sooner. The material matters as well: tungsten, the metal of old lamp filaments, resists about three times as much as copper of the same size.<sup class="fn"><a href="#n1">1</a></sup></p>
+
+<p>A lamp circuit puts these side by side. The figure shows one: a metre of household copper wire, a filament of fine tungsten and another metre of wire, on a 12-volt battery. Above it is the same height profile as before.</p>
+
+<figure class="fig" data-fig="resistance" id="fig-resistance">
+<figcaption><span class="tagline tag-ill">Model</span> A copper wire, a straightened tungsten filament and a copper wire in series on a 12 V battery, magnified and not to scale. Electrons (coloured by the energy they still carry) drift through a lattice of ions; rings mark collisions, at a rate that follows the heat released in each part. The filament’s temperature is set directly here; in a real lamp the current itself heats it. Resistivities from standard tables, varying linearly with temperature.<sup class="fn"><a href="#n1">1</a></sup></figcaption>
+</figure>
+
+<p>The same current flows through every part, because charge cannot pile up anywhere in the loop: every electron that enters the filament leaves it. In the thin filament the electrons crowd into a narrow channel and drift much faster, and the collisions there are many and hard. That is where the height goes. The filament takes almost all of the 12 volts and glows; the copper takes a few hundredths of a volt and stays cool.</p>
+
+<p>This is <b>Ohm’s law</b>, seen as a landscape. The height lost across any piece of the circuit equals the current through it times its resistance, <i>V = I × R</i>. With one current for the whole loop, the piece with the most resistance loses the most height. Resistance is measured in ohms: one ohm loses one volt for every ampere. A shorter, thicker filament has less resistance, so more current flows; make it thick enough and the copper starts to take a share of the height, and warms.</p>
+
+<p>The filament also shows why temperature matters. Cold, it has less than a tenth of the resistance it has white-hot, so a lamp draws a surge of current at the instant it is switched on, until the filament heats up. Filaments usually fail at that moment.</p>
+
+<h2 id="power-and-energy"><span class="num">4</span>Power and energy</h2>
+
+<p>The energy a charge loses in a piece of the circuit is the height it falls, and the charge passing each second is the current. Multiply them and you have the rate at which energy turns into heat or light there, the <b>power</b>: <i>P = V × I</i>, in watts. One watt is one joule a second. In the lamp figure, 12 volts times about one ampere is the filament’s 12 watts.</p>
+
+<p>The two words that cause the most confusion in everything that follows are <b>power</b> and <b>energy</b>. Power is a rate, measured in watts. Energy is an amount, measured in watt-hours or joules: a watt-hour is one watt kept up for an hour, 3,600 joules. A kettle draws about two kilowatts, but only for a couple of minutes; a fridge draws a twentieth of that, but all day long. Switch on the kettle and watch the meter:</p>
+
+<figure class="fig" data-fig="powerEnergy" id="fig-powerEnergy">
+<figcaption><span class="tagline tag-ill">Model</span> The trace is power, in watts; the meter counts energy, the area under that trace. One second here is one minute of household time. The dashed line is the average power of a household using 3,500 kWh a year.</figcaption>
+</figure>
+
+<p>Your bill charges for energy, in kilowatt-hours. Grids and markets also care about power: how many watts must be available at the worst moment of the year. A household using 3,500 kWh a year averages about 400 W, but occasionally asks for ten times that. Much of the cost of an electricity system is being ready for the moments when everyone asks at once; that thread comes back in <a class="xref" href="balancing.html">essay 5</a> and <a class="xref" href="price.html">essay 8</a>.</p>
+
+<h2 id="losses"><span class="num">5</span>Heat in the wires</h2>
+
+<p>In the lamp, the heat is the point. In the wires it is a loss, and Ohm’s law says how big. The height lost in a wire is <i>I × R</i>, so the power lost is <i>I × R × I</i>: it grows with the <i>square</i> of the current. Double the current through the same wire and it gets four times as hot.</p>
+
+<p>This one fact shapes the grid. Suppose a village needs 10 kW at the end of a line with 1 Ω of resistance. Sent at 230 volts, the line carries about 43 amperes and loses about 1.9 kW, almost a fifth as much again as it delivers. Sent at 2,300 volts, the same power needs a tenth of the current and the line loses a hundredth as much, about 19 W. That is why power travels across a country at hundreds of thousands of volts and is stepped down near the people who use it. How it is stepped, and what limits a line, is the subject of <a class="xref" href="transmission.html#why-high-voltage">the Wires essay</a>.</p>
+
+<p>Heat is also where nearly all the energy ends up. The kettle’s heat is the goal; the motor’s and the laptop’s are what is left after the work is done. Heat is easy to make from electricity, completely and at any scale. Getting electricity back out of heat is the hard direction, and most of the world’s electricity is made that way. <a class="xref" href="the-machine.html#heat">Essay 3</a> is about what that costs.</p>
+
+<h2 id="kilowatt-hour"><span class="num">6</span>What a kilowatt-hour is worth</h2>
+
+<p>A <b>kilowatt-hour</b> is a thousand watts for an hour: 3.6 million joules. It is a useful amount of energy. It would boil about eleven litres of water from the tap. It would lift a one-tonne car about 370 metres straight up. A fit person turning a crank can keep up about 100 watts of useful work, so a kilowatt-hour is a long day of hard labour.<sup class="fn"><a href="#n3">3</a></sup></p>
+
+<p>In the United States in 2025 a household paid on average 17.3¢ for one. In Germany it was about 43.7¢, two and a half times as much, for reasons that are mostly not the power station.<sup class="fn"><a href="#n4">4</a></sup> Either way, a day of labour costs less than a cup of coffee.</p>
+
+<p>What it took to deliver is less tiny. If it came from a coal plant converting a third of its fuel’s heat, as a typical one does, the plant burned about a third of a kilogram of coal and sent two thirds of the heat up a cooling tower or into a river.<sup class="fn"><a href="#n5">5</a></sup> Then a generator turned at a fixed speed for it, transformers stepped it up and down, and the wires turned a few per cent of it into heat on the way, every loss following <i>I × I × R</i>.</p>
+
+<p>All of that is in the 17.3¢: the fuel, the machine, the wires and the losses. Each part can get cheaper or dearer on its own, and the century of falling prices in <a class="xref" href="cheaper.html">essay 1</a> was mostly one of them, the machine, getting better. Where the push in every circuit comes from, and why turning heat into electricity has a limit, is <a class="xref" href="the-machine.html">essay 3: the machine</a>.</p>
+
+<h2 id="notes">Notes and sources</h2>
+<ol class="notes">
+<li id="n1">Material constants from standard tables (e.g. <i>CRC Handbook of Chemistry and Physics</i>): copper has about 8.5 × 10²⁸ free electrons per cubic metre, moving at about 1,570 km/s (the Fermi speed; C. Kittel, <i>Introduction to Solid State Physics</i>); resistivity at 20 °C of copper 1.68 × 10⁻⁸ Ω·m and tungsten 5.6 × 10⁻⁸ Ω·m; temperature coefficient of tungsten about 0.0045 per kelvin. The model applies that coefficient linearly up to 2,500 °C, which understates tungsten’s hot resistance somewhat; the ratio of hot to cold resistance in a real filament is closer to fifteen than ten. One coulomb is 6.24 × 10¹⁸ electron charges.</li>
+<li id="n2">The figure follows the electrons themselves and draws the hill for the energy they carry, so they leave the battery at the top. Textbooks usually draw the same hill for the electric potential, which is the energy per unit of <i>positive</i> charge; electrons, being negative, flow the other way round it. The energy story, and every number, is the same.</li>
+<li id="n3">Water: 4.18 kJ per kilogram per degree, so heating a litre from 20 °C to 100 °C takes 0.33 MJ. Lifting: 3.6 MJ / (1,000 kg × 9.81 m/s²) ≈ 367 m. Sustained human output of about 100 W is a common figure for trained cyclists over several hours; for most people it is less.</li>
+<li id="n4">US: EIA, <i>Electric Power Monthly</i>, <a href="https://www.eia.gov/electricity/monthly/">eia.gov</a>, 2025 average residential price 17.3¢/kWh. Germany: Eurostat <i>nrg_pc_204</i>, second half of 2025, households using 2,500–4,999 kWh a year, all taxes included: €0.387/kWh, converted at US$1.13/€ (ECB 2025). <a class="xref" href="price.html">Essay 8</a> takes both bills apart.</li>
+<li id="n5">3.6 MJ / 0.35 ≈ 10.3 MJ of fuel heat. A kilogram of “standard coal”, the unit used by the IEA and China’s statistics, holds 29.3 MJ, so 10.3 MJ is about 0.35 kg. Real coals range from about half that energy content (lignite) to slightly more. Plant efficiencies are in <a class="xref" href="the-machine.html#heat">essay 3</a>.</li>
+</ol>
+<nav class="pager" aria-label="Previous and next in the series"><a class="prev" href="cheaper.html"><small>← Previous</small>Cheaper, Then Not: A Century of Electricity Prices</a><a class="next" href="the-machine.html"><small>Next →</small>The Machine: Magnets, Steam and the Limits of Heat</a></nav>
+</article>
+</main>
+<script src="series.js"></script>
+</body>
+</html>
