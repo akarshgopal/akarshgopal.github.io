@@ -75,5 +75,16 @@ CONFIRMED: EIA heat rates 1949 (15,033) & 1960 (10,760), 1965 (10,453); Bureau o
   CREZ ~3,600 mi 345 kV, $6.9bn, ~18.5 GW, energised by end 2013; Pingshan II 49.37% LHV net (2022); Eddystone 1 5,000 psi/650 °C.
 CORRECTED: US efficiency 1900 5%→3.7%, 1930 17→16.2, 1940 20→19.2 (+ note cites Minerals Yearbook); India AT&C "22% 2020–21"→"~21% 2019–20";
   China best unit "~47%"→Pingshan II 49.4% (≈47 US basis); Eddystone "most efficient in the world"→"in the country" (ASME); Adams paraphrase → direct quote.
-STILL UNVERIFIED (lower stakes): Eddystone ~40%; Sagan formula from the book itself (standard form used); BNEF 2024 turbine ranking; PL 119-21 details; Section 201/AD-CVD dates;
+VERIFIED 1 Nov (web search; sources in the session log):
+  Eddystone 1 design heat rate 8,320 Btu/net kWh (ASME landmark history) = 41% ("around 40 per cent" stands);
+  BNEF 2024 turbine ranking: Goldwind, Envision, Windey, Mingyang (four largest Chinese, first time); P.L. 119-21: wind/solar
+  45Y/48E end for projects starting after 4 Jul 2026 unless in service by end 2027, 45X kept with prohibited-foreign-entity
+  rules, 45V construction before 2028; AD/CVD orders on China 7 Dec 2012 and China/Taiwan 18 Feb 2015, Proclamation 9693
+  23 Jan 2018, AD/CVD orders on Cambodia/Malaysia/Thailand/Vietnam 24 Jun 2025; ERCOT nodal go-live 1 Dec 2010; Document
+  No. 9 March 2015, first eight spot pilots named 2017 (Southern China from Guangdong, Mengxi, Zhejiang, Shanxi, Shandong,
+  Fujian, Sichuan, Gansu; trials from 2018); copper 1.68e-8 Ω·m, tungsten 5.3-5.6e-8 (ratio ~3.1-3.3, "about three times"
+  stands), α(W) ~0.0045; TSI 1,360.8 ± 0.5 W/m² (Kopp & Lean 2011); new fridge ~350-450 kWh/yr (~1 kWh/day).
+CORRECTED 1 Nov: Sagan's formula is not printed in The Cosmic Connection (Gray, AJ 159, 228, 2020) -> note reworded;
+  Bhadla is now in Phalodi district (formed 2023, kept in the Dec 2024 reorganisation) -> note updated.
+PREVIOUSLY UNVERIFIED (all checked 1 Nov, above): Eddystone ~40%; Sagan formula from the book itself (standard form used); BNEF 2024 turbine ranking; PL 119-21 details; Section 201/AD-CVD dates;
   India Bhadla/Khavda/MNRE parks; ERCOT nodal Dec 2010; China Doc 9 / spot pilots 2017; copper/tungsten constants (textbook); solar constant 1,361 (Kopp & Lean 2011); fridge 1 kWh/day.
