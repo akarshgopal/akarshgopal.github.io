@@ -18,6 +18,16 @@ lesson, "Where the savings went" (two sentences), the network bullet, the conclu
 the-machine.html §3 ¶3–4 and §4 close; transmission.html opening and close; history.js 1949 and 1968 cards and the toy
 button ("Machines & growth: gains continue after 1970"; `STOP = 1970` unchanged).
 
+**Follow-ups applied 1 Nov 2026** (from `docs/THESIS-DRAFT.md`): futures.html "whole arc" paragraph adds 1983–2000 as a
+second fall (−2.4%/yr, two-thirds of the 1950s pace) and why wires kept falling to 2000 (the boom's network being paid
+off: wires capital 3.5¢ → 1.1¢ per household kWh, real wires spend +0.6%/yr); the paragraph after `billSplit` compares
+wires spending now and then (+3.8%/yr since 2000 against +5.3%/yr 1951–69, with sales flat now and +8.6%/yr then);
+the network bullet moved to second in "What would have to be true", with the 1951–69 arithmetic; the conclusion adds
+growth possibly restarting (fills idle hours: cheaper wires per kWh; needs new peaks: not); essay 1's short version
+ends on wires as the fastest-rising part of an American bill; note 4 gives the wires-spending method and values.
+`salesPrice`: after 2001 every year keeps its dot but the path joins only five-year steps (`SP_PATH`), and the 2007
+label is dropped (the readout gives 2007). Provocations in `docs/THESIS-DRAFT.md` not applied (author's call).
+
 **Figure `salesPrice`** (`src/figs/new-futures.js`, after `billSplit` in futures.html): log-log connected scatter, one
 dot a year, kWh sold (1951 = 1) against the real household price or (toggle) its wires part; the other series faint
 for reference; rough sales years drawn as hollow, lighter dots; hover/tap a dot for year, index, % change on five

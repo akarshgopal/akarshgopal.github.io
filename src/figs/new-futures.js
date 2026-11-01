@@ -165,14 +165,17 @@ export function billSplit(el) {
 // Sales against price: the same US utilities, kWh sold (1951 = 1) against the real price of a household kWh or its
 // wires part, both on log scales, one dot a year. Sales before 1960 and in 1994–2001 rest on a weaker basis (lighter).
 const SP = USSALES.map(s => { const r = USBILL.find(b => b.y === s.y); return { y: s.y, i: s.i, rough: !!s.rough, price: r.real, wires: r.parts.wires }; });
+// After 2001 sales wobble around a flat line (10.3-11.1x) and a year-by-year path is a knot: every year keeps its dot,
+// but the path joins only 2001, 2005, 2010, ..., 2025.
+const SP_PATH = SP.filter(p => p.y <= 2001 || p.y % 5 === 0 || p.y === SP[SP.length - 1].y);
 const SP_LAB = { // label offsets in px from the dot, by width and series: [dx, dy, align, leader]
   wide: {
-    price: { 1951: [3, 17, 'left'], 1969: [-7, 14, 'right'], 1973: [0, 17, 'center'], 1983: [0, -10, 'center'], 2000: [8, 17, 'left'], 2007: [34, 4, 'left', 1], 2025: [7, -9, 'left'] },
-    wires: { 1951: [4, -8, 'left'], 1969: [5, -9, 'left'], 1973: [-5, 15, 'right'], 1983: [0, 19, 'center'], 2000: [7, 14, 'left'], 2007: [9, 4, 'left'], 2025: [9, 4, 'left'] },
+    price: { 1951: [3, 17, 'left'], 1969: [-7, 14, 'right'], 1973: [0, 17, 'center'], 1983: [0, -10, 'center'], 2000: [8, 17, 'left'], 2025: [7, -9, 'left'] },
+    wires: { 1951: [4, -8, 'left'], 1969: [5, -9, 'left'], 1973: [-5, 15, 'right'], 1983: [0, 19, 'center'], 2000: [7, 14, 'left'], 2025: [9, 4, 'left'] },
   },
   narrow: {
-    price: { 1951: [3, 17, 'left'], 1969: [-6, 14, 'right'], 1973: [0, 17, 'center'], 1983: [0, -10, 'center'], 2000: [0, 18, 'center'], 2007: [-14, 15, 'right', 1], 2025: [0, -10, 'center'] },
-    wires: { 1951: [4, -8, 'left'], 1969: [4, -9, 'left'], 1973: [-5, 15, 'right'], 1983: [-5, 15, 'right'], 2000: [6, 14, 'left'], 2007: [8, 4, 'left'], 2025: [8, 4, 'left'] },
+    price: { 1951: [3, 17, 'left'], 1969: [-6, 14, 'right'], 1973: [0, 17, 'center'], 1983: [0, -10, 'center'], 2000: [0, 18, 'center'], 2025: [0, -10, 'center'] },
+    wires: { 1951: [4, -8, 'left'], 1969: [4, -9, 'left'], 1973: [-5, 15, 'right'], 1983: [-5, 15, 'right'], 2000: [6, 14, 'left'], 2025: [8, 4, 'left'] },
   },
 };
 export function salesPrice(el) {
@@ -194,16 +197,20 @@ export function salesPrice(el) {
       text(ctx, narrow ? 'kWh sold, 1951 = 1, log scale' : 'kWh sold by the same utilities, 1951 = 1, log scale', box.r, box.b + 32, { size: 11, color: C.ink3, weight: 500, align: 'right' });
       // the other series, faint, for reference
       const other = st.s === 'price' ? 'wires' : 'price';
-      pathLine(ctx, SP.map(p => [sx(p.i), sy(p[other])]), alpha(S[other].col, 0.16), 1.4);
+      pathLine(ctx, SP_PATH.map(p => [sx(p.i), sy(p[other])]), alpha(S[other].col, 0.16), 1.4);
       text(ctx, S[other].lab, sx(1) + 8, sy(SP[0][other]) + 4, { size: 10.5, color: alpha(S[other].col, 0.5), weight: 600, halo: true });
       // the chosen series: segments and dots, lighter where the sales estimate is rough
       const col = S[st.s].col;
       st.pts = SP.map(p => ({ p, x: sx(p.i), y: sy(p[st.s]) }));
-      for (let k = 1; k < st.pts.length; k++) {
-        const a = st.pts[k - 1], b = st.pts[k], rough = a.p.rough || b.p.rough;
+      const path = st.pts.filter(q => SP_PATH.includes(q.p));
+      for (let k = 1; k < path.length; k++) {
+        const a = path[k - 1], b = path[k], rough = a.p.rough || b.p.rough;
         line(ctx, a.x, a.y, b.x, b.y, alpha(col, rough ? 0.3 : 0.75), rough ? 1.2 : 1.6);
       }
-      for (const q of st.pts) circle(ctx, q.x, q.y, narrow ? 2.4 : 2.8, q.p.rough ? C.paper : col, alpha(col, q.p.rough ? 0.5 : 1), 1.2);
+      for (const q of st.pts) {
+        const off = !SP_PATH.includes(q.p); // the years between the five-year steps: smaller and lighter
+        circle(ctx, q.x, q.y, (narrow ? 2.4 : 2.8) * (off ? 0.75 : 1), q.p.rough ? C.paper : alpha(col, off ? 0.45 : 1), alpha(col, q.p.rough || off ? 0.5 : 1), 1.2);
+      }
       for (const [yr, [dx, dy, align, lead]] of Object.entries(SP_LAB[narrow ? 'narrow' : 'wide'][st.s])) {
         const q = st.pts.find(t => t.p.y === +yr);
         if (lead) line(ctx, q.x + Math.sign(dx) * 3, q.y + Math.sign(dy) * 2, q.x + dx - Math.sign(dx) * 2, q.y + dy - 4, alpha(col, 0.55), 1);

@@ -1,5 +1,8 @@
 # The reframed thesis: review of 263e562 and what is still open
 
+**Status 1 Nov 2026:** proposals 1–5 and the `salesPrice` fix are applied (see `HANDOVER.md` §0); the provocations
+are not.
+
 1 November 2026. Commit 263e562 ("Growth as the second engine") already reframed the series around two engines,
 better machines and growing use, with a new figure (`salesPrice`) and rewritten passages in essays 1, 3, 4 and 9.
 This note was drafted in parallel, checked against that commit, and cut down to what it adds. Nothing in the essays
