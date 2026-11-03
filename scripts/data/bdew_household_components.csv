@@ -1,0 +1,33 @@
+# BDEW, household electricity price for 3,500 kWh/year, basic charge included, nominal euro cents per kWh, in three
+# components: procurement and sales (energy), network charges incl. metering (wires), taxes, levies and surcharges.
+# 2006-2014, basis "all": BDEW-Strompreisanalyse Juli 2022, slide 16 (all household tariffs incl. default supply,
+#   not volume-weighted), https://www.bdew.de/media/documents/220727_BDEW-Strompreisanalyse_Juli_2022.pdf
+#   (components add to the totals printed on slide 14 for 2006-2014 even years; odd-year totals here are the sums).
+# 2015-2026, basis "new": BDEW-Strompreisanalyse Oktober 2026, slide 8 (new-customer tariffs only; 2026 year to date),
+#   https://www.bdew.de/media/documents/BDEW_Strompreisanalyse_102026_1.pdf
+# The two bases overlap in 2015-2021 (old basis also on slide 16 of the July 2022 edition): taxes and network agree
+# within ~0.2 ct except network 2015 (6.74 vs 6.3); procurement on the new-customer basis is 0.7-1.3 ct higher.
+# Old-basis values for the overlap are kept in the old_* columns for reference. BDEW reports only two components,
+# every other year, before 2006, so the series starts in 2006.
+year,basis,energy,network,taxes,total,old_energy,old_network,old_taxes
+2006,all,4.92,6.93,7.61,19.46,,,
+2007,all,6.08,6.24,8.32,20.64,,,
+2008,all,7.22,5.90,8.53,21.65,,,
+2009,all,8.52,5.73,8.96,23.21,,,
+2010,all,8.16,5.86,9.67,23.69,,,
+2011,all,8.01,5.92,11.30,25.23,,,
+2012,all,8.16,6.14,11.59,25.89,,,
+2013,all,7.91,6.64,14.29,28.84,,,
+2014,all,7.38,6.63,15.13,29.14,,,
+2015,new,8.3,6.3,15.0,29.6,7.05,6.74,14.91
+2016,new,7.5,6.6,15.7,29.8,6.26,7.01,15.53
+2017,new,6.6,7.6,16.2,30.4,5.71,7.50,16.06
+2018,new,7.0,7.3,16.1,30.3,6.20,7.29,15.98
+2019,new,7.8,7.3,16.1,31.2,7.09,7.39,15.98
+2020,new,8.3,7.7,16.3,32.3,7.51,7.75,16.55
+2021,new,8.6,7.7,16.5,32.8,7.93,7.80,16.43
+2022,new,24.1,8.0,14.2,46.3,,,
+2023,new,25.1,9.3,12.6,47.0,,,
+2024,new,17.0,11.4,11.7,40.1,,,
+2025,new,15.7,10.9,12.6,39.3,,,
+2026,new,15.4,9.2,12.6,37.3,,,

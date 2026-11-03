@@ -28,6 +28,17 @@ ends on wires as the fastest-rising part of an American bill; note 4 gives the w
 `salesPrice`: after 2001 every year keeps its dot but the path joins only five-year steps (`SP_PATH`), and the 2007
 label is dropped (the readout gives 2007). Provocations in `docs/THESIS-DRAFT.md` not applied (author's call).
 
+**Germany 2006–2025 in real euros (3 Nov 2026).** `billSplit`'s German view now runs 2006–2025 in 2025 euro cents:
+BDEW household components from `scripts/data/bdew_household_components.csv` (July 2022 edition, slide 16, all tariffs,
+2006–2014; October 2026 edition, slide 8, new contracts, 2015–2026; the overlap 2015–21 is kept in `old_*` columns)
+deflated with Eurostat's HICP for Germany (`scripts/data/eurostat_hicp_de.csv`; no 2026 index yet, so the real series
+ends in 2025) by `scripts/make_de_bill_data.py` → `src/lib/debilldata.js`. The basis change in 2015 is a dashed line.
+BDEW gives all three components yearly only from 2006 (before: two, every other year). The August 2026 BDEW PDF the
+essays cited is gone (404): links now point to the October 2026 edition, `DATA.bdew` 2025–26 rows in `src/lib/data.js`
+were edited by hand to match it (39.3 and 37.3 ct; `make_data.py`'s input CSV is outside the repo and still has the
+August values), and the text follows (essay 8 procurement 17.9¢, essay 9 small firms about 21¢, heat-pump preset
+37.3 ct).
+
 **Figure `salesPrice`** (`src/figs/new-futures.js`, after `billSplit` in futures.html): log-log connected scatter, one
 dot a year, kWh sold (1951 = 1) against the real household price or (toggle) its wires part; the other series faint
 for reference; rough sales years drawn as hollow, lighter dots; hover/tap a dot for year, index, % change on five
@@ -169,7 +180,7 @@ WebSearch worked (snippets only); WebFetch is bound by the same network allowlis
   over figures). The drawer drops `backdrop-filter` when open (otherwise the fixed panel is trapped in the bar).
 
 ## 5. Conventions
-Every amount in US dollars (euro data through `src/lib/currency.js`: `eur()`, `euroFigure`, `curStr`; no new
+Every amount in US dollars, with one exception: the German view of essay 9's `billSplit` is in real 2025 euro cents (the author's choice, 3 Nov 2026), because a 20-year series converted to dollars would mostly track the exchange rate. Every amount in US dollars (euro data through `src/lib/currency.js`: `eur()`, `euroFigure`, `curStr`; no new
 exchange rates). British spelling. "17.3¢" (no space), "per cent" in prose, comma thousands, "$/MWh" after a number.
 Figure tags: Data / Model / Data + model (`tag-real` / `tag-ill` / `tag-mixed`). Captions describe content, not UI;
 no "Left/Right" (panels stack on phones); no hover hints. Never invent numbers: every figure value comes from data

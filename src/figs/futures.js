@@ -8,12 +8,12 @@ import { loadProfile, solarShape, TECHS } from '../lib/market.js';
 // ---------------------------------------------------------------- heat pump (rule-of-thumb COP; household price presets, all in US cents)
 const copOf = (tOut, tFlow) => { const Th = tFlow + 273.15 + 5, Tc = tOut + 273.15 - 5; return clamp(0.5 * Th / Math.max(5, Th - Tc), 1, 8); };
 export function heatPump(el) {
-  // Household prices per kWh in US cents. Germany: BDEW 2026 new-customer electricity (37.0 euro cents) and a 12 euro-cent gas
+  // Household prices per kWh in US cents. Germany: BDEW 2026 new-customer electricity (37.3 euro cents, October 2026 edition) and a 12 euro-cent gas
   // default, both at the ECB 2026 year-to-date rate. UK: Ofgem cap Oct–Dec 2025 (26.35p / 6.29p, taken as 31.0 / 7.4 euro cents
   // at ≈£0.85/€) at the ECB 2025 rate. US: EIA 2025 averages (17.3¢; gas $15.34/Mcf ≈ 5.05¢/kWh), already in dollars.
   const r2 = v => Math.round(v * 100) / 100;
   const HP = {
-    de: { elec: r2(37.0 * USD_PER_EUR[2026]), gas: r2(12 * USD_PER_EUR[2026]), tOut: 2 },
+    de: { elec: r2(37.3 * USD_PER_EUR[2026]), gas: r2(12 * USD_PER_EUR[2026]), tOut: 2 },
     uk: { elec: r2(31.0 * USD_PER_EUR[2025]), gas: r2(7.4 * USD_PER_EUR[2025]), tOut: 5 },
     us: { elec: 17.3, gas: 5.05, tOut: 0 },
   };

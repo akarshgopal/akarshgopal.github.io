@@ -5,8 +5,7 @@ import { text, circle, line, pathLine, scale } from '../lib/draw.js';
 import { controls, slider, readout, segmented } from '../lib/ui.js';
 import { ENERGY } from '../lib/energydata.js';
 import { USBILL, USSALES } from '../lib/usbilldata.js';
-import { DATA } from '../lib/data.js';
-import { USD_PER_EUR } from '../lib/currency.js';
+import { DEBILL } from '../lib/debilldata.js';
 
 // Humanity on the Kardashev scale: world primary energy as a rate of power (OWID / Energy Institute), Sagan's continuous
 // rating K = (log10 P − 6) / 10, Type I at 10^16 W, and how long a steady growth rate takes to get there.
@@ -64,10 +63,11 @@ export function kardashev(el) {
 }
 
 // What a household kilowatt-hour pays for, over time: the US from utilities' accounts, 1951 on (2025 dollars),
-// Germany from BDEW's price components (each year's euro cents at that year's ECB rate).
+// Germany from BDEW's price components, 2006 on, in 2025 euro cents: the one figure in euros, because a long series at
+// each year's exchange rate would mostly show the euro's swings. BDEW's basis changes in 2015 (marked).
 const SPLIT = {
   us: {
-    name: 'United States', years: USBILL.map(r => r.y), unit: '¢ per kWh, 2025 dollars',
+    name: 'United States', years: USBILL.map(r => r.y), unit: '¢ per kWh, 2025 dollars', sfx: '¢',
     layers: [
       { k: 'energy', lab: 'fuel and bought power', col: C.procurement, v: r => r.parts.fuel + r.parts.bought },
       { k: 'gen', lab: 'running and paying for plants', col: '#c98f4a', v: r => r.parts.gen },
@@ -78,19 +78,20 @@ const SPLIT = {
     rows: USBILL,
   },
   de: {
-    name: 'Germany', years: DATA.bdew.map(r => r[0]), unit: '¢ per kWh at each year’s exchange rate',
+    name: 'Germany', years: DEBILL.map(r => r.y), unit: 'euro cents (ct) per kWh, 2025 euros', sfx: ' ct',
+    seam: { y: DEBILL.find(r => r.basis === 'new').y, lab: 'new contracts only →' },
     layers: [
-      { k: 'energy', lab: 'energy and sales', col: C.procurement, v: r => r[1] * USD_PER_EUR[r[0]] },
-      { k: 'wires', lab: 'network', col: C.network, v: r => r[2] * USD_PER_EUR[r[0]] },
-      { k: 'taxes', lab: 'taxes and levies', col: C.taxes, v: r => r[3] * USD_PER_EUR[r[0]] },
+      { k: 'energy', lab: 'energy and sales', col: C.procurement, v: r => r.parts.energy },
+      { k: 'wires', lab: 'network', col: C.network, v: r => r.parts.wires },
+      { k: 'taxes', lab: 'taxes and levies', col: C.taxes, v: r => r.parts.taxes },
     ],
-    rows: DATA.bdew,
+    rows: DEBILL,
   },
 };
 export function billSplit(el) {
   const st = { c: 'us' };
   const fig = new Fig(el, {
-    label: 'What a household kilowatt-hour pays for, by year: in the United States 1951 to 2025 every part fell until about 1970, then fuel and bought power jumped in the 1970s, plant costs rose in the 1980s, and wires have tripled since 2000; in Germany 2015 to 2026 energy, network and taxes and levies',
+    label: 'What a household kilowatt-hour pays for, by year: in the United States 1951 to 2025 every part fell until about 1970, then fuel and bought power jumped in the 1970s, plant costs rose in the 1980s, and wires have tripled since 2000; in Germany 2006 to 2025, in 2025 euros, taxes and levies rose to a peak in 2017 and fell back after the renewables levy ended, energy and sales jumped in 2022, and the network fell to 2011 and then rose',
     height: w => w < 600 ? 470 : 380,
     draw(ctx, w, h) {
       const S = SPLIT[st.c], narrow = w < 600;
@@ -100,7 +101,7 @@ export function billSplit(el) {
       const tops = S.rows.map(r => S.layers.reduce((s, L) => s + L.v(r), 0));
       const ymax = Math.ceil(Math.max(...tops) / 10) * 10;
       const sx = scale(y0, y1, box.l, box.r), sy = scale(0, ymax, box.b, box.t);
-      for (let v = 0; v <= ymax; v += 10) { const y = Math.round(sy(v)) + 0.5; line(ctx, box.l, y, box.r, y, v ? C.grid : C.grid2, 1); text(ctx, v + '¢', box.l - 6, y + 4, { size: 10.5, color: C.ink3, align: 'right' }); }
+      for (let v = 0; v <= ymax; v += 10) { const y = Math.round(sy(v)) + 0.5; line(ctx, box.l, y, box.r, y, v ? C.grid : C.grid2, 1); text(ctx, v + S.sfx, box.l - 6, y + 4, { size: 10.5, color: C.ink3, align: 'right' }); }
       const step = y1 - y0 > 15 ? (narrow ? 10 : 5) : (narrow ? 4 : 2);
       const t0 = y1 - y0 > 15 ? Math.ceil(y0 / step) * step : y0;
       for (let y = t0; y <= y1; y += step) text(ctx, y, sx(y), box.b + 15, { size: 10.5, color: C.ink3, align: 'center' });
@@ -121,12 +122,17 @@ export function billSplit(el) {
       }
       // total line
       pathLine(ctx, S.rows.map((r, i) => [sx(ys[i]), sy(tops[i])]), C.ink, 1.6);
+      if (S.seam) { // where the source's basis changes
+        const x = Math.round(sx(S.seam.y - 0.5)) + 0.5;
+        ctx.save(); ctx.setLineDash([3, 3]); line(ctx, x, box.t, x, box.b, alpha(C.ink, 0.45), 1); ctx.restore();
+        text(ctx, S.seam.lab, x + 4, box.t + 10, { size: 10.5, color: C.ink3, halo: true });
+      }
       const chg = e => { const ch = e.b / e.a - 1; return Math.abs(ch) < 0.05 ? 'about the same' : (ch > 0 ? '+' : '−') + Math.round(Math.abs(ch) * 100) + '%'; };
       if (narrow) { // legend under the chart, top layer first
         ends.slice().reverse().forEach((e, i) => { const y = box.b + 34 + i * 18;
           ctx.fillStyle = alpha(e.L.col, 0.85); ctx.fillRect(box.l, y - 9, 10, 10);
           text(ctx, e.L.lab, box.l + 16, y, { size: 10.5, weight: 650, color: C.ink2 });
-          text(ctx, `${e.a.toFixed(1)} → ${e.b.toFixed(1)}¢ · ${chg(e)}`, w - 10, y, { size: 10.5, color: C.ink3, align: 'right' }); });
+          text(ctx, `${e.a.toFixed(1)} → ${e.b.toFixed(1)}${S.sfx} · ${chg(e)}`, w - 10, y, { size: 10.5, color: C.ink3, align: 'right' }); });
         return;
       }
       // end labels, pushed apart
@@ -138,7 +144,7 @@ export function billSplit(el) {
       for (const e of ends) {
         const chs = chg(e);
         text(ctx, e.L.lab, lx, e.y - 2, { size: narrow ? 10.5 : 11.5, weight: 650, color: e.L.col === C.taxes || e.L.col === '#bdb7aa' ? C.ink2 : e.L.col });
-        text(ctx, `${e.a.toFixed(1)} → ${e.b.toFixed(1)}¢ · ${chs}`, lx, e.y + 12, { size: 10.5, color: C.ink3 });
+        text(ctx, `${e.a.toFixed(1)} → ${e.b.toFixed(1)}${S.sfx} · ${chs}`, lx, e.y + 12, { size: 10.5, color: C.ink3 });
       }
     },
   });
@@ -155,7 +161,10 @@ export function billSplit(el) {
     const top = S.rows.filter(r => r.y > low.y).reduce((b, r) => (tot(r) > tot(b) ? r : b), r1);
     ro.innerHTML = st.c === 'us'
       ? `An average American household kWh cost <b>${tot(r0).toFixed(1)}¢</b> in ${y0}, ${tot(low).toFixed(1)}¢ in ${low.y}, ${tot(top).toFixed(1)}¢ in ${top.y} and <b>${tot(r1).toFixed(1)}¢</b> in ${y1}, in 2025 dollars. Fuel and bought power peaked at ${L('energy').v(fuelTop).toFixed(1)}¢ in ${fuelTop.y}; wires fell to ${L('wires').v(wireLow).toFixed(1)}¢ in ${wireLow.y} and are now <b>${L('wires').v(r1).toFixed(1)}¢</b>.`
-      : `In ${y1} a German household paid <b>${tot(r1).toFixed(1)}¢</b> a kWh: ${L('energy').v(r1).toFixed(1)}¢ for energy and sales, ${L('wires').v(r1).toFixed(1)}¢ for the network and <b>${L('taxes').v(r1).toFixed(1)}¢</b> in taxes and levies.`;
+      : (() => {
+        const taxTop = at('taxes', (a, b) => a > b), c = v => v.toFixed(1) + ' ct';
+        return `A German household kWh cost <b>${c(tot(r0))}</b> in ${y0} and <b>${c(tot(r1))}</b> in ${y1}, in 2025 euros. Taxes and levies rose from ${c(L('taxes').v(r0))} to ${c(L('taxes').v(taxTop))} in ${taxTop.y} and were <b>${c(L('taxes').v(r1))}</b> in ${y1}; energy and sales peaked at ${c(L('energy').v(fuelTop))} in ${fuelTop.y}; the network fell to ${c(L('wires').v(wireLow))} in ${wireLow.y} and was ${c(L('wires').v(r1))} in ${y1}.`;
+      })();
     fig.invalidate();
   };
   segmented(ctl, { label: 'Country', value: st.c, name: 'country', options: [{ label: 'United States', value: 'us', name: 'us' }, { label: 'Germany', value: 'de', name: 'de' }], onchange: v => { st.c = v; upd(); } });
