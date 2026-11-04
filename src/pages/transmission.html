@@ -7,7 +7,7 @@
 <meta name="description" content="An interactive explainer of the electricity network: why lines run at high voltage, how a transformer works, what limits a line, congestion and redispatch, where direct current wins, and why new lines and transformers have become the slowest part of the system to build, in China, India, the United States and Germany.">
 <link rel="icon" href="data:,">
 <link rel="stylesheet" href="style.css">
-<script>(function(){var m={"fig-networkEuro":"price.html#fig-networkEuro","network-costs":"price.html#network-costs","power-flow":"transmission.html#congestion","interconnection":"transmission.html#congestion","grids-world":"transmission.html#hvdc","fig-getsWeek":"transmission.html#thermal-limits","fig-lineField":"transmission.html#why-high-voltage","fig-voltageLosses":"transmission.html#why-high-voltage","fig-loadability":"transmission.html#power-angle","fig-interconnect":"futures.html#moving-the-surplus"};var h=location.hash.slice(1);if(m[h])location.replace(m[h]);})();</script>
+<script>(function(){var m={"fig-networkEuro":"price.html#fig-networkEuro","network-costs":"price.html#network-costs","power-flow":"transmission.html#congestion","interconnection":"transmission.html#congestion","grids-world":"transmission.html#hvdc","fig-getsWeek":"transmission.html#thermal-limits","fig-lineField":"transmission.html#why-high-voltage","fig-voltageLosses":"transmission.html#why-high-voltage","fig-loadability":"transmission.html#power-angle","fig-interconnect":"futures.html#moving-the-surplus","fig-coreFlux":"transformers.html#fig-coreFlux"};var h=location.hash.slice(1);if(m[h])location.replace(m[h]);})();</script>
 </head>
 <body>
 <main>
@@ -55,11 +55,8 @@
 
 <p>In 1831, the year he found the effect behind the generator, Faraday also wound two coils of wire around an iron ring. Switching a current on or off in one coil gave a brief kick of current in the other; a steady current gave nothing. No magnet had to move. The magnetic field through the second coil only had to <i>change</i>.</p>
 
-<p>Make the current in the first coil alternate, as a generator’s does, and the field never stops changing. Iron is thousands of times more permeable than air, so it gathers almost all of the field into a closed loop, the magnetic <b>flux</b>, and threads it through the second coil. Every turn of wire around the core sees the same changing flux and gets the same voltage, so each coil’s voltage is proportional to its number of turns.</p>
+<p>Make the current in the first coil alternate, as a generator’s does, and the field never stops changing. Iron is thousands of times more permeable than air, so it gathers almost all of the field into a closed loop, the magnetic <b>flux</b>, and threads it through the second coil. Every turn of wire around the core sees the same changing flux and gets the same voltage, so each coil’s voltage is proportional to its number of turns. The <a class="xref" href="transformers.html#fig-coreFlux">transformers deep dive</a> animates the flux.<sup class="fn"><a href="#n6">6</a></sup></p>
 
-<figure class="fig" data-fig="coreFlux">
-<figcaption><span class="tagline tag-ill">Model</span> A single-phase transformer slowed to one cycle every two seconds; arrows show the flux in the iron. The secondary has half the primary’s turns, so it gives half the voltage and carries twice the current.<sup class="fn"><a href="#n6">6</a></sup></figcaption>
-</figure>
 
 <p>The flux does not depend on the load. When the load draws current, the primary draws a matching current and their magnetic effects cancel; with nothing connected, the primary still draws a small <b>magnetising current</b> to keep the flux going. Voltage goes up exactly as current goes down, so power in equals power out, less a small loss.</p>
 

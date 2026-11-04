@@ -39,6 +39,12 @@ were edited by hand to match it (39.3 and 37.3 ct; `make_data.py`'s input CSV is
 August values), and the text follows (essay 8 procurement 17.9¢, essay 9 small firms about 21¢, heat-pump preset
 37.3 ct).
 
+**Browser review fixes (4 Nov 2026).** No figure appears twice any more (88 figures): essay 4 keeps `losses`,
+`transformer` and `shortage`, the transformers deep dive keeps `coreFlux`, essay 9 links to essay 1's `historyChart`;
+each removed copy is a text link, and old anchors redirect (page maps and `scripts/redirects.py` ALIASES). Essay 9's
+note on the timeline lanes went with its figure (notes renumbered). Essay 1's world total is now about 31,900 TWh,
+matching essay 3 (Ember). `turbineScale` on phones draws two rows to one scale (onshore, offshore), about 1.7× larger.
+
 **Figure `salesPrice`** (`src/figs/new-futures.js`, after `billSplit` in futures.html): log-log connected scatter, one
 dot a year, kWh sold (1951 = 1) against the real household price or (toggle) its wires part; the other series faint
 for reference; rough sales years drawn as hollow, lighter dots; hover/tap a dot for year, index, % change on five

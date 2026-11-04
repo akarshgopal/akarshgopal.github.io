@@ -29,13 +29,16 @@ for sha in git('log', '--format=%H', '--', PAGES, 'src/posts').split():
 
 # old ids that no longer exist anywhere, sent to the nearest surviving place
 ALIASES = {
+    # figures shown on one page only since 4 Nov 2026 (they had been repeated)
+    'transformers.html': {'fig-losses': 'transmission.html#fig-losses', 'fig-transformer': 'transmission.html#fig-transformer',
+                          'fig-shortage': 'transmission.html#fig-shortage'},
     'solar-pv.html': {'iv-curve': 'solar-pv.html#photons', 'modules': 'solar-pv.html#photons', 'fig-ivCurve': 'solar-pv.html#photons',
                       'fig-shading': 'solar-pv.html#photons', 'fig-junction': 'solar-pv.html#junction', 'fig-cellTech': 'solar-pv.html#cell-tech',
                       'lifetime': 'solar-pv.html#yield', 'fig-sunPath': 'solar-pv.html#sun', 'fig-clipping': 'solar-pv.html#inverters',
                       'fig-solarWorld': 'solar-pv.html#deployment', 'fig-noonDay': 'solar-pv.html#capture'},
     'utility-renewables.html': {'fig-bladeElement': 'utility-renewables.html#wind-physics', 'fig-seasonMix': 'utility-renewables.html#system-integration',
                                 'fig-seasonDay': 'utility-renewables.html#system-integration', 'wind-world': 'utility-renewables.html#auctions-world'},
-    'transmission.html': {'power-flow': 'transmission.html#congestion', 'interconnection': 'transmission.html#congestion', 'grids-world': 'transmission.html#hvdc',
+    'transmission.html': {'fig-coreFlux': 'transformers.html#fig-coreFlux', 'power-flow': 'transmission.html#congestion', 'interconnection': 'transmission.html#congestion', 'grids-world': 'transmission.html#hvdc',
                           'fig-getsWeek': 'transmission.html#thermal-limits', 'fig-lineField': 'transmission.html#why-high-voltage',
                           'fig-voltageLosses': 'transmission.html#why-high-voltage', 'fig-loadability': 'transmission.html#power-angle',
                           'fig-interconnect': 'futures.html#moving-the-surplus'},

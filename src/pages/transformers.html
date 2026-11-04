@@ -7,7 +7,7 @@
 <meta name="description" content="An interactive explainer of power transformers: induction and flux, hysteresis and eddy-current losses, efficiency, cooling and insulation ageing, three-phase vector groups, tap changers, the family from pole-top units to generator step-ups, the 2020s supply crunch, resilience and solid-state transformers.">
 <link rel="icon" href="data:,">
 <link rel="stylesheet" href="style.css">
-<script>(function(){var m={"fig-threePhase":"the-machine.html#fig-threePhase"};var h=location.hash.slice(1);if(m[h])location.replace(m[h]);})();</script>
+<script>(function(){var m={"fig-threePhase":"the-machine.html#fig-threePhase","fig-losses":"transmission.html#fig-losses","fig-transformer":"transmission.html#fig-transformer","fig-shortage":"transmission.html#fig-shortage"};var h=location.hash.slice(1);if(m[h])location.replace(m[h]);})();</script>
 </head>
 <body>
 <main>
@@ -37,19 +37,13 @@
 
 <h2 id="s4"><span class="num">1</span>Why change the voltage</h2>
 
-<p>Power stations are rarely where the people are. China’s coal, wind and sun are in the far west, its factories on the east coast. Brazil’s great dams are in the Amazon, its demand in São Paulo and Rio. Germany’s wind blows on the North Sea coast, far from its southern industry. Moving electricity hundreds or thousands of kilometres runs into resistance. A wire with resistance <i>R</i> carrying current <i>I</i> turns <i>I²R</i> watts into heat. For a fixed amount of power, <i>P = V × I</i> from <a class="xref" href="kilowatt-hour.html#power-and-energy">essay 2</a>, raising the voltage lowers the current — and the losses fall with the <i>square</i> of the current:</p>
+<p>Power stations are rarely where the people are. China’s coal, wind and sun are in the far west, its factories on the east coast. Brazil’s great dams are in the Amazon, its demand in São Paulo and Rio. Germany’s wind blows on the North Sea coast, far from its southern industry. Moving electricity hundreds or thousands of kilometres runs into resistance. A wire with resistance <i>R</i> carrying current <i>I</i> turns <i>I²R</i> watts into heat. For a fixed amount of power, <i>P = V × I</i> from <a class="xref" href="kilowatt-hour.html#power-and-energy">essay 2</a>, raising the voltage lowers the current — and the losses fall with the <i>square</i> of the current. <a class="xref" href="transmission.html#fig-losses">Essay 4’s line figure</a> lets you try it.</p>
 
-<figure class="fig" data-fig="losses">
-<figcaption><span class="tagline tag-ill">Model</span> Sending power down a line with 0.03 Ω per km per conductor. The glow of the conductors shows the heat lost. Losses scale as P² R / V²: ten times the voltage means a hundredth of the loss.</figcaption>
-</figure>
 
 <p>At household voltage a few hundred megawatts would melt the wires. At 380 kV, the backbone voltage of much of Europe, the figure’s gigawatt crosses 300 km on one circuit losing about 6%; spread over two circuits, as German grid operators usually build such lines, about 3%.<sup class="fn"><a href="#n2">2</a></sup> India’s 765 kV backbone and China’s 1,000 kV lines push the same arithmetic further, as <a class="xref" href="transmission.html#why-high-voltage">essay 4</a> shows.</p>
 
-<p>High voltage is dangerous in a home and expensive in a generator, so the voltage has to change along the way. Alternating current makes that easy, with a <b>transformer</b>: two coils on a shared iron core. Twenty times the turns gives twenty times the voltage and a twentieth of the current.</p>
+<p>High voltage is dangerous in a home and expensive in a generator, so the voltage has to change along the way. Alternating current makes that easy, with a <b>transformer</b>: two coils on a shared iron core. Twenty times the turns gives twenty times the voltage and a twentieth of the current, as in <a class="xref" href="transmission.html#fig-transformer">essay 4’s step-up transformer</a>.</p>
 
-<figure class="fig" data-fig="transformer">
-<figcaption><span class="tagline tag-ill">Model</span> The generator of <a class="xref" href="the-machine.html#s2">essay 3</a> wired to a transformer: two coils on a shared iron core. Voltage changes by the turns ratio and current by its inverse, so power in equals power out, minus about half a per cent.</figcaption>
-</figure>
 
 <p>A generator’s 21 kV is stepped up to 380 kV for the journey, then down in stages to 230 V at the socket.</p>
 
@@ -160,11 +154,8 @@
 
 <p>For most of the twentieth century transformers were a mature, slow business: flat demand in rich countries, leisurely replacement, factories sized to match. Then almost every driver moved at once: renewable connections, data centres, electrification, replacing units from the 1960s and 70s and, in the US, storm hardening. US demand for power transformers more than doubled between 2019 and 2025.<sup class="fn"><a href="#n13">13</a></sup> Factories could not follow.</p>
 
-<p>After a decade of near-flat prices, transformers became much more expensive from 2021, far faster than prices in general:<sup class="fn"><a href="#n14">14</a></sup></p>
+<p>After a decade of near-flat prices, transformers became much more expensive from 2021, far faster than prices in general: by August 2026 US producer prices were 88 per cent above their 2019 level, against about 31 per cent for consumer prices (<a class="xref" href="transmission.html#fig-shortage">essay 4 charts both</a>).<sup class="fn"><a href="#n14">14</a></sup><sup class="fn"><a href="#n15">15</a></sup></p>
 
-<figure class="fig" data-fig="shortage">
-<figcaption><span class="tagline tag-real">Data</span> US producer prices of transformers against consumer prices since 2006, and lead times before and after the shortage.<sup class="fn"><a href="#n15">15</a></sup></figcaption>
-</figure>
 
 <p>Lead times stretched even more: a large unit that came within a year before the pandemic took three years or more by 2024.<sup class="fn"><a href="#n1">1</a></sup></p>
 

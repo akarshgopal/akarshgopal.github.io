@@ -81,16 +81,51 @@ const TURBS = [
   { k: 'hx', name: 'GE Haliade-X 13 MW (offshore, e.g. Dogger Bank)', short: 'Haliade-X 13 MW', mw: 13, d: 220, hub: 140, col: '#2c6795', hubIll: true },
   { k: 'v236', name: 'Vestas V236-15.0 MW (offshore)', short: 'V236 15 MW', mw: 15, d: 236, hub: 150, col: '#1d4a73', hubIll: true },
 ];
-// px per metre that fits all four rotors side by side between the axis labels and the cathedral (phones)
-const fitM = w => (w - 24 - 30 - 40 - 6 * TURBS.length) / TURBS.reduce((a, t) => a + t.d, 0);
+// Phones: two rows to one scale, onshore above and offshore below, each with the cathedral for reference.
+// px per metre that fits the wider row's rotors between the axis labels and the cathedral
+const ROWS = [TURBS.slice(0, 2), TURBS.slice(2)];
+const ROW_H = ROWS.map(r => Math.max(...r.map(t => t.hub + t.d / 2)) + 12); // metres shown in each row
+const fitM = w => (w - 34 - 34 - 12) / Math.max(...ROWS.map(r => r.reduce((a, t) => a + t.d, 0)));
+const ROW_PAD = 44; // px under each row's ground for labels
+function paintTurbine(ctx, t, x, ground, m, sel, a, i, labelY, narrow) {
+  const hub = ground - t.hub * m, R = t.d / 2 * m;
+  const col = sel ? t.col : alpha(t.col, 0.45);
+  ctx.strokeStyle = col; ctx.lineWidth = Math.max(2, R * 0.05); ctx.beginPath(); ctx.moveTo(x - 1.5, ground); ctx.lineTo(x, hub); ctx.stroke();
+  if (sel) { ctx.strokeStyle = alpha(t.col, 0.25); ctx.lineWidth = 1; ctx.setLineDash([3, 3]); ctx.beginPath(); ctx.arc(x, hub, R, 0, Math.PI * 2); ctx.stroke(); ctx.setLineDash([]); }
+  for (let b = 0; b < 3; b++) { const ang = a * (40 / t.d) * 3 + b * 2 * Math.PI / 3 + i; ctx.strokeStyle = col; ctx.lineWidth = Math.max(1.5, R * 0.035); ctx.beginPath(); ctx.moveTo(x, hub); ctx.lineTo(x + Math.cos(ang) * R, hub + Math.sin(ang) * R); ctx.stroke(); }
+  circle(ctx, x, hub, Math.max(2.5, R * 0.04), col, null);
+  text(ctx, narrow ? t.short.replace('US onshore ', '').replace(/ \d+ MW$/, '') : t.short, x, labelY, { size: narrow ? 10.5 : 11, weight: sel ? 700 : 500, color: sel ? C.ink : C.ink3, align: 'center' });
+  text(ctx, t.mw + ' MW', x, labelY + 14, { size: 10.5, color: C.ink3, align: 'center' });
+}
+function paintCathedral(ctx, cx, ground, m, label) {
+  const ch = 157 * m;
+  ctx.fillStyle = alpha('#8a7f70', 0.35); ctx.beginPath(); ctx.moveTo(cx - 10, ground); ctx.lineTo(cx - 10, ground - ch * 0.7); ctx.lineTo(cx - 5, ground - ch); ctx.lineTo(cx, ground - ch * 0.7); ctx.lineTo(cx + 3, ground - ch * 0.7); ctx.lineTo(cx + 8, ground - ch * 0.98); ctx.lineTo(cx + 13, ground - ch * 0.7); ctx.lineTo(cx + 13, ground); ctx.fill();
+  if (label) text(ctx, label, cx + 1, ground + 16, { size: 10, color: C.ink3, align: 'center' });
+}
 export function turbineScale(el) {
   const st = { sel: 't2024', a: 0 };
+  const drawRows = (ctx, w) => { // phones
+    const m = fitM(w), cx = w - 22;
+    let y = 16;
+    ROWS.forEach((row, r) => {
+      const ground = y + ROW_H[r] * m;
+      ctx.fillStyle = '#e5e1d6'; ctx.fillRect(0, ground, w, 4);
+      for (const v of [50, 100, 150, 200, 250]) if (v < ROW_H[r] - 4) { line(ctx, 30, ground - v * m, w - 8, ground - v * m, alpha(C.grid2, 0.8), 1); text(ctx, v + ' m', 28, ground - v * m + 4, { size: 10.5, color: C.ink3, align: 'right' }); }
+      text(ctx, r ? 'offshore' : 'onshore, US average', 34, y + 8, { size: 10.5, weight: 600, color: C.ink3 });
+      paintCathedral(ctx, cx, ground, m, r ? 'Cathedral' : null);
+      const span = cx - 16 - 36, used = row.reduce((a, t) => a + t.d * m, 0), gap = (span - used) / row.length;
+      let nx = 36 + gap / 2;
+      row.forEach((t, i) => { const x = nx + t.d / 2 * m; nx += t.d * m + gap; paintTurbine(ctx, t, x, ground, m, t.k === st.sel, st.a, i + 2 * r, ground + 18, true); });
+      y = ground + ROW_PAD;
+    });
+  };
   const fig = new Fig(el, {
     label: 'Wind turbines drawn to scale: the average new US onshore turbine in 1998–99 and in 2024, and two offshore turbines, with Cologne Cathedral for reference',
-    height: w => w < 600 ? Math.round(68 + 300 * Math.min(1.1, fitM(w))) : 420, animated: true,
+    height: w => w < 600 ? Math.round(16 + ROW_H.reduce((a, H) => a + H * fitM(w) + ROW_PAD, 0)) : 420, animated: true,
     step(dt) { st.a += dt * 0.9; },
     draw(ctx, w, h) {
-      const narrow = w < 600, ground = h - 38, top = 30, H = 300; // metres shown
+      if (w < 600) return drawRows(ctx, w);
+      const narrow = false, ground = h - 38, top = 30, H = 300; // metres shown
       const m = narrow ? Math.min((ground - top) / H, fitM(w)) : (ground - top) / H;
       ctx.fillStyle = '#e5e1d6'; ctx.fillRect(0, ground, w, h - ground);
       for (const v of narrow ? [100, 200] : [50, 100, 150, 200, 250]) { line(ctx, 28, ground - v * m, w - 8, ground - v * m, alpha(C.grid2, 0.8), 1); text(ctx, v + ' m', 26, ground - v * m + 4, { size: 10.5, color: C.ink3, align: 'right' }); }
