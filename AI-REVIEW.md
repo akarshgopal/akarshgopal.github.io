@@ -153,10 +153,9 @@ The fix is mostly *re-asking the question* and *re-anchoring the numbers*, not m
 - **The 3D relays.** In `relayLogic` and `relayCascade` the labels A, B and "lamp" float far from the parts they name
   at desktop width. Anchor the labels to the objects.
 - **Small defects:**
-  - `syncSwing` has no unit on its y-axis (MW);
   - a missing space in The Price of a Flip §4 ("same.The industry's");
   - Language's first citation is note 24, so notes are not numbered in reading order.
-- **Twenty different figure tags.** "Physics + DERIVED", "Real data + cited rule of thumb", "Published figures,
+- **Twenty different figure tags** (fixed 5 Nov; see below). "Physics + DERIVED", "Real data + cited rule of thumb", "Published figures,
   derived", "Measured + estimates", and so on. The electricity series uses three: Data, Model, Data + model. Unify
   them.
 
@@ -174,11 +173,13 @@ The fix is mostly *re-asking the question* and *re-anchoring the numbers*, not m
    - Price in US dollars at US market prices, with GPU-hour rental prices.
 3. **Add a page on what binds in 2026–30**, ranked: chips (CoWoS, HBM) → power (turbines, interconnection,
    transformers) → permits → money. Link the electricity series for the grid mechanics.
-4. **Copy-edit.** Fix the bylines and page names, remove code identifiers from the prose, use three figure tags,
-   convert € to $, renumber the notes, and fix the typo and the `syncSwing` axis.
+4. **Copy-edit.** **Done 5 Nov** in `blog/ai/` ([PR #28](https://github.com/akarshgopal/akarshgopal.github.io/pull/28)):
+   bylines, page names, code identifiers, figure tags, note order and the typo. Converting € to $ involves figure
+   code, so it moved to the handoff. (`syncSwing` was wrongly listed: it has a "cluster power, MW" axis title, which
+   the screenshot had cropped.)
 5. **Cut the repetition.** Give each figure one home, choose one front door, and give orbit one page.
 6. **Keep the physics and ML deep dives as they are.** At most, swap the H100 for an NVL72-era example where a
    number is quoted.
 
-These changes belong in the `ai-explainer` source, which this repo does not hold. Patching the built `blog/ai/` pages
+The remaining work is briefed for a session with the source in `docs/HANDOFF-AI-SERIES.md`. These changes belong in the `ai-explainer` source, which this repo does not hold. Patching the built `blog/ai/` pages
 by hand, as earlier AI fixes did, works for the copy-edits in step 4 but not for steps 1–3.
