@@ -109,3 +109,19 @@ Secondary or reported only:
 - GE Vernova's "sold out through 2030";
 - Microsoft's 50T tokens a month, and OpenAI's 6B tokens a minute and 2.5B prompts a day (company statements as
   reported).
+
+## 5. Follow-ups, 5 Nov 2026 (second PR)
+
+- `app.js`, `caseMap` (`Vr`):
+  - Added a "What binds" card to Act 2, with edges need → binds → verdict.
+  - "Power needed" now links to `verdict.html#act2`.
+  - The Demand card's description is updated.
+- `three3d.js`: label anchors in `relay3d` (`Vd`) and `cascade3d` (`Yd`) lowered from y = 1.35 (and 1.05) to 0.85, so A, B
+  and "B driven" sit just above their coils.
+- **data**:
+  - `laborMap` replaced by a table (`#labour`).
+  - `dataFlow` and `flywheel` removed; the paragraphs around them already describe the pipeline and the loop.
+  - `dataIndustry` (a real data chart) is kept.
+- **factory**: `regionsTWh` is kept, because it bears on energy.
+- **essay**: the opening aside, a second lede paragraph and the final words now carry the series' near-term question and
+  point to Demand, What binds and the Verdict. The index stays the contents page and case map.
