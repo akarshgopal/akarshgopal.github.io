@@ -15,7 +15,7 @@
 <article>
 <header class="top">
 <h1>The Verdict: What the Ledger Says</h1>
-<p class="byline">Can AI outgrow the planet’s power grid? · the ledger · Low, Mid, High · written for Akarsh Gopal, October 2026</p>
+<p class="byline">Can AI outgrow the planet’s power grid? · the ledger · Low, Mid, High · by Akarsh Gopal, October 2026</p>
 </header>
 <details class="spine"><summary>Timeline, 1822–2026</summary><ol><li><a href="essay.html#s2"><span class="y">1822</span><span class="w" title="outside the US">◆</span>Babbage proposes the Difference Engine</a></li><li><a href="essay.html#s2"><span class="y">1843</span><span class="w" title="outside the US">◆</span>Lovelace publishes the first program, for the Analytical Engine</a></li><li><a href="essay.html#s2"><span class="y">1936</span><span class="w" title="outside the US">◆</span>Turing: a machine that can imitate any other</a></li><li><a href="essay.html#s1"><span class="y">1937</span>Shannon: relay circuits do Boolean logic</a></li><li><a href="essay.html#s3"><span class="y">1941</span><span class="w" title="outside the US">◆</span>Zuse’s Z3, a programmable relay computer</a></li><li><a href="model.html#perceptron"><span class="y">1943</span>McCulloch and Pitts: a neuron as a switch</a></li><li><a href="essay.html#s3"><span class="y">1946</span>ENIAC: 17,468 tubes, 150 kW</a></li><li><a href="essay.html#s3"><span class="y">1947</span>The transistor, Bell Labs</a></li><li><a href="essay.html#s7"><span class="y">1958</span>Rosenblatt’s perceptron</a></li><li><a href="essay.html#s3"><span class="y">1959</span>The MOSFET (Atalla and Kahng) and the planar chip</a></li><li><a href="essay.html#s4"><span class="y">1965</span>Moore’s observation</a></li><li><a href="model.html#xor"><span class="y">1969</span>Minsky and Papert’s Perceptrons</a></li><li><a href="essay.html#s4"><span class="y">1971</span><span class="w" title="outside the US">◆</span>Intel 4004, made for Busicom of Japan</a></li><li><a href="essay.html#s4"><span class="y">1974</span>Dennard’s scaling rules</a></li><li><a href="essay.html#s5"><span class="y">1976</span>Cray-1</a></li><li><a href="model.html#backprop"><span class="y">1986</span>Backpropagation popularised</a></li><li><a href="language.html#convolution"><span class="y">1989</span>LeCun’s convolutional network reads zip codes</a></li><li><a href="language.html#sequences"><span class="y">1997</span><span class="w" title="outside the US">◆</span>LSTM (Hochreiter and Schmidhuber)</a></li><li><a href="essay.html#s4"><span class="y">~2005</span>Dennard scaling ends; clock speeds stall</a></li><li><a href="essay.html#s6"><span class="y">2007</span>CUDA lets GPUs run general code</a></li><li><a href="essay.html#s10"><span class="y">2009</span>ImageNet</a></li><li><a href="essay.html#s5"><span class="y">2011</span><span class="w" title="outside the US">◆</span>K computer tops the TOP500</a></li><li><a href="essay.html#s10"><span class="y">2012</span><span class="w" title="outside the US">◆</span>AlexNet, trained on two gaming GPUs</a></li><li><a href="essay.html#s11"><span class="y">2017</span>“Attention Is All You Need”</a></li><li><a href="essay.html#s12"><span class="y">2020</span>Scaling laws; GPT-3; Fugaku tops the TOP500</a></li><li><a href="essay.html#s12"><span class="y">2022</span>Chinchilla; H100; ChatGPT</a></li><li><a href="essay.html#s14"><span class="y">2024</span>100,000-GPU clusters; a 1,500 MW data-centre load drops off the Virginia grid</a></li><li><a href="essay.html#s14"><span class="y">2025</span><span class="w" title="outside the US">◆</span>IEA: data centres used 415 TWh in 2024</a></li></ol></details>
 
@@ -32,7 +32,7 @@
 
 <p>The model is one line. Inference energy in year <i>t</i> = 55 TWh × (U × T)<sup>s(t)</sup> ÷ eff(t), capped by the power built for inference × 8.76 TWh per GW. U is people × tasks a day and T tokens per task, both as multiples of today reached by 2050; s(t) climbs from 0 in 2025 to 1 in 2050, fast at first and then saturating; eff(t) compounds a yearly efficiency gain that halves every few years. Each rung then gets a verdict: <b>YES</b> if the central path reaches the bar and the low end of the band is within 2× of it; <b>NO</b> if even the high end falls short; otherwise <b>UNRESOLVED</b>. The band runs from the central path × 40/55 ÷ u to × 80/55 × u, where u is the forecast uncertainty (2 by default).</p>
 
-<p>Mid is calibrated to land near the IEA’s Base Case. The chain: accelerated servers were about 15% of the IEA’s 415 TWh in 2024, ≈62 TWh; the IEA has them growing about 30% a year, so ≈300 TWh by 2030 (roughly a third of its ~945 TWh all-data-centre total); my 60% inference share gives ≈180 TWh. Mid lands at ~220 TWh in 2030, a little above.<sup class="fn"><a href="#n2">2</a></sup> <b>That calibration is mine, not a forecast.</b> Low and High move the same five levers; the ledger below freezes the three presets from <code>model.js</code>.</p>
+<p>Mid is calibrated to land near the IEA’s Base Case. The chain: accelerated servers were about 15% of the IEA’s 415 TWh in 2024, ≈62 TWh; the IEA has them growing about 30% a year, so ≈300 TWh by 2030 (roughly a third of its ~945 TWh all-data-centre total); my 60% inference share gives ≈180 TWh. Mid lands at ~220 TWh in 2030, a little above.<sup class="fn"><a href="#n2">2</a></sup> <b>That calibration is mine, not a forecast.</b> Low and High move the same five levers; the ledger below freezes the three presets.</p>
 
 <figure class="fig showpiece" data-fig="verdictMeter" id="fig-verdictMeter">
 <figcaption><span class="tagline tag-ill">Model</span> Same meter as the index. Defaults and sources are under <b>ⓘ data</b>. Press <b>To make this YES, set…</b> to see that R3 needs several levers at once.</figcaption>
@@ -49,7 +49,7 @@
 <tr><td>R3 (17,200 TWh, 2050)</td><td>NO</td><td>NO</td><td>NO</td></tr>
 </tbody>
 </table>
-<p class="aside"><b>Read the cells as model output under labelled assumptions</b>, not as predictions. The numbers are filled from the Low / Mid / High presets in <code>model.js</code> when the page loads (not from the live sliders above, which you can still move). High still misses R1 and R3; R2 is <b>UNRESOLVED</b> under High — the band reaches the bar, the central path does not clearly clear it. The joint solver on the meter reaches R3 only with power built for inference near 3,000 GW <i>and</i> tokens per task above a thousand times today’s — together, not alone.</p>
+<p class="aside"><b>Read the cells as model output under labelled assumptions</b>, not as predictions. The numbers are filled from the Low / Mid / High presets when the page loads (not from the live sliders above, which you can still move). High still misses R1 and R3; R2 is <b>UNRESOLVED</b> under High — the band reaches the bar, the central path does not clearly clear it. The joint solver on the meter reaches R3 only with power built for inference near 3,000 GW <i>and</i> tokens per task above a thousand times today’s — together, not alone.</p>
 
 <h2 id="act2" data-level="H0"><span class="num">2</span>Act 2: 100× and beyond</h2>
 
@@ -60,7 +60,7 @@
 </figure>
 
 <figure class="fig showpiece" data-fig="launchCost" id="fig-launchCost">
-<figcaption><span class="tagline tag-real">Published figures, derived</span> Launch-only $/kWh floor against the terrestrial band. On launch alone, beating the cheapest terrestrial cost takes ~$100–200/kg at 13–25 kg/kW; beating the dearest, ~$500–1,000/kg. Neither price has been shown.</figcaption>
+<figcaption><span class="tagline tag-real">Data</span> Launch-only $/kWh floor against the terrestrial band. On launch alone, beating the cheapest terrestrial cost takes ~$100–200/kg at 13–25 kg/kW; beating the dearest, ~$500–1,000/kg. Neither price has been shown.</figcaption>
 </figure>
 
 <h2 id="trip" data-level="S0"><span class="num">3</span>Tripwires</h2>
@@ -80,7 +80,7 @@
 
 <h2 id="notes">Notes and sources</h2>
 <ol class="notes">
-<li id="n1">Model defaults and rung bars: see <a href="index.html#notes">index notes</a> and <code>src/lib/model.js</code>. Mid calibration is mine.</li>
+<li id="n1">Model defaults and rung bars: see <a href="index.html#notes">index notes</a>. Mid calibration is mine.</li>
 <li id="n2">IEA <i>Energy and AI</i> / <i>Key Questions on Energy and AI</i>: data-centre outlook used as the Mid anchor. 415 TWh in 2024 and ~945 TWh in 2030 (Base Case); accelerated-server consumption “is projected to grow by 30% annually in the Base Case” (<a href="https://www.iea.org/reports/energy-and-ai/energy-demand-from-ai">Energy demand from AI</a>). 0.15 × 415 ≈ 62 TWh; 62 × 1.3<sup>6</sup> ≈ 300 TWh; × 0.60 ≈ 180 TWh. The 15% accelerated-server share and 60% inference share are as in index note 3.</li>
 <li id="n3">Epoch AI capacity path; Act 2 assumptions as on the index.</li>
 </ol>
