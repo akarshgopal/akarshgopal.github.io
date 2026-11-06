@@ -125,3 +125,21 @@ Secondary or reported only:
 - **factory**: `regionsTWh` is kept, because it bears on energy.
 - **essay**: the opening aside, a second lede paragraph and the final words now carry the series' near-term question and
   point to Demand, What binds and the Verdict. The index stays the contents page and case map.
+
+## 6. The essay as the front door; Rubin (6 Nov 2026, same PR)
+
+- **essay.html** is the front door:
+  - Retitled "From Switch to Supercluster: Can the Grid Keep Up?".
+  - A new opening states the near-term question.
+  - New sections: §15 "What AI uses, and what the money buys" (now the home of `actsBridge`), §16 "Can the grid connect
+    it?", §17 "Who pays" (the AEP Ohio data-centre tariff) and §18 "The long run".
+  - New final words, and notes 38–47.
+- **index.html** is now the contents page (grouped `ul.contents`, styled at the end of `style.css`) plus the case map.
+  It has one note. The ids `#act2`, `#verdict` and `#map` are kept.
+- **Series menu**: Start Contents; 1 The essay; 2 Yardstick … 14 Verdict. The pager chain is index → essay →
+  yardstick → … → verdict → index. "Short tour" is renamed "the essay" in the prose.
+- **app.js, roofline (`dt`)**: added `{lab:"Rubin (2026)", peak:4e15, bw:192e11}` from Nvidia's Vera Rubin NVL72
+  specifications page (dense FP16/BF16 4 PFLOPS; HBM4 19.2 TB/s per GPU), and raised the y-axis top from 15.6 to 15.8.
+  Once Epoch's dataset has Rubin, replace this with its row.
+- **factory**: note 3 and the `rackLadder` caption add Nvidia's "40K GPUs in 100 MW" (2.5 kW per GPU, site level).
+- Script paths were removed from essay note 36, essay note 37 and Language note 17.
