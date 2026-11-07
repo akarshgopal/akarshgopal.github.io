@@ -88,3 +88,25 @@ CORRECTED 1 Nov: Sagan's formula is not printed in The Cosmic Connection (Gray, 
   Bhadla is now in Phalodi district (formed 2023, kept in the Dec 2024 reorganisation) -> note updated.
 PREVIOUSLY UNVERIFIED (all checked 1 Nov, above): Eddystone ~40%; Sagan formula from the book itself (standard form used); BNEF 2024 turbine ranking; PL 119-21 details; Section 201/AD-CVD dates;
   India Bhadla/Khavda/MNRE parks; ERCOT nodal Dec 2010; China Doc 9 / spot pilots 2017; copper/tungsten constants (textbook); solar constant 1,361 (Kopp & Lean 2011); fridge 1 kWh/day.
+
+## STATUS 7 Nov 2026 (second pass; sources read directly, quotes in the notes)
+CONFIRMED:
+- DOE Hydrogen Shot "$1 per 1 kilogram in 1 decade".
+- Generators up to about 20–27 kV (Siemens Energy SGen ranges).
+- China has 36 reactors under construction, more than 49% of the world's (EIA, citing PRIS, Jun 2026).
+- Free farm power in Punjab, Tamil Nadu and Karnataka (Prayas 2020).
+- Wright, J. Aeronautical Sciences 3(4) 122–128, 1936 (Crossref).
+- SECI PPAs run 25 years.
+- The oil price quadrupled in 1973–74 (State Dept Office of the Historian).
+- Fuel-adjustment clauses passed fuel costs through in the 1970s (Brattle for EEI, 2006).
+- IEX clears about 99.9% of exchange volume, and the exchanges trade under a tenth of generation (CERC).
+- US transmission spending nearly tripled in real terms from 2003 to 2023, while retail sales rose 10.9% (EIA).
+- FERC Order 1920 requires a 20-year horizon and at least three scenarios.
+CORRECTED:
+- Green Energy Corridor: it is an intra-state scheme. Transmission now says so, citing the NEP target of 143 GW
+  inter-regional by 2027 (new note 38).
+- India's wind: "mostly in two states" became "nearly half": 49.5% (MNRE, 31 Mar 2026).
+- Winter Storm Uri: "millions of homes" became "more than 4.5 million Texans, some for up to four days"; the winter
+  peak record is 69,871 MW (FERC–NERC report, now linked directly).
+- German solar 110 GW is now described as the mid-2025 fleet, 117 GW at the end of 2025 (Bundesnetzagentur). The
+  model's 110 GW is kept so that its outputs, quoted in essay 8, stay consistent.
