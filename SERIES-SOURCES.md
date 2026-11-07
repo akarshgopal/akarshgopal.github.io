@@ -197,3 +197,13 @@ Secondary or reported only:
   - TSMC CoWoS capacity (TrendForce);
   - Vera Rubin rack draw (analyst estimate; Gigabyte "up to 240 kW");
   - the xAI permit figure (TechCrunch).
+
+## 8. Social cards (7 Nov 2026)
+
+- Every page except the three redirect stubs now has, before `</head>`:
+  - a canonical link;
+  - Open Graph tags: `og:title` (the page title, without the series suffix), `og:description` (the page's meta
+    description), `og:url`, and `og:image` = `blog/ai/og.png`;
+  - `twitter:card` = `summary_large_image`.
+- `og.png` (1200 × 630) shows `actsBridge` beside the series title.
+- Add the same tags to the source's page template, and copy `og.png` into its static files.
