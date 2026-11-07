@@ -154,9 +154,15 @@ WebSearch worked (snippets only); WebFetch is bound by the same network allowlis
   and push work back to that branch. An esbuild static site. `pnpm install`, then `node build.mjs`
   (`OUT=<dir> node build.mjs` builds elsewhere). Pages `src/pages/*.html`, order and titles `src/series.mjs`,
   figures `src/figs/*.js` registered in `src/figures.js` (each essay has its own `src/figs/new-<key>.js`).
-- **Site**: `akarshgopal/akarshgopal.github.io`, GitHub Pages from `master`. Deploy = copy `dist/*.html`,
-  `dist/series.js`, `dist/style.css` (and `dist/fonts/` if changed) into `blog/electricity/`, commit on a branch,
-  PR, merge. `hero.js` is no longer used by any page; do not ship it.
+  Since 7 Nov 2026 each page loads `js/<page>.js`, which imports only the figure modules it uses. `build.mjs`
+  generates these entries (via `scripts/figmap.mjs`, which maps figure names to modules in `src/figures.js` order),
+  and esbuild splits shared code into `js/chunks/`. A new figure module must also be added to `FIG_ORDER` in
+  `build.mjs`. Each page also gets a canonical link and Open Graph/Twitter tags; the card image is `src/og.png`.
+- **Site**: `akarshgopal/akarshgopal.github.io`, GitHub Pages from `master`. Deploy: copy `dist/*.html`,
+  `dist/js/` (replacing the old folder), `dist/series.js`, `dist/style.css`, `dist/og.png` (and `dist/fonts/` if
+  changed) into `blog/electricity/`, then commit on a branch, open a PR and merge it. A check on `master`
+  (`series-guard`) fails a PR that would put back an older version. `hero.js` is no longer used by any page; do not
+  ship it.
 - **Checks before any deploy**:
   - `node scripts/linkcheck.mjs` (`OUT=<dir>` supported). The 10 `../ai/` links always "fail" here: they point at the
     sibling AI series on the site; check them against `blog/ai/` in the site repo instead.
