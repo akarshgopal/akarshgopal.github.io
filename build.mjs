@@ -65,6 +65,12 @@ function pager(cur) {
   const a = (p, cls, word) => p ? `<a class="${cls}" href="${p.file}"><small>${word}</small>${esc(p.title)}</a>` : '<span></span>';
   return `<nav class="pager" aria-label="Previous and next in the series">${a(prev, 'prev', '← Previous')}${a(next, 'next', 'Next →')}</nav>`;
 }
+// When each page's text last changed: the date of the last commit to src/pages/<file>, or today if it has
+// uncommitted changes. Shown in the byline, in article:modified_time, and in feed.xml.
+const git = args => { try { return execFileSync('git', args, { encoding: 'utf8' }).trim(); } catch { return ''; } };
+const today = new Date().toISOString().slice(0, 10);
+const updated = file => (git(['status', '--porcelain', `src/pages/${file}`]) ? today : git(['log', '-1', '--format=%cs', '--', `src/pages/${file}`])) || today;
+const longDate = d => new Date(d + 'T12:00:00Z').toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' });
 // Canonical URL and the Open Graph / Twitter card for each page, from its own <title> and description.
 const SITE = 'https://akarshgopal.github.io/blog/electricity/';
 const attr = s => s.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');
@@ -72,7 +78,7 @@ function social(p, html) {
   const title = p.title; // the series name travels as og:site_name
   const desc = (html.match(/<meta name="description" content="([^"]*)"/) || [, ''])[1].replace(/&amp;/g, '&').replace(/&quot;/g, '"');
   const url = SITE + (p.file === 'index.html' ? '' : p.file);
-  return `<link rel="canonical" href="${url}">\n<meta property="og:type" content="article">\n<meta property="og:site_name" content="${attr(SERIES_TITLE)}">\n`
+  return `<link rel="alternate" type="application/rss+xml" title="${attr(SERIES_TITLE)}" href="feed.xml">\n<meta property="article:modified_time" content="${updated(p.file)}">\n<link rel="canonical" href="${url}">\n<meta property="og:type" content="article">\n<meta property="og:site_name" content="${attr(SERIES_TITLE)}">\n`
     + `<meta property="og:title" content="${attr(title)}">\n<meta property="og:description" content="${attr(desc)}">\n<meta property="og:url" content="${url}">\n`
     + `<meta property="og:image" content="${SITE}og.png">\n<meta property="og:image:width" content="1200">\n<meta property="og:image:height" content="630">\n`
     + `<meta property="og:image:alt" content="${attr(SERIES_TITLE)}: what an American household kilowatt-hour paid for, 1951 to 2025">\n<meta name="twitter:card" content="summary_large_image">\n`;
@@ -87,9 +93,26 @@ PAGES.forEach((p, i) => {
   html = html.replace(/<\/a>,(?=<a href="#n\d+">\d+<\/a>(?:<span class="fn-sep">,<\/span>|,|<\/sup>))/g, '</a><span class="fn-sep">,</span>');
   html = html.replace(/<button id="play-toggle"[^>]*>[^<]*<\/button>\n?/, '');
   html = html.replace(/<\/head>/, social(p, html) + '</head>');
+  const up = updated(p.file);
+  html = html.replace(/(<p class="byline">[^<]*?)(<\/p>)/, `$1 · updated <time datetime="${up}">${longDate(up)}</time>$2`);
   html = html.replace(/(<main>)/, nav(i) + '\n$1');
   html = html.replace(/(<\/article>)/, pager(i) + '\n$1');
   html = html.replace('<script src="series.js"></script>', `<script type="module" src="js/${p.file.replace(/\.html$/, '')}.js"></script>`);
   writeFileSync(`${OUT}/${p.file}`, html);
 });
+// feed.xml: one item per page, dated by its last update, so feed readers see revised essays.
+{
+  const rfc = d => new Date(d + 'T12:00:00Z').toUTCString();
+  const items = PAGES.map(p => {
+    const html = readFileSync(`src/pages/${p.file}`, 'utf8');
+    const desc = (html.match(/<meta name="description" content="([^"]*)"/) || [, ''])[1];
+    const url = SITE + (p.file === 'index.html' ? '' : p.file);
+    return `<item><title>${attr(p.title)}</title><link>${url}</link><guid isPermaLink="true">${url}</guid><pubDate>${rfc(updated(p.file))}</pubDate><description>${desc}</description></item>`;
+  }).sort((a, b) => new Date(b.match(/<pubDate>(.*?)</)[1]) - new Date(a.match(/<pubDate>(.*?)</)[1]));
+  const latest = PAGES.map(p => updated(p.file)).sort().pop();
+  writeFileSync(`${OUT}/feed.xml`, `<?xml version="1.0" encoding="UTF-8"?>\n<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel>`
+    + `<title>${attr(SERIES_TITLE)}</title><link>${SITE}</link><atom:link href="${SITE}feed.xml" rel="self" type="application/rss+xml"/>`
+    + `<description>An interactive series by Akarsh Gopal on why electricity stopped getting cheaper, and whether it can again.</description>`
+    + `<language>en-gb</language><lastBuildDate>${rfc(latest)}</lastBuildDate>\n${items.join('\n')}\n</channel></rss>\n`);
+}
 console.log(`built ${OUT}/: ` + PAGES.map(p => p.file).join(', '));
