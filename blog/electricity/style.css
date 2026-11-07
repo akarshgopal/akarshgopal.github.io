@@ -243,3 +243,9 @@ ol.essays a:hover { background: #efebe2; }
 ol.essays .n { grid-row: span 2; font-size: 1.05rem; color: var(--ink3); font-variant-numeric: tabular-nums; padding-top: 1px; }
 ol.essays .t { font-weight: 650; font-size: 1.02rem; line-height: 1.35; }
 ol.essays .d { font-size: 0.88rem; line-height: 1.5; color: var(--ink2); }
+
+/* "In brief" box at the top of each essay */
+.brief { font-family: var(--sans); font-size: 0.95rem; line-height: 1.55; color: var(--ink2); border-left: 3px solid var(--ink3, #999); padding: 2px 0 2px 16px; margin: 1.4em auto 1.8em; }
+.brief p { margin: 0.35em 0; }
+.brief b { color: var(--ink); }
+.byline time { white-space: nowrap; }
