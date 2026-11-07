@@ -185,3 +185,18 @@ Secondary or reported only:
 - `blog/ai/feed.xml` (RSS 2.0) lists the 15 pages, newest update first.
 - In the source, generate these at build time from git dates, as the electricity build does (see `build.mjs` on
   `electricity-source`).
+## 10. Accessibility and "In brief" (7 Nov 2026)
+
+- **`style.css`, appended:**
+  - `--ink3` changed to `#6d6d6b`.
+  - `.figfoot .fig-hint` (and `.done`) set to `opacity: 1`.
+  - `.pk-lv` darkened.
+  - Three inline readout colours raised to 4.5:1.
+  - A `.brief` style added.
+- **HTML:**
+  - The `<aside class="deepdive …">` boxes in essay and factory are now `<div … role="note">`.
+  - The empty first `<th>` cells now read "Rank" (binds) and "Result" (verdict).
+  - 13 deep dives open with `<div class="brief" role="note">` ("In brief" plus "The surprise").
+- **Yardstick:** the opening and note 2 now use the published-token range (3.3–7.6 TWh, a 7–16× gap) instead of
+  "ten billion prompts".
+- **Result:** axe-core 4.10 reports 0 violations on all 15 pages at 1280 and 390.
