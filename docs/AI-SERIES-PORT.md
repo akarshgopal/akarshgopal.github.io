@@ -143,3 +143,25 @@ Secondary or reported only:
   Once Epoch's dataset has Rubin, replace this with its row.
 - **factory**: note 3 and the `rackLadder` caption add Nvidia's "40K GPUs in 100 MW" (2.5 kW per GPU, site level).
 - Script paths were removed from essay note 36, essay note 37 and Language note 17.
+
+## 7. Primary sources and Epoch's Rubin row (7 Nov 2026)
+
+- **app.js roofline**: the Rubin entry is now named `NVIDIA VR200 (Vera Rubin)`, Epoch's row. Epoch's dataset,
+  downloaded on 7 Nov 2026, has it: released 2026-09-30, BF16 dense 4e15 FLOP/s, 19.2e12 B/s. Once the bundled
+  Epoch data is refreshed, take it from `eo` like the other chips. The Parallel caption is updated to match.
+- **thesis.js `RUNGS`**:
+  - GB200 is 120 kW (Nvidia) only.
+  - GB300 is 135 kW, up to 155 kW peak, from Lenovo's LP2357 product guide (a primary source).
+- **factory**: the text, caption and note 3 match. Note 3 adds the 4 × 110 kW shelf ceiling from Nvidia's DGX Vera
+  Rubin guide.
+- **binds**:
+  - GE Vernova's "sold out through 2030" (secondary) becomes "sold multiple slots for 2032 delivery", from its
+    28 Oct 2026 call transcript (primary).
+  - SK hynix's "sold out" (secondary) becomes "LTAs cover more than 50% of 2027–28 capacity", from its 3Q26 release.
+  - Stargate Abilene: TCEQ operating-permit application O4721 lists 5 Titan 350 and 5 LM2500 turbines and
+    62 emergency generators. The total of about 360 MW is still as reported.
+- **demand note 9**: Meta's $135–145B is now quoted from its SEC exhibit 99.1 (21 Oct 2026).
+- **Still secondary** (no primary source is published):
+  - TSMC CoWoS capacity (TrendForce);
+  - Vera Rubin rack draw (analyst estimate; Gigabyte "up to 240 kW");
+  - the xAI permit figure (TechCrunch).
