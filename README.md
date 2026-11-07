@@ -13,7 +13,9 @@ Plain HTML, CSS and a little JavaScript with no build step. Edit the `.html` fil
 | `assets/fonts/` | Self-hosted Inter (variable) and Newsreader (variable, roman and italic), Latin subsets, SIL OFL licences alongside |
 | `assets/projects/` | Screenshots captured from the live apps (pdfdiff.app, treechat.cc, ultimat-sim) |
 | `assets/video/` | BlueHornet demo video and poster |
-| `blog/electricity/` | *How Electricity Works*, a self-contained interactive series with its own styles and scripts. Replace it wholesale from its own build; don't edit it here |
+| `blog/electricity/` | *Why Did Electricity Stop Getting Cheaper?*, a self-contained interactive series built from the `electricity-source` branch. Replace it wholesale from that branch's head; see `SERIES-SOURCES.md` |
+| `blog/ai/` | *Can AI outgrow the planet's power grid?*, built from the separate `ai-explainer` source. The built files are ahead of the source: read `SERIES-SOURCES.md` before any rebuild |
+| `.github/workflows/series-guard.yml` | Fails a pull request that would put back an older version of either series |
 | `bio.html`, `story.html`, `blog/index.html` | Redirects that keep old URLs working |
 | `404.html`, `sitemap.xml`, `robots.txt`, favicons, `assets/og.png` | Housekeeping |
 
