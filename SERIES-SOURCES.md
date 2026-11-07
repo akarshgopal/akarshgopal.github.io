@@ -207,3 +207,13 @@ Secondary or reported only:
   - `twitter:card` = `summary_large_image`.
 - `og.png` (1200 × 630) shows `actsBridge` beside the series title.
 - Add the same tags to the source's page template, and copy `og.png` into its static files.
+
+## 9. Updated dates and RSS feed (7 Nov 2026)
+
+- Each page's byline ends "· updated <time datetime=…>…</time>". The date is the last commit to the page on
+  `master`.
+- The `<head>` has `<meta property="article:modified_time">` and
+  `<link rel="alternate" type="application/rss+xml" href="feed.xml">`.
+- `blog/ai/feed.xml` (RSS 2.0) lists the 15 pages, newest update first.
+- In the source, generate these at build time from git dates, as the electricity build does (see `build.mjs` on
+  `electricity-source`).
