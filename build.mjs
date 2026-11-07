@@ -25,7 +25,10 @@ rmSync('.build', { recursive: true, force: true });
 mkdirSync(ENTRY, { recursive: true });
 const pageEntries = PAGES.map(p => {
   const html = readFileSync(`src/pages/${p.file}`, 'utf8');
-  const names = [...new Set([...html.matchAll(/data-fig="([A-Za-z0-9]+)"/g)].map(x => x[1]))].filter(n => owner[n]);
+  const all = [...new Set([...html.matchAll(/data-fig="([A-Za-z0-9]+)"/g)].map(x => x[1]))];
+  const orphan = all.filter(n => !owner[n] && n !== 'hero3d');
+  if (orphan.length) throw new Error(`${p.file}: no module provides ${orphan.join(', ')}; add its module to FIG_ORDER`);
+  const names = all.filter(n => owner[n]);
   const mods = [...new Set(names.map(n => owner[n][0]))];
   const imp = mods.map((m, i) => `import { ${figmap[m].exp} as m${i} } from ${JSON.stringify(resolve(`src/figs/${m}.js`))};`).join('\n');
   const figs = names.map(n => { const [m, , k] = owner[n]; return `${JSON.stringify(n)}: m${mods.indexOf(m)}[${JSON.stringify(k)}]`; }).join(',\n  ');
