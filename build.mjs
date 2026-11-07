@@ -1,5 +1,7 @@
 import { build } from 'esbuild';
 import { cpSync, mkdirSync, rmSync, readFileSync, writeFileSync, existsSync } from 'node:fs';
+import { execFileSync } from 'node:child_process';
+import { resolve } from 'node:path';
 import { PAGES, SERIES_TITLE } from './src/series.mjs';
 
 // OUT=<dir> builds somewhere else (parallel editors each check their own build)
@@ -7,11 +9,38 @@ const OUT = process.env.OUT || 'dist';
 rmSync(OUT, { recursive: true, force: true });
 mkdirSync(`${OUT}/fonts`, { recursive: true });
 const common = { bundle: true, minify: true, format: 'iife', target: ['es2020'], legalComments: 'eof' };
-// series.js: every 2D figure; hero.js: the three.js generator, loaded only on the pages that show it
+// Each page loads js/<page>.js, which imports only the figure modules that page uses; code shared between pages goes
+// into chunks the browser caches once. The order and renames below follow src/figures.js (later modules win).
+const FIG_ORDER = ['solar', 'wind', 'xfmr', 'txl', 'sf', 'global3', 'essay', 'new-cheaper', 'new-kwh', 'new-machine',
+  'new-wires', 'new-balance', 'new-solar', 'new-wind', 'new-costs', 'new-futures', 'new-deep'];
+const figmap = JSON.parse(execFileSync('node', ['scripts/figmap.mjs', resolve('.'), ...FIG_ORDER], { encoding: 'utf8' }));
+const owner = {}; // figure name on the page -> [module, export, key in that module]
+for (const m of FIG_ORDER) for (const k of figmap[m].names) {
+  if (m === 'txl' && k === 'bill') continue;              // "bill" is the household-bill figure, not txl's
+  const name = m === 'xfmr' && k === 'threePhase' ? 'vectorGroups' : k; // "threePhase" is the generator's figure
+  owner[name] = [m, figmap[m].exp, k];
+}
+const ENTRY = '.build/entries';
+rmSync('.build', { recursive: true, force: true });
+mkdirSync(ENTRY, { recursive: true });
+const pageEntries = PAGES.map(p => {
+  const html = readFileSync(`src/pages/${p.file}`, 'utf8');
+  const names = [...new Set([...html.matchAll(/data-fig="([A-Za-z0-9]+)"/g)].map(x => x[1]))].filter(n => owner[n]);
+  const mods = [...new Set(names.map(n => owner[n][0]))];
+  const imp = mods.map((m, i) => `import { ${figmap[m].exp} as m${i} } from ${JSON.stringify(resolve(`src/figs/${m}.js`))};`).join('\n');
+  const figs = names.map(n => { const [m, , k] = owner[n]; return `${JSON.stringify(n)}: m${mods.indexOf(m)}[${JSON.stringify(k)}]`; }).join(',\n  ');
+  const base = p.file.replace(/\.html$/, '');
+  writeFileSync(`${ENTRY}/${base}.js`, `import { boot } from ${JSON.stringify(resolve('src/lib/boot.js'))};\n${imp}\nboot({\n  ${figs}\n});\n`);
+  return `${ENTRY}/${base}.js`;
+});
+await build({ bundle: true, minify: true, format: 'esm', splitting: true, target: ['es2020'], legalComments: 'eof',
+  entryPoints: pageEntries, outdir: `${OUT}/js`, chunkNames: 'chunks/[name]-[hash]' });
+// series.js (every figure) is kept for anything that still links to it; hero.js is the three.js generator.
 await build({ ...common, entryPoints: ['src/figures.js'], outfile: `${OUT}/series.js` });
 await build({ ...common, entryPoints: ['src/hero.js'], outfile: `${OUT}/hero.js` });
 cpSync('src/fonts', `${OUT}/fonts`, { recursive: true });
 cpSync('src/style.css', `${OUT}/style.css`);
+cpSync('src/og.png', `${OUT}/og.png`); // the card shown when a page is shared (1200 × 630)
 
 const esc = s => s.replace(/&/g, '&amp;').replace(/</g, '&lt;');
 
@@ -33,6 +62,18 @@ function pager(cur) {
   const a = (p, cls, word) => p ? `<a class="${cls}" href="${p.file}"><small>${word}</small>${esc(p.title)}</a>` : '<span></span>';
   return `<nav class="pager" aria-label="Previous and next in the series">${a(prev, 'prev', '← Previous')}${a(next, 'next', 'Next →')}</nav>`;
 }
+// Canonical URL and the Open Graph / Twitter card for each page, from its own <title> and description.
+const SITE = 'https://akarshgopal.github.io/blog/electricity/';
+const attr = s => s.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');
+function social(p, html) {
+  const title = p.title; // the series name travels as og:site_name
+  const desc = (html.match(/<meta name="description" content="([^"]*)"/) || [, ''])[1].replace(/&amp;/g, '&').replace(/&quot;/g, '"');
+  const url = SITE + (p.file === 'index.html' ? '' : p.file);
+  return `<link rel="canonical" href="${url}">\n<meta property="og:type" content="article">\n<meta property="og:site_name" content="${attr(SERIES_TITLE)}">\n`
+    + `<meta property="og:title" content="${attr(title)}">\n<meta property="og:description" content="${attr(desc)}">\n<meta property="og:url" content="${url}">\n`
+    + `<meta property="og:image" content="${SITE}og.png">\n<meta property="og:image:width" content="1200">\n<meta property="og:image:height" content="630">\n`
+    + `<meta property="og:image:alt" content="${attr(SERIES_TITLE)}: what an American household kilowatt-hour paid for, 1951 to 2025">\n<meta name="twitter:card" content="summary_large_image">\n`;
+}
 PAGES.forEach((p, i) => {
   let html = readFileSync(`src/pages/${p.file}`, 'utf8');
   // stable ids for every figure that lacks one
@@ -42,8 +83,10 @@ PAGES.forEach((p, i) => {
   html = html.replace(/<\/a><\/sup><sup class="fn">(?=<a )/g, '</a><span class="fn-sep">,</span>');
   html = html.replace(/<\/a>,(?=<a href="#n\d+">\d+<\/a>(?:<span class="fn-sep">,<\/span>|,|<\/sup>))/g, '</a><span class="fn-sep">,</span>');
   html = html.replace(/<button id="play-toggle"[^>]*>[^<]*<\/button>\n?/, '');
+  html = html.replace(/<\/head>/, social(p, html) + '</head>');
   html = html.replace(/(<main>)/, nav(i) + '\n$1');
   html = html.replace(/(<\/article>)/, pager(i) + '\n$1');
+  html = html.replace('<script src="series.js"></script>', `<script type="module" src="js/${p.file.replace(/\.html$/, '')}.js"></script>`);
   writeFileSync(`${OUT}/${p.file}`, html);
 });
 console.log(`built ${OUT}/: ` + PAGES.map(p => p.file).join(', '));
