@@ -1,0 +1,17 @@
+name: Series guard
+on:
+  pull_request:
+    branches: [master]
+    paths: ['blog/ai/**', 'blog/electricity/**', '.github/**']
+  push:
+    branches: [master]
+    paths: ['blog/ai/**', 'blog/electricity/**', '.github/**']
+permissions:
+  contents: read
+jobs:
+  guard:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check that neither series has gone back to an older version
+        run: bash .github/scripts/series-guard.sh

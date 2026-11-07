@@ -698,8 +698,8 @@
   var RUNGS = [
     { name: 'H100 chip', kw: 0.7, gpus: 1, src: 'NVIDIA rating' },
     { name: 'DGX H100 server', kw: 10.2, gpus: 8, src: 'NVIDIA maximum' },
-    { name: 'GB200 NVL72 rack', kw: 120, hi: 132, gpus: 72, src: 'NVIDIA ≈120; HPE 132 nominal' },
-    { name: 'GB300 NVL72 rack', kw: 132, hi: 155, gpus: 72, src: 'HPE: 132 nominal, ≈155 peak' },
+    { name: 'GB200 NVL72 rack', kw: 120, gpus: 72, src: 'Nvidia: ≈120' },
+    { name: 'GB300 NVL72 rack', kw: 135, hi: 155, gpus: 72, src: 'Lenovo: 135, ≤155 peak' },
     { name: 'Vera Rubin NVL72 rack', kw: 190, hi: 230, gpus: 72, src: 'reported, not confirmed', est: true }
   ];
   FIGS.rackLadder = function (fig) {
