@@ -249,7 +249,7 @@ export function network(el) {
     const dayNote = st.day ? `At ${String(Math.floor(hq)).padStart(2, '0')}:${String(Math.round((hq % 1) * 60)).padStart(2, '0')}: wind ${inputs(st.hour).windN.toFixed(1)} GW, southern demand ${inputs(st.hour).loadS.toFixed(1)} GW. ` : '';
     ro.innerHTML = dayNote + (st.mode === 'nodal'
       ? (Math.max(...R.lmp) - Math.min(...R.lmp) < 0.5 && Math.max(...R.lmp) < 999 ? `Every node pays <b>€${Math.max(0, Math.round(R.lmp[0]))}</b>: no line is holding power back, so there is one price.` : `Prices range from <b>€${Math.max(0, Math.round(Math.min(...R.lmp)))}</b> to <b>${Math.max(...R.lmp) >= 999 ? 'shortage' : '€' + Math.max(...R.lmp).toFixed(0)}</b>. Where a line is full, the price on either side splits.`)
-      : `One price, <b>€${R.zonal.toFixed(0)}</b>, for everyone — and a redispatch bill of <b>€${(R.redispatchCost / 1000).toFixed(2)} m per hour</b> that lands in network tariffs.`) + ` <span style="color:#777">Selected line: ${NODES[l.from].name} – ${NODES[l.to].name}.</span>`;
+      : `One price, <b>€${R.zonal.toFixed(0)}</b>, for everyone — and a redispatch bill of <b>€${(R.redispatchCost / 1000).toFixed(2)} m per hour</b> that lands in network tariffs.`) + ` <span style="color:#6b6861">Selected line: ${NODES[l.from].name} – ${NODES[l.to].name}.</span>`;
     fig.invalidate();
   }
   euroFigure(el, fig, ctl, 'eu-network');
