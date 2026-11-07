@@ -196,7 +196,10 @@ in the project or a named source; anything from memory is listed in `docs/VERIFY
 - `docs/VERIFY.md`: from-memory claims; the bottom "STATUS" block lists what was confirmed, corrected and still
   unverified (lower stakes: Eddystone ≈40%, US trade-policy dates, Indian solar-park details, ERCOT nodal 2010, …).
 - A bot ("Grok Bot") refreshed `blog/electricity/` from an older source on 26–28 Oct and reverted the series to the
-  old six-page version; whatever runs that refresh needs this source, or it will do it again.
+  old six-page version. Since 7 Nov 2026, `master` has a check (`.github/workflows/series-guard.yml`) that fails any
+  pull request putting back an older version of either series, and `SERIES-SOURCES.md` at the root of `master` says
+  where each is built from. The Grok Bot delivers through pull requests, so the check shows on its next one. To make
+  it binding, the owner can require the "Series guard" check in branch protection for `master`.
 - `blog/ai/index.html` and `blog/ai/essay.html` still call this series "How (the World's) Electricity Works"; they
   are built from the AI series' own source.
 - The author's quality plan after verification and the decomposition: (a) the author's own voice and a blunt thesis

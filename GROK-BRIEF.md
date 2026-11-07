@@ -1,3 +1,12 @@
+> **Read first (7 Nov 2026).**
+> - This brief is out of date on the project's name and build command.
+> - The electricity series is *Why Did Electricity Stop Getting Cheaper?*. It builds with `node build.mjs` from the
+>   head of this `electricity-source` branch.
+> - Before refreshing `blog/electricity/` or `blog/ai/` on `master`, read `SERIES-SOURCES.md` at the root of
+>   `master`. A check there fails any pull request that puts back an older version of either series.
+> - `blog/ai/` must not be rebuilt from `ai-explainer` until the changes in `docs/AI-SERIES-PORT.md` are ported into
+>   that source.
+
 # Brief for coding agents (read fully before editing)
 
 Project: Ciechanowski-style interactive explainer series "How Electricity Works". Static site built by `node build.mjs`.

@@ -1,7 +1,11 @@
 # The reframed thesis: review of 263e562 and what is still open
 
-**Status 1 Nov 2026:** proposals 1–5 and the `salesPrice` fix are applied (see `HANDOVER.md` §0); the provocations
-are not.
+**Status 1 Nov 2026:** proposals 1–5 and the `salesPrice` fix are applied (see `HANDOVER.md` §0).
+**Status 7 Nov 2026:** the three provocations are applied, softened and with their risks stated in the text, as the
+"three claims" paragraph in essay 9, "Back to the curve":
+- "demand as much as machines", with the accounts-not-causes caveat;
+- "cheaper generation alone cannot halve the bill", with the AI-series link for data centres;
+- "America's problem is use; Germany's *was* taxes" (half of the price 2013–21, under a third since 2022).
 
 1 November 2026. Commit 263e562 ("Growth as the second engine") already reframed the series around two engines,
 better machines and growing use, with a new figure (`salesPrice`) and rewritten passages in essays 1, 3, 4 and 9.
