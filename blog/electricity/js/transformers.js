@@ -1,0 +1,1 @@
+import{a as e}from"./chunks/chunk-ZNHOYKOZ.js";import"./chunks/chunk-R44A6P6A.js";import{c as o}from"./chunks/chunk-DRRA7XMF.js";o({coreFlux:e.coreFlux,coreLoss:e.coreLoss,efficiency:e.efficiency,hotSpot:e.hotSpot,windings:e.windings,vectorGroups:e.threePhase,tapChanger:e.tapChanger,scaleUp:e.scaleUp,sizeFrequency:e.sizeFrequency});
