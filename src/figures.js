@@ -17,6 +17,7 @@ import * as n_wind from './figs/new-wind.js';
 import * as n_costs from './figs/new-costs.js';
 import * as n_futures from './figs/new-futures.js';
 import * as n_deep from './figs/new-deep.js';
+import * as merged from './figs/merged.js';
 const { threePhase: vectorGroups, ...xfmrRest } = xfmr.FIGS; // "threePhase" is the generator's figure
 const { bill: _unused, ...txlRest } = txl.FIGS; // "bill" is the household-bill figure
-boot({ ...solar.FIGS, ...wind.FIGS, ...xfmrRest, vectorGroups, ...txlRest, ...sf.FIGS, ...g3.FIGS, ...MAIN_FIGS, ...n_cheaper.FIGS, ...n_kwh.FIGS, ...n_machine.FIGS, ...n_wires.FIGS, ...n_balance.FIGS, ...n_solar.FIGS, ...n_wind.FIGS, ...n_costs.FIGS, ...n_futures.FIGS, ...n_deep.FIGS });
+boot({ ...solar.FIGS, ...wind.FIGS, ...xfmrRest, vectorGroups, ...txlRest, ...sf.FIGS, ...g3.FIGS, ...MAIN_FIGS, ...n_cheaper.FIGS, ...n_kwh.FIGS, ...n_machine.FIGS, ...n_wires.FIGS, ...n_balance.FIGS, ...n_solar.FIGS, ...n_wind.FIGS, ...n_costs.FIGS, ...n_futures.FIGS, ...n_deep.FIGS, ...merged.FIGS });

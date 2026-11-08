@@ -12,7 +12,7 @@ const common = { bundle: true, minify: true, format: 'iife', target: ['es2020'],
 // Each page loads js/<page>.js, which imports only the figure modules that page uses; code shared between pages goes
 // into chunks the browser caches once. The order and renames below follow src/figures.js (later modules win).
 const FIG_ORDER = ['solar', 'wind', 'xfmr', 'txl', 'sf', 'global3', 'essay', 'new-cheaper', 'new-kwh', 'new-machine',
-  'new-wires', 'new-balance', 'new-solar', 'new-wind', 'new-costs', 'new-futures', 'new-deep'];
+  'new-wires', 'new-balance', 'new-solar', 'new-wind', 'new-costs', 'new-futures', 'new-deep', 'merged'];
 const figmap = JSON.parse(execFileSync('node', ['scripts/figmap.mjs', resolve('.'), ...FIG_ORDER], { encoding: 'utf8' }));
 const owner = {}; // figure name on the page -> [module, export, key in that module]
 for (const m of FIG_ORDER) for (const k of figmap[m].names) {
@@ -43,7 +43,8 @@ await build({ ...common, entryPoints: ['src/figures.js'], outfile: `${OUT}/serie
 await build({ ...common, entryPoints: ['src/hero.js'], outfile: `${OUT}/hero.js` });
 cpSync('src/fonts', `${OUT}/fonts`, { recursive: true });
 cpSync('src/style.css', `${OUT}/style.css`);
-cpSync('src/og.png', `${OUT}/og.png`); // the card shown when a page is shared (1200 × 630)
+cpSync('src/og.png', `${OUT}/og.png`);
+cpSync('src/img', `${OUT}/img`, { recursive: true }); // static images (the landing page's chart thumbnail) // the card shown when a page is shared (1200 × 630)
 
 const esc = s => s.replace(/&/g, '&amp;').replace(/</g, '&lt;');
 

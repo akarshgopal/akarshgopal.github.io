@@ -7,7 +7,7 @@
 <meta name="description" content="Why solar power got cheap when steam could not: how a photon becomes a current, the efficiency ceiling silicon has nearly reached, the factories of China and the learning curve, where the panels go in China, India, the US and Germany, yield and capacity factor, and why noon power loses its value as solar spreads.">
 <link rel="icon" href="data:,">
 <link rel="stylesheet" href="style.css">
-<script>(function(){var m={"iv-curve":"solar-pv.html#photons","modules":"solar-pv.html#photons","fig-ivCurve":"solar-pv.html#photons","fig-shading":"solar-pv.html#photons","fig-junction":"solar-pv.html#junction","fig-cellTech":"solar-pv.html#cell-tech","lifetime":"solar-pv.html#yield","fig-sunPath":"solar-pv.html#sun","fig-clipping":"solar-pv.html#inverters","fig-solarWorld":"solar-pv.html#deployment","fig-noonDay":"solar-pv.html#capture"};var h=location.hash.slice(1);if(m[h])location.replace(m[h]);})();</script>
+<script>(function(){var m={"fig-captureHistory":"utility-renewables.html#fig-captureCompare","iv-curve":"solar-pv.html#photons","modules":"solar-pv.html#photons","fig-ivCurve":"solar-pv.html#photons","fig-shading":"solar-pv.html#photons","fig-junction":"solar-pv.html#junction","fig-cellTech":"solar-pv.html#cell-tech","lifetime":"solar-pv.html#yield","fig-sunPath":"solar-pv.html#sun","fig-clipping":"solar-pv.html#inverters","fig-solarWorld":"solar-pv.html#deployment","fig-noonDay":"solar-pv.html#capture"};var h=location.hash.slice(1);if(m[h])location.replace(m[h]);})();</script>
 </head>
 <body>
 <main>
@@ -42,8 +42,9 @@
 
 <p>In a semiconductor, the electrons sit on a floor they cannot leave unless something lifts them over a step of fixed height. A photon smaller than the step passes straight through, as if the crystal were glass. A larger one lifts an electron free, but the surplus above the step is lost as heat within a trillionth of a second. That step is the material’s <b>band gap</b>: 1.12 eV in silicon.<sup class="fn"><a href="#n3">3</a></sup> Every absorbed photon, whatever its colour, delivers at most one gap’s worth of energy.</p>
 
-<figure class="fig" data-fig="spectrum">
-<figcaption><span class="tagline tag-real">Data</span> The reference spectrum of sunlight at the ground (ASTM G173)<sup class="fn"><a href="#n2">2</a></sup> split by the band gap of silicon or another common material.<sup class="fn"><a href="#n3">3</a></sup> Grey passes through; orange is lost as heat; yellow, one gap’s worth from each absorbed photon, is the most a cell could keep.</figcaption>
+<span id="fig-sqLimit" class="anchor"></span>
+<figure class="fig showpiece" data-fig="spectrum">
+<figcaption><span class="tagline tag-real">Data</span> <b>Step 1, sunlight and the band gap.</b> The reference spectrum of sunlight at the ground (ASTM G173)<sup class="fn"><a href="#n2">2</a></sup> split by the band gap of silicon or another common material.<sup class="fn"><a href="#n3">3</a></sup> Grey passes through; orange is lost as heat; yellow, one gap’s worth from each absorbed photon, is the most a cell could keep. <b>Step 2, the limit for every gap.</b> The detailed-balance limit at 25 °C under ASTM G173, computed for every band gap from 0.4 to 3.0 eV.<sup class="fn"><a href="#n4">4</a></sup> The optimum is 33.7% at 1.34 eV. Crosses mark record cells.<sup class="fn"><a href="#n5">5</a></sup></figcaption>
 </figure>
 
 <p>The gap is a trade-off. A low gap, like germanium’s, catches almost every photon but keeps a small slice of each; a high gap keeps a big slice but lets most light through. For silicon, about 19% of the sunlight’s energy is below the gap and 32% is lost above it as heat.</p>
@@ -56,11 +57,8 @@
 
 <h2 id="sq-limit"><span class="num">2</span>A ceiling silicon has nearly reached</h2>
 
-<p>Steam plants met a ceiling set by temperature, and stopped well short of it (<a class="xref" href="the-machine.html#heat">essay 3</a>). Solar cells have one too. In 1961 William Shockley and Hans-Joachim Queisser asked what the best possible single-junction cell could do, with perfect materials and only the losses physics insists on.<sup class="fn"><a href="#n4">4</a></sup> Their answer adds one loss to the split above: anything that absorbs light also emits it, so even a perfect cell glows faintly back at the sky and loses some current.</p>
+<p>Steam plants met a ceiling set by temperature, and stopped well short of it (<a class="xref" href="the-machine.html#heat">essay 3</a>). Solar cells have one too. In 1961 William Shockley and Hans-Joachim Queisser asked what the best possible single-junction cell could do, with perfect materials and only the losses physics insists on.<sup class="fn"><a href="#n4">4</a></sup> Their answer adds one loss to the split above: anything that absorbs light also emits it, so even a perfect cell glows faintly back at the sky and loses some current. Step 2 of the figure above draws the result for every band gap.</p>
 
-<figure class="fig" data-fig="sqLimit">
-<figcaption><span class="tagline tag-real">Data</span> The detailed-balance limit at 25 °C under ASTM G173, computed for every band gap from 0.4 to 3.0 eV.<sup class="fn"><a href="#n4">4</a></sup> The optimum is 33.7% at 1.34 eV. Crosses mark record cells.<sup class="fn"><a href="#n5">5</a></sup></figcaption>
-</figure>
 
 <p>The peak is broad, and silicon sits on its left shoulder at 33.4%. Silicon absorbs weakly, so its wafers must be thick, and in thick silicon some electrons are lost in collisions with each other, which cuts the practical limit to about <b>29.4%</b>.<sup class="fn"><a href="#n6">6</a></sup> The best laboratory silicon cell, certified in 2026, reaches 28.3%, 96% of that limit.<sup class="fn"><a href="#n5">5</a></sup> Unlike steam, silicon has come close to its ceiling.</p>
 
@@ -130,12 +128,10 @@
 
 <h2 id="yield"><span class="num">6</span>Sun, site and capacity factor</h2>
 
-<p>A panel’s rating says what it makes under 1,000 W/m² of light with its cells at 25 °C. Real panels see that rarely: the sun is low in the morning, evening and winter, clouds and haze come and go, and at night there is nothing. The European Commission’s PVGIS models real output from years of satellite weather; the figure shows its estimates for 1 kWp, panels rated at one kilowatt, in 28 places.<sup class="fn"><a href="#n22">22</a></sup></p>
+<p>A panel’s rating says what it makes under 1,000 W/m² of light with its cells at 25 °C. Real panels see that rarely: the sun is low in the morning, evening and winter, clouds and haze come and go, and at night there is nothing. The European Commission’s PVGIS models real output from years of satellite weather; its estimates for 1 kWp, panels rated at one kilowatt, show how much the place matters.<sup class="fn"><a href="#n22">22</a></sup></p>
 
-<figure class="fig" data-fig="yieldMap">
-<figcaption><span class="tagline tag-mixed">Data + model</span> Annual energy from 1 kWp, 2014–2023, fixed at the best tilt or on a single-axis tracker, against latitude, with the monthly output of one place (PVGIS 5.3).<sup class="fn"><a href="#n22">22</a></sup> The right-hand scale is capacity factor.</figcaption>
-</figure>
 
+<span id="fig-yieldMap" class="anchor"></span>
 <p>A fixed kilowatt near Jodhpur, in India’s solar-park country, makes about 1,670 kWh a year; the same panels in Berlin make about 1,060, with four and a half times as much in June as in December. Jodhpur’s bars are much flatter, with a dip from June to September, when the monsoon clouds arrive.</p>
 
 <p>The right-hand scale gives the same yields as a <b>capacity factor</b>: a plant’s average output, night included, as a share of its rated power. Fixed panels near Jodhpur run at about 19%, in Berlin about 12%. A nuclear plant can run at over 90%; solar never comes close, because the sun sets.</p>
@@ -150,13 +146,10 @@
 
 <p>Every panel in a country sees roughly the same sun. <a class="xref" href="balancing.html#s6">Essay 5</a> showed what follows in a market cleared by the merit order: the more panels there are, the lower the price in exactly the hours they produce, and the lower solar’s capture rate. Cheap energy, arriving all at once, is worth less.</p>
 
-<p>Germany, with the highest solar share of the four countries and open hourly data, shows the effect most clearly:</p>
+<p>Germany, with the highest solar share of the four countries and open hourly data, shows the effect most clearly, charted in the second view of <a class="xref" href="utility-renewables.html#fig-captureCompare">essay 7’s capture figure</a>.</p>
 
-<figure class="fig" data-fig="captureHistory">
-<figcaption><span class="tagline tag-real">Data</span> Germany, 2015–2025, from hourly SMARD data, each year converted at that year’s ECB rate.<sup class="fn"><a href="#n24">24</a></sup> Annual average and solar-weighted day-ahead prices, capture rate and negative hours; and the average price by hour of day, April–September, 2015 against 2025.</figcaption>
-</figure>
 
-<p>Through the 2010s solar earned close to the average price. Then the midday dip deepened: in 2025 solar earned about $52/MWh against an average of $101, a capture rate of 52%, and prices were negative in 573 hours, most of them sunny middays. The 2022 spike shows that the capture rate is set by the market, not the panels: when gas set the price in almost every hour, solar earned 94% of the average. Hour by hour, 2015’s nearly flat summer day has become 2025’s noon canyon.</p>
+<p>Through the 2010s solar earned close to the average price. Then the midday dip deepened: in 2025 solar earned about $52/MWh against an average of $101, a capture rate of 52%, and prices were negative in 573 hours, most of them sunny middays.<sup class="fn"><a href="#n24">24</a></sup> The 2022 spike shows that the capture rate is set by the market, not the panels: when gas set the price in almost every hour, solar earned 94% of the average. Hour by hour, 2015’s nearly flat summer day has become 2025’s noon canyon.</p>
 
 <p>This is the limit of the restarted engine. The learning curve makes each kilowatt-hour cheaper to produce; the noon problem makes each extra kilowatt-hour of solar worth less. Where demand peaks after sunset, as India’s does, noon power does nothing for the hardest hour of the day.</p>
 

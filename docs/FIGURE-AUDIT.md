@@ -1,5 +1,12 @@
 # Figure audit: fewer, stronger figures (proposal, 7 Nov 2026)
 
+**Status, 8 Nov 2026: applied in full** (88 → 54 figures).
+- **Merges:** step figures defined in `src/figs/merged.js`, using `src/lib/steps.js`.
+- **Cuts and text replacements:** done in the pages.
+- **Old links:** every removed figure's `#fig-…` anchor survives as an anchor span, or as a redirect alias in
+  `scripts/redirects.py` for figures that moved to another page.
+- **Landing thumbnail:** `src/img/century.png`.
+
 The quality plan, item (c), asks for about 40 figures instead of about 90, in one strict visual language. Today the
 electricity series has **88 figures**: 1 on the landing page, 71 in the nine essays and 16 in the two deep dives.
 
