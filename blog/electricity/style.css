@@ -3,7 +3,7 @@
 @font-face { font-family: 'Inter'; src: url('fonts/inter.woff2') format('woff2'); font-weight: 100 900; font-style: normal; font-display: swap; }
 
 :root {
-  --ink: #2f2d2a; --ink2: #5b5852; --ink3: #8d897f; --grid: #e7e3da; --grid2: #d8d3c8;
+  --ink: #2f2d2a; --ink2: #5b5852; --ink3: #6b6861; --grid: #e7e3da; --grid2: #d8d3c8;
   --paper: #fbfaf6; --bg: #f4f2ec;
   --measure: 40rem;
   --series-w: 0px; /* non-zero under the ≥960px left rail */
@@ -54,7 +54,7 @@ figure.fig { width: var(--figw); max-width: none; margin: 2.2rem 0 2.4rem calc((
 .three-wrap { border-radius: 10px; overflow: hidden; }
 figcaption { font-family: var(--sans); font-size: 0.82rem; line-height: 1.5; color: var(--ink2); margin: 10px 4px 0; max-width: 46rem; }
 figcaption .tagline { display: inline-block; font-weight: 650; font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.08em; padding: 1px 7px; border-radius: 99px; margin-right: 6px; vertical-align: 1px; }
-.tag-real { background: #e2efe9; color: #2a7a5f; } .tag-ill { background: #efe9dc; color: #8a6d35; } .tag-mixed { background: #e6e8f2; color: #4d5c8e; }
+.tag-real { background: #e2efe9; color: #29765c; } .tag-ill { background: #efe9dc; color: #7f6431; } .tag-mixed { background: #e6e8f2; color: #4d5c8e; }
 .fig-error::after { content: 'This figure failed to load.'; font-family: var(--sans); color: var(--peaker); }
 
 /* controls */
@@ -249,3 +249,22 @@ ol.essays .d { font-size: 0.88rem; line-height: 1.5; color: var(--ink2); }
 .brief p { margin: 0.35em 0; }
 .brief b { color: var(--ink); }
 .byline time { white-space: nowrap; }
+
+/* Coloured words in the text: darker than the figure colours they name, so they meet WCAG AA contrast (4.5:1). */
+.c-solar { color: #89620a; }
+.c-wind { color: #376f8e; }
+.c-gas { color: #9f542d; }
+.c-lignite { color: #816347; }
+.c-nuclear { color: #7e57a1; }
+.c-storage { color: #217562; }
+.c-peaker { color: #b5413a; }
+.c-procurement { color: #8e5f0c; }
+.c-network { color: #586892; }
+.c-taxes { color: #6d685d; }
+.c-hot { color: #b83f25; }
+.c-cold { color: #3268b8; }
+.c-A { color: #b6404f; }
+.c-B { color: #8d5e15; }
+.c-C { color: #1a7381; }
+.c-electron { color: #3268b8; }
+.c-freq { color: #1a7381; }

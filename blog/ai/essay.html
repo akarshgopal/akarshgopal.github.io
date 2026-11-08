@@ -78,7 +78,7 @@
 <p>where ⊕ is XOR, ∧ is AND and ∨ is OR: two XORs, two ANDs and one OR, the five gates in each column of the adder on <a class="xref" href="rules.html#sum">Rules</a>.</p>
 </details>
 
-<aside class="deepdive d-switch">How a relay clicks, how a valve amplifies, and why a transistor’s current falls tenfold for every 70 millivolts or so are worked through in <a class="xref" href="rules.html#relay">Rules</a>.</aside>
+<div class="deepdive d-switch" role="note">How a relay clicks, how a valve amplifies, and why a transistor’s current falls tenfold for every 70 millivolts or so are worked through in <a class="xref" href="rules.html#relay">Rules</a>.</div>
 
 <h2 id="s2" data-level="H7"><span class="num">2</span>Rules on a tape</h2>
 
@@ -100,7 +100,7 @@
 <p class="eq">P ≈ α · N · C · V² · f</p>
 </details>
 
-<aside class="deepdive d-switch">What sets the smallest line a chip factory can print, and what that costs in light and yield, is in <a class="xref" href="flip.html#litho">The Price of a Flip: printing with light</a>.</aside>
+<div class="deepdive d-switch" role="note">What sets the smallest line a chip factory can print, and what that costs in light and yield, is in <a class="xref" href="flip.html#litho">The Price of a Flip: printing with light</a>.</div>
 
 <h2 id="s4" data-level="H10 H9"><span class="num">4</span>Moore, Dennard and the heat wall</h2>
 
@@ -116,7 +116,7 @@
 <p>Shrink lengths and voltage by a factor k &gt; 1. Capacitance falls as 1/k, voltage as 1/k, and delay as 1/k so frequency rises by k. Power per transistor, CV²f, falls as (1/k)(1/k²)(k) = 1/k². Transistors per area rise by k², so power per area is unchanged. Once V stops falling, power per transistor falls only as 1/k while density still rises as k², and power density grows by k every generation at the same clock.</p>
 </details>
 
-<aside class="deepdive d-switch">The energy per transistor per clock tick, measured on half a century of processors, and the “dark silicon” that the end of Dennard scaling left behind are in <a class="xref" href="flip.html#tick">The Price of a Flip</a>.</aside>
+<div class="deepdive d-switch" role="note">The energy per transistor per clock tick, measured on half a century of processors, and the “dark silicon” that the end of Dennard scaling left behind are in <a class="xref" href="flip.html#tick">The Price of a Flip</a>.</div>
 
 <h2 id="s5" data-level="H7"><span class="num">5</span>A joule per operation</h2>
 
@@ -149,7 +149,7 @@
 <p>which approaches 1/s however large N grows.</p>
 </details>
 
-<aside class="deepdive d-parallel">Why a matrix multiply is ideal work for many hands, and why a chip often waits on memory instead of computing, are worked through with a roofline you can move in <a class="xref" href="parallel.html#roofline">Parallel</a>.</aside>
+<div class="deepdive d-parallel" role="note">Why a matrix multiply is ideal work for many hands, and why a chip often waits on memory instead of computing, are worked through with a roofline you can move in <a class="xref" href="parallel.html#roofline">Parallel</a>.</div>
 
 <h2 id="s7" data-level="S2"><span class="num">7</span>Learning instead of programming</h2>
 <p class="aside">Deep: <a class="xref" href="model.html">A model</a>.</p>
@@ -194,7 +194,7 @@
 
 <p>Look at what the computer is doing on each step. For every dot, for every neuron, multiply each input by a weight and add them up. Then the same backwards. It is the same few multiply-and-add operations, repeated over and over on different numbers, with almost nothing that has to wait for anything else. That is the grey-free job of section 6. Once networks got big, they were a perfect fit for GPUs.</p>
 
-<aside class="deepdive d-learning">Why one line cannot draw XOR, how the blame is passed backwards, and why momentum helps are worked through with figures on the companion page <a class="xref" href="model.html#xor">A Model</a>.</aside>
+<div class="deepdive d-learning" role="note">Why one line cannot draw XOR, how the blame is passed backwards, and why momentum helps are worked through with figures on the companion page <a class="xref" href="model.html#xor">A Model</a>.</div>
 
 <h2 id="s10" data-level="S7 H6"><span class="num">10</span>Data, and 2012</h2>
 
@@ -221,7 +221,7 @@
 
 <p>In 2017 eight researchers, most of them at Google, proposed the <b>transformer</b>, built around a mechanism they called attention: every word computes, all at the same moment, how much to draw from every other word.<sup class="fn"><a href="#n23">23</a></sup> In a model that writes text, like the tiny one above, each word looks only backwards, at itself and what came before. Nothing has to wait for the previous word, so a whole passage can be processed in parallel, and nothing fades with distance. It was a better model and, just as important, a better fit for GPUs: grey-free arithmetic again. Nearly every large language model since is built on it.</p>
 
-<aside class="deepdive d-learning">Queries, keys and values, the memory problem attention solved, and a next-word predictor counted from <i>Alice in Wonderland</i> are in <a class="xref" href="language.html#attention">A Model</a>.</aside>
+<div class="deepdive d-learning" role="note">Queries, keys and values, the memory problem attention solved, and a next-word predictor counted from <i>Alice in Wonderland</i> are in <a class="xref" href="language.html#attention">A Model</a>.</div>
 
 <h2 id="s12" data-level="S7"><span class="num">12</span>Scaling</h2>
 <p class="aside">Deep: <a class="xref" href="scaling.html">Scaling</a> · <a class="xref" href="data.html">The data</a>.</p>
@@ -238,7 +238,7 @@
 <p>Training a transformer with N parameters on D tokens takes about C ≈ 6ND floating-point operations: two per parameter per token for the forward pass and four for the backward pass. Chinchilla’s fit put the compute-optimal ratio near D ≈ 20N. Converting to GPU-hours divides C by the chip’s peak rate times its utilisation (the share of peak a real training run achieves) and by 3,600 seconds.</p>
 </details>
 
-<aside class="deepdive d-scaling">How a fixed budget is best split between model size and data, whether the training data runs out, and what a frontier run costs are in <a class="xref" href="scaling.html#knobs">Scaling</a>, with the <a class="xref" href="scaling.html#datawall">data wall</a> and the <a class="xref" href="scaling.html#bill">training bill</a>. What happens after pretraining, an industry of paid experts writing, ranking and grading for the next model, is the <a class="xref" href="data.html#flywheel">data flywheel</a>.</aside>
+<div class="deepdive d-scaling" role="note">How a fixed budget is best split between model size and data, whether the training data runs out, and what a frontier run costs are in <a class="xref" href="scaling.html#knobs">Scaling</a>, with the <a class="xref" href="scaling.html#datawall">data wall</a> and the <a class="xref" href="scaling.html#bill">training bill</a>. What happens after pretraining, an industry of paid experts writing, ranking and grading for the next model, is the <a class="xref" href="data.html#flywheel">data flywheel</a>.</div>
 
 <h2 id="s13" data-level="H0 S1"><span class="num">13</span>What a megawatt-hour buys</h2>
 <p class="aside">Deep: <a class="xref" href="demand.html">The demand</a> · <a class="xref" href="yardstick.html">The yardstick</a>.</p>
@@ -247,7 +247,7 @@
 
 <p>A training run of a hundred thousand GPU-hours needs roughly 140–200 MWh. At $85 per MWh, the 2025 US average price for industrial customers, the electricity for one GPU-hour is 12–17 cents. The chip is far dearer: one H100’s share of a DGX server sold for about $33,600 in 2023, which spread over four years of round-the-clock use is $33,600 ÷ 35,040 hours ≈ $0.96 an hour, before the building; renting one from a cloud costs about $6.<sup class="fn"><a href="#n13">13</a></sup> That is why AI companies buy chips first and electricity second, and also why, once chips are plentiful, it is the electricity, and the grid connection to deliver it, that runs out.</p>
 
-<aside class="deepdive d-elec">What sets that price, and why it differs so much by hour and by place, is the subject of the electricity series’ <a class="xref" href="../electricity/balancing.html#s7">merit order</a> and <a class="xref" href="../electricity/price.html#s11">what a power plant costs</a>.</aside>
+<div class="deepdive d-elec" role="note">What sets that price, and why it differs so much by hour and by place, is the subject of the electricity series’ <a class="xref" href="../electricity/balancing.html#s7">merit order</a> and <a class="xref" href="../electricity/price.html#s11">what a power plant costs</a>.</div>
 
 <h2 id="s14" data-level="H0 H1"><span class="num">14</span>The factory and the grid</h2>
 <p class="aside">Deep: <a class="xref" href="factory.html">The AI factory</a> · <a class="xref" href="orbital.html">Orbital</a>.</p>
@@ -260,7 +260,7 @@
 
 <p>A million H100s draw 1.4–2 GW day and night. Ireland’s data centres already take 22% of its electricity; US data centres took about 4.4% of US electricity in 2023.<sup class="fn"><a href="#n34">34</a></sup> In July 2024 ~1,500 MW in northern Virginia switched to backup within seconds after a voltage dip — a power station tripping in reverse: the grid suddenly had 1.5 GW more supply than demand, so its frequency jumped and generators had to throttle back fast. Connection queues and transformers are the same story as wind and solar; the working-out is on <a class="xref" href="factory.html#grid">The AI Factory</a>.</p>
 
-<aside class="deepdive d-factory">Where a cluster’s power goes between the chip and the grid, why liquid replaces air, why the servers never pause for cheap hours, and how a training run’s power swings by tens of megawatts are worked through in <a class="xref" href="factory.html#chip">The AI Factory</a>.</aside>
+<div class="deepdive d-factory" role="note">Where a cluster’s power goes between the chip and the grid, why liquid replaces air, why the servers never pause for cheap hours, and how a training run’s power swings by tens of megawatts are worked through in <a class="xref" href="factory.html#chip">The AI Factory</a>.</div>
 
 <p>Chip efficiency still rises, about twofold a generation, but the compute bought rises faster. What binds this decade is power that runs at every hour, the lines and transformers that deliver it, and its price around the clock; <a class="xref" href="binds.html">What binds</a> ranks them. Free web text as training fuel is close to used up (<a href="https://epoch.ai/blog/will-we-run-out-of-data-limits-of-llm-scaling-based-on-human-generated-data">Epoch AI</a>: fully used “at some point between 2026 and 2032”, 80% interval); paid examples take over — sized on <a class="xref" href="data.html#flywheel">The data</a>.</p>
 
