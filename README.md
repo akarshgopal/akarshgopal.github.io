@@ -7,10 +7,10 @@ Plain HTML, CSS and a little JavaScript with no build step. Edit the `.html` fil
 | Path | What |
 | --- | --- |
 | `index.html`, `projects.html`, `essays.html` (Writing), `bookshelf.html` | Pages. `notes.html` is kept but `noindex` and out of the nav |
-| `projects/*.html` | One case-study page per project (role, dates, what it is, what I did, links, media) |
-| `assets/styles.css` | All styles: light and dark themes via `prefers-color-scheme` plus a manual toggle, cross-page view transitions, reduced-motion handling |
-| `assets/site.js` | Theme toggle (remembered in `localStorage`), header hairline, chart reveal, hover previews on project rows (mouse only) |
-| `assets/fonts/` | Self-hosted Inter (variable) and Newsreader (variable, roman and italic), Latin subsets, SIL OFL licences alongside |
+| `projects/*.html` | One page per project: a facts block, media, and sections with key numbers and pictures in the margin |
+| `assets/styles.css` | All styles. One text column with a margin for notes (`.pair` = a paragraph and its `.note`; `.row` keeps a note level with its entry). Light and dark themes via `prefers-color-scheme` plus a manual toggle. Below 62rem the notes drop in under their paragraph |
+| `assets/site.js` | Theme toggle (remembered in `localStorage`) and margin-note highlighting: hovering a note number lights up its note |
+| `assets/fonts/` | Self-hosted Source Serif 4 (variable, roman and italic), Latin subset, SIL OFL licence alongside |
 | `assets/projects/` | Screenshots captured from the live apps (pdfdiff.app, treechat.cc, ultimat-sim) |
 | `assets/video/` | BlueHornet demo video and poster |
 | `blog/electricity/` | *Why Did Electricity Stop Getting Cheaper?*, a self-contained interactive series built from the `electricity-source` branch. Replace it wholesale from that branch's head; see `SERIES-SOURCES.md` |

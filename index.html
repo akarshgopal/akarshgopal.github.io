@@ -8,8 +8,8 @@
 <meta name="author" content="Akarsh Gopal">
 <link rel="canonical" href="https://akarshgopal.github.io/">
 <meta name="color-scheme" content="light dark">
-<meta name="theme-color" content="#f8f7f4" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#0e0e0d" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#fbfaf6" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#151412" media="(prefers-color-scheme: dark)">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Akarsh Gopal">
 <meta property="og:title" content="Akarsh Gopal">
@@ -24,8 +24,7 @@
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-<link rel="preload" href="/assets/fonts/inter-var.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="/assets/fonts/newsreader-var.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/source-serif-4-var.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/assets/styles.css">
 <script>(function(){try{var t=localStorage.getItem('theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t;}catch(e){}})();</script>
 <script src="/assets/site.js" defer></script>
@@ -33,66 +32,53 @@
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
-<header class="site-header">
-  <div class="wrap header-in">
-    <a class="wordmark" href="/" aria-current="page">Akarsh Gopal</a>
-    <nav aria-label="Main">
-      <ul class="nav">
-      <li><a href="/projects.html">Projects</a></li>
-      <li><a href="/essays.html">Writing</a></li>
-      <li><a href="/bookshelf.html">Bookshelf</a></li>
-      </ul>
-    </nav>
-    <button class="theme-toggle" type="button" aria-label="Switch colour theme" title="Switch colour theme">
-      <svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.25" fill="none" stroke="currentColor" stroke-width="1.3"/><path d="M8 1.75a6.25 6.25 0 0 1 0 12.5Z" fill="currentColor"/></svg>
-    </button>
-  </div>
+<div class="page">
+<header class="mast">
+  <a class="name" href="/" aria-current="page">Akarsh Gopal</a>
+  <nav aria-label="Main"><a href="/projects.html">Projects</a><a href="/essays.html">Writing</a><a href="/bookshelf.html">Bookshelf</a><button class="theme" type="button" aria-label="Switch colour theme"><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.3" fill="none" stroke="currentColor" stroke-width="1.3"/><path d="M8 1.7a6.3 6.3 0 0 1 0 12.6Z" fill="currentColor"/></svg></button></nav>
 </header>
-<main id="main" class="wrap">
-<section class="hero" aria-labelledby="hero-title">
-  <div class="hero-id">
-    <picture>
-      <source srcset="/assets/profile.webp" type="image/webp">
-      <img class="avatar" src="/assets/profile.jpg" width="400" height="400" alt="Portrait of Akarsh Gopal at night, with a lit-up bridge over the water behind him">
-    </picture>
-    <div>
-      <h1 id="hero-title">Hey there! I’m Akarsh.</h1>
-      <p class="hero-role">Software Engineer at <a href="https://rfa.space">Rocket Factory Augsburg</a></p>
-    </div>
-  </div>
-  <p class="objective"><span class="obj-k">Primary Objective:</span> <span class="obj-v">Techno-Abundance</span></p>
-  <div class="intro prose">
-    <p>I’m currently building software to help aerospace engineers build a rocket factory at <a href="https://rfa.space">RFA</a>.</p>
-    <p>Previously I worked as a data engineer at Reactive Robotics, helping patients recover faster. Before that I built launchable GPS trackers for safer police pursuits at my company Myst Works.</p>
-  </div>
-</section>
+<main id="main">
+<div class="pair">
+<aside class="note" id="n1"><picture><source srcset="/assets/profile.webp" type="image/webp"><img class="portrait" src="/assets/profile.jpg" width="400" height="400" alt="Akarsh at night, with a lit-up bridge over the water behind him"></picture><span class="n">1</span>I call it <i>techno-abundance</i>. Most of what’s on this site is me poking at it from one side or another.</aside>
+<p class="lead">I build software for a rocket factory in Augsburg, and spend my spare time on one question: what would it take for energy and materials to become absurdly cheap?<a class="ref" href="#n1" aria-label="Note 1">1</a></p>
+</div>
 
-<section class="block" aria-labelledby="h-work">
-  <div class="block-head"><h2 id="h-work">Selected work</h2><a class="more" href="/projects.html">All projects<svg class="ic-arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M4.5 11.5l7-7M6 4.5h5.5V10" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
-  <ul class="work"><li><a href="/projects/bluehornet.html" data-preview="/assets/projects/bluehornet-sm.webp"><span class="w-name">BlueHornet</span><span class="w-desc">Launchable GPS darts to reduce high speed pursuits.</span><span class="w-year">2020–22</span></a></li><li><a href="/projects/pdfdiff.html" data-preview="/assets/projects/pdfdiff-light-sm.webp"><span class="w-name">PDF Diff</span><span class="w-desc">Private PDF comparisons on your browser.</span><span class="w-year">2026</span></a></li><li><a href="/projects/treechat.html" data-preview="/assets/projects/treechat-sm.webp"><span class="w-name">TreeChat</span><span class="w-desc">Branching AI chat: select any passage to explore it in a side branch, then bring the takeaway back.</span><span class="w-year">2026</span></a></li><li><a href="/projects/molecular-foundry.html" data-preview="/assets/projects/foundry-process-sm.webp"><span class="w-name">Molecular Foundry</span><span class="w-desc">Ultimate Material Abundance Simulator.</span><span class="w-year">2026</span></a></li><li><a href="/projects/1brc.html"><span class="w-name">1BRC</span><span class="w-desc">1 Billion Row Challenge in C and Rust.</span><span class="w-year">2026</span></a></li></ul>
-  <div class="preview" aria-hidden="true"><img alt="" width="400" height="250"></div>
-</section>
+<div class="pair">
+<aside class="note" id="n2"><span class="n">2</span>Where I’ve worked<table class="cv"><tr><td>2023–</td><td>Rocket Factory Augsburg</td></tr><tr><td>2022–</td><td>Aswell, co-founder (part-time)</td></tr><tr><td>2022–23</td><td>Reactive Robotics</td></tr><tr><td>2020–22</td><td>Myst Works, co-founder</td></tr><tr><td>2020–21</td><td>Saxion, research engineer</td></tr><tr><td>2018–19</td><td>WePublish, intern</td></tr><tr><td>2017–20</td><td>B.Sc., University of Twente</td></tr></table></aside>
+<p>My day job is at <a href="https://rfa.space">Rocket Factory Augsburg</a>, writing the tools engineers use to dig through rocket test data.<a class="ref" href="#n2" aria-label="Note 2">2</a> Before that I was a data engineer at Reactive Robotics, whose robots help patients recover faster.</p>
+</div>
 
-<section class="block" aria-labelledby="h-writing">
-  <div class="block-head"><h2 id="h-writing">Writing</h2><a class="more" href="/essays.html">All writing<svg class="ic-arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M4.5 11.5l7-7M6 4.5h5.5V10" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
-  <ul class="work"><li><a href="/blog/electricity/"><span class="w-name">Why Did Electricity Stop Getting Cheaper?</span><span class="w-desc">An interactive series on how electricity works: a century of falling prices, why they stopped, and whether they can fall again.</span><span class="w-year">9 essays</span></a></li><li><a href="/blog/ai/"><span class="w-name">Can AI outgrow the planet’s power grid? <span class="badge-wip">WIP</span></span><span class="w-desc">A WIP interactive case on AI energy demand, the grid, and whether orbit is the only way out.</span><span class="w-year">14 pages</span></a></li></ul>
-</section>
+<div class="pair">
+<aside class="note" id="n3"><picture><source srcset="/assets/projects/bluehornet-prototype.webp" type="image/webp"><img src="/assets/projects/bluehornet-prototype.jpg" width="1600" height="720" alt="The BlueHornet launcher on the bonnet of a Dutch police car" loading="lazy" decoding="async"></picture><span class="n">3</span><b>BlueHornet</b> on a Dutch police car. The dart sticks to the car being chased, so the police can drop back and follow it from a distance. <a href="/projects/bluehornet.html">The whole story</a>.</aside>
+<p>Before <i>that</i>, I co-founded a company that fired GPS darts from police cars.<a class="ref" href="#n3" aria-label="Note 3">3</a> The demo fired one at 100&nbsp;km/h.</p>
+</div>
 
-<section class="block" aria-labelledby="h-exp">
-  <div class="block-head"><h2 id="h-exp">Experience</h2></div>
-  <ol class="exp"><li><p class="when"><time>Oct 2023 – present</time></p><div class="exp-main"><p class="exp-role">Software Engineer<span class="exp-org"><a href="https://rfa.space">Rocket Factory Augsburg</a></span></p><p class="exp-what">Internal data-analysis tooling and ETL pipelines for aerospace test data.</p></div></li><li><p class="when"><time>Jun 2022 – present</time></p><div class="exp-main"><p class="exp-role">Co-founder (part-time)<span class="exp-org">Aswell</span></p><p class="exp-what">Software architecture and engineering for a two-sided marketplace app.</p></div></li><li><p class="when"><time>Jun 2022 – Sep 2023</time></p><div class="exp-main"><p class="exp-role">Data Engineer<span class="exp-org">Reactive Robotics</span></p><p class="exp-what">Data warehouse pipelines and visualisation.</p></div></li><li><p class="when"><time>Nov 2020 – Jun 2022</time></p><div class="exp-main"><p class="exp-role">Co-founder<span class="exp-org"><a href="/projects/bluehornet.html">Myst Works B.V.</a></span></p><p class="exp-what">Systems engineering, software and finance for BlueHornet.</p></div></li><li><p class="when"><time>Sep 2020 – Jun 2021</time></p><div class="exp-main"><p class="exp-role">Research Engineer<span class="exp-org">Saxion LED</span></p><p class="exp-what">Trajectory-tracking control for a tilting-rotor hexacopter in PX4.</p></div></li><li><p class="when"><time>Jul 2018 – Jan 2019</time></p><div class="exp-main"><p class="exp-role">Intern<span class="exp-org">WePublish</span></p><p class="exp-what">Deep-learning image recognition, served as an API.</p></div></li><li><p class="when"><time>2017 – 2020</time></p><div class="exp-main"><p class="exp-role">B.Sc. ATLAS, magna cum laude<span class="exp-org">University of Twente</span></p><p class="exp-what">Technology, liberal arts and sciences, focused on robotics, machine learning and control.</p></div></li></ol>
-</section>
+<h2>Writing</h2>
+<div class="pair">
+<aside class="note" id="n4"><span class="n">4</span>If you only read one, start with <a href="/blog/electricity/cheaper.html">Cheaper, Then Not</a>: a century of electricity prices, and the point where they stopped falling.</aside>
+<p><a href="/blog/electricity/">Why did electricity stop getting cheaper?</a> Nine illustrated essays, from what a kilowatt-hour actually is to why the price curve flattened, and whether solar can bend it down again.<a class="ref" href="#n4" aria-label="Note 4">4</a></p>
+</div>
+<p><a href="/blog/ai/">Can AI outgrow the planet’s power grid?</a> A case I’m still building: how much power AI will want, whether the grid can supply it, and whether orbit is the way out.</p>
 
-<section class="block" aria-labelledby="h-contact">
-  <div class="block-head"><h2 id="h-contact">Find me on</h2></div>
-  <ul class="contact"><li><a href="mailto:akarsh98@gmail.com"><span class="c-k">Email</span><span class="c-v">akarsh98@gmail.com</span><svg class="ic-arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M4.5 11.5l7-7M6 4.5h5.5V10" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></a></li><li><a href="https://github.com/akarshgopal" rel="me"><span class="c-k">GitHub</span><span class="c-v">akarshgopal</span><svg class="ic-arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M4.5 11.5l7-7M6 4.5h5.5V10" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></a></li><li><a href="https://www.linkedin.com/in/akarsh-gopal-b9a8b917b/" rel="me"><span class="c-k">LinkedIn</span><span class="c-v">akarsh-gopal</span><svg class="ic-arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M4.5 11.5l7-7M6 4.5h5.5V10" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></a></li><li><a href="https://x.com/gopal_akarsh" rel="me"><span class="c-k">X</span><span class="c-v">@gopal_akarsh</span><svg class="ic-arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M4.5 11.5l7-7M6 4.5h5.5V10" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></a></li></ul>
-</section>
+<h2>Things I’ve made</h2>
+<div class="pair">
+<aside class="note" id="n5"><img src="/assets/projects/foundry-process-sm.webp" width="800" height="500" alt="Molecular Foundry process canvas" loading="lazy" decoding="async"><span class="n">5</span>The Lake Zabuye brine hub in Molecular Foundry: 24 process blocks, solved for flows and cost.</aside>
+<ul class="dated">
+<li><span class="yr">2026</span><a href="/projects/molecular-foundry.html">Molecular Foundry</a><span class="what">: plan a solar-powered chemical plant in your browser</span><a class="ref" href="#n5" aria-label="Note 5">5</a></li>
+<li><span class="yr">2026</span><a href="/projects/treechat.html">TreeChat</a><span class="what">: an AI chat you can branch off any passage</span></li>
+<li><span class="yr">2026</span><a href="/projects/pdfdiff.html">PDF Diff</a><span class="what">: compare PDFs without uploading them anywhere</span></li>
+<li><span class="yr">2026</span><a href="/projects/1brc.html">1BRC</a><span class="what">: a billion rows in 26.9 seconds, in C</span></li>
+<li><span class="yr">2020–22</span><a href="/projects/bluehornet.html">BlueHornet</a><span class="what">: the GPS darts</span></li>
+<li><span class="yr">2019–20</span><a href="/projects/a3t.html">A3T</a><span class="what">: a VTOL drone for the Twente drone team</span></li>
+<li><span class="yr">2016–18</span><a href="/projects/vision-x.html">Vision X</a><span class="what">: an electric motorcycle, started as a freshman</span></li>
+</ul>
+</div>
+<p class="after-list"><a href="/projects.html">Everything, including university work and old repos</a></p>
+
+<h2>Reading</h2>
+<p>Lately on the <a href="/bookshelf.html">shelf</a>: Hamming’s <i>The Art of Doing Science and Engineering</i>, Ben Rich’s <i>Skunk Works</i>, and Adrian Newey’s <i>How to Build a Car</i>.</p>
 </main>
-<footer class="site-footer">
-  <div class="wrap footer-in">
-    <p>© 2026 Akarsh Gopal</p>
-    <ul class="footer-links" aria-label="Elsewhere"><li><a href="mailto:akarsh98@gmail.com">Email</a></li><li><a href="https://github.com/akarshgopal" rel="me">GitHub</a></li><li><a href="https://www.linkedin.com/in/akarsh-gopal-b9a8b917b/" rel="me">LinkedIn</a></li><li><a href="https://x.com/gopal_akarsh" rel="me">X</a></li></ul>
-  </div>
-</footer>
+<footer class="foot"><span>Write to me at <a href="mailto:akarsh98@gmail.com">akarsh98@gmail.com</a></span><span><a href="https://github.com/akarshgopal" rel="me">GitHub</a> · <a href="https://www.linkedin.com/in/akarsh-gopal-b9a8b917b/" rel="me">LinkedIn</a> · <a href="https://x.com/gopal_akarsh" rel="me">X</a></span></footer>
+</div>
 </body>
 </html>
