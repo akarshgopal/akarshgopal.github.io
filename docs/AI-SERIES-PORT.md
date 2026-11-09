@@ -228,3 +228,21 @@ Secondary or reported only:
     because the canvases and 3D scenes draw a fixed light palette.
   - The `--t-*` text colours and the colour classes get lighter values outside figures.
   - `details.peek`, notes, the navigation and asides get dark values.
+
+## 13. Keyboard access for figures (9 Nov 2026)
+
+- **What changed:**
+  - **`app.js`:** the figure class's `interact(o)` now ends with `,o.keys!==!1&&this._kbdPtr(o)`, and a new method,
+    `_kbdPtr(o)`, follows it. The method is a port of the electricity series' keyboard pointer (`src/lib/fig.js`).
+  - **`style.css`:** `.kbd-ptr` styles added at the end.
+- **What it does:** every canvas that responds to the mouse becomes focusable and responds to the keyboard.
+  - The arrow keys move a visible pointer, and Shift moves it further.
+  - Enter or Space clicks or grabs; Escape lets go.
+  - Hover readouts follow the pointer.
+  - If nothing is under the pointer, Enter snaps to the nearest thing that can be pressed. This covers the small
+    handles in `darkSilicon` and `xorLine`.
+  - Tested: all 64 pointer-interactive AI figures respond to keys alone.
+- **Series guard:** it now checks for `_kbdPtr(` in `app.js`, and for dark mode and the drawer fix in both
+  stylesheets.
+- **Rebuilding from the `ai-explainer` source:** put the same code in that source's figure runtime, or the
+  rebuild will drop it.

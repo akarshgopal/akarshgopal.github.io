@@ -163,8 +163,8 @@ export class Fig {
 
   /**
    * Keyboard pointer: every canvas that answers the pointer also answers the keyboard. Tab to the figure; the arrow
-   * keys move a visible pointer (Shift moves it further); Enter or Space presses where it is: a click on things that
-   * are clicked, a grab on things that are dragged, so the arrows then drag and Enter, Space or Escape lets go.
+   * keys move a visible pointer (Shift moves it further); Enter or Space presses where it is (or, if nothing is there,
+   * on the nearest thing that can be pressed): a click on things that are clicked, a grab on things that are dragged, so the arrows then drag and Enter, Space or Escape lets go.
    * Hover readouts follow the pointer as they follow the mouse. A figure with its own keys passes { keys: false }.
    */
   _keyboardPointer(h) {
@@ -207,7 +207,16 @@ export class Fig {
         e.preventDefault(); mark.classList.add('on');
         if (kp.x == null) show();
         if (kp.grab) { release(); show(); hover(); this.invalidate(); return; }
-        const obj = h.hit ? h.hit(kp.x, kp.y) : true;
+        let obj = h.hit ? h.hit(kp.x, kp.y) : true;
+        if (!obj && h.hit) { // missed: snap to the nearest thing that can be pressed, searching outwards
+          const lim = Math.max(this.w, this.h) / 2;
+          search: for (let r = 6; r <= lim; r += 6) for (let a = 0; a < 24; a++) {
+            const x = kp.x + r * Math.cos(a * Math.PI / 12), y = kp.y + r * Math.sin(a * Math.PI / 12);
+            if (x < 0 || y < 0 || x >= this.w || y >= this.h) continue;
+            const o2 = h.hit(x, y);
+            if (o2) { kp.x = x; kp.y = y; obj = o2; break search; }
+          }
+        }
         if (!obj || !h.down) return;
         h.down(obj, kp.x, kp.y, ev());
         if (h.move) { kp.grab = obj; c.classList.add('dragging'); } else if (h.up) h.up(obj);
