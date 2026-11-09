@@ -211,3 +211,20 @@ Secondary or reported only:
   - If any link is dead (404/410 or no answer), it opens or updates an issue labelled `link-rot`, suggesting
     archive.org copies.
   - Sites that block automated clients are listed as "could not check" and do not fail the run.
+
+## 12. Phone drawer and dark mode (9 Nov 2026)
+
+- **Phone drawer fix (`style.css`):** on phones, tapping a page in the open drawer only closed it. There were two
+  causes:
+  - The scrim (z-index 21) sat above the drawer, which lives inside the sticky `nav.series` (z-index 20).
+  - The nav's `backdrop-filter` made it the containing block of the "fixed" drawer.
+
+  Fix: the scrim is now z-index 19, and `body.series-open nav.series` drops the backdrop filter. Links navigate;
+  tapping outside or pressing Escape still closes the drawer.
+- **Dark mode (`style.css`, appended):**
+  - It follows `prefers-color-scheme`, as in the electricity series.
+  - The page goes dark.
+  - Every `figure.fig` keeps the light tokens and gets a light plate (background, padding, rounded corners),
+    because the canvases and 3D scenes draw a fixed light palette.
+  - The `--t-*` text colours and the colour classes get lighter values outside figures.
+  - `details.peek`, notes, the navigation and asides get dark values.
