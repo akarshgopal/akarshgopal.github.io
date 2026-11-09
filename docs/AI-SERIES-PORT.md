@@ -200,3 +200,14 @@ Secondary or reported only:
 - **Yardstick:** the opening and note 2 now use the published-token range (3.3–7.6 TWh, a 7–16× gap) instead of
   "ten billion prompts".
 - **Result:** axe-core 4.10 reports 0 violations on all 15 pages at 1280 and 390.
+
+## 11. Link-rot check (9 Nov 2026)
+
+- **`data.html`, note n3:** the Llama 3.1 link now points to `https://ai.meta.com/blog/meta-llama-3-1/`. The old
+  `/blog/llama-3-1/` address returns 404.
+- **Monthly check:** on `master`, `.github/workflows/link-rot.yml` runs `.github/scripts/link-rot.py` on the 3rd
+  of each month, and can also be started by hand.
+  - It checks every external link in `blog/ai` and `blog/electricity`.
+  - If any link is dead (404/410 or no answer), it opens or updates an issue labelled `link-rot`, suggesting
+    archive.org copies.
+  - Sites that block automated clients are listed as "could not check" and do not fail the run.
