@@ -157,6 +157,65 @@ export class Fig {
     c.addEventListener('pointerup', end);
     c.addEventListener('pointercancel', end);
     c.addEventListener('pointerleave', () => { if (!drag && h.hover) { h.hover(null, -1, -1); this.invalidate(); } });
+
+    if (h.keys !== false) this._keyboardPointer(h);
+  }
+
+  /**
+   * Keyboard pointer: every canvas that answers the pointer also answers the keyboard. Tab to the figure; the arrow
+   * keys move a visible pointer (Shift moves it further); Enter or Space presses where it is: a click on things that
+   * are clicked, a grab on things that are dragged, so the arrows then drag and Enter, Space or Escape lets go.
+   * Hover readouts follow the pointer as they follow the mouse. A figure with its own keys passes { keys: false }.
+   */
+  _keyboardPointer(h) {
+    const c = this.canvas;
+    c.tabIndex = 0;
+    c.setAttribute('role', 'application');
+    c.setAttribute('aria-roledescription', 'interactive figure');
+    c.setAttribute('aria-label', (c.getAttribute('aria-label') || 'Interactive figure').replace(/\.?\s*$/, '.') +
+      ' Arrow keys move a pointer over the figure; Enter or Space presses or grabs; Escape lets go.');
+    const mark = document.createElement('div');
+    mark.className = 'kbd-ptr';
+    mark.setAttribute('aria-hidden', 'true');
+    this.wrap.appendChild(mark);
+    const kp = { x: null, y: null, grab: null };
+    const ev = () => { const r = c.getBoundingClientRect(); return { pointerType: 'keyboard', clientX: r.left + kp.x, clientY: r.top + kp.y, shiftKey: false, preventDefault() {} }; };
+    const show = () => {
+      if (kp.x == null) { const s = h.keyStart && h.keyStart(); [kp.x, kp.y] = s || [this.w / 2, this.h / 2]; }
+      kp.x = Math.max(0, Math.min(this.w - 1, kp.x)); kp.y = Math.max(0, Math.min(this.h - 1, kp.y));
+      mark.style.transform = `translate(${kp.x}px, ${kp.y}px)`;
+      mark.classList.toggle('grab', !!kp.grab);
+    };
+    const hover = () => { if (h.hover && !kp.grab) { h.hover(h.hit ? h.hit(kp.x, kp.y) : null, kp.x, kp.y); } };
+    const release = () => { if (kp.grab) { const g = kp.grab; kp.grab = null; h.up && h.up(g); c.classList.remove('dragging'); } };
+    c.addEventListener('focus', () => {
+      if (!c.matches(':focus-visible')) return; // a mouse click focuses too; only keyboard focus shows the pointer
+      mark.classList.add('on'); show(); hover(); this.invalidate();
+    });
+    c.addEventListener('blur', () => { release(); mark.classList.remove('on', 'grab'); if (h.hover) h.hover(null, -1, -1); this.invalidate(); });
+    c.addEventListener('keydown', e => {
+      if (e.altKey || e.ctrlKey || e.metaKey) return;
+      const big = e.shiftKey ? 5 : 1, step = Math.max(3, Math.round(this.w / 60)) * big;
+      const d = { ArrowLeft: [-step, 0], ArrowRight: [step, 0], ArrowUp: [0, -step], ArrowDown: [0, step] }[e.key];
+      if (d) {
+        e.preventDefault(); mark.classList.add('on');
+        if (kp.x == null) show();
+        kp.x += d[0]; kp.y += d[1]; show();
+        if (kp.grab) h.move && h.move(kp.grab, kp.x, kp.y, ev()); else hover();
+        this.invalidate();
+      } else if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault(); mark.classList.add('on');
+        if (kp.x == null) show();
+        if (kp.grab) { release(); show(); hover(); this.invalidate(); return; }
+        const obj = h.hit ? h.hit(kp.x, kp.y) : true;
+        if (!obj || !h.down) return;
+        h.down(obj, kp.x, kp.y, ev());
+        if (h.move) { kp.grab = obj; c.classList.add('dragging'); } else if (h.up) h.up(obj);
+        show(); this.invalidate();
+      } else if (e.key === 'Escape' && kp.grab) {
+        e.preventDefault(); release(); show(); hover(); this.invalidate();
+      }
+    });
   }
 }
 

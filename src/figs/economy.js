@@ -90,7 +90,7 @@ export function unlock(el) {
     },
   });
   const setP = v => { st.p = clamp(Math.round(v), 0, 400); upd(); };
-  fig.interact({
+  fig.interact({ keys: false, // its own arrow keys, below
     hit: (x, y) => geo && Math.abs(y - geo.A.y) < 24 ? 'p' : null, cursor: 'ew-resize', touchAction: 'pan-y',
     down: (o, x) => setP(geo.sx.inv(x)),
     move: (o, x) => setP(geo.sx.inv(x)),

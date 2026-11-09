@@ -158,6 +158,9 @@ WebSearch worked (snippets only); WebFetch is bound by the same network allowlis
   generates these entries (via `scripts/figmap.mjs`, which maps figure names to modules in `src/figures.js` order),
   and esbuild splits shared code into `js/chunks/`. A new figure module must also be added to `FIG_ORDER` in
   `build.mjs`. Each page also gets a canonical link and Open Graph/Twitter tags; the card image is `src/og.png`.
+  Since 9 Nov 2026 every canvas that uses `fig.interact()` (`src/lib/fig.js`) also answers the keyboard. Tab to it;
+  the arrow keys move a visible pointer (Shift moves further); Enter or Space clicks or grabs; Escape lets go. A
+  figure with its own keys passes `keys: false` (only `unlock` does); `keyStart()` can set where the pointer starts.
 - **Site**: `akarshgopal/akarshgopal.github.io`, GitHub Pages from `master`. Deploy: copy `dist/*.html`,
   `dist/js/` (replacing the old folder), `dist/series.js`, `dist/style.css`, `dist/og.png` (and `dist/fonts/` if
   changed) into `blog/electricity/`, then commit on a branch, open a PR and merge it. A check on `master`

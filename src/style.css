@@ -279,3 +279,9 @@ figure.fig.thumb img { display: block; width: 100%; height: auto; border-radius:
 
 /* the step selector of a merged figure */
 .controls.fig-steps { margin-bottom: 8px; }
+/* keyboard pointer (src/lib/fig.js): shown only while a figure has keyboard focus */
+.canvas-wrap canvas:focus-visible { outline: 2px solid var(--ink2); outline-offset: 2px; }
+.kbd-ptr { position: absolute; left: -9px; top: -9px; width: 18px; height: 18px; border-radius: 50%; border: 2px solid var(--ink, #1a1a1a); box-shadow: 0 0 0 2px rgba(255,255,255,.9); pointer-events: none; display: none; z-index: 2; }
+.kbd-ptr::after { content: ''; position: absolute; left: 50%; top: 50%; width: 4px; height: 4px; margin: -2px 0 0 -2px; border-radius: 50%; background: var(--ink, #1a1a1a); }
+.kbd-ptr.grab { background: color-mix(in srgb, var(--ink, #1a1a1a) 25%, transparent); }
+canvas:focus-visible + .kbd-ptr.on, canvas:focus-visible ~ .kbd-ptr.on { display: block; }
