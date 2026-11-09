@@ -43,7 +43,7 @@ sup.fn .fn-sep { font-family: var(--sans); font-size: 0.7em; color: var(--ink3);
 .c-nuclear { color: var(--nuclear); } .c-hydro { color: var(--hydro); } .c-storage { color: var(--storage); } .c-price { color: var(--price); } .c-peaker { color: var(--peaker); }
 .c-procurement { color: #b97b10; } .c-network { color: var(--network); } .c-taxes { color: #7d776b; } .c-hot { color: var(--hot); } .c-cold { color: var(--cold); }
 .c-A { color: var(--phaseA); } .c-B { color: #c4831d; } .c-C { color: var(--phaseC); } .c-electron { color: var(--electron); } .c-freq { color: var(--freq); }
-.c-solar, .c-wind, .c-gas, .c-coal, .c-lignite, .c-nuclear, .c-hydro, .c-storage, .c-price, .c-peaker, .c-procurement, .c-network, .c-taxes, .c-hot, .c-cold, .c-A, .c-B, .c-C, .c-electron, .c-freq { font-weight: 600; }
+.c-solar, .c-wind, .c-gas, .c-coal, .c-lignite, .c-nuclear, .c-hydro, .c-storage, .c-price, .c-peaker, .c-procurement, .c-network, .c-taxes, .c-hot, .c-cold, .c-A, .c-B, .c-C, .c-electron, .c-freq, .c-field { font-weight: 600; }
 
 /* figures */
 figure.fig { width: var(--figw); max-width: none; margin: 2.2rem 0 2.4rem calc((100% - var(--figw)) / 2); padding: 14px 14px 12px; background: var(--paper); border-radius: 16px; box-shadow: 0 1px 0 rgba(0,0,0,0.04), 0 8px 30px -18px rgba(60,50,30,0.25); }
@@ -166,7 +166,7 @@ nav.series li.deep a[aria-current=page] { color: #fff; }
   nav.series .series-in { display: none; position: fixed; left: 0; top: 0; bottom: 0; width: min(18.5rem, 88vw); max-width: 100%; background: rgba(251,250,246,0.98); border-right: 1px solid var(--grid2); box-shadow: 8px 0 28px rgba(0,0,0,.14); overflow-y: auto; z-index: 22; padding-top: 12px; }
   nav.series.open { backdrop-filter: none; -webkit-backdrop-filter: none; } /* a filter would trap the fixed drawer inside the bar */
   nav.series.open .series-in { display: flex; }
-  .series-scrim { position: fixed; inset: 0; z-index: 21; background: rgba(20,18,14,.35); border: 0; padding: 0; cursor: pointer; }
+  .series-scrim { position: fixed; inset: 0; z-index: 19; /* under nav.series (z 20), whose stacking context holds the drawer */ background: rgba(20,18,14,.35); border: 0; padding: 0; cursor: pointer; }
   body.series-open .series-scrim { display: block; }
   body.series-open { overflow: hidden; }
   header.top { padding-top: 1.6rem; }
@@ -268,6 +268,7 @@ ol.essays .d { font-size: 0.88rem; line-height: 1.5; color: var(--ink2); }
 .c-C { color: #1a7381; }
 .c-electron { color: #3268b8; }
 .c-freq { color: #1a7381; }
+.c-field { color: #b6404f; }
 
 /* the market-designs table (text columns) */
 table.mini.designs td, table.mini.designs th { text-align: left; vertical-align: top; }
@@ -285,3 +286,47 @@ figure.fig.thumb img { display: block; width: 100%; height: auto; border-radius:
 .kbd-ptr::after { content: ''; position: absolute; left: 50%; top: 50%; width: 4px; height: 4px; margin: -2px 0 0 -2px; border-radius: 50%; background: var(--ink, #1a1a1a); }
 .kbd-ptr.grab { background: color-mix(in srgb, var(--ink, #1a1a1a) 25%, transparent); }
 canvas:focus-visible + .kbd-ptr.on, canvas:focus-visible ~ .kbd-ptr.on { display: block; }
+
+/* ── Dark mode (9 Nov 2026) ──────────────────────────────────────────────────────────────────────────────
+   The page goes dark; each figure stays a light plate. Canvas figures draw with a fixed light palette
+   (src/lib/colors.js and colours in the figure code), so a figure keeps the light tokens, and its legends,
+   readouts and controls keep matching what the canvas draws. */
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+    --ink: #ece8df; --ink2: #c4bfb4; --ink3: #a39e93; --grid: #34312c; --grid2: #4a463f;
+    --paper: #24221f; --bg: #1a1916;
+  }
+  figure.fig {
+    color-scheme: light;
+    --ink: #2f2d2a; --ink2: #5b5852; --ink3: #6b6861; --grid: #e7e3da; --grid2: #d8d3c8;
+    --paper: #fbfaf6; --bg: #f4f2ec;
+    color: var(--ink);
+    box-shadow: 0 0 0 1px rgba(255,255,255,0.06), 0 8px 30px rgba(0,0,0,0.35);
+  }
+  figure.fig.thumb img { opacity: 0.94; }
+  /* colour words in prose: lighter variants that read on the dark page (figures keep the darker ones) */
+  .c-solar:not(figure.fig *) { color: #e6b44a; } .c-wind:not(figure.fig *) { color: #74b6de; }
+  .c-gas:not(figure.fig *) { color: #ee9466; } .c-coal:not(figure.fig *) { color: #b0aba1; }
+  .c-lignite:not(figure.fig *) { color: #c7a07d; } .c-nuclear:not(figure.fig *) { color: #bc98dc; }
+  .c-hydro:not(figure.fig *) { color: #79abd6; } .c-storage:not(figure.fig *) { color: #52c4a6; }
+  .c-price:not(figure.fig *) { color: #ec7fae; } .c-peaker:not(figure.fig *) { color: #ef8a82; }
+  .c-procurement:not(figure.fig *) { color: #e9b55c; } .c-network:not(figure.fig *) { color: #9daede; }
+  .c-taxes:not(figure.fig *) { color: #bdb6a9; } .c-hot:not(figure.fig *) { color: #f08a6e; }
+  .c-cold:not(figure.fig *) { color: #82abf0; } .c-electron:not(figure.fig *) { color: #82abf0; }
+  .c-A:not(figure.fig *) { color: #ef8b97; } .c-B:not(figure.fig *) { color: #e8b25e; }
+  .c-C:not(figure.fig *) { color: #4fbfd0; } .c-freq:not(figure.fig *) { color: #4fbfd0; }
+  .c-field:not(figure.fig *) { color: #ef8b97; }
+  /* page elements that used fixed light colours */
+  .aside { background: #26241f; }
+  ol.notes li:target { background: #4a3f17; }
+  nav.series { background: rgba(26,25,22,0.94); }
+  @media (min-width: 960px) { nav.series { background: rgba(26,25,22,0.98); } }
+  nav.series .series-in { background: rgba(26,25,22,0.98); }
+  nav.series li a:hover, ol.essays a:hover { background: #2c2a26; }
+  nav.series li a[aria-current=page], nav.series li.deep a[aria-current=page] { background: var(--ink); color: var(--bg); }
+  nav.series li a[aria-current=page] .n { color: #5b5852; }
+  .series-scrim { background: rgba(0,0,0,.55); }
+  a { text-decoration-color: #6a655c; }
+  a:hover { text-decoration-color: var(--ink2); }
+}

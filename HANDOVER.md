@@ -161,6 +161,10 @@ WebSearch worked (snippets only); WebFetch is bound by the same network allowlis
   Since 9 Nov 2026 every canvas that uses `fig.interact()` (`src/lib/fig.js`) also answers the keyboard. Tab to it;
   the arrow keys move a visible pointer (Shift moves further); Enter or Space clicks or grabs; Escape lets go. A
   figure with its own keys passes `keys: false` (only `unlock` does); `keyStart()` can set where the pointer starts.
+  Dark mode (9 Nov 2026, `prefers-color-scheme`): the page goes dark; every `figure.fig` stays a light plate, because
+  canvases draw a fixed light palette. Colour words in prose (`.c-solar` …) get lighter variants outside figures. A
+  new colour class needs both variants, and inline `style="color:…"` in prose defeats dark mode (use a class).
+  Data sources, vintages and how to refresh them: `docs/DATA-REFRESH.md`.
 - **Site**: `akarshgopal/akarshgopal.github.io`, GitHub Pages from `master`. Deploy: copy `dist/*.html`,
   `dist/js/` (replacing the old folder), `dist/series.js`, `dist/style.css`, `dist/og.png` (and `dist/fonts/` if
   changed) into `blog/electricity/`, then commit on a branch, open a PR and merge it. A check on `master`
