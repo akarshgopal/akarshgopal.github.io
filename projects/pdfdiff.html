@@ -18,7 +18,7 @@
 <meta property="og:image" content="https://akarshgopal.github.io/assets/og.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="Akarsh Gopal. Primary Objective: Techno-Abundance">
+<meta property="og:image:alt" content="Akarsh Gopal: I build software for a rocket factory in Augsburg, and spend my spare time on one question: what would it take for energy and materials to become absurdly cheap?">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:creator" content="@gopal_akarsh">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
@@ -43,12 +43,12 @@
 <figure class="wide"><img class="only-light" src="/assets/projects/pdfdiff-light.webp" width="1600" height="1000" alt="The pdfdiff.app start screen: drop an earlier and a newer PDF, with a preview of two drawing revisions compared"><img class="only-dark" src="/assets/projects/pdfdiff-dark.webp" width="1600" height="1000" alt="The pdfdiff.app start screen: drop an earlier and a newer PDF, with a preview of two drawing revisions compared" loading="lazy" decoding="async"><figcaption>pdfdiff.app, captured from the live site.</figcaption></figure>
 <h2>What it is</h2>
 <div class="pair">
-<aside class="note"><span class="big-num">0</span>uploads: your PDFs never leave the browser.<span class="big-num">4</span>ways to compare: overlay, side by side, slider, text.</aside>
+<div class="note"><span class="big-num">0</span>uploads: your PDFs never leave the browser.<span class="big-num">4</span>ways to compare: overlay, side by side, slider, text.</div>
 <p>It compares two PDF revisions locally in the browser: a pixel overlay, side-by-side pages, a slider that reveals one revision under the other, and highlighted text changes. It also ships a headless CLI (<code>@pdfdiff/cli</code>) that writes overlays and JSON reports, so the same comparison can run in CI or from an agent.</p>
 </div>
 <h2>How it’s built</h2>
 <div class="pair">
-<aside class="note"><span class="big-num">~72 MB</span>peak raster memory, whatever the page count.</aside>
+<div class="note"><span class="big-num">~72 MB</span>peak raster memory, whatever the page count.</div>
 <p>The comparison logic is split into workspace packages so it can be reused without the app. <code>@pdfdiff/core</code> holds the raster, alignment, connected-region and semantic text comparison algorithms, and has no DOM or PDF.js dependency. Separate adapters handle PDF.js text extraction, browser rendering, a React viewer and the CLI.</p><p>Aligning and diffing two rendered pages is the expensive half of a comparison: roughly 3.9&nbsp;s of a 10&nbsp;s, 43-page run, against 2.5&nbsp;s of canvas rendering. That work runs on a Web Worker, so rendering and pixel work overlap and the UI keeps painting. Page rasters are transferred rather than copied, and peak memory stays at two pages of rasters (about 72&nbsp;MB at the standard 3&nbsp;MP budget) however long the document is.</p>
 </div>
 <h2>Privacy</h2>
