@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Orbital Compute: Is Space the Only Answer? · Can AI outgrow the planet’s power grid?</title>
+<meta name="description" content="Sunlight, radiators, mass per kilowatt and launch price: when orbital data centres beat the grid, and when they do not. Star-mind as a coda.">
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<button id="play-toggle" type="button" aria-pressed="true" title="Pause all animations">❚❚ Pause</button>
+<main>
+<article>
+<header class="top">
+<h1>Orbital Compute: Is Space the Only Answer?</h1>
+<p class="byline">Can AI outgrow the planet’s power grid? · Act 2 · sunlight, tonnes and dollars · by Akarsh Gopal, October 2026</p>
+</header>
+
+<div class="brief" role="note" aria-label="In brief"><p><b>In brief.</b> Whether space is the answer once the grid runs out: sunlight, radiators, mass per kilowatt and the price of launch.</p><p><b>The surprise.</b> A hundred times today’s AI compute by 2035 needs about 108 GW, a third of the series’ grid ceiling, so orbit is not needed until the multiple reaches the thousands.</p></div>
+
+<p class="lede">A square metre of panel in a dawn–dusk orbit sees <b>1,361 W</b> of sunlight nearly around the clock (short eclipses around the June solstice aside) — the solar constant.<sup class="fn"><a href="#n1">1</a></sup> On the ground the same panel sees night, weather and a lower average. That is the pitch for putting AI in space. This page asks when the pitch survives contact with mass, heat and $/kg to orbit — and shows the ranges, not a single optimistic number.</p>
+
+<p>It is Act&nbsp;2 of the case. Act&nbsp;1 asked how big the bill could get on Earth. Here the question is sharper: <i>is orbital compute the only answer to a hundred times more AI?</i> The headline target is 100× by 2035; 1,000× by 2040 is a slider.</p>
+
+<ol class="toc">
+<li><a href="#need"><span class="n">1</span>Power needed</a></li>
+<li><a href="#physics"><span class="n">2</span>Sunlight and heat</a></li>
+<li><a href="#mass"><span class="n">3</span>Mass per kilowatt</a></li>
+<li><a href="#launch"><span class="n">4</span>Launch price</a></li>
+<li><a href="#only"><span class="n">5</span>Only, or not?</a></li>
+<li><a href="#star"><span class="n">6</span>Coda: star-mind</a></li>
+<li><a href="#final"><span class="n"></span>Final words</a></li>
+</ol>
+
+<h2 id="need" data-level="H0"><span class="num">1</span>Power needed</h2>
+
+<p>The arithmetic of need lives on <a class="xref" href="verdict.html#act2">the Verdict page</a>, with the ceiling meter. Compute is power times efficiency, so 100× today’s AI compute by 2035, with chips gaining 40% a year, needs about <b>108 GW</b>: 31.2 GW × 100 ÷ 1.4<sup>10</sup>.<sup class="fn"><a href="#n2">2</a></sup> That is a third of the series’ grid ceiling of 316 GW, which itself assumes that capacity growth slows to 26% a year (my extrapolation), so at 100× orbit is not needed. The claim bites at a thousand or ten thousand times today, which is where 2035 lands if AI compute keeps growing two to three times a year. This page asks what orbit would weigh and cost there.</p>
+
+<h2 id="physics" data-level="H0 H1"><span class="num">2</span>Sunlight and heat</h2>
+
+<p>Starlink-class arrays: <b>196 W/m²</b> after cell/temperature/pointing derates (losses from heat, ageing and imperfect sun-pointing; ideal AM0, i.e. sunlight above the atmosphere, at 20% = 272 W/m²).<sup class="fn"><a href="#n3">3</a></sup> One MW of IT → a few thousand m² of PV. In vacuum heat leaves only by radiation: q = ε · F · σ · (T⁴ − T<sub>sink</sub>⁴). With emissivity ε=0.9 (how close the coating comes to a perfect radiator), view factor F=0.85 (the share of its view that is cold sky, as in Turyshev’s JPL preprint) and σ the Stefan–Boltzmann constant, at 320 K against deep space: q ≈ <b>455 W/m²</b> one-sided → ≈ <b>1,100 m²/MW</b> two-sided. In low orbit the radiator also soaks up Earth’s infrared and reflected sunlight; lumped into a sink temperature of 200–250 K, that adds roughly 20–60% to the area.<sup class="fn"><a href="#n4">4</a></sup></p>
+
+<figure class="fig showpiece" data-fig="radiatorT4">
+<figcaption><span class="tagline tag-ill">Model</span> Stefan–Boltzmann with ε = 0.9 and view factor 0.85 (as in Turyshev’s JPL preprint). Two-sided area per MW falls as 1/(T⁴ − T<sub>sink</sub>⁴). Markers at 300 / 320 / 350 K. At 100 GW and 320 K the radiator is ≈110 km² against deep space and ≈130–175 km² against a 200–250 K sink, while the panels need ≈510 km²: PV is about 5× the radiator in the ideal case, 3–4× with sink loading.<sup class="fn"><a href="#n4">4</a></sup></figcaption>
+</figure>
+
+<p>Radiators are not the cost showstopper (a few percent of system cost in the Forethought read), but they add area to the panels. At 100 GW the radiator is ≈110 km² ideal, ≈130–175 km² with Earth’s glow, about a fifth to a third of the ≈510 km² of panels — large, yet far smaller than the land a terrestrial solar farm would need for the same average power.<sup class="fn"><a href="#n5">5</a></sup></p>
+
+<h2 id="mass" data-level="H0"><span class="num">3</span>Mass per kilowatt</h2>
+
+<p>The number that decides the economics is how many kilograms of satellite you must launch per kilowatt of IT power. Published claims span a factor of six:</p>
+<ul>
+<li>SpaceX FCC filing: <b>10 kg/kW</b> (aspirational)</li>
+<li>SpaceX Starmind page: <b>13 kg/kW</b></li>
+<li>Suncatcher reference design: about <b>20 kg/kW</b></li>
+<li>Turyshev / JPL bottom-up preprint: <b>34–59 kg/kW</b> (~40 typical)</li>
+</ul>
+<p>The optimistic end are company claims; the pessimistic end is the only independent bottom-up so far. This page’s sliders carry 13 / 25 / 40.<sup class="fn"><a href="#n6">6</a></sup></p>
+
+<p>A hundred gigawatts at 13–40 kg/kW is 1.3–4 million tonnes — about 9,000–27,000 Starship-class launches at 150 tonnes each — against about 145 Starship launches a year in today’s site approvals (~21,750 t/yr: <b>0.5–1.7 GW/yr</b> across 40–13 kg/kW, ≈0.9 at 25).<sup class="fn"><a href="#n7">7</a></sup> Tonnage, not thermodynamics, is the binding constraint at scale.</p>
+
+<h2 id="launch" data-level="H0"><span class="num">4</span>Launch price</h2>
+
+<p>Today’s published $/kg disagree by more than 2×: <b>~$3,600/kg</b> (Suncatcher paper / TechCrunch) vs <b>~$1,500/kg</b> (Forethought internal-cost basis). Suncatcher’s learning curve reaches <b>$200/kg by ~2035</b> — a projection, not a contract.<sup class="fn"><a href="#n8">8</a></sup> Launch-only $/kWh = (price/kg) × (kg/kW) ÷ (5 yr × 8,760 h × 0.95). Floor only: excludes satellite build, ops, and chips that fail without repair.</p>
+
+<figure class="fig showpiece" data-fig="launchCost">
+<figcaption><span class="tagline tag-real">Data</span> Against the terrestrial band of $0.065–0.34/kWh (Suncatcher’s $570–3,000 per kW-year). On launch alone, beating the cheapest terrestrial cost takes ~$100–200/kg at 13–25 kg/kW; beating the dearest, ~$500–1,000/kg. SpaceX’s S-1 says space data centres “may not be commercially viable”.<sup class="fn"><a href="#n9">9</a></sup></figcaption>
+</figure>
+
+<h2 id="only" data-level="H0"><span class="num">5</span>Only, or not?</h2>
+
+<p>At 100× by 2035 the answer is a plain no: the grid alone is enough under Mid assumptions. At 1,000× or 10⁴× the grid runs out and orbit can close a gap — if launches and mass per kilowatt cooperate. “Only” fails when terrestrial supply or demand-side efficiency also close it. The ceiling meter on <a class="xref" href="verdict.html#act2">the Verdict page</a> is the argument; this page is the physics behind its sliders.</p>
+
+<h2 id="star" data-level="H0 S0"><span class="num">6</span>Coda: star-mind</h2>
+
+<p>Bookend, not a path: Earth intercepts <b>1.74×10⁵ TW</b> of sunlight; the Sun emits <b>3.8×10¹⁴ TW</b>.<sup class="fn"><a href="#n10">10</a></sup> At today’s efficiency, 10⁶× today’s AI fleet ≈ 31,000 TW — 18% of sunlight on Earth, ~1,600× human primary power. With 100× better hardware the same compute needs 100× less power. Nothing in Act&nbsp;1 or Act&nbsp;2 depends on this.</p>
+
+<p class="aside"><b>Honest placement.</b> This is a post-2100 physics bookend, not a 2035–2050 engineering path. Nothing in the Act&nbsp;1 or Act&nbsp;2 verdicts depends on it. It adds one message: the long-run limit is thermodynamics (Landauer’s kT ln 2 per bit <i>erased</i>; reversible computing, which erases nothing, could in principle go below it), not the scarcity of joules on Earth.</p>
+
+<h2 id="final" data-level="H0">Final words</h2>
+
+<p>Orbit is real as a research programme and unproven on the one number that decides it: kilograms per kilowatt at a launch price that clears the terrestrial band. For 100× by 2035, the grid is enough. For much larger multiples, tonnes and licences decide before physics does. Read the <a href="verdict.html">ledger</a>, then mark the tripwires on Act&nbsp;1.</p>
+
+<h2 id="notes">Notes and sources</h2>
+<ol class="notes">
+<li id="n1">Solar constant 1,361 W/m²: Google Suncatcher paper, <a href="https://arxiv.org/abs/2511.19468">arXiv:2511.19468</a>.</li>
+<li id="n2"><b>Epoch AI</b>: ~31 GW AI data-centre capacity end-2025 (13.5 GW end-2024). Efficiency ~40%/yr: <b>secondary summary</b> of Epoch hardware data (“Leading ML hardware becomes 40% more energy-efficient each year”) — treat as a recent trend, not a law. 316 GW grid ceiling = my 26%/yr extrapolation from Epoch’s capacity path, a slowdown from the +130% of 2025. Today’s trend: Epoch AI, <a href="https://epoch.ai/data-insights/ai-chip-production">“Global AI computing capacity is doubling every 7 months”</a>: ≈3.3×/yr since 2022 (90% CI 2.7–4.1×); 3.3<sup>10</sup> ≈ 1.5×10⁵, 2<sup>10</sup> ≈ 10³, 2.5<sup>10</sup> ≈ 10⁴. The button applies 3.3×/yr to the chosen horizon (capped at the slider’s 10⁶×).</li>
+<li id="n3">Forethought, <a href="https://forethought.org/research/will-we-really-put-data-centers-in-space">“Will we really put data centers in space?”</a> (22 May 2026; non-peer-reviewed, advocate-leaning): ~196 W/m² Starlink-class.</li>
+<li id="n4">Stefan–Boltzmann; Turyshev (JPL) arXiv:2604.27197 view-factor assumptions: F is the fraction of the radiator’s view that is deep space (his Table 5 range 0.7–0.9; 0.85 is his worked example). Derived fluxes: 0.9 × 0.85 × 5.67×10⁻⁸ × 320⁴ ≈ 455 W/m²; 10⁶ ÷ (2 × 455) ≈ 1,100 m²/MW. Sink: Earth radiates at an effective temperature of ≈255 K (≈240 W/m² outgoing longwave), so a radiator that partly views Earth, plus albedo, sees an effective sink below that; 200 K gives ×1.18, 250 K ×1.59. The 200–250 K range is <b>my illustrative bracket</b>, not a published LEO value: the true effective sink depends on altitude, orientation and coatings (NASA, <a href="https://ntrs.nasa.gov/api/citations/20010014168/downloads/20010014168.pdf">Juhasz, TM-2001-210063</a>), and Turyshev uses a T<sub>sink,eff</sub> without fixing a number. One anchor: an ESA-funded LEO heat-pipe radiator was tested against a −60 °C (≈213 K) sink (<a href="https://cordis.europa.eu/project/id/640143/reporting">CORDIS 640143</a>). See also NASA, <a href="https://www.nasa.gov/smallsat-institute/sst-soa/thermal-control/">State of the Art: Thermal Control</a>, on environmental loads.</li>
+<li id="n5">Radiator area at 100 GW: 1,100 m²/MW × 10⁵ MW ≈ 110 km² (deep-space sink), ≈130–175 km² at 200–250 K. Panels: 100 GW ÷ 196 W/m² ≈ 510 km². Terrestrial land from Forethought.</li>
+<li id="n6">SpaceX FCC SAT-LOA-20260108-00016 (10 kg/kW); Starmind page (13); Suncatcher (~20); Turyshev 34–59.</li>
+<li id="n7">145 is not one FAA cap but the sum of site approvals: LC-39A up to 44 a year (FAA Record of Decision, Jan 2026; <a href="https://www.nasaspaceflight.com/2026/01/faa-advances-approval-44-starship-launches-39a/">NSF</a>), SLC-37 up to 76 (Department of the Air Force, pending FAA airspace review), Starbase ~25 (reported; I could not confirm it from a primary source). The FAA’s LC-39A assessment quotes ~146 across the three sites. Via Forethought. Tonnage arithmetic is mine: 145 × 150 t = 21,750 t/yr ÷ 13/25/40 kg/kW = 1.7/0.87/0.54 GW/yr.</li>
+<li id="n8">TechCrunch 11 Feb 2026 (~$3,600/kg); Forethought (~$1,500/kg); Suncatcher learning curve to $200/kg ~2035.</li>
+<li id="n9">Reuters, 21 Apr 2026, on the S-1 caveat.</li>
+<li id="n10">Armstrong and Sandberg, “Eternity in six hours”, Acta Astronautica 2013; IAU nominal solar luminosity 3.828×10²⁶ W. Earth intercept ~1.74×10¹⁷ W.</li>
+</ol>
+<footer class="colophon">
+<p>Figures marked <span class="tagline tag-real" style="font-size:.7rem;padding:1px 6px;border-radius:99px">Data</span> use the cited sources; <span class="tagline tag-mixed" style="font-size:.7rem;padding:1px 6px;border-radius:99px">Data + model</span> combine them with the series’ own arithmetic. Figures marked <span class="tagline tag-ill" style="font-size:.7rem;padding:1px 6px;border-radius:99px">Model</span> are simplified models built to show a mechanism; their assumptions are listed under <b>ⓘ data</b>.</p>
+</footer>
+</article>
+</main>
+<script src="app.js"></script>
+</body>
+</html>

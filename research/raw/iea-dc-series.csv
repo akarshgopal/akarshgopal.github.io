@@ -1,0 +1,18 @@
+# IEA chart data (CC BY 4.0), read from the data-chart-csv attribute of each chart page on 20 October 2026.
+# global_2015_2025: https://www.iea.org/energy-system/end-uses/data-centres-and-data-transmission-networks ("Data centre electricity consumption, 2015-2025", IEA 2026, Key Questions on Energy and AI)
+# regions_2020_2030: https://www.iea.org/data-and-statistics/charts/data-centre-electricity-consumption-by-region-base-case-2020-2030 (IEA 2025, Energy and AI)
+# cases_2020_2035: https://www.iea.org/data-and-statistics/charts/global-data-centre-electricity-consumption-by-sensitivity-case-2020-2035 (IEA 2025, Energy and AI)
+series,year,values
+global,2015-2025,172.8;180.7;191.5;211.4;239.4;269.2;297.1;324.2;360.5;415.6;485.1
+regions(US;China;Europe;AsiaExChina;RoW),2020,108.41;61.93;56.85;27.87;14.30
+regions,2021,120.65;70.75;59.90;30.74;15.18
+regions,2022,134.07;77.55;62.95;33.83;15.91
+regions,2023,154.07;84.46;65.58;38.80;17.73
+regions,2024,182.61;101.85;67.83;43.20;20.37
+regions,2025,224.35;117.43;71.45;49.22;22.91
+regions,2026,259.33;140.10;77.99;56.65;26.21
+regions,2027,304.01;175.08;88.35;66.77;30.49
+regions,2028,350.04;214.34;98.29;76.34;34.34
+regions,2029,391.02;245.15;105.70;83.72;37.42
+regions,2030,425.73;277.30;113.44;89.10;40.13
+cases(Base;LiftOff;HighEff;Headwinds),2025-2035,"485;509;473;465 | 560;616;526;512 | 665;770;599;573 | 773;945;669;622 | 863;1118;736;652 | 946;1264;792;669 | 1013;1390;846;678 | 1076;1500;894;687 | 1120;1584;926;694 | 1162;1660;954;701 | 1193;1719;972;707"

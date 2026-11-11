@@ -1,0 +1,14 @@
+node_modules/
+screenshots/
+research/raw/all_ai_models.csv
+research/raw/large_scale_ai_models.csv
+research/raw/frontier_ai_models.csv
+*.zip
+research/raw/ember_yearly.csv
+
+# ai-source conventions (as electricity-source): built output and QA screenshots stay out of git
+dist/
+wave-3d-*/
+*.png
+!src/**/*.png
+package-lock.json

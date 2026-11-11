@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Scaling: The Bet That Loss Is Predictable · Can AI outgrow the planet’s power grid?</title>
+<meta name="description" content="An interactive explainer: language-model loss falls along a straight line on a log plot of compute, which turned AI into a capital, data and energy project. Scaling laws, compute-optimal training, the frontier, the data wall, the data flywheel and the bill.">
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<button id="play-toggle" type="button" aria-pressed="true" title="Pause all animations">❚❚ Pause</button>
+<main>
+<article>
+<header class="top">
+<h1>Scaling: The Bet That Loss Is Predictable</h1>
+<p class="byline">Can AI outgrow the planet’s power grid? · a deep dive · from one curve to a frontier · by Akarsh Gopal, October 2026</p>
+</header>
+
+<div class="brief" role="note" aria-label="In brief"><p><b>In brief.</b> Why bigger kept working: error falls along a smooth curve as compute grows, which turned AI into a question of money, data and electricity. The page also prices a training run, and what serving costs after it.</p><p><b>The surprise.</b> Llama 3.1 405B saw about 15.6 trillion tokens of text, nearly 40 for every one of its 405 billion parameters.</p></div>
+
+<p class="lede">Meta’s Llama 3.1 405B is a block of 405 billion numbers. To set them, Meta showed it about 15.6 trillion tokens of text, nearly 40 for every number.<sup class="fn"><a href="#n4">4</a></sup> Why that many, and why not more? Most of science is not predictable in advance: you try an idea and it works or it does not. Around 2020 language models turned out to be different: train them bigger, on more text, with more arithmetic, and their error falls along a smooth curve you can draw before you start. That one measurement changed AI from a research problem into a question of how much money, data and electricity to commit.</p>
+
+<p>The <a class="xref" href="essay.html#s12">essay</a> showed the compute of notable models rising since 2010. This page looks at why anyone would spend that much, and what stands in the way of spending more.</p>
+
+<ol class="toc">
+<li><a href="#powerlaw"><span class="n">1</span>A straight line on a log plot</a></li>
+<li><a href="#knobs"><span class="n">2</span>Three knobs, one budget</a></li>
+<li><a href="#overtrain"><span class="n">3</span>Training past the optimum</a></li>
+<li><a href="#frontier"><span class="n">4</span>The frontier’s slope</a></li>
+<li><a href="#datawall"><span class="n">5</span>The data wall</a></li>
+<li><a href="#bill"><span class="n">6</span>The bill</a></li>
+<li><a href="#inference"><span class="n">7</span>After training</a></li>
+<li><a href="#recap"><span class="n">8</span>What the bet is</a></li>
+<li><a href="#final"><span class="n"></span>Final words</a></li>
+</ol>
+
+<h2 id="powerlaw" data-level="S7"><span class="num">1</span>A straight line on a log plot</h2>
+
+<p>A language model is scored by its <b>loss</b>: how surprised it is, on average, by the next word of text it has not seen. Lower is better. In 2020 Jared Kaplan and colleagues at OpenAI trained many models of different sizes and found that the loss fell as a <b>power law</b> in the compute, parameters and data they used, over seven orders of magnitude.<sup class="fn"><a href="#n1">1</a></sup> In 2022 Jordan Hoffmann and colleagues at DeepMind fitted a formula to more than 400 training runs that predicts the loss from the number of parameters and training tokens together.<sup class="fn"><a href="#n2">2</a></sup></p>
+
+<figure class="fig" data-fig="powerLaw">
+<figcaption><span class="tagline tag-real">Data</span> The loss predicted by Hoffmann et al.’s fitted formula, L = 1.69 + 406.4 / N<sup>0.34</sup> + 410.7 / D<sup>0.28</sup>, with each compute budget split between parameters N and tokens D in the way the formula itself says is best.<sup class="fn"><a href="#n2">2</a></sup> Loss is in nats per token (natural-log surprise) on their MassiveText data, so it is comparable only within that dataset. On the logarithmic axes the vertical scale is the loss above the formula’s floor of 1.69 nats. The curve is the fit, extended beyond the runs it was fitted to.</figcaption>
+</figure>
+
+<p>On linear axes the curve looks as if improvement stops early. On logarithmic axes it is close to a straight line: every tenfold increase in compute removes about the same share of the loss that remains above the floor. That is what made the bet possible. If ten times the compute bought a known improvement last time, it is a reasonable guess that it will again, and the cost of the next model can be planned.</p>
+
+<details class="math"><summary>The maths: power laws and logs</summary>
+<p>If y = a x<sup>−α</sup>, then log y = log a − α log x: a straight line of slope −α on log–log axes, so multiplying x by 10 multiplies y by 10<sup>−α</sup> whatever x is. The loss has a floor E that no amount of compute removes (text is partly unpredictable), so the power law applies to L − E. With the formula’s exponents, ten times the compute, split optimally, removes roughly a third of what is above the floor.</p>
+</details>
+
+<h2 id="knobs" data-level="S7"><span class="num">2</span>Three knobs, one budget</h2>
+
+<p>Training a transformer with N parameters on D tokens takes about 6ND operations. So a fixed budget can buy a large model trained briefly or a small one trained long. Kaplan’s 2020 paper advised spending most of a growing budget on size: parameters rising as about C<sup>0.73</sup> and tokens only as C<sup>0.27</sup>. Hoffmann’s team found instead that the two should grow about equally, and showed it by training Chinchilla, 70 billion parameters on 1.4 trillion tokens, which beat their own 280-billion-parameter Gopher trained with the same compute.<sup class="fn"><a href="#n2">2</a></sup> The rule of thumb that came out of it was about 20 tokens per parameter.</p>
+
+<figure class="fig" data-fig="threeKnobs">
+<figcaption><span class="tagline tag-real">Data</span> Predicted loss against model size for a fixed budget C, with tokens D = C / 6N, from the two fits of the same formula: Hoffmann et al.’s published values and Besiroglu et al.’s 2024 re-fit of Hoffmann’s data, L = 1.817 + 482.0 / N<sup>0.348</sup> + 2,085 / D<sup>0.366</sup>.<sup class="fn"><a href="#n3">3</a></sup> The default budget is Chinchilla’s, about 5.8 × 10²³ FLOP.</figcaption>
+</figure>
+
+<p>There is a twist, and the toggle shows it. Hoffmann’s paper estimated the best ratio three ways. Two gave about 20 tokens per parameter. The formula in the figure was the third, and taken literally it prefers several times more tokens. In 2024 Tamay Besiroglu and colleagues at Epoch AI reconstructed Hoffmann’s data from the paper’s plots and re-fitted the formula. Their version agrees with the other two methods: about 20 tokens per parameter.<sup class="fn"><a href="#n3">3</a></sup> Both curves have the same shape, a wide valley with a gentle floor, which is the more useful lesson: being a factor of two off the best size costs little.</p>
+
+<details class="math"><summary>The maths: the compute-optimal split</summary>
+<p>Minimise L(N, D) = E + A N<sup>−α</sup> + B D<sup>−β</sup> subject to 6ND = C. Substituting D = C / 6N and setting dL/dN = 0 gives</p>
+<p class="eq">N<sub>opt</sub> = G (C/6)<sup>β/(α+β)</sup>,  D<sub>opt</sub> = G<sup>−1</sup> (C/6)<sup>α/(α+β)</sup>,  G = (αA / βB)<sup>1/(α+β)</sup>.</p>
+<p>With α ≈ β, both grow roughly as C<sup>1/2</sup>, which is the “equal proportions” result. The figure finds the minimum numerically.</p>
+</details>
+
+<h2 id="overtrain" data-level="S7"><span class="num">3</span>Training past the optimum</h2>
+
+<p>“Compute-optimal” means the lowest loss for the training budget. But a model is trained once and then used, possibly by millions of people, and every answer costs arithmetic in proportion to its size. A smaller model trained on far more <b class="c-green">tokens</b> than the optimum costs more to train for the same loss but much less to run. Since Chinchilla the field has moved that way. Each <b class="c-blue">dot</b> is a notable language model; the black steps track the median <b class="c-green">tokens</b> per <b class="c-blue">parameter</b>: about 3 in 2021, 20 in 2023 and 47 in 2025.</p>
+
+<figure class="fig" data-fig="tokensPerParam">
+<figcaption><span class="tagline tag-mixed">Data + model</span> Training tokens per parameter for notable language models since 2017 (log scale), with the yearly median and the <span class="c-violet">~20:1 compute-optimal</span> line (Chinchilla). Every dot is a real model: all 211 language-domain rows of Epoch AI’s Notable AI Models with both a parameter count and a training-dataset size (“Training dataset size (total)”, mostly tokens) published from 2017, ratio ≥ 0.1, nothing synthetic or jittered. Placed at publication date. About one in five dataset sizes is Epoch’s own estimate (see its “dataset size notes”).<sup class="fn"><a href="#n4">4</a></sup> Tap a dot to name the model.</figcaption>
+</figure>
+
+<p>Meta’s Llama 3.1 405B saw about 15.6 trillion tokens, nearly 40 per parameter; many smaller models have seen hundreds or thousands per parameter.<sup class="fn"><a href="#n4">4</a></sup> That choice ties scaling to the rest of this series. It trades training compute for cheaper serving, and it eats training data faster, which is the subject of section 5.</p>
+
+<h2 id="frontier" data-level="S7"><span class="num">4</span>The frontier’s slope</h2>
+
+<p>The <a class="xref" href="essay.html#fig-computeTrend">essay’s chart</a> fits every notable model. Here you can lay the line yourself on the models Epoch flags as frontier models, roughly those that were among the largest by training compute when they were released, drawn in <b class="c-blue">blue</b>; your line is <b class="c-violet">violet</b>.</p>
+
+<figure class="fig" data-fig="frontierSlope">
+<figcaption><span class="tagline tag-real">Data</span> Training compute of notable AI models since 2010, from Epoch AI’s Notable AI Models data (CC BY); frontier models in blue.<sup class="fn"><a href="#n4">4</a></sup> “Fit it for me” is a least-squares line through the frontier models. The algorithmic-progress line multiplies your slope by Ho et al.’s central estimate, compute needs halving every 8 months (95% interval about 5 to 14 months), for language models from 2012 to 2023.<sup class="fn"><a href="#n5">5</a></sup></figcaption>
+</figure>
+
+<p>Whatever line you draw, it is steep: several times more compute every year, against Moore’s law’s doubling every two. Epoch’s own analysis puts the frontier at four to five times a year since 2010.<sup class="fn"><a href="#n6">6</a></sup> And the arithmetic is not the whole story. Anson Ho and colleagues estimated that the compute needed to reach a given loss has halved roughly every eight months, through better architectures, training recipes and data. Effective compute has grown faster than the chips.</p>
+
+<h2 id="datawall" data-level="S7"><span class="num">5</span>The data wall</h2>
+
+<p>Compute can be bought. Text written by people cannot be made faster. In 2024 Pablo Villalobos and colleagues at Epoch AI estimated the stock of public human text on the indexed web at an “effective” 300 trillion tokens or so (90% interval 100 to 1,000 trillion), allowing for quality and for repeating data a few times, and projected that if current trends continue models will be trained on datasets about that size between 2026 and 2032, with a median of 2028. Below, the <b class="c-blue">dots</b> are training sets and the <b class="c-green">green band</b> is that stock.<sup class="fn"><a href="#n7">7</a></sup></p>
+
+<figure class="fig" data-fig="dataWall">
+<figcaption><span class="tagline tag-mixed">Data + model</span> Training dataset sizes of language models in Epoch AI’s Notable AI Models data (CC BY); the dark dots are those Epoch flags as frontier models, and the dashed line our least-squares fit to them, carried forward.<sup class="fn"><a href="#n4">4</a></sup> The green line is Epoch’s effective stock of about 3 × 10¹⁴ tokens, and the band its 90% interval, 100 to 1,000 trillion tokens; the same estimate as on the <a class="xref" href="data.html">Data</a> page.<sup class="fn"><a href="#n7">7</a></sup></figcaption>
+</figure>
+
+<p>What happens next is open. The same study discusses training on text generated by models, on images, video and audio, on private data, and getting more from each token. None is yet proven at the scale needed, and each has its own costs; this page does not try to predict which will work. What the line does show is that the cheap part of the bet, more text, is close to used up.</p>
+
+<p class="aside"><b>The data flywheel</b> — human examples, synthetic data, and whether demand can outgrow the supply of text — has its own page: <a class="xref" href="data.html">The data</a>. It sets none of the long-run meter’s sliders; it asks whether use, people × tasks a day, can keep rising.</p>
+
+<h2 id="bill" data-level="S7 H1"><span class="num">6</span>The bill</h2>
+
+<p>Turn compute into money with the numbers the rest of this series has built up: an H100 does 989 trillion 16-bit operations a second at its peak and real training runs get about 40% of that; a GPU’s share of its server draws 1.275 kW; the building adds a PUE of 1.09 to 1.56; and the <b class="c-blue">hardware</b>, at $33,600 a GPU over four years, costs about $0.96 an hour whether it computes or not. The figure sets it against the <b class="c-orange">electricity</b>.<sup class="fn"><a href="#n8">8</a></sup></p>
+
+<figure class="fig" data-fig="trainingBill">
+<figcaption><span class="tagline tag-ill">Model</span> GPU-hours = compute ÷ (989.4 × 10¹² FLOP/s × 40.5% × 3,600 s), the utilisation being the middle of Llama 3’s 38–43%. Electricity uses the <a class="xref" href="factory.html#pue">AI Factory</a>’s 503–720 GPU-hours per MWh. Hardware is the GPU’s share of a $269,000 DGX H100 over four years. The electricity price defaults to the 2025 US average for industrial customers, $85 per MWh.<sup class="fn"><a href="#n8">8</a></sup> Staff, networking, failed runs and experiments before the final run are left out, and they are large. The run markers use Epoch’s compute estimates.<sup class="fn"><a href="#n4">4</a></sup></figcaption>
+</figure>
+
+<p>At the average US industrial price the electricity is about an eighth of these two costs, 11–15%; the chips are most of it. Renting instead of owning makes the gap wider: a cloud H100 reserved in advance costs about $6 an hour, against about 12–17 cents of electricity.<sup class="fn"><a href="#n8">8</a></sup> That is why a training run is a capital project first and an energy project second, and why, as the <a class="xref" href="factory.html#flat">AI Factory</a> shows, nobody switches the machines off to wait for cheap hours. It also explains the scale of the energy question: the bill for electricity is modest per run, but the runs, and the buildings, keep growing.</p>
+
+<h2 id="inference" data-level="S1"><span class="num">7</span>After training</h2>
+
+<p>Training happens once. Answering questions happens every day. Producing one token takes about two operations per parameter, so a 405-billion-parameter model spends about 8 × 10¹¹ operations per token it reads or writes. Attention adds a part that grows with the context, about 2 × layers × context × width; for this model it is 4% extra at 8,000 tokens and catches up with the weights only near 200,000. Below, the <b class="c-violet">training</b> cost is paid once and the <b class="c-blue">answering</b> cost piles up day by day.<sup class="fn"><a href="#n1">1</a></sup></p>
+
+<figure class="fig" data-fig="inferenceVsTraining">
+<figcaption><span class="tagline tag-ill">Model</span> Inference compute as 2 × parameters × tokens for a dense 405-billion-parameter model, against Llama 3.1 405B’s training compute of 3.8 × 10²⁵ FLOP.<sup class="fn"><a href="#n4">4</a></sup> Real serving costs more per token than this count (chips sit partly idle while waiting for memory, as the <a class="xref" href="parallel.html#roofline">roofline</a> shows) and less where smaller or mixture-of-experts models are used.</figcaption>
+</figure>
+
+<details class="peek" id="peek-serving" data-level="S1" data-title="Serving and the KV cache">
+<summary>Look inside: <b>decode is a memory problem</b></summary>
+<div class="peek-body">
+<p>To write one new token, a model must read every weight from memory: 140 GB for a 70-billion-parameter model in FP16, about 42 ms at an H100’s bandwidth, for only 1.4 × 10¹¹ operations. HBM bandwidth, not FLOP/s, sets the pace, so chip efficiency gains do not cut Wh per token one-for-one. Serving many conversations at once shares that weight read across the batch. What it cannot share is each conversation’s own KV cache, the stored keys and values of every earlier token, which grows with context. At long context and large batch the cache, not the weights, is the bottleneck.<sup class="fn"><a href="#n10">10</a></sup></p>
+<figure class="fig" data-fig="servingKV">
+<figcaption><span class="tagline tag-ill">Model</span> Bytes per token = weights ÷ batch + KV cache. 70B-class (Llama 3 70B shape): 80 layers, 8 KV heads, 128-d, FP16, 320 KB of KV per context token. HBM 3.35 TB/s as on one H100; real deployments split the model over several GPUs, which adds bandwidth but not the ratio.</figcaption>
+</figure>
+</div>
+</details>
+
+<details class="peek" id="peek-moe" data-level="S3" data-title="Mixture of experts">
+<summary>Look inside: <b>active parameters, not the headline total</b></summary>
+<div class="peek-body">
+<p>A mixture-of-experts model stores many specialists and, for each token, wakes only a few. FLOPs track the active slice, not the total weight count. That is one of the efficiency levers on the verdict meter: more experts, same quality, fewer joules per token — until routing and memory traffic claw it back.</p>
+<figure class="fig" data-fig="moePeek">
+<figcaption><span class="tagline tag-ill">Model</span> Top-2 routing over a fixed 800B total, with 3% of the weights (attention, embeddings) used by every token, close to Mixtral 8x7B and DeepSeek-V3 (<a href="https://arxiv.org/abs/2401.04088">arXiv:2401.04088</a>, <a href="https://arxiv.org/abs/2412.19437">arXiv:2412.19437</a>); illustrative, not a named product.</figcaption>
+</figure>
+</div>
+</details>
+
+
+<p>The count is sobering in both directions. With a million users a day, a model this size would take decades of serving to match the arithmetic of its training. With a hundred million, it takes well under a year, and ChatGPT alone says more than 1.2 billion people use it each week, though not all of them daily and not all on its largest model.<sup class="fn"><a href="#n9">9</a></sup> Models that think step by step before answering, writing thousands of hidden tokens per question, multiply the tokens per user, and with them the daily load. Spending moves from a one-off training run to a load that runs every day.</p>
+
+<h2 id="recap" data-level="S7"><span class="num">8</span>What the bet is</h2>
+
+<p>The scaling laws are measurements, not laws of nature. They describe what happened over the range of models that have been trained, and they have held as that range has grown. They turned the question of how good to make a model into a question of how much to spend, and the answers have been compute growing four or five times a year, models trained past their optimum so they are cheap to use, and a supply of text that is close to its limit, which is being topped up by paying people to write, rank and grade.</p>
+
+<h2 id="final" data-level="S7">Final words</h2>
+
+<p>There is something unusual about an industry that can draw its own future on a log chart and then go and build it. Most bets on technology are made in fog; this one was made with a ruler. The ruler may yet bend. Text may run out, money may run out, or the curve may simply flatten. But for six years and counting, paying for ten times more arithmetic has bought a measurably better model, much as the curve said it would, and that is a rare thing to be able to say about any technology.</p>
+
+<p>Where the compute ends up is the subject of the <a class="xref" href="factory.html">AI Factory</a>: in buildings that draw as much as cities, on grids that need years to connect them. And where it came from, the cheap switch and the parallel chip, is in <a class="xref" href="flip.html">The Price of a Flip</a> and <a class="xref" href="parallel.html">Parallel</a>.</p>
+
+<h2 id="notes">Notes and sources</h2>
+<ol class="notes">
+<li id="n1">J. Kaplan et al., <a href="https://arxiv.org/abs/2001.08361">“Scaling Laws for Neural Language Models”</a> (2020): power laws over more than seven orders of magnitude; compute-efficient allocation N ∝ C<sup>0.73</sup>; forward-pass cost about 2N + 2·n<sub>layer</sub>·n<sub>ctx</sub>·d<sub>attn</sub> operations per token (§2.1, Table 1), i.e. about 2N at short context. For Llama 3.1 405B (126 layers, width 16,384; Llama 3 paper, arXiv:2407.21783, Table 3) the context term is 3.4 × 10¹⁰ at 8,192 tokens, 4% of 2N, and equals 2N at about 196,000 tokens.</li>
+<li id="n2">J. Hoffmann et al., <a href="https://arxiv.org/abs/2203.15556">“Training Compute-Optimal Large Language Models”</a> (2022): over 400 models; the fitted formula with E = 1.69, A = 406.4, B = 410.7, α = 0.34, β = 0.28 (equation 10); Kaplan et al.’s exponents 0.73 and 0.27 (table 2); Chinchilla, 70B parameters, 1.4T tokens, against Gopher, 280B.</li>
+<li id="n3">T. Besiroglu, E. Erdil, M. Barnett and J. You, <a href="https://arxiv.org/abs/2404.10102">“Chinchilla Scaling: A replication attempt”</a> (2024): re-fitted model L = 1.8172 + 482.01/N<sup>0.3478</sup> + 2085.43/D<sup>0.3658</sup>, compatible with Hoffmann et al.’s first two approaches.</li>
+<li id="n4">Epoch AI, <a href="https://epoch.ai/data/notable-ai-models">Notable AI Models</a> (CC BY), downloaded 19 October 2026: training compute, parameters, dataset size and frontier flag. Llama 3.1-405B: 405 billion parameters, 15.6 trillion tokens, 3.8 × 10²⁵ FLOP.</li>
+<li id="n5">A. Ho et al., <a href="https://arxiv.org/abs/2403.05812">“Algorithmic progress in language models”</a> (2024): compute required to reach a set performance threshold halves about every 8 months, 95% confidence interval about 5 to 14 months.</li>
+<li id="n6">Epoch AI, <a href="https://epoch.ai/blog/training-compute-of-frontier-ai-models-grows-by-4-5x-per-year">“Training compute of frontier AI models grows by 4–5x per year”</a> (2024).</li>
+<li id="n7">P. Villalobos et al., <a href="https://arxiv.org/abs/2211.04325">“Will we run out of data? Limits of LLM scaling based on human-generated data”</a> (2024; summary at <a href="https://epoch.ai/publications/will-we-run-out-of-data-limits-of-llm-scaling-based-on-human-generated-data">epoch.ai</a>): effective stock of public human text about 3 × 10¹⁴ tokens (90% confidence interval 100T–1,000T), fully used between 2026 and 2032 (80% interval), median 2028. The raw indexed web is a different, larger quantity: 510T (95% interval 130T–2,100T) in the arXiv v2.</li>
+<li id="n8">Throughput and utilisation: Epoch AI Machine Learning Hardware and the Llama 3 paper (Llama Team, AI @ Meta, <a href="https://arxiv.org/abs/2407.21783">“The Llama 3 Herd of Models”</a>, 2024, table 4). Server power and price and PUE as in the <a href="essay.html#s13">essay</a> and the <a href="factory.html#notes">AI Factory notes</a>. EIA, <i>Electric Power Monthly</i>, <a href="https://www.eia.gov/electricity/monthly/epm_table_grapher.php?t=table_5_03">Table 5.3</a>: average US retail price to industrial customers in 2025, 8.51¢/kWh ($85 per MWh); figures default to it. Electricity share: $0.118–0.169 of electricity per GPU-hour (85 ÷ 720 and 85 ÷ 503) against $0.96 of hardware (my arithmetic). AWS, <a href="https://aws.amazon.com/ec2/capacityblocks/pricing/">EC2 Capacity Blocks pricing</a> (read 5 November 2026): $5.970 an hour per H100 (p5.48xlarge) and $14.208 per B200 (p6-b200.48xlarge), reserved in advance in US regions.</li>
+<li id="n9">ChatGPT weekly users: TechCrunch, 6 November 2023 (about 100 million, announced at OpenAI’s first DevDay); TechCrunch, 27 February 2026 (900 million, up from 800 million in October 2025); OpenAI, “GPT-6 and Intelligent UI for everyone”, 7 October 2026 (“more than 1.2 billion people who use ChatGPT each week”).</li>
+<li id="n10">R. Pope et al., <a href="https://arxiv.org/abs/2211.05102">“Efficiently Scaling Transformer Inference”</a> (2022): decode at small batch is limited by the time to load the weights from memory; batching amortises the weight loads, while the KV cache grows with batch × context and dominates memory traffic at long context. Worked arithmetic in kipp.ly, <a href="https://kipp.ly/transformer-inference-arithmetic/">“Transformer Inference Arithmetic”</a> (2022). 70B shape from Meta’s Llama 3 70B configuration (80 layers, 8 key–value heads, head dimension 128); 3.35 TB/s from NVIDIA’s H100 SXM datasheet.</li>
+</ol>
+
+<footer class="colophon">
+<p>Figures marked <span class="tagline tag-real" style="font-size:.7rem;padding:1px 6px;border-radius:99px">Data</span> use the cited sources; <span class="tagline tag-mixed" style="font-size:.7rem;padding:1px 6px;border-radius:99px">Data + model</span> combine them with the series’ own arithmetic. Figures marked <span class="tagline tag-ill" style="font-size:.7rem;padding:1px 6px;border-radius:99px">Model</span> are simplified models built to show a mechanism, and their numbers should not be quoted as facts. Charts use only openly licensed data (CC BY); individual figures from papers are quoted with credit. Fonts: Literata and Inter (SIL Open Font License).</p>
+</footer>
+</article>
+</main>
+<script src="app.js"></script>
+</body>
+</html>

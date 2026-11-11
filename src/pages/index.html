@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Can AI outgrow the planet’s power grid?</title>
+<meta name="description" content="Contents and map of an interactive series on AI and electricity: what AI uses now, what the money will build, whether the grid can connect it this decade, and the long-run case.">
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<button id="play-toggle" type="button" aria-pressed="true" title="Pause all animations">❚❚ Pause</button>
+<main>
+<article>
+<header class="top">
+<h1>Can AI outgrow the planet’s power grid?</h1>
+<p class="byline">An interactive series · switches, chips, learning, scaling, power and orbit · by Akarsh Gopal, November 2026</p>
+</header>
+
+<p class="lede">AI’s electricity is still small, about 55 TWh of inference in 2025 by this series’ estimate, a fifth of one per cent of the world’s. The money behind it is not: four companies plan to spend about $730 billion on data centres and chips in 2026, enough for about 19 GW of AI capacity in a year.<sup class="fn"><a href="#n1">1</a></sup> This series asks whether the grid can connect what that money is buying this decade, and keeps the long-run question, whether AI becomes humanity’s largest use of energy, as a bookend.</p>
+
+<p><b>Start with <a href="essay.html">the essay</a>.</b> It is the whole argument in one sitting, from a switch you can tap to the turbines and transformers that now set the pace. The pages below are its deep dives, each written to be read alone; the map at the end shows how they fit.</p>
+
+<h2 id="start" data-level="S0"><span class="num">1</span>Contents</h2>
+
+<h3 id="how">How AI got here</h3>
+<ul class="contents">
+<li><a href="essay.html"><b>From Switch to Supercluster: Can the Grid Keep Up?</b></a> The essay: the series in one sitting.</li>
+<li><a href="rules.html"><b>Rules</b></a> A sum made of switches, relays that throw relays, and a machine that can run any program.</li>
+<li><a href="flip.html"><b>The Price of a Flip</b></a> What one switch costs in energy, and why that stopped falling as fast.</li>
+<li><a href="parallel.html"><b>Parallel</b></a> Why GPUs won: the roofline, memory, and many chips working as one.</li>
+<li><a href="model.html"><b>A Model</b></a> A neuron is a line; layers, backpropagation and gradient descent.</li>
+<li><a href="language.html"><b>Language</b></a> From convolution to attention, and a tiny model that predicts the next word.</li>
+<li><a href="scaling.html"><b>Scaling</b></a> Why bigger kept working, what a training run costs, and what serving costs after it.</li>
+<li><a href="data.html"><b>The Data</b></a> How much text, how many people, and how much money goes into the examples.</li>
+</ul>
+
+<h3 id="act2">The near term: power</h3>
+<ul class="contents">
+<li><a href="demand.html"><b>The Demand</b></a> Counting tokens and dollars: what AI uses now, and what 2026’s spending buys in gigawatts.</li>
+<li><a href="factory.html"><b>The AI Factory</b></a> From a 700 W chip to a gigawatt site: heat, overhead, and a load that never sleeps.</li>
+<li><a href="binds.html"><b>What Binds, 2026–30</b></a> Firm power, connections and transformers, chips, permits and money, ranked with the evidence.</li>
+<li><a href="orbital.html"><b>Orbital Compute</b></a> Whether space is the answer once the grid runs out: sunlight, radiators, mass and launch price.</li>
+</ul>
+
+<h3 id="verdict">The long run</h3>
+<ul class="contents">
+<li><a href="yardstick.html"><b>The Yardstick</b></a> How big the bars are, and how fast heating, cooling and industry grow.</li>
+<li><a href="verdict.html"><b>The Verdict</b></a> The long-run meter built up one lever at a time, the Low, Mid and High ledger, and the tripwires.</li>
+</ul>
+
+<p>For how the grid itself works, the sister series <a href="../electricity/index.html"><i>Why Did Electricity Stop Getting Cheaper?</i></a> covers <a href="../electricity/transmission.html#planning">planning, permits and the queue to connect</a>, <a href="../electricity/transformers.html#shortage">the transformer shortage</a> and <a href="../electricity/price.html">what power plants cost</a>.</p>
+
+<h2 id="map" data-level="S0"><span class="num">2</span>The case, as a map</h2>
+
+<p>Each card is a page that explains one condition for, or one force against, the thesis. Every card is a live link; cards you have opened in this browser are tinted, and the pips show which way you have set that page’s slider on the long-run meter.</p>
+
+<figure class="fig showpiece" data-fig="caseMap">
+<figcaption><span class="tagline tag-ill">Diagram</span> Every card is a live page in this series. A green tint means this browser has opened it. Pips show which way that page’s slider leans on the long-run meter on <a href="verdict.html#act1">the Verdict</a> (left NO, right YES). Act&nbsp;2 cards feed the ceiling meter on the Verdict page and the launch figures on <a href="orbital.html#launch">Orbital</a>.</figcaption>
+</figure>
+
+<p class="aside"><b>What this series is not.</b> Not a forecast. The 55 TWh is <b>derived</b>, from the IEA’s data-centre total, a year’s growth and a 60% inference share taken from a <b>secondary</b> source; its band is 40–80 TWh, and the token counts companies publish explain only 3 to 8 TWh of it. Where something is an assumption, the figure’s <b>ⓘ data</b> panel says so.</p>
+
+<h2 id="notes" data-level="S0">Notes and sources</h2>
+<ol class="notes">
+<li id="n1">The 55 TWh (band 40–80) is derived on <a href="verdict.html#anchor">the Verdict page</a>; world electricity in 2025, 28,200 TWh (IEA <i>Electricity 2026</i>). Capital spending guidance for calendar 2026 and Epoch AI’s $38 billion per gigawatt: <a href="demand.html#n9">The demand, notes 9–10</a>; $730 billion ÷ $38 billion ≈ 19 GW (my arithmetic).</li>
+</ol>
+
+<footer class="colophon">
+<p>Figures marked <span class="tagline tag-real" style="font-size:.7rem;padding:1px 6px;border-radius:99px">Data</span> use the cited sources; <span class="tagline tag-mixed" style="font-size:.7rem;padding:1px 6px;border-radius:99px">Data + model</span> combine them with the series’ own arithmetic. Figures marked <span class="tagline tag-ill" style="font-size:.7rem;padding:1px 6px;border-radius:99px">Model</span> are simplified models built to show a mechanism; their assumptions are listed under <b>ⓘ data</b>. Nothing on this page is a forecast.</p>
+</footer>
+</article>
+</main>
+<script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Demand: Who Asks, How Often? · Can AI outgrow the planet’s power grid?</title>
+<meta name="description" content="Counting the tokens Google, OpenAI and Microsoft publish, turning them into electricity and reconciling them with a top-down estimate; then what 2026 capital spending buys in gigawatts.">
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<button id="play-toggle" type="button" aria-pressed="true" title="Pause all animations">❚❚ Pause</button>
+<main>
+<article>
+<header class="top">
+<h1>The Demand: Who Asks, How Often?</h1>
+<p class="byline">Can AI outgrow the planet’s power grid? · a deep dive · tokens, watt-hours and dollars · by Akarsh Gopal, November 2026</p>
+</header>
+
+<div class="brief" role="note" aria-label="In brief"><p><b>In brief.</b> Counting the tokens companies publish, turning them into electricity and checking them against a top-down estimate; then what four companies’ 2026 spending buys in gigawatts.</p><p><b>The surprise.</b> Published token counts explain only about a seventh of AI inference’s estimated electricity in 2025: about 7.6 TWh against 55.</p></div>
+
+<p class="lede">In May 2026 Google said it was processing more than <b>3.2 quadrillion tokens a month</b> across its products, seven times as many as a year earlier.<sup class="fn"><a href="#n1">1</a></sup> Tokens are the unit of AI demand, and a few companies count them in public. This page adds up those counts, turns them into electricity and checks the total against the series’ top-down estimate of <b>55 TWh</b> of inference in 2025. Then it follows the money: what four companies’ capital spending in 2026 buys in gigawatts.</p>
+
+<p>The answer to the first sum is that published tokens explain only a small part of AI’s electricity, between a sixteenth and a seventh of it. The answer to the second is that the money now committed grows AI’s capacity faster than this series’ grid ceiling assumes, for as long as it keeps rising.</p>
+
+<ol class="toc">
+<li><a href="#tokens"><span class="n">1</span>Counting tokens</a></li>
+<li><a href="#reading"><span class="n">2</span>Reading is cheaper than writing</a></li>
+<li><a href="#missing"><span class="n">3</span>What the count misses</a></li>
+<li><a href="#ladder"><span class="n">4</span>Tokens per task</a></li>
+<li><a href="#capex"><span class="n">5</span>From dollars to gigawatts</a></li>
+<li><a href="#jevons"><span class="n">6</span>When cheaper means more</a></li>
+<li><a href="#final"><span class="n"></span>Final words</a></li>
+</ol>
+
+<h2 id="tokens" data-level="S0"><span class="num">1</span>Counting tokens</h2>
+
+<p>Three companies publish counts of the tokens they process. Google’s grew from 9.7 trillion a month in May 2024 to about 480 trillion a year later, more than 1.3 quadrillion by October 2025 and more than 3.2 quadrillion in May 2026, summed over Search, the Gemini app, its cloud customers and everything else.<sup class="fn"><a href="#n1">1</a></sup> Its model APIs alone were handling nearly 32 billion tokens a minute by October 2026, four times as many as a year before.<sup class="fn"><a href="#n2">2</a></sup> OpenAI’s API was serving 6 billion tokens a minute in October 2025, and ChatGPT was receiving about 2.5 billion prompts a day in July 2025.<sup class="fn"><a href="#n3">3</a></sup> Microsoft processed 50 trillion tokens in March 2025.<sup class="fn"><a href="#n4">4</a></sup> Nobody else publishes a number that can be added to these.</p>
+
+<p>To turn tokens into energy the series uses one rate. Google’s median Gemini text prompt used 0.24 Wh at the data-centre meter in May 2025, idle machines and cooling included; taking that prompt as about 400 tokens, which is my conversion because Google gave no token count, makes 0.6 mWh a token. Epoch AI’s independent estimate for ChatGPT, about 0.3 Wh for a reply of 500 tokens, gives the same 0.6 mWh.<sup class="fn"><a href="#n5">5</a></sup></p>
+
+<p>Google’s count for calendar 2025 has to be pieced together. Growing smoothly at the rate between its two I/O figures, it sums to about 8.4 quadrillion tokens over the year, a little low if anything, since that path reaches only 1.1 quadrillion a month in October against Google’s reported 1.3. At 0.6 mWh that is <b>5.1 TWh</b>. OpenAI’s API at its October rate for a whole year is 1.9 TWh, an upper bound because the rate was lower earlier in the year; ChatGPT’s prompts at OpenAI’s own 0.34 Wh each are 0.31 TWh; Microsoft at its March rate is 0.36 TWh. Together, about <b>7.6 TWh</b>, a seventh of the top-down 55.</p>
+
+<h2 id="reading" data-level="S0"><span class="num">2</span>Reading is cheaper than writing</h2>
+
+<p>Most of those tokens are read, not written. On OpenRouter, a marketplace that routes requests to hundreds of models, the average request in late 2025 carried about 6,000 tokens of prompt and got back about 400.<sup class="fn"><a href="#n6">6</a></sup> A model reads its whole prompt in one parallel pass, which keeps the chip’s arithmetic busy; it writes one token at a time, and each one needs every weight fetched from memory again, as <a class="xref" href="scaling.html#peek-serving">Scaling</a> shows. Reading is therefore cheaper per token.</p>
+
+<p>How much cheaper has not, as far as I can find, been measured for a production service. Epoch’s estimates give a working figure: a query with 10,000 tokens of input uses about 2.5 Wh against 0.3 Wh for a short one, so each token read adds about 0.22 mWh, a little over a third of a written token.<sup class="fn"><a href="#n5">5</a></sup> That ratio is my arithmetic on a model, not a measurement. Count reads at that rate, with 94% of tokens read, and the published tokens come to about <b>3.3 TWh</b> in 2025.</p>
+
+<figure class="fig showpiece" data-xfig="demandBridge" id="fig-demandBridge">
+<figcaption><span class="tagline tag-mixed">Data + model</span> Token counts: Google (I/O, 19 May 2026; 2025 summed on a smooth path between its May 2025 and May 2026 figures, my arithmetic),<sup class="fn"><a href="#n1">1</a></sup> OpenAI’s API at its October 2025 rate for a full year, ChatGPT’s July 2025 prompts at OpenAI’s 0.34 Wh each,<sup class="fn"><a href="#n3">3</a></sup> Microsoft at its March 2025 rate.<sup class="fn"><a href="#n4">4</a></sup> Energy per written token, 0.6 mWh: the series’ 0.24 Wh per 400-token prompt, which matches Epoch’s 0.3 Wh per 500 tokens.<sup class="fn"><a href="#n5">5</a></sup> The dashed outline counts every token at that rate; the solid bar discounts tokens read. Read share, 94%: OpenRouter’s 6,000 prompt to 400 completion tokens per request in late 2025, an API mix that may not match Google’s products.<sup class="fn"><a href="#n6">6</a></sup> Read cost, about 1/2.7 of a written token: my arithmetic on Epoch’s 2.5 Wh at 10,000 tokens of input.<sup class="fn"><a href="#n5">5</a></sup> Top-down: the series’ 2025 inference estimate, 55 TWh (band 40–80), derived on <a href="verdict.html#anchor">the Verdict page</a>; for 2026, Act&nbsp;1’s Mid path (77 TWh) with its band. There are no newer counts for OpenAI or Microsoft, so the May 2026 view keeps their 2025 values.</figcaption>
+</figure>
+
+<table class="ledger" id="reconcile">
+<thead><tr><th>2025</th><th>TWh</th><th>How it is counted</th></tr></thead>
+<tbody>
+<tr><td>Google, every product</td><td>2.1–5.1</td><td>8.4 quadrillion tokens × 0.6 mWh, reads discounted or not</td></tr>
+<tr><td>OpenAI API</td><td>0.8–1.9</td><td>6 billion tokens a minute for a year (an upper bound)</td></tr>
+<tr><td>ChatGPT</td><td>0.31</td><td>2.5 billion prompts a day × 0.34 Wh</td></tr>
+<tr><td>Microsoft</td><td>0.15–0.36</td><td>50 trillion tokens a month for a year</td></tr>
+<tr><td><b>Published tokens, total</b></td><td><b>3.3–7.6</b></td><td>the four rows</td></tr>
+<tr><td><b>All AI inference, top-down</b></td><td><b>55 (40–80)</b></td><td>IEA data centres × accelerated share × growth × inference share</td></tr>
+<tr><td><b>Not explained by published tokens</b></td><td><b>47–52</b></td><td>86–94% of the top-down figure</td></tr>
+</tbody>
+</table>
+
+<h2 id="missing" data-level="S0"><span class="num">3</span>What the count misses</h2>
+
+<p>A gap of more than six-sevenths is not an error to be closed. It is a list of what token counts leave out, and each item on it is large.</p>
+
+<p>The largest is probably the AI nobody calls AI. At Meta, recommendation models were “up to 79%” of the AI inference cycles in its data centres when its engineers last published a share, and its 2025 paper on its own inference chip still calls them “the majority of inference workloads at Meta”.<sup class="fn"><a href="#n7">7</a></sup> They rank feeds, videos and ads for billions of people, and they are not counted in tokens. Then come the providers that publish no counts at all: Anthropic, xAI, Meta’s assistant, and the Chinese and open-model services. Then images and video, which are billed in frames and denoising steps rather than tokens (§4). Last, capacity held in reserve: chips kept free for peaks and new launches, which the top-down figure counts and a token count does not.</p>
+
+<p>The gap could also mean that the top-down figure is too high. It rests on two shares that nobody publishes directly, a 15% accelerated-server share of data-centre electricity and a 60% inference share, the second from a secondary source. Halve the inference share and the top-down figure halves to about 28 TWh; published tokens would still explain less than a third of it.</p>
+
+<p>What the count settles is narrower but firm. Chatbot and API text, counted generously, was between a sixteenth and a seventh of AI inference’s electricity in 2025. It is the fastest-growing part: at its May 2026 rate Google’s count alone is <b>23 TWh</b> a year counted as written and about <b>9 TWh</b> with reads discounted, against about 77 TWh on Act&nbsp;1’s Mid path for 2026. Use the year switch on the figure to see it.</p>
+
+<h2 id="ladder" data-level="S0 S1"><span class="num">4</span>Tokens per task</h2>
+
+<p>The ladder below sets the scale of one task. Its bottom rung is Google’s 0.24 Wh median prompt.<sup class="fn"><a href="#n5">5</a></sup> The IEA says reasoning, agents and video can use “hundreds or thousands of times” more energy per task;<sup class="fn"><a href="#n8">8</a></sup> the three upper rungs are <b>order-of-magnitude estimates</b> that scale energy with the same multiple as tokens. That is the weak point: video and tool use break the link between tokens and energy. One measured rung, three labelled estimates. The ladder sets the demand sliders of the long-run meter on <a class="xref" href="verdict.html#act1">the Verdict page</a>.</p>
+
+<figure class="fig showpiece" data-fig="tokensLadder">
+<figcaption><span class="tagline tag-mixed">Data + model</span> Chat rung anchored to Google’s 0.24 Wh median Gemini text prompt (May 2025; not independently verified).<sup class="fn"><a href="#n5">5</a></sup> Reasoning ≈ 100×, agent ≈ 1,000×, short video ≈ 10,000× are order-of-magnitude estimates from the IEA’s “hundreds or thousands” note, not product measurements.<sup class="fn"><a href="#n8">8</a></sup> Cross-check for video: <i>MIT Technology Review</i> measured ≈3.4 MJ ≈ 0.94 kWh for one five-second clip from the open CogVideoX model, against the rung’s 2.4 kWh, the same order of magnitude (<a href="https://www.technologyreview.com/2025/05/20/1116327/ai-energy-usage-climate-footprint-big-tech/">MIT TR, May 2025</a>). Token counts assume the same energy per token as the chat rung. OpenAI weekly users: 100 million (November 2023), 900 million (February 2026).<sup class="fn"><a href="#n3">3</a></sup></figcaption>
+</figure>
+
+<details class="peek" id="peek-wh-tokens" data-level="S1" data-title="Why Wh ≠ tokens">
+<summary>Why watt-hours are not tokens</summary>
+<p>The meter’s tokens-per-task slider is a multiple of today’s. The ladder’s upper rungs set it from a multiple of the chat rung’s token count, then show energy as 0.24 Wh times that multiple. That is a <b>labelled approximation</b>, not a measurement. A reasoning pass can spend more arithmetic per token on search and self-checking; a short video is made of frames and diffusion steps, not tokens; an agent spends energy on the tools it calls. When the IEA says “hundreds or thousands of times” more energy per task, it means energy, not tokens. Use the ladder for orders of magnitude, and treat its energy column on the estimated rungs as a sketch.</p>
+</details>
+
+<h2 id="capex" data-level="S0 H0"><span class="num">5</span>From dollars to gigawatts</h2>
+
+<p>Tokens show the demand that exists. Money shows the capacity being built for the demand that is expected. In their latest guidance, given at the end of October 2026, the four largest cloud companies expect to spend about <b>$730 billion</b> of capital in calendar 2026: Alphabet $195–205 billion, Amazon about $220 billion, Microsoft about $170 billion and Meta $135–145 billion.<sup class="fn"><a href="#n9">9</a></sup> Most of it is for AI. Microsoft says three-quarters of its latest quarter’s spending went on short-lived assets such as GPUs and CPUs; Alphabet says about 65% of its technical-infrastructure spending was servers and networking and the rest data-centre buildings.<sup class="fn"><a href="#n9">9</a></sup></p>
+
+<p>Epoch AI puts the up-front cost of a one-gigawatt AI data centre at about <b>$38 billion</b>: $21 billion of servers, $11 billion for the building with its power and cooling, $5 billion of networking, and under half a billion for land and the utility connection.<sup class="fn"><a href="#n10">10</a></sup> The chain is then a division. $730 billion ÷ $38 billion per gigawatt ≈ <b>19 GW</b> in one year, if all of it bought AI data centres. Epoch estimates the world’s AI data-centre capacity at 31 GW at the end of 2025, up from 13.5 GW a year earlier.<sup class="fn"><a href="#n11">11</a></sup> Four companies’ 2026 spending alone would grow it by about 60%, more than twice the 26% a year that Act&nbsp;2 assumes on its way to a grid ceiling of 316 GW in 2035.</p>
+
+<figure class="fig showpiece" data-xfig="capexChain" id="fig-capexChain">
+<figcaption><span class="tagline tag-mixed">Data + model</span> 2026 capital spending: midpoints of the latest guidance (Alphabet $195–205 billion, Meta $135–145 billion; Amazon about $220 billion; Microsoft about $170 billion for calendar 2026), $730 billion in all.<sup class="fn"><a href="#n9">9</a></sup> All-in cost, $38 billion per GW: Epoch AI’s model of a GB200 NVL72 data centre, chips included.<sup class="fn"><a href="#n10">10</a></sup> Starting capacity: Epoch’s 31.24 GW at the end of 2025.<sup class="fn"><a href="#n11">11</a></sup> The share of spending that buys AI data centres defaults to all of it, <b>my assumption</b>: the firms say most of it does, and the spending of everyone else (Oracle, xAI, CoreWeave, the Chinese cloud companies) is left out, so the two errors partly cancel. Capacity is added in the year the money is spent, though buildings take one to two years; the load of 50% (for the terawatt-hours) is <b>my assumption</b>, and Epoch’s own cost model implies about 81% for a fully used site. Act&nbsp;2’s line, 26% a year from 31 GW, is the series’ <b>extrapolation</b> (see <a href="verdict.html#act2">the Verdict</a>).</figcaption>
+</figure>
+
+<p>The test also runs the other way. Held flat in dollars, the same spending adds the same 19 GW each year, so growth in percentage terms slows; by 2035 it reaches about <b>220 GW</b>, short of Act&nbsp;2’s ceiling. To reach 316 GW the four companies’ spending must keep rising by about 8.5% a year, to roughly <b>$1.5 trillion</b> a year by 2035. Alphabet already expects its capital spending to “increase significantly in 2027”, and Amazon expects it to rise too.<sup class="fn"><a href="#n9">9</a></sup> Act&nbsp;2’s ceiling is a statement about money as much as about the grid; <a class="xref" href="binds.html">What binds</a> asks which runs out first.</p>
+
+<h2 id="jevons" data-level="S0"><span class="num">6</span>When cheaper means more</h2>
+
+<p>Google reported a 33× drop in energy per Gemini text prompt in a year (May 2024 to May 2025), while Google’s own data-centre electricity rose 27% in 2024 and its total electricity another 37% in 2025.<sup class="fn"><a href="#n12">12</a></sup> Over roughly the same span its token count grew fiftyfold. That is consistent with the Jevons shape, cheaper answers inviting more of them, but it is not proof of it: the extra electricity also went to training, new products and everything else Google runs, and nobody has published the elasticity for the same service. The meter’s efficiency and tokens sliders pull opposite ways on purpose.</p>
+
+<p>Electricity is a small part of the cost of a token. In Epoch’s cost model of a one-gigawatt data centre, energy is about 7% of the yearly cost of ownership and servers about 60%.<sup class="fn"><a href="#n10">10</a></sup> So a fall in the price of electricity barely changes the price of a token, and a fall in the price of chips changes it a great deal. Very cheap tokens are tokens bought in bulk, increasingly by software rather than by people: human attention caps prompts per person, and growth past that cap needs agents that ask on our behalf, or it fails to find a use that pays.</p>
+
+<p>For the cheap hours that both data centres and synthetic-fuel plants want to buy, see <a href="../electricity/synthetic-fuels.html#cheap-demand">Cheap demand</a> in the electricity series.</p>
+
+<h2 id="final" data-level="S0">Final words</h2>
+
+<p>Count the tokens and AI’s best-known demand turns out to be a small part of its electricity: a few terawatt-hours in 2025 against an estimated 55 for all inference. Count the dollars and the capacity being built is growing faster than this series’ grid ceiling assumes, as long as the spending keeps rising. Neither count changes the long-run verdict on <a class="xref" href="verdict.html">the Verdict page</a>, where the bars are hundreds of times away. Both bear on the near-term question: whether the grid can connect what the money is buying. That is the subject of <a class="xref" href="binds.html">What binds</a>.</p>
+
+<h2 id="notes">Notes and sources</h2>
+<ol class="notes">
+<li id="n1">Google, <a href="https://blog.google/innovation-and-ai/sundar-pichai-io-2026/">“I/O 2026: Welcome to the agentic Gemini era”</a> (19 May 2026): “Two years ago, we were processing 9.7 trillion tokens a month across our surfaces… Last year at I/O, that grew to roughly 480 trillion tokens… that number jumped 7x to over 3.2 quadrillion per month.” Alphabet Q3 2025 earnings remarks (29 October 2025): “over 1.3 quadrillion monthly tokens”. The 2025 total of 8.4 quadrillion is my arithmetic: a constant monthly growth of 17% (7× a year) through 480 trillion in May 2025.</li>
+<li id="n2">Alphabet, <a href="https://blog.google/company-news/inside-google/message-ceo/alphabet-earnings-q3-2026/">Q3 2026 earnings remarks</a> (28 October 2026): “first-party model APIs are now processing nearly 32 billion tokens per minute — 40% more than last quarter and more than four times what we processed a year ago.” At I/O in May 2026 the figure was “roughly 19 billion tokens per minute”.</li>
+<li id="n3">OpenAI, <a href="https://openai.com/devday/2025/">DevDay 2025</a> (6 October 2025): 6 billion tokens a minute on the API. ChatGPT prompts: 2.5 billion a day, figures OpenAI gave Axios (<a href="https://techcrunch.com/2025/07/21/chatgpt-users-send-2-5-billion-prompts-a-day/">TechCrunch, 21 July 2025</a>). Energy per average query, about 0.34 Wh: S. Altman, “The Gentle Singularity” (10 June 2025), an unaudited company figure. Weekly users: 100 million (November 2023, DevDay); 900 million (OpenAI, February 2026, <a href="https://techcrunch.com/2026/02/27/chatgpt-reaches-900m-weekly-active-users">TechCrunch</a>). OpenAI, “GPT-6 and Intelligent UI for everyone” (7 October 2026): “more than 1.2 billion people who use ChatGPT each week” (as cited on <a href="scaling.html#n9">Scaling</a>).</li>
+<li id="n4">Microsoft, <a href="https://www.microsoft.com/en-us/investor/events/fy-2025/earnings-fy-2025-q3">FY25 Q3 earnings call</a> (30 April 2025): “we processed over 100 trillion tokens this quarter, up 5X year-over-year – including a record 50 trillion tokens last month alone.” Microsoft has not published a total since.</li>
+<li id="n5">Google, <a href="https://arxiv.org/abs/2508.15734">arXiv:2508.15734</a>: the median Gemini Apps text prompt used 0.24 Wh in May 2025, including idle machines and data-centre overhead; Google gives no token count for it, so the 400 tokens are my conversion. Epoch AI, <a href="https://epoch.ai/gradient-updates/how-much-energy-does-chatgpt-use">“How much energy does ChatGPT use?”</a> (February 2025): “roughly 0.3 watt-hours” for a GPT-4o query with about 500 tokens of output; about 2.5 Wh with 10,000 tokens of input and almost 40 Wh with 100,000. Read cost: (2.5 − 0.3) Wh ÷ 10,000 = 0.22 mWh a token, against 0.3 Wh ÷ 500 = 0.6 mWh for a written token, a ratio of 0.37 (my arithmetic). Published measurements agree that writing costs more per token than reading but give no single ratio.</li>
+<li id="n6">M. Aubakirova et al. (a16z and OpenRouter), <a href="https://arxiv.org/abs/2601.10088">“State of AI: An Empirical 100 Trillion Token Study with OpenRouter”</a>, arXiv:2601.10088: “Average prompt tokens per request have increased roughly fourfold from around 1.5K to over 6K while completions have nearly tripled from about 150 to 400 tokens.” 6,000 ÷ 6,400 = 94% read (my arithmetic).</li>
+<li id="n7">U. Gupta et al., <a href="https://arxiv.org/abs/1906.03109">“The Architectural Implications of Facebook’s DNN-based Personalized Recommendation”</a>, HPCA 2020: recommendation models “comprise up to 79% of AI inference cycles in a production-scale data center”. Meta, “Meta’s Second Generation AI Chip” (MTIA), ISCA 2025: recommendation models “currently represent the majority of inference workloads at Meta”.</li>
+<li id="n8">IEA <i>Key Questions on Energy and AI</i>: energy per AI task “dropping by at least an order of magnitude annually”, but reasoning, agents and video use “hundreds or thousands of times” more per task. The reasoning, agent and video rungs are my order-of-magnitude estimates from that note.</li>
+<li id="n9">Capital spending guidance for calendar 2026, as of late October 2026. Alphabet: “our full‑year 2026 CapEx guidance range of $195‑$205 billion remain unchanged. We continue to expect our CapEx to increase significantly in 2027”; “Approximately 65% of our investments in technical infrastructure in Q3 was related to servers and networking equipment… The remaining 35% was for data centers” (<a href="https://s206.q4cdn.com/479360582/files/doc_events/2026/Oct/28/2026_Q3_Earnings_Transcript.pdf">Q3 2026 call transcript</a>). Microsoft: calendar-year outlook “approximately $170 billion”, cut because “some third-party capacity deliveries we expected in Q1 were delayed”; 75% of the quarter’s $45.2 billion on short-lived assets (<a href="https://www.fool.com/earnings/call-transcripts/2026/10/29/microsoft-msft-q1-2027-earnings-call-transcript/">FY27 Q1 call, Motley Fool transcript</a>). Amazon: about $220 billion for 2026, with increases expected in 2027 (<a href="https://www.fool.com/earnings/call-transcripts/2026/10/30/amazon-amzn-q3-2026-earnings-call-transcript/">Q3 2026 call, Motley Fool transcript</a>). Meta: “We anticipate 2026 capital expenditures, including principal payments on finance leases, to be in the range of $135-145 billion” (<a href="https://www.sec.gov/Archives/edgar/data/1326801/000162828026066700/meta-09302026xexhibit991.htm">third-quarter 2026 results, SEC exhibit 99.1</a>, 21 October 2026). Midpoints sum to $730 billion.</li>
+<li id="n10">Epoch AI, <a href="https://epoch.ai/data-insights/ai-datacenter-cost-breakdown">“Total cost of ownership of a one-gigawatt AI data center”</a> (May 2026): “$38 billion in up-front capital expenditure (CapEx) and $0.9 billion in annual operating expenses”; servers about $21.2 billion, facility $11.4 billion, networking $4.9 billion, land and utility works about $0.3 billion; annualised, $8.5 billion a year, of which servers are 60% and energy $594 million (7%). The model assumes GB200 NVL72 racks, 8.34¢/kWh and a PUE of 1.14. $594 million ÷ 8.34¢ = 7.1 TWh a year, 81% of a gigawatt run all year (my arithmetic).</li>
+<li id="n11">Epoch AI, <a href="https://epoch.ai/data-insights/ai-datacenter-power">AI data-centre capacity</a>: 13.50 GW at the end of 2024 and 31.24 GW at the end of 2025, estimated from the rated power of AI chips sold, times about 2.5 for servers, cooling and infrastructure. Act&nbsp;2’s 26% a year to 316 GW in 2035 is the series’ extrapolation.</li>
+<li id="n12">Google arXiv:2508.15734 (33× per median prompt, May 2024 to May 2025). Google, <a href="https://sustainability.google/reports/google-2025-environmental-report/">2025 Environmental Report</a>: data-centre electricity consumption +27% in 2024 (≈30.6 TWh). Google’s 2026 report: electricity consumption +37% in 2025 (<a href="https://www.datacenterdynamics.com/en/news/googles-electricity-use-grew-37-percent-in-2025-largest-annual-rise-to-date/">DCD summary</a>). Token growth: 9.7 trillion a month (May 2024) to 480 trillion (May 2025), note 1. For the world, the IEA puts all data centres at +17% in 2025.</li>
+</ol>
+
+<footer class="colophon">
+<p>Figures marked <span class="tagline tag-real" style="font-size:.7rem;padding:1px 6px;border-radius:99px">Data</span> use the cited sources; <span class="tagline tag-mixed" style="font-size:.7rem;padding:1px 6px;border-radius:99px">Data + model</span> combine them with the series’ own arithmetic. Figures marked <span class="tagline tag-ill" style="font-size:.7rem;padding:1px 6px;border-radius:99px">Model</span> are simplified models built to show a mechanism; their assumptions are listed under <b>ⓘ data</b>.</p>
+</footer>
+</article>
+</main>
+<script src="app.js"></script>
+<script src="thesis.js"></script>
+</body>
+</html>

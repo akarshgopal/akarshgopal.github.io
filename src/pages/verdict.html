@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Verdict: What the Ledger Says · Can AI outgrow the planet’s power grid?</title>
+<meta name="description" content="Scenario ledger for Act 1 and Act 2: Low, Mid and High paths, the three rungs, 100× by 2035, and what would flip the answer.">
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<button id="play-toggle" type="button" aria-pressed="true" title="Pause all animations">❚❚ Pause</button>
+<main>
+<article>
+<header class="top">
+<h1>The Verdict: What the Ledger Says</h1>
+<p class="byline">Can AI outgrow the planet’s power grid? · the ledger · Low, Mid, High · by Akarsh Gopal, November 2026</p>
+</header>
+
+<div class="brief" role="note" aria-label="In brief"><p><b>In brief.</b> The long-run case: does AI become humanity’s largest use of energy, and is orbit the only way to supply a hundred times today’s AI? The meter built up one lever at a time, a ledger of three settings, and the tripwires.</p><p><b>The surprise.</b> Today’s 55 TWh of inference is 70 times smaller than the first bar and 300 times smaller than the third.</p></div>
+
+<p class="lede">This page holds the series’ long-run case. Act&nbsp;1 asks whether AI inference becomes humanity’s largest use of energy; Act&nbsp;2 asks whether orbital compute is the only way to supply a hundred times today’s AI. Here the meter is built up one lever at a time, three settings (Low, Mid and High) are frozen in a ledger, and the tripwires that would overturn the verdict are written down. It is a ledger, not a forecast. Every default is labelled.</p>
+
+<ol class="toc">
+<li><a href="#act1"><span class="n">1</span>Act 1: the three rungs</a></li>
+<li><a href="#act2"><span class="n">2</span>Act 2: 100× and beyond</a></li>
+<li><a href="#trip"><span class="n">3</span>Tripwires</a></li>
+<li><a href="#final"><span class="n"></span>Final words</a></li>
+</ol>
+
+<h2 id="act1" data-level="S0 H0"><span class="num">1</span>Act 1: the three rungs</h2>
+
+<p>Act&nbsp;1’s question, <i>will AI inference become humanity’s largest energy expenditure?</i>, hides choices, so it is pinned down. “Inference” means serving trained models to people and software, measured at the data-centre meter. “Largest” is tested on three rungs, each with a bar that today’s numbers can check: <b>R1</b>, at least a tenth of the world’s electricity by 2035, about 3,800 TWh; <b>R2</b>, more than any other single use of electricity by 2050, a working bar of 6,000 TWh set by space cooling; <b>R3</b>, more than any other single use of energy at all, fuels included, by 2050, about 17,200 TWh set by heating buildings and water.<sup class="fn"><a href="#n1">1</a></sup><sup class="fn"><a href="#n2">2</a></sup></p>
+
+<p id="anchor">The starting point is the series’ estimate of inference in 2025, <b>55 TWh</b> (band 40–80). Nobody publishes it, so it is derived: about 15% of the IEA’s 415 TWh of data-centre electricity in 2024 went to accelerated servers; a year’s growth and the building’s overhead multiply that by about 1.5; and 60% of it, a share taken from a secondary source, was inference.<sup class="fn"><a href="#n3">3</a></sup> Counting the tokens that Google, OpenAI and Microsoft publish gives only 3 to 8 TWh; the rest is recommendation and ads, unpublished providers, images and video, and reserve (<a class="xref" href="demand.html#tokens">The demand</a>). Today’s 55 TWh is 70 times smaller than R1 and 300 times smaller than R3.</p>
+
+<p>The model is one line. Inference energy in a year is 55 TWh × (growth in people and tasks × growth in tokens per task), raised to a power that climbs from 0 in 2025 to 1 in 2050, fast at first and then saturating; divided by the efficiency gained so far, where the yearly gain halves every twelve years; and capped by the power the world builds for inference, at 8.76 TWh a year per gigawatt. Below it is built one lever at a time.</p>
+
+<figure class="fig showpiece" data-xfig="meterSteps" id="fig-meterSteps">
+<figcaption><span class="tagline tag-ill">Model</span> The same equations as the full meter below, with its Mid defaults: 30× more people and tasks and 45× more tokens per task by 2050; a first-year efficiency gain of 35% that halves every 12 years; 400 GW built for inference by 2050. Step 1 shows demand with no efficiency gain, step 2 adds efficiency, step 3 adds the cap. The bars are R1 (2035), R2 and R3 (2050).<sup class="fn"><a href="#n1">1</a></sup><sup class="fn"><a href="#n2">2</a></sup></figcaption>
+</figure>
+
+<p>Mid is calibrated to land near the IEA’s Base Case. The chain: accelerated servers were about 15% of the IEA’s 415 TWh in 2024, about 62 TWh; the IEA has them growing about 30% a year, so about 300 TWh by 2030 (roughly a third of its 950 TWh for all data centres); a 60% inference share gives about 180 TWh. Mid lands at about 220 TWh in 2030, a little above.<sup class="fn"><a href="#n4">4</a></sup> That calibration is mine, not a forecast. The full meter moves all five levers at once; Low, Mid and High are presets.</p>
+
+<figure class="fig showpiece" data-fig="verdictMeter">
+<figcaption><span class="tagline tag-ill">Model</span> A deliberately simple model, not a forecast. Energy = (2025 inference energy) × (demand growth) ÷ (efficiency gained so far), capped by the power the world builds. 2025 inference energy is a derived estimate of 55 TWh (band 40 to 80).<sup class="fn"><a href="#n3">3</a></sup> Demand is people × tasks a day × tokens per task, rising on a curve that is fast at first and saturates; the yearly efficiency gain halves every few years. <b>The defaults are my calibration</b> so that Mid lands near the IEA’s Base Case for data centres (about 220 TWh of inference in 2030; the IEA’s 2030 total for all data centres is about 950).<sup class="fn"><a href="#n4">4</a></sup> The bars: R1 is 10% of about 37,800 TWh of world electricity in 2035, rounded to 3,800; R3 is 62 EJ of space and water heating in buildings in 2021, about 17,200 TWh;<sup class="fn"><a href="#n1">1</a></sup> R2 is a working 6,000 TWh bar set by the growth of space cooling.<sup class="fn"><a href="#n2">2</a></sup> “Other uses grow” scales the bars. The band is the 2025 band, widened by the forecast band you choose. <b>YES</b> means the central estimate reaches the bar and the low end is within 2× of it; <b>NO</b> means even the high end falls short; otherwise <b>UNRESOLVED</b>. The two diamonds are tripwires, observable by 2030 and 2035: filled green means the path meets them. Press <b>To make this YES, set…</b> to see that R3 needs several levers at once.</figcaption>
+</figure>
+
+<p id="meter-live" class="meter-live" aria-live="polite">On this path the meter fills the numbers: 2035 and 2050 energy, the three bars, and YES / NO / UNRESOLVED for each rung. Move a slider or a Low / Mid / High preset and this paragraph updates with it.</p>
+
+<table class="ledger" id="ledger-act1" data-live="presets">
+<thead><tr><th>Result</th><th>Low</th><th>Mid (IEA-like)</th><th>High</th></tr></thead>
+<tbody>
+<tr><td>2030 inference</td><td>~114 TWh</td><td>~220 TWh</td><td>~292 TWh</td></tr>
+<tr><td>2035 inference</td><td>~146 TWh</td><td>~486 TWh</td><td>~796 TWh</td></tr>
+<tr><td>2050 inference</td><td>~100 TWh</td><td>~999 TWh</td><td>~2,347 TWh</td></tr>
+<tr><td>R1 (3,800 TWh, 2035)</td><td>NO</td><td>NO</td><td>NO</td></tr>
+<tr><td>R2 (6,000 TWh, 2050)</td><td>NO</td><td>NO</td><td>UNRESOLVED</td></tr>
+<tr><td>R3 (17,200 TWh, 2050)</td><td>NO</td><td>NO</td><td>NO</td></tr>
+</tbody>
+</table>
+<p class="aside"><b>Read the cells as model output under labelled assumptions</b>, not as predictions. The numbers are filled from the Low / Mid / High presets when the page loads, not from the live sliders above. High still misses R1 and R3; R2 is <b>UNRESOLVED</b> under High, because the band reaches the bar but the central path does not clearly clear it. The meter’s solver reaches R3 only with power built for inference near 3,000 GW and tokens per task above a thousand times today’s, together, not alone.</p>
+
+<h2 id="act2" data-level="H0"><span class="num">2</span>Act 2: 100× and beyond</h2>
+
+<p>Compute is power times efficiency, so a hundred times today’s AI is not a hundred times today’s power. If chips gain 40% a year for a decade, they do 1.4<sup>10</sup> ≈ 29 times more per watt, and 100× today’s compute needs 31.2 GW × 100 ÷ 29 ≈ <b>108 GW</b>, about 3.5 times today’s AI data-centre capacity.<sup class="fn"><a href="#n5">5</a></sup> The grid’s ceiling of 316 GW in 2035 is <b>my extrapolation</b>: Epoch’s capacity more than doubled in 2025, and I assume growth slows to 26% a year. Whether the money keeps up with that is tested on <a class="xref" href="demand.html#capex">The demand</a>; whether the grid does, on <a class="xref" href="binds.html">What binds</a>. Under it, 100× needs no orbit. But 100× in ten years is only about 1.6× a year, itself a sharp slowdown: at 2025’s growth, 2035 would be a thousand to ten thousand times today.</p>
+
+<figure class="fig showpiece" data-fig="ceilingMeter">
+<figcaption><span class="tagline tag-ill">Model</span> The need is P = 31.2 GW × (multiple) ÷ (efficiency gained), with the efficiency gain capped at the value you set. 31.2 GW is Epoch AI’s estimate of AI data-centre capacity at the end of 2025 (13.5 GW a year earlier; rated capacity including cooling, not average draw).<sup class="fn"><a href="#n5">5</a></sup> The grid’s ceiling defaults to 316 GW for 2035 (Epoch’s capacity more than doubled in 2025; I assume growth slows to 26% a year, <b>my extrapolation</b>) and to 600 and 1,500 GW for 2040 and 2050 (<b>my assumptions</b>). Orbit adds launches a year × 150 tonnes ÷ mass per kilowatt, summed from 2029 (the year of the first large deployments planned, <b>my assumption</b>) but only over the last five years: satellites retire after a five-year life, the same life as the launch-cost floor on <a href="orbital.html#launch">Orbital</a> (<b>my assumption</b>; a slider under More assumptions). The verdict follows the series’ rule: <b>NO</b> if the grid alone suffices, or if even grid plus orbit falls short; <b>YES</b> only if orbit is both needed and enough. The need, the ceiling and orbit are all rated capacity, so they compare like with like; the electricity and energy reference marks are <b>average</b> draw (a year’s energy ÷ 8,760 h), and the world’s generating capacity is several times larger than that, so against them a capacity bar looks somewhat bigger than it is. Reference marks: Epoch AI; IEA (28,200 TWh a year ≈ 3,219 GW average); about 19,000 GW (600 EJ of primary energy a year, Energy Institute); and sunlight on Earth, 1,361 W/m² × π(6,371 km)² = 1.74 × 10¹⁷ W.<sup class="fn"><a href="#n6">6</a></sup></figcaption>
+</figure>
+
+<p>At 100× by 2035 the answer is a plain no: the grid on its present trend gets there without orbit. The claim bites at a thousand or ten thousand times, and there orbit is limited in tonnes: a hundred gigawatts is over a million tonnes, and Forethought sums the FAA’s site approvals for Starship to 145 launches a year.<sup class="fn"><a href="#n7">7</a></sup> Try the launches slider under <b>More assumptions</b>. What a launched kilowatt-hour costs, and why that is a floor rather than a price, is worked through on <a class="xref" href="orbital.html#launch">Orbital</a>.</p>
+
+<h2 id="trip" data-level="S0"><span class="num">3</span>Tripwires</h2>
+
+<p>Two observables keep the long-run case falsifiable without waiting for 2050: inference of at least <b>300 TWh by 2030</b>, and at least <b>1,000 TWh by 2035</b>. Both are mine. If the path misses them, R1 to R3 are effectively dead under this model. For scale, the IEA’s 2035 range for <i>all</i> data centres is 700 to 1,700 TWh.<sup class="fn"><a href="#n4">4</a></sup> The sources to watch are the IEA’s <i>Energy and AI</i> updates, Ember, the Energy Institute’s <i>Statistical Review</i> and, for the near term, the token counts and capital spending tracked on <a class="xref" href="demand.html">The demand</a>.</p>
+
+<h2 id="final" data-level="S0 H0">Final words</h2>
+
+<p>Under Mid assumptions the answer on Act&nbsp;1 is NO on every rung, and on Act&nbsp;2 the grid alone covers 100× by 2035. The interesting region is the joint tail: many levers moved together, or a much larger multiple. Mark the tripwires and return when the next IEA number lands. The near-term question, whether the grid can connect what AI is buying this decade, is on <a class="xref" href="binds.html">What binds</a>; the case map on <a href="index.html#map">the front page</a> shows which pages feed which slider.</p>
+
+<h2 id="notes">Notes and sources</h2>
+<ol class="notes">
+<li id="n1">R1: 10% of about 37,800 TWh of world electricity in 2035 (IEA <i>World Energy Outlook 2025</i>, where the Current Policies and Stated Policies scenarios reach “essentially the same level”), rounded to 3,800. R3: IEA, <i>The Future of Heat Pumps</i> (2022), §1.2: “Global energy demand for space and water heating amounted to 62 exajoules (EJ) in 2021” ≈ 17,200 TWh at 277.8 TWh per EJ. Using the 2021 level as the 2050 bar is conservative if heating energy falls with efficiency. World electricity in 2050 for the share readouts: about 60,000 TWh (<b>my assumption</b>).</li>
+<li id="n2">R2 working bar: IEA commentary <a href="https://www.iea.org/commentaries/cooling-a-hotter-world-el-nino-meets-strong-growth-in-global-electricity-demand">“Cooling a hotter world…”</a> (10 July 2026): space cooling about 2,900 TWh in 2025 and 1,600 TWh more by 2035 under today’s policies (about 4,500). IEA space-cooling tracking: consumption to “more than double by 2050 with no action taken”, so at least 5,800, rounded to 6,000. The free <i>WEO 2025</i> dataset does not publish a single “largest electricity end-use in 2050”. Industrial motor systems used about 10,400 TWh in 2023 (IEA-4E EMSA policy brief) but span many end-uses, so they are not used as R2.</li>
+<li id="n3"><b>Derived.</b> 15% accelerated-server share (my reading of the IEA’s equipment split; server level) × 415 TWh (2024) × 1.5 (1.3 for the IEA’s growth to 2025 × about 1.15 for the building’s overhead) × <b>60% inference share</b> (secondary: arXiv:2509.07218, citing Google’s reported split) ≈ 55 TWh. A 40% share gives about 37; 80% about 73. Band 40–80. IEA <a href="https://www.iea.org/reports/energy-and-ai">Energy and AI</a> (April 2025), <a href="https://www.iea.org/reports/key-questions-on-energy-and-ai">Key Questions on Energy and AI</a> (2026). World electricity 28,200 TWh in 2025: IEA <a href="https://www.iea.org/reports/electricity-2026">Electricity 2026</a>.</li>
+<li id="n4">IEA, <i>Energy and AI</i> and <i>Key Questions on Energy and AI</i>: data centres 415 TWh in 2024 and 485 TWh in 2025; about 950 TWh in 2030 on about 225 GW of capacity (Base Case); in 2035 about 700 TWh (Headwinds), 970 (High-Efficiency), 1,200 (Base) and over 1,700 (Lift-Off), all data centres, not only inference. Accelerated-server consumption “is projected to grow by 30% annually in the Base Case” (<a href="https://www.iea.org/reports/energy-and-ai/energy-demand-from-ai">Energy demand from AI</a>). 0.15 × 415 ≈ 62 TWh; 62 × 1.3<sup>6</sup> (six years of 30%, 2024 to 2030) ≈ 300 TWh; × 0.60 ≈ 180 TWh. Tripwires (300 and 1,000 TWh) are mine.</li>
+<li id="n5">Epoch AI, <a href="https://epoch.ai/data-insights/ai-datacenter-power">AI data-centre capacity</a>: 13.50 GW at the end of 2024 and 31.24 GW at the end of 2025, from the rated power of AI chips sold, times about 2.5 for servers, cooling and infrastructure. Hardware efficiency of about 40% a year: a secondary summary of Epoch’s hardware data (“Leading ML hardware becomes 40% more energy-efficient each year”). The IEA’s 485 TWh for all data centres is an average draw of about 55 GW, a different quantity.</li>
+<li id="n6">Energy Institute, <i>Statistical Review of World Energy 2026</i>: 600.3 EJ of primary energy in 2025 (about 19 TW). Solar constant 1,361 W/m², as quoted in Google’s Project Suncatcher paper, <a href="https://arxiv.org/abs/2511.19468">arXiv:2511.19468</a>.</li>
+<li id="n7">Forethought, <a href="https://forethought.org/research/will-we-really-put-data-centers-in-space">“Will we really put data centers in space?”</a> (22 May 2026; not peer-reviewed, and its authors lean towards the idea): 145 Starship launches a year as the FAA limit, which appears to be their sum of per-site approvals (not independently checked here). Tonnage: 100 GW × 13 to 40 kg/kW = 1.3 to 4 million tonnes, about 8,700 to 26,700 launches at 150 tonnes each (my arithmetic).</li>
+</ol>
+
+<footer class="colophon">
+<p>Figures marked <span class="tagline tag-real" style="font-size:.7rem;padding:1px 6px;border-radius:99px">Data</span> use the cited sources; <span class="tagline tag-mixed" style="font-size:.7rem;padding:1px 6px;border-radius:99px">Data + model</span> combine them with the series’ own arithmetic. Figures marked <span class="tagline tag-ill" style="font-size:.7rem;padding:1px 6px;border-radius:99px">Model</span> are simplified models built to show a mechanism; their assumptions are listed under <b>ⓘ data</b>.</p>
+</footer>
+</article>
+</main>
+<script src="app.js"></script>
+<script src="thesis.js"></script>
+</body>
+</html>

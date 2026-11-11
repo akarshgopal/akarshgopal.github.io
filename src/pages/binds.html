@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>What Binds, 2026–30: Chips, Power, Permits or Money? · Can AI outgrow the planet’s power grid?</title>
+<meta name="description" content="What limits AI’s growth this decade: firm power, grid connections and transformers, chips and memory, permits, or money. A ranking with the evidence, mostly from the United States.">
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<button id="play-toggle" type="button" aria-pressed="true" title="Pause all animations">❚❚ Pause</button>
+<main>
+<article>
+<header class="top">
+<h1>What Binds, 2026–30: Chips, Power, Permits or Money?</h1>
+<p class="byline">Can AI outgrow the planet’s power grid? · a deep dive · the near-term constraints · by Akarsh Gopal, November 2026</p>
+</header>
+
+<div class="brief" role="note" aria-label="In brief"><p><b>In brief.</b> What limits AI’s growth to 2030: firm power, grid connections and transformers, chips and memory, permits and money, ranked with the evidence.</p><p><b>The surprise.</b> In energy the US grid is keeping up: the plants planned for 2026 would make about 159 TWh a year, more than twice what data centres add each year. Power at every hour is the shortage.</p></div>
+
+<p class="lede">Four companies plan to spend about $730 billion on data centres and chips in 2026, enough for about 19 GW of AI capacity in a year.<sup class="fn"><a href="#n1">1</a></sup> Something has to deliver those gigawatts: chips, memory, buildings, power plants, wires, transformers, permits and the money itself. This page ranks them by how hard they bind between now and 2030, with the evidence for each, mostly from the United States, where nearly half of the world’s data-centre electricity is used.</p>
+
+<p>The ranking is mine. The short version: <b>energy is not the shortage; power at the right place and hour is.</b> The United States is building more kilowatt-hours a year than its data centres will add, but the plant that can run at any hour, and the connections and transformers that bring it to a site, are booked years ahead. Chips and memory come next, and money last.</p>
+
+<ol class="toc">
+<li><a href="#balance"><span class="n">1</span>Energy against power</a></li>
+<li><a href="#ranked"><span class="n">2</span>The constraints, ranked</a></li>
+<li><a href="#power"><span class="n">3</span>Firm power and the connection</a></li>
+<li><a href="#chips"><span class="n">4</span>Chips and memory</a></li>
+<li><a href="#money"><span class="n">5</span>Money and permits</a></li>
+<li><a href="#final"><span class="n"></span>Final words</a></li>
+</ol>
+
+<h2 id="balance" data-level="S0 H0"><span class="num">1</span>Energy against power</h2>
+
+<p>Start with what the grid has to supply. The Lawrence Berkeley National Laboratory estimates that US data centres used 176 TWh in 2023 and, in the reference case of its 2026 update, 649 TWh in 2030, with bounds of 521 and 843.<sup class="fn"><a href="#n2">2</a></sup> That is about <b>68 TWh</b> of new demand a year. The Energy Information Administration expects the country’s total electricity sales to grow from 4,135 TWh in 2026 to 4,211 TWh in 2027, by 76 TWh.<sup class="fn"><a href="#n3">3</a></sup> On these numbers data centres are nearly all of America’s demand growth.</p>
+
+<p>Now what is being built. Developers planned to add a record 86 GW of generating capacity in 2026: 43.4 GW of solar, 24 GW of batteries, 11.8 GW of wind and 6.3 GW of gas; 53 GW were added in 2025.<sup class="fn"><a href="#n4">4</a></sup> Run at the average capacity factors of 2025, the solar, wind and gas would make about 159 TWh a year, more than twice what data centres add.<sup class="fn"><a href="#n5">5</a></sup> In energy, the grid is keeping up.</p>
+
+<figure class="fig showpiece" data-xfig="usBalance" id="fig-usBalance">
+<figcaption><span class="tagline tag-mixed">Data + model</span> Data-centre growth: LBNL, 176 TWh (2023) to 649 TWh (2030, Reference Case; band from its 521–843 TWh bounds), ÷ 7 years.<sup class="fn"><a href="#n2">2</a></sup> All US sales: EIA <i>Short-Term Energy Outlook</i>, September 2026.<sup class="fn"><a href="#n3">3</a></sup> New generation: EIA’s planned 2026 additions<sup class="fn"><a href="#n4">4</a></sup> × 2025 capacity factors from the EIA’s <i>Electric Power Monthly</i> (solar 24.0%, wind 33.8%, gas at the combined-cycle 58.7%, which flatters gas if many of the new units are peakers) × 8,760 h, my arithmetic.<sup class="fn"><a href="#n5">5</a></sup> Batteries store energy rather than make it, so they add nothing to the energy bar. Peak growth: Grid Strategies’ five-year forecast of 166 GW, of which about 90 GW is data centres, divided by five; it notes that utility forecasts may overstate data-centre growth by about 40%.<sup class="fn"><a href="#n6">6</a></sup> The share actually built is a slider because planned capacity is often delayed; the default, all of it, is <b>my assumption</b>.</figcaption>
+</figure>
+
+<p>At the peak the picture flips. Grid Strategies’ survey of utility forecasts has US peak demand growing 166 GW in five years, about 90 GW of it from data centres, or 18 GW a year.<sup class="fn"><a href="#n6">6</a></sup> Against that, the 2026 build adds 6.3 GW of gas that can run at any hour and 24 GW of batteries that can cover a peak for a few hours. The 55 GW of solar and wind add energy but little power on a still winter evening. A data centre wants power every hour of the year, so it is the firm part of the build that it competes for, and the firm part is small.</p>
+
+<h2 id="ranked" data-level="S0"><span class="num">2</span>The constraints, ranked</h2>
+
+<table class="ledger" id="ranking">
+<thead><tr><th>Rank</th><th>Constraint</th><th>Evidence</th></tr></thead>
+<tbody>
+<tr><td>1</td><td>Firm power at the site</td><td>GE Vernova’s gas-turbine backlog and reservations reached 122 GW in October 2026; it is now selling slots for delivery in 2032. Sites build their own gas plants to get round the grid.<sup class="fn"><a href="#n7">7</a></sup></td></tr>
+<tr><td>2</td><td>The connection: queues and transformers</td><td>About 2,060 GW waiting to connect at the end of 2025, with a median of over five years from request to operation; a 30% shortfall of power transformers in 2025, with 80% of them imported.<sup class="fn"><a href="#n8">8</a></sup><sup class="fn"><a href="#n9">9</a></sup></td></tr>
+<tr><td>3</td><td>Chips and memory</td><td>Advanced packaging capacity reported to grow from about 75,000–80,000 wafers a month at the end of 2025 to 120,000–130,000 at the end of 2026; SK hynix has more than half of its 2027–28 memory capacity under long-term contracts.<sup class="fn"><a href="#n10">10</a></sup></td></tr>
+<tr><td>4</td><td>Permits</td><td>Air permits for on-site turbines and local objections to large campuses; slow, but site by site rather than system-wide.<sup class="fn"><a href="#n7">7</a></sup></td></tr>
+<tr><td>5</td><td>Money</td><td>$730 billion committed for 2026 by four firms; Microsoft cut its 2026 spending because data-centre capacity it had contracted was late, not because money was short.<sup class="fn"><a href="#n1">1</a></sup></td></tr>
+</tbody>
+</table>
+
+<p>The order is a judgement, and the evidence for the bottom of the table is the clearest. When the largest buyers report that spending is waiting on buildings and power, money is not what binds. The top is harder to prove, because a shortage of firm power shows up as delay and price rather than as a single number.</p>
+
+<h2 id="power" data-level="S0 H0"><span class="num">3</span>Firm power and the connection</h2>
+
+<p>The quickest firm power is a gas turbine, and there are not enough of them. GE Vernova, the largest maker, ended the third quarter of 2026 with 122 GW of gas equipment in backlog and slot reservations, up from 116 GW a quarter earlier, and expects at least 130 GW by the end of the year; it shipped 5 GW in the quarter.<sup class="fn"><a href="#n7">7</a></sup> At that rate the queue is six years long, and on its October call the company said it had sold slots for delivery in 2032.</p>
+
+<p>So the largest sites build their own. xAI’s Colossus in Memphis received a permit in July 2025 for 15 gas turbines of up to 247 MW, and environmental lawyers counted more than twice as many on site before then; the Stargate site at Abilene, Texas, applied to run ten gas turbines and 62 emergency generators of its own, reported at about 360 MW of turbines.<sup class="fn"><a href="#n7">7</a></sup> Generation behind the meter skips the interconnection queue, but not the turbine queue or the air permit.</p>
+
+<p>Plants that do connect to the grid wait in line. At the end of 2025 about 8,200 projects, 1,312 GW of generation and 749 GW of storage, were waiting for an interconnection study in the United States, and the median project built in 2025 had spent more than five years between asking to connect and starting to operate.<sup class="fn"><a href="#n8">8</a></sup> Only 13% of the capacity that asked to connect from 2000 to 2020 had been built by the end of 2025. The electricity series explains why studies take so long and who pays for the upgrades they find, in <a class="xref" href="../electricity/transmission.html#planning">Planning, permitting and who pays</a>.</p>
+
+<p>Each new plant and each new campus also needs transformers. Wood Mackenzie estimated a 30% shortfall in the supply of large power transformers in the United States in 2025, with imports making up about 80% of supply.<sup class="fn"><a href="#n9">9</a></sup> Why a transformer takes years to make is the subject of <a class="xref" href="../electricity/transformers.html#shortage">The transformer shortage</a> in the electricity series, and what firm power costs to build is in <a class="xref" href="../electricity/price.html">What a power plant costs</a>.</p>
+
+<h2 id="chips" data-level="S0"><span class="num">4</span>Chips and memory</h2>
+
+<p>Chips bind too, but they have been growing faster than power. Epoch AI’s estimate of AI data-centre capacity, built from the chips sold, rose from 13.5 GW to 31 GW in 2025, a factor of 2.3.<sup class="fn"><a href="#n11">11</a></sup> The tightest steps are packaging, which joins each GPU to its memory, and the memory itself. TSMC’s advanced packaging capacity is reported to grow by about 60% in 2026, and SK hynix, the largest maker of high-bandwidth memory, says long-term agreements already cover more than half of its production capacity for 2027 and 2028.<sup class="fn"><a href="#n10">10</a></sup> TSMC does not publish its packaging capacity, so that figure is the weakest evidence on this page. A chip without power is still a chip in a warehouse, and Microsoft’s report of delayed capacity suggests that this, not the reverse, was the more common problem in 2026.</p>
+
+<h2 id="money" data-level="S0"><span class="num">5</span>Money and permits</h2>
+
+<p>Money binds last, for now. The four largest buyers expect to spend about $730 billion in 2026, and Alphabet and Amazon expect to spend more in 2027.<sup class="fn"><a href="#n1">1</a></sup> Microsoft lowered its 2026 outlook to about $170 billion because “some third-party capacity deliveries we expected in Q1 were delayed”: the money was ready before the buildings and the power were. That could change quickly if the revenue does not follow; <a class="xref" href="demand.html#capex">The demand</a> shows that the series’ grid ceiling for 2035 needs this spending to keep rising by about 8.5% a year.</p>
+
+<p>Permits sit between. Air permits for on-site turbines, water for cooling, and local objections to campuses of a gigawatt or more slow individual sites, and they push developers towards places where power and permission are easier to get. They rarely stop the system as a whole.</p>
+
+<h2 id="final" data-level="S0 H0">Final words</h2>
+
+<p>This decade, AI’s growth is limited less by chips or money than by power that runs at every hour and can be connected where the data centre is. The United States is adding kilowatt-hours fast enough; it is not adding firm capacity, connections and transformers as fast as the money now committed would use them. The tripwire for this page is simple to check: if US data-centre use tracks LBNL’s reference case of about 650 TWh in 2030, the grid kept up; if it falls well short while spending stays high, power was the bind.</p>
+
+<h2 id="notes">Notes and sources</h2>
+<ol class="notes">
+<li id="n1">Capital spending guidance for calendar 2026: Alphabet $195–205 billion; Amazon about $220 billion; Microsoft about $170 billion; Meta $135–145 billion; midpoints sum to $730 billion. Sources and quotes in <a href="demand.html#n9">The demand, note 9</a>. Cost per gigawatt, $38 billion: Epoch AI (<a href="demand.html#n10">The demand, note 10</a>). US share of data-centre electricity: the IEA puts the United States at roughly 45% of the world total in 2024 (<i>Energy and AI</i>).</li>
+<li id="n2">LBNL, <a href="https://eta-publications.lbl.gov/publications/united-states-data-center-energy-2025">United States Data Center Energy Usage Report, 2025 update</a> (2026): “The Reference Case estimate for electricity use (649 TWh in 2030)… producing the ultimate estimate bounds of 521-843 TWh of U.S. data center electricity consumption in 2030.” LBNL, 2024 United States Data Center Energy Usage Report (December 2024): 176 TWh in 2023, 4.4% of US electricity. (649 − 176) ÷ 7 = 68 TWh a year (my arithmetic).</li>
+<li id="n3">EIA, <a href="https://www.eia.gov/outlooks/steo/archives/sep26.pdf">Short-Term Energy Outlook, September 2026</a>: “We expect electricity sales in the United States to total 4,135 billion kilowatthours (BkWh) in 2026 and 4,211 BkWh in 2027, driven by data center development and increased manufacturing activity.”</li>
+<li id="n4">EIA, <a href="https://www.eia.gov/todayinenergy/detail.php?id=67205">Today in Energy</a> (20 February 2026): “U.S. power plant developers and operators plan to add 86 gigawatts (GW) of new utility-scale electric generating capacity to the U.S. power grid in 2026”; solar 43.4 GW, batteries 24 GW, wind 11.8 GW, natural gas 6.3 GW. “In 2025, 53 GW of new capacity was added to the grid, the largest capacity installation in a single year since 2002.”</li>
+<li id="n5">EIA, <i>Electric Power Monthly</i>, Tables <a href="https://www.eia.gov/electricity/monthly/epm_table_grapher.php?t=epmt_6_07_a">6.07.A</a> and <a href="https://www.eia.gov/electricity/monthly/epm_table_grapher.php?t=epmt_6_07_b">6.07.B</a>, 2025 capacity factors: solar photovoltaic 24.0%, wind 33.8%, natural-gas combined cycle 58.7%. 43.4 × 0.240 + 11.8 × 0.338 + 6.3 × 0.587 = 18.1 GW of average output, × 8.76 = 159 TWh a year (my arithmetic).</li>
+<li id="n6">Grid Strategies, <a href="https://gridstrategiesllc.com/wp-content/uploads/Grid-Strategies-National-Load-Growth-Report-2025.pdf">National Load Growth Report 2025</a> (November 2025): five-year summer peak growth of 166 GW; “Data Centers 90 GW ~55%”; utility load forecasts “collectively overstate data center-driven load growth by about 40%”.</li>
+<li id="n7">GE Vernova, <a href="https://www.sec.gov/Archives/edgar/data/1996810/000199681026000162/gevpressrelease3q26.htm">third-quarter 2026 results</a> (28 October 2026): “Gas Power equipment backlog and slot reservation agreements grew from 116 to 122 GW; now anticipate reaching at least 130 GW by year-end 2026”; 5 GW of equipment shipped in the quarter. 122 ÷ (5 × 4) ≈ 6 years (my arithmetic). GE Vernova, <a href="https://www.gevernova.com/sites/default/files/gev_webcast_transcript_10282026.pdf">third-quarter call transcript</a> (28 October 2026): “This quarter, we sold multiple slots for 2032 delivery.” xAI: Shelby County Health Department permit for 15 turbines of up to 247 MW, July 2025; the Southern Environmental Law Center’s count of 35 turbines, about 422 MW, before that (<a href="https://techcrunch.com/2025/07/03/xai-gets-permits-for-15-natural-gas-generators-at-memphis-data-center/">TechCrunch, 3 July 2025</a>). Stargate Abilene (Longhorn Data Center): Texas Commission on Environmental Quality, federal operating permit O4721, <a href="https://www.tceq.texas.gov/assets/public/permitting/air/reports/applications/37589-tc.pdf">application</a> (2025): five Solar Titan 350 and five GE LM2500 turbines and 62 emergency generators; about 360 MW of turbines as reported by Cleanview (secondary).</li>
+<li id="n8">LBNL, <a href="https://eta-publications.lbl.gov/bibcite/reference/36938">Queued Up: 2026 Edition</a>: “As of the end of 2025, there were ~8,200 projects actively seeking grid interconnection in the U.S., representing 1,312 GW of generation and approximately 749 GW of storage”; “the median duration from IR to COD was over 5 years for projects built in 2025”; “Only 13% of capacity that submitted interconnection requests from 2000-2020 had reached commercial operations by the end of 2025.”</li>
+<li id="n9">Wood Mackenzie, <a href="https://www.woodmac.com/press-releases/power-transformers-and-distribution-transformers-will-face-supply-deficits-of-30-and-10-in-2025/">press release</a> (August 2025): “a supply shortage for power and distribution transformers to hit 30% and 10%, respectively, in 2025”; “In 2025, imports will account for an estimated 80% of US power transformer supply.”</li>
+<li id="n10">TSMC CoWoS capacity: about 75,000–80,000 wafers a month at the end of 2025 and a target of about 120,000–130,000 at the end of 2026, analyst and supply-chain estimates reported by TrendForce (December 2025; June and September 2026); TSMC does not publish the figure. SK hynix, “SK hynix Announces 3Q26 Financial Results” (28 October 2026, <a href="https://www.webull.com/news/15822865136734208">as distributed</a>): “The company has currently signed LTAs with 14 major customers… The LTA volume secured to date corresponds to more than 50% of total production capacity for 2027 and 2028.”</li>
+<li id="n11">Epoch AI, <a href="https://epoch.ai/data-insights/ai-datacenter-power">AI data-centre capacity</a>: 13.50 GW at the end of 2024, 31.24 GW at the end of 2025.</li>
+</ol>
+
+<footer class="colophon">
+<p>Figures marked <span class="tagline tag-real" style="font-size:.7rem;padding:1px 6px;border-radius:99px">Data</span> use the cited sources; <span class="tagline tag-mixed" style="font-size:.7rem;padding:1px 6px;border-radius:99px">Data + model</span> combine them with the series’ own arithmetic. Figures marked <span class="tagline tag-ill" style="font-size:.7rem;padding:1px 6px;border-radius:99px">Model</span> are simplified models built to show a mechanism; their assumptions are listed under <b>ⓘ data</b>.</p>
+</footer>
+</article>
+</main>
+<script src="app.js"></script>
+<script src="thesis.js"></script>
+</body>
+</html>

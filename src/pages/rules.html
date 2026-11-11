@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rules: Switch, Gate, Adder, Program · Can AI outgrow the planet’s power grid?</title>
+<meta name="description" content="An interactive explainer: two switches that add, a relay that throws a relay, and a machine that can imitate any other. What a computation is, physically.">
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<button id="play-toggle" type="button" aria-pressed="true" title="Pause all animations">❚❚ Pause</button>
+<main>
+<article>
+<header class="top">
+<h1>Rules: Switch, Gate, Adder, Program</h1>
+<p class="byline">Can AI outgrow the planet’s power grid? · a deep dive · from two lamps to a universal machine · by Akarsh Gopal, October 2026</p>
+</header>
+
+<div class="brief" role="note" aria-label="In brief"><p><b>In brief.</b> This page builds a computer out of switches: gates that add, relays that throw relays, and a machine that can run any program, before the series asks what each flip costs.</p><p><b>The surprise.</b> Konrad Zuse’s Z3 of 1941, a programmable computer, did its arithmetic with about 2,600 relays.</p></div>
+
+<p class="lede">Take two light switches and two lamps, wire them the right way, and they add: flip both on and the lamp that means “two” lights up. A chatbot answering a question is the same idea, scaled up to a few hundred billion switches, flipping billions of times a second in a pattern that a program wrote down. This page asks what that pattern <i>is</i>, physically, before the rest of the series asks how much energy it costs.</p>
+
+<p>It opens the physics stack of Act&nbsp;1. The <a class="xref" href="yardstick.html">Yardstick</a> set the bars; this page says what a computation <i>is</i> as switches. <a class="xref" href="flip.html">The Price of a Flip</a> prices one switch; <a class="xref" href="model.html">A model</a> asks what we are paying those flips to compute.</p>
+
+<ol class="toc">
+<li><a href="#sum"><span class="n">1</span>A sum made of switches</a></li>
+<li><a href="#relay"><span class="n">2</span>A switch that throws a switch</a></li>
+<li><a href="#tape"><span class="n">3</span>Rules on a tape</a></li>
+<li><a href="#final"><span class="n"></span>Final words</a></li>
+</ol>
+
+<h2 id="sum" data-level="H8 H7"><span class="num">1</span>A sum made of switches</h2>
+
+<p>Take two light switches and two <b class="c-yellow">lamps</b>. Wire the first lamp so it lights when exactly one switch is on, and the second so it lights only when both are. Now read the switches as numbers, off is 0 and on is 1, and read the lamps as a two-digit answer.</p>
+
+<figure class="fig" data-fig="switchAdder">
+<figcaption><span class="tagline tag-ill">Model</span> Two switches and two lamps. The boxes are just wiring: one passes current when exactly one input is on, the other when both are. Tap the switches.</figcaption>
+</figure>
+
+<p>Every case comes out right. 0 + 0 lights nothing. 1 + 0 lights the right-hand lamp. 1 + 1 lights only the left-hand one, which reads “10”: one two and no ones, in the counting system that uses only the digits 0 and 1, called <b>binary</b>. The two boxes are the first <b>logic gates</b> of this essay; engineers call them XOR (“exclusive or”) and AND.</p>
+
+<p>Arithmetic, comparison and memory are all just patterns of switches driving switches. Who first showed that, and why it holds for any switch, comes in the next section.</p>
+
+<p>To add bigger numbers, copy the box. Each copy adds three bits, one from each number plus the <b class="c-orange">carry</b> from the column to its right, exactly as in long addition at school.</p>
+
+<figure class="fig" data-fig="rippleAdder">
+<figcaption><span class="tagline tag-ill">Model</span> Four 1-bit adders in a row make a 4-bit adder. Each “add 3 bits” box contains five gates like the two above. The carry has to travel from the right-hand column to the left before the answer is final; the grey boxes are still waiting.</figcaption>
+</figure>
+
+<p>Two things already show. First, the answer is not instant: each column has to wait for the carry from its neighbour, so a wider adder is slower unless it is cleverer. Second, every change flips some of the little switches inside: two to five usually, and up to thirteen of the twenty when a carry ripples all the way along. Hold on to both. Speed and the number of flips will decide everything that follows.</p>
+
+<details class="math"><summary>The maths: binary and the full adder</summary>
+<p>A binary number with digits b<sub>3</sub>b<sub>2</sub>b<sub>1</sub>b<sub>0</sub> means 8b<sub>3</sub> + 4b<sub>2</sub> + 2b<sub>1</sub> + b<sub>0</sub>. One full adder takes bits a, b and an incoming carry c and produces</p>
+<p class="eq">sum = a ⊕ b ⊕ c,   carry = (a ∧ b) ∨ (c ∧ (a ⊕ b))</p>
+<p>where ⊕ is XOR, ∧ is AND and ∨ is OR: two XORs, two ANDs and one OR, the five gates the figure counts.</p>
+</details>
+
+
+<h2 id="relay" data-level="H9 H8"><span class="num">2</span>A switch that throws a switch</h2>
+
+<p>A light switch needs a hand; a relay needs only a current. Telephone exchanges were built from relays by the million. In his 1937 master’s thesis at MIT, Claude Shannon showed that circuits of relays obey the algebra of logic that George Boole had written down in 1854: contacts one after the other behave like AND, contacts side by side like OR.<sup class="fn"><a href="#n1">1</a></sup> Wire two relays both ways below.</p>
+
+<figure class="fig" data-fig="relayLogic">
+<figcaption><span class="tagline tag-ill">Model</span> Two relays drawn as mechanisms. Each key energises a <b class="c-blue">coil</b>, which pulls an <b class="c-blue">armature</b> that closes a contact; the lamp runs from a separate battery through those contacts. Series wiring is AND; side-by-side is OR. Timing and geometry are schematic.</figcaption>
+</figure>
+
+<p>The important part is easy to miss: the keys never touch the lamp’s circuit. The lamp’s current comes from its own battery, and it could just as well feed the coils of other relays, so one switch can drive several more and logic can be stacked as deep as you like. Konrad Zuse’s Z3 of 1941 used about 2,600 relays this way.<sup class="fn"><a href="#n2">2</a></sup> The catch is the lever. It has mass, so it takes milliseconds to move, and it wears.</p>
+
+
+<p>Here is that stack as a mechanism: A’s contact throws B’s coil. No second key.</p>
+
+<figure class="fig" data-fig="relayCascade">
+<figcaption><span class="tagline tag-ill">Model</span> Same relay object as above: coil, armature, contact. Default mid-action with A closed and B pulling. Timing schematic.</figcaption>
+</figure>
+
+<h2 id="tape" data-level="H7"><span class="num">3</span>Rules on a tape</h2>
+
+<p>An adder does one thing. The leap that made computers was a machine that could be told what to do. Charles Babbage proposed a mechanical Difference Engine to the Astronomical Society (later the Royal Astronomical Society) in 1822 and later designed a far more general Analytical Engine, programmed with punched cards; neither was finished in his lifetime.<sup class="fn"><a href="#n3">3</a></sup> In 1843 Ada Lovelace published notes on the Analytical Engine that include a step-by-step method for computing Bernoulli numbers, usually counted as the first published program, and the observation that such a machine could manipulate symbols of any kind, not only numbers.<sup class="fn"><a href="#n3">3</a></sup></p>
+
+<p>In 1936 Alan Turing asked what it means for anything to be computable at all, and answered with a machine so simple it fits in a figure: a tape of squares, a head that reads and writes one square at a time, and a short table of rules.<sup class="fn"><a href="#n4">4</a></sup></p>
+
+<figure class="fig" data-fig="turingTape">
+<figcaption><span class="tagline tag-ill">Model</span> A Turing machine with four rules that adds one to a binary number. The blue head reads the square under it, looks up the rule for its current state and that symbol, and acts. Write your own number by tapping squares.</figcaption>
+</figure>
+
+<p>Turing’s point was that a single machine of this kind can read a description of any other such machine from its tape and imitate it. That is a general-purpose computer: the wiring stays fixed and the program is just data. Everything since, from ENIAC to the chip in a phone, is a faster version of this idea, with the tape replaced by memory.</p>
+
+
+
+<h2 id="final" data-level="H7">Final words</h2>
+
+<p>A computation is a pattern of flips. Two switches make an adder; a chain of adders makes an arithmetic unit; a tape of rules makes a machine that can imitate any other. Nothing so far has said how much energy a flip costs, or why that cost stopped falling. That is the next page.</p>
+
+<p><a class="xref" href="flip.html">The Price of a Flip</a> follows the switch from the vacuum tube to 2&nbsp;nm silicon. On the long-run meter (<a class="xref" href="verdict.html#act1">the Verdict</a>), this page sets the unit: a flip of a switch.</p>
+
+<h2 id="notes">Notes and sources</h2>
+<ol class="notes">
+<li id="n1">C. E. Shannon, “A Symbolic Analysis of Relay and Switching Circuits”, MIT master’s thesis (1937), published in <i>Transactions of the AIEE</i> 57 (1938); G. Boole, <i>An Investigation of the Laws of Thought</i> (1854).</li>
+<li id="n2">H. Zuse, <a href="https://horst-zuse.hier-im-netz.de/Konrad_Zuse_index_english_html/rechner_z3.html">“Z3”</a> (completed May 1941, about 2,600 relays, destroyed in 1943; a replica is in the Deutsches Museum, Munich).</li>
+<li id="n3">C. Babbage, letter to Sir Humphry Davy on the application of machinery to calculating tables, 3 July 1822, and “Observations on the application of machinery to the computation of mathematical tables”, <i>Memoirs of the Astronomical Society</i> 1 (1822); the Analytical Engine was designed from 1834; A. A. Lovelace, translator’s notes to L. F. Menabrea, “Sketch of the Analytical Engine”, <i>Scientific Memoirs</i> 3 (1843), Note G.</li>
+<li id="n4">A. M. Turing, “On Computable Numbers, with an Application to the Entscheidungsproblem”, <i>Proceedings of the London Mathematical Society</i> s2-42 (1936–37). The four-rule incrementer in the figure is our own example.</li>
+</ol>
+
+<footer class="colophon">
+<p>Figures marked <span class="tagline tag-real" style="font-size:.7rem;padding:1px 6px;border-radius:99px">Data</span> use the cited sources; <span class="tagline tag-mixed" style="font-size:.7rem;padding:1px 6px;border-radius:99px">Data + model</span> combine them with the series’ own arithmetic. Figures marked <span class="tagline tag-ill" style="font-size:.7rem;padding:1px 6px;border-radius:99px">Model</span> are simplified models built to show a mechanism; their assumptions are listed under <b>ⓘ data</b>.</p>
+</footer>
+</article>
+</main>
+<script src="app.js"></script>
+</body>
+</html>

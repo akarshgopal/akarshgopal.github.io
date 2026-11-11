@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>A Model Is a Function You Can Tune · Can AI outgrow the planet’s power grid?</title>
+<meta name="description" content="An interactive explainer: a neuron is a line, two layers draw XOR, backpropagation passes the blame, and gradient descent rolls downhill. What a model is, before tokens and transformers.">
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<button id="play-toggle" type="button" aria-pressed="true" title="Pause all animations">❚❚ Pause</button>
+<main>
+<article>
+<header class="top">
+<h1>A Model Is a Function You Can Tune</h1>
+<p class="byline">Can AI outgrow the planet’s power grid? · a deep dive · from a line through dots to a valley of loss · by Akarsh Gopal, October 2026</p>
+</header>
+
+<div class="brief" role="note" aria-label="In brief"><p><b>In brief.</b> What a model is: a function with knobs, from one neuron that draws a line to layers trained by passing the error backwards and rolling downhill.</p><p><b>The surprise.</b> The random-batch method behind today’s training, stochastic gradient descent, goes back to a 1951 method of Herbert Robbins and Sutton Monro.</p></div>
+
+<p class="lede">Start with a page of red and blue dots and a straight line you can drag across it. Each time a dot lands on the wrong side, nudge the line a little. That is the oldest idea in machine learning, and it is still what a neural network does: it is a function with knobs, and training is the search for knob settings that fit the examples.<sup class="fn"><a href="#n1">1</a></sup></p>
+
+<p>This page asks what that function <i>is</i>. The next page, <a class="xref" href="language.html">Language</a>, asks what it costs to run one that predicts the next word. Together they set the unit of the Act&nbsp;1 meter: one answer, in operations.</p>
+
+<ol class="toc">
+<li><a href="#perceptron"><span class="n">1</span>A neuron is a line</a></li>
+<li><a href="#xor"><span class="n">2</span>The pattern one line cannot draw</a></li>
+<li><a href="#backprop"><span class="n">3</span>Passing the blame backwards</a></li>
+<li><a href="#descent"><span class="n">4</span>Better ways downhill</a></li>
+<li><a href="#final"><span class="n"></span>Final words</a></li>
+</ol>
+
+<h2 id="perceptron" data-level="S2"><span class="num">1</span>A neuron is a line</h2>
+
+<p>In 1943 the neurophysiologist Warren McCulloch and the logician Walter Pitts described a brain cell as a switch: it adds up signals from other cells, some pushing it on and some holding it off, and fires if the total crosses a threshold.<sup class="fn"><a href="#n1">1</a></sup> With the right connections a few such units could compute AND, OR or NOT, the same gates as the switches at the start of the <a class="xref" href="essay.html#s1">essay</a>. What they did not say was how the connections should be chosen.</p>
+
+<p>Put that unit on a page and it becomes a line. Give it two inputs, say an x and a y position. It multiplies each by a <b>weight</b>, adds a third number, the <b>bias</b>, and asks whether the result is above zero. All the points where the sum is exactly zero form a straight line; on one side the unit fires, on the other it does not. Choosing the three numbers is choosing where the line goes.</p>
+
+<p>Below are dots in four corner groups. Think of each corner as two inputs, each off or on. In the first dataset a dot is <b class="c-red">red</b> only when both inputs are on, which is AND; otherwise it is <b class="c-blue">blue</b>. Drag the line to separate the colours, then try OR.</p>
+
+<figure class="fig" data-fig="xorLine">
+<figcaption><span class="tagline tag-ill">Model</span> Dots scattered round the four corners of a square. Each corner stands for a pair of inputs that are off or on, coloured red by the rule you choose. “Let it learn” runs Rosenblatt’s perceptron rule from wherever your line is, for up to 80 nudges.</figcaption>
+</figure>
+
+<p>In 1958 Frank Rosenblatt, a psychologist at the Cornell Aeronautical Laboratory, gave this unit a way to learn. Take a dot it gets wrong and move the line a little towards putting that dot on the right side; repeat. In July that year the US Office of Naval Research showed his method running on an IBM 704: after 50 tries it had taught itself to tell punched cards marked on the left from cards marked on the right. “NEW NAVY DEVICE LEARNS BY DOING”, said the <i>New York Times</i>.<sup class="fn"><a href="#n2">2</a></sup> For AND and OR, press “Let it learn” and the perceptron finds a line, usually within a handful of nudges. It always will, whenever such a line exists: the perceptron convergence theorem, proved in 1962 by Rosenblatt and by Albert Novikoff.</p>
+
+<details class="math"><summary>The maths: the perceptron rule</summary>
+<p>With weights w = (w₁, w₂), bias b and input x, the unit outputs 1 if w·x + b &gt; 0 and 0 otherwise. For an example it gets wrong, with target t = 1 (red) or t = −1 (blue), the update is</p>
+<p class="eq">w ← w + η t x,  b ← b + η t,</p>
+<p>which tilts and shifts the line towards classifying that point correctly. If some line separates the classes with a margin γ and every input lies within a radius r, the number of mistakes is at most (r/γ)²: the perceptron convergence theorem.</p>
+</details>
+
+
+<h2 id="xor" data-level="S2"><span class="num">2</span>The pattern one line cannot draw</h2>
+
+<p>Now switch the figure to XOR: red when exactly one input is on. The two red corners sit diagonally opposite each other, and so do the two blue ones. Try it by hand first. Every line you draw puts at least one corner on the wrong side. Press “Let it learn” and the perceptron nudges forever; it never settles, because there is nothing to settle on.</p>
+
+<p>In 1969 Marvin Minsky and Seymour Papert of MIT published <i>Perceptrons</i>, a careful mathematical book about what such single-layer machines could and could not compute, and XOR-like patterns were among the things they could not.<sup class="fn"><a href="#n3">3</a></sup> The book is often blamed, too simply, for a long cooling of interest in neural networks, but research on them did slow for more than a decade.</p>
+
+<p>The way out was known in principle: use more than one line. Below, two neurons each draw a dashed line, <b class="c-violet">neuron 1</b> and <b class="c-green">neuron 2</b>, and their outputs are fed to a third neuron that combines them. The two in the middle are called <b>hidden</b> neurons, because you never see their outputs directly, only the final answer. Fence the two red corners into a strip between the lines.</p>
+
+<figure class="fig" data-fig="twoLayers">
+<figcaption><span class="tagline tag-ill">Model</span> A network with two inputs, two hidden neurons and one output, working on XOR. Each dashed line is one hidden neuron, with an arrow pointing to the side where it is “on”. While you drag, the output neuron re-learns its own three weights (how to combine the two lines); “Let it learn” trains all nine weights together by gradient descent. The background is the network’s answer.</figcaption>
+</figure>
+
+<p>The output neuron is just a third line, but drawn in a different space: not the position on the page, but “how on is hidden neuron 1” against “how on is hidden neuron 2”. In that space the four corners are no longer arranged as XOR, and one line is enough. That is the whole trick of a layer: it moves the data into a new space where the next layer’s job is easier. Deep networks repeat it many times.</p>
+
+<details class="math"><summary>The maths: why one line fails, and two succeed</summary>
+<p>Suppose one unit computed XOR with inputs 0/1. It would need b ≤ 0 for (0,0), w₁ + b &gt; 0 for (1,0), w₂ + b &gt; 0 for (0,1) and w₁ + w₂ + b ≤ 0 for (1,1). Adding the middle two gives w₁ + w₂ + 2b &gt; 0, so w₁ + w₂ + b &gt; −b ≥ 0, contradicting the last. No such weights exist.</p>
+<p>With hidden units h₁ = OR(x₁, x₂) and h₂ = AND(x₁, x₂), XOR is h₁ AND NOT h₂, which one more unit can compute: output = step(h₁ − h₂ − 0.5). The network in the figure uses smooth tanh units instead of hard steps, so that it can be trained by gradient descent.</p>
+</details>
+
+
+<h2 id="backprop" data-level="S6 S7"><span class="num">3</span>Passing the blame backwards</h2>
+
+<p>With one neuron it is obvious how to fix a mistake: move its line. With hidden neurons it is not. When the answer is wrong, which of the many weights is to blame, and by how much? A weight deep inside the network only affects the answer through everything that comes after it.</p>
+
+<p>The answer is to ask each weight a precise question: if I nudged you up a tiny bit, how much would the error change? That number is the weight’s share of the blame, its <b>gradient</b>. It can be worked out for every weight at once by starting at the output, where the error is known, and passing it backwards one layer at a time. Each layer only needs what the layer after it reports back. Below is the smallest network where this matters, shown one example at a time. <b class="c-blue">Blue</b> connections are positive weights and <b class="c-orange">orange</b> ones negative; the <b class="c-violet">violet</b> numbers are the blame flowing back.</p>
+
+<figure class="fig" data-fig="backpropFlow">
+<figcaption><span class="tagline tag-ill">Model</span> A network with two inputs, two hidden neurons (tanh) and one output (sigmoid), trained on a single example with inputs 1 and 0.5 and target 1; the error is half the squared difference. Line thickness is the size of each weight. The purple dots travelling from right to left, and the purple bar under each knob, show that weight’s gradient, computed by the backward pass. “Take one step downhill” moves all six weights against their gradients at once.</figcaption>
+</figure>
+
+<p>Drag a weight with a long <b class="c-violet">violet</b> bar and the error moves a lot; drag one with a short bar and it hardly moves. The bars are exactly that sensitivity: raise a weight by 0.1 and the error changes by about a tenth of its blame. The step button uses all six at once. The same idea scales unchanged: a model with a hundred billion weights does one forward pass to get its answers, one backward pass to get a hundred billion blame numbers, and nudges every weight.</p>
+
+<p>The method was found several times. Seppo Linnainmaa described the general way to compute such derivatives backwards through a calculation in his 1970 master’s thesis in Helsinki; Paul Werbos sketched using it to train neural networks in his 1974 Harvard thesis and set it out for networks in full in 1982. It became widely known in 1986, when David Rumelhart, Geoffrey Hinton and Ronald Williams showed in <i>Nature</i> that networks trained this way learned useful internal features by themselves.<sup class="fn"><a href="#n4">4</a></sup> They called it back-propagating errors, and the name stuck.</p>
+
+<details class="math"><summary>The maths: the chain rule, backwards</summary>
+<p>For the figure’s network, with hᵢ = tanh(zᵢ), output o = σ(v₁h₁ + v₂h₂) and error E = ½(o − t)², the chain rule gives</p>
+<p class="eq">∂E/∂vᵢ = δₒ hᵢ, where δₒ = (o − t) o (1 − o),</p>
+<p class="eq">∂E/∂aⱼᵢ = δᵢ xⱼ, where δᵢ = δₒ vᵢ (1 − hᵢ²).</p>
+<p>Each δ is computed from the one after it: that is the backward pass. Its cost is about twice that of the forward pass, whatever the number of weights, which is why training costs roughly three times as much arithmetic as running the model once per example.</p>
+</details>
+
+
+<h2 id="descent" data-level="S7"><span class="num">4</span>Better ways downhill</h2>
+
+<p>Once every weight has a gradient, learning is the ball rolling downhill from the <a class="xref" href="essay.html#s8">essay</a>: step against the gradient, recompute, repeat. Two refinements made this practical for large networks, and both are visible in one valley.</p>
+
+<p>The first is <b>momentum</b>. A plain step only looks at the slope where the ball is now. In a long, narrow valley the walls are steep and the floor almost flat, so a step small enough not to overshoot the walls only crawls along the floor. Momentum lets the ball keep some of its previous velocity, like a real ball. Along the floor, where the slope keeps pointing the same way, the velocity builds up to about ten times a plain step. Across the valley the ball now overshoots and swings from wall to wall, but those pushes change sign and largely cancel, and the swings die away. Boris Polyak analysed this “heavy ball” method in Moscow in 1964.<sup class="fn"><a href="#n5">5</a></sup> In the valley below, from where the balls start, plain steps need 212 steps to reach the floor and stay there; momentum, with the same step size, flies through the floor far sooner, swings out again and still settles long before the plain ball; the readout counts both.</p>
+
+<p>The second is <b>noise</b>. Computing the exact gradient means running every training example through the network before taking a single step. With millions of examples that is far too slow. Instead each step uses a small random batch, which gives a rough, wobbling estimate of the slope: stochastic gradient descent, after a 1951 method of Herbert Robbins and Sutton Monro.<sup class="fn"><a href="#n6">6</a></sup> Add noise below and watch both balls still find the floor, just less tidily.</p>
+
+<figure class="fig" data-fig="sgdValley">
+<figcaption><span class="tagline tag-ill">Model</span> The same two-knob error landscape as in the essay: position is the two knobs, height is the error. Both balls start where you drop them and use the same step size. The yellow one carries 90% of its previous velocity into each step (momentum). A ball counts as on the floor once its error stays below 0.01 for ten steps in a row, so a momentum ball that only passes through does not count. The noise slider adds random error to every measured slope, as when each step sees only a small batch of the data. The error formula is made up for the picture: L = 0.12(x − 1.2)² + 1.5(y − 0.35 sin 1.7x)², a long curved valley. Height is drawn as ln(1 + L), so the shallow floor stays visible; colour bands mark equal heights. Without WebGL the same figure appears as a flat map seen from above.</figcaption>
+</figure>
+
+<p>Noisy steps sound like a compromise, but they are cheap enough to take millions of them, and a little noise helps the ball shake out of shallow dips. Most large models today are trained with Adam, a 2014 method by Diederik Kingma and Jimmy Ba that combines momentum with a separate, automatically tuned step size for every weight.<sup class="fn"><a href="#n7">7</a></sup></p>
+
+<details class="math"><summary>The maths: momentum and mini-batches</summary>
+<p>Plain gradient descent: w ← w − η ∇L(w). With momentum β (here 0.9):</p>
+<p class="eq">v ← β v − η ∇L(w),  w ← w + v.</p>
+<p>Along a direction where the gradient keeps the same sign, the velocity builds up to about η/(1 − β) times the gradient, ten times a plain step for β = 0.9; across the valley, where the sign flips every step, it largely cancels. Stochastic gradient descent replaces ∇L, an average over all N examples, with the average over a random batch of B ≪ N, an unbiased estimate whose noise shrinks roughly as 1/√B.</p>
+</details>
+
+
+
+<h2 id="final" data-level="S2">Final words</h2>
+
+<p>A model is a function you can tune. One line draws half-planes; two layers draw XOR; backpropagation says which knob to turn; gradient descent turns them. Nothing so far has said what the function is <i>for</i> when the input is language, or how many operations an answer takes. That is the next page.</p>
+
+<p>For the short version of the same story, with a 3D loss surface you can tilt, see the <a class="xref" href="essay.html#s7">essay §§7–9</a>. On the long-run meter (<a class="xref" href="verdict.html#act1">the Verdict</a>), this page sets the unit of work: a model evaluation.</p>
+
+<h2 id="notes">Notes and sources</h2>
+<ol class="notes">
+<li id="n1">W. S. McCulloch and W. Pitts, “A logical calculus of the ideas immanent in nervous activity”, <i>Bulletin of Mathematical Biophysics</i> 5, 115–133 (1943).</li>
+<li id="n2">F. Rosenblatt, “The perceptron: a probabilistic model for information storage and organization in the brain”, <i>Psychological Review</i> 65(6), 386–408 (1958). The July 1958 IBM 704 demonstration, the 50 trials and the <i>New York Times</i> headline are from M. Lefkowitz, <a href="https://news.cornell.edu/stories/2019/09/professors-perceptron-paved-way-ai-60-years-too-soon">“Professor’s perceptron paved the way for AI – 60 years too soon”</a>, Cornell Chronicle, 25 September 2019. Convergence theorem: A. B. J. Novikoff, “On convergence proofs for perceptrons”, Symposium on the Mathematical Theory of Automata (1962).</li>
+<li id="n3">M. Minsky and S. Papert, <i>Perceptrons: An Introduction to Computational Geometry</i>, MIT Press (1969).</li>
+<li id="n4">S. Linnainmaa, master’s thesis, University of Helsinki (1970), on the reverse accumulation of rounding errors; P. J. Werbos, <i>Beyond Regression</i>, PhD thesis, Harvard University (1974); P. J. Werbos, “Applications of advances in nonlinear sensitivity analysis”, in R. Drenick and F. Kozin (eds.), <i>System Modeling and Optimization</i>, Springer (1982); on the history, J. Schmidhuber, <a href="https://people.idsia.ch/~juergen/who-invented-backpropagation.html">“Who invented backpropagation?”</a>; D. E. Rumelhart, G. E. Hinton and R. J. Williams, “Learning representations by back-propagating errors”, <i>Nature</i> 323, 533–536 (1986).</li>
+<li id="n5">B. T. Polyak, “Some methods of speeding up the convergence of iteration methods”, <i>USSR Computational Mathematics and Mathematical Physics</i> 4(5), 1–17 (1964). G. Goh, <a href="https://distill.pub/2017/momentum/">“Why Momentum Really Works”</a>, <i>Distill</i> (2017): with momentum the ball can overshoot and oscillate across a narrow valley while it speeds up along the floor; how fast it settles depends on the step size, β and the ratio of the valley’s curvatures.</li>
+<li id="n6">H. Robbins and S. Monro, “A stochastic approximation method”, <i>Annals of Mathematical Statistics</i> 22(3), 400–407 (1951).</li>
+<li id="n7">D. P. Kingma and J. Ba, <a href="https://arxiv.org/abs/1412.6980">“Adam: A Method for Stochastic Optimization”</a> (2014; ICLR 2015).</li>
+</ol>
+
+<footer class="colophon">
+<p>Figures marked <span class="tagline tag-real" style="font-size:.7rem;padding:1px 6px;border-radius:99px">Data</span> use the cited sources; <span class="tagline tag-mixed" style="font-size:.7rem;padding:1px 6px;border-radius:99px">Data + model</span> combine them with the series’ own arithmetic. Figures marked <span class="tagline tag-ill" style="font-size:.7rem;padding:1px 6px;border-radius:99px">Model</span> are simplified models built to show a mechanism; their assumptions are listed under <b>ⓘ data</b>.</p>
+</footer>
+</article>
+</main>
+<script src="app.js"></script>
+</body>
+</html>
