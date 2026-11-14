@@ -32,6 +32,9 @@ exists "$E/feed.xml"    "the RSS feed (7 Nov 2026)"
 n=$(ls "$E"/*.html 2>/dev/null | wc -l)
 if [ "$n" -lt 12 ]; then echo "::error::blog/electricity has $n pages; the current series has 12 or more"; fail=1; fi
 
+# cache stamps: every local script and stylesheet is loaded as name?v=<hash of the file> (9 Nov 2026)
+python3 .github/scripts/stamp-assets.py --check || fail=1
+
 if [ "$fail" -ne 0 ]; then
   echo
   echo "This change would put back an older version of a series. Read SERIES-SOURCES.md at the root of master."
