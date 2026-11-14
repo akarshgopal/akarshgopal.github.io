@@ -1,0 +1,40 @@
+name: Link rot
+# Once a month, check every external link in the two blog series. If any are dead, open an issue
+# (or update the open one) with the report and archive.org suggestions. Sites that block automated
+# clients are listed in the report as "could not check", not as dead, and do not fail the run.
+on:
+  schedule:
+    - cron: '17 5 3 * *'
+  workflow_dispatch:
+permissions:
+  contents: read
+  issues: write
+concurrency:
+  group: link-rot
+  cancel-in-progress: true
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check external links
+        id: check
+        continue-on-error: true
+        run: python3 .github/scripts/link-rot.py link-rot-report.md
+      - name: Show the report
+        if: always()
+        run: cat link-rot-report.md >> "$GITHUB_STEP_SUMMARY"
+      - name: Open or update the link-rot issue
+        if: steps.check.outcome == 'failure'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh label create link-rot --color B60205 --description "Dead external links in the blog series" --force
+          n=$(gh issue list --label link-rot --state open --json number --jq '.[0].number')
+          if [ -n "$n" ]; then
+            gh issue edit "$n" --body-file link-rot-report.md
+            gh issue comment "$n" --body "Checked again on $(date -u +%F); the report above is current."
+          else
+            gh issue create --title "Dead external links in the blog series" --label link-rot --body-file link-rot-report.md
+          fi

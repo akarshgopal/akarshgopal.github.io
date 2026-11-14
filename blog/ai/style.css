@@ -208,10 +208,11 @@ nav.series li span.planned small { font-style: italic; }
   }
   nav.series.open .series-in { display: flex; }
   .series-scrim {
-    display: none; position: fixed; inset: 0; z-index: 21;
+    display: none; position: fixed; inset: 0; z-index: 19; /* under nav.series (z 20), whose stacking context holds the drawer */
     background: rgba(20,18,14,.35); border: 0; padding: 0; cursor: pointer;
   }
   body.series-open .series-scrim { display: block; }
+  body.series-open nav.series { -webkit-backdrop-filter: none; backdrop-filter: none; } /* a filter makes the nav the containing block of the fixed drawer */
   body.series-open { overflow: hidden; }
   header.top { padding-top: 1.6rem; }
 }
@@ -420,3 +421,54 @@ ul.contents li a { margin-right: 0.35em; }
 .brief { font-family: var(--sans); font-size: 0.95rem; line-height: 1.55; color: var(--ink2); border-left: 3px solid var(--ink3); padding: 2px 0 2px 16px; margin: 1.4em auto 1.8em; }
 .brief p { margin: 0.35em 0; }
 .brief b { color: var(--ink); }
+
+/* ── Dark mode (9 Nov 2026), as in the electricity series ─────────────────────────────────────────────────
+   The page goes dark; each figure stays a light plate, because the canvases draw a fixed light palette. */
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+    --ink: #ece9e3; --ink2: #c4c1ba; --ink3: #a3a09a; --grid: #343432; --grid2: #4a4a46;
+    --paper: #232322; --bg: #1a1a19; --stage: #232322;
+    --t-red: #f08a80; --t-orange: #f0a066; --t-yellow: #e6be55; --t-green: #7cc883; --t-cyan: #55c4bb; --t-blue: #84aef0; --t-violet: #b796e6;
+  }
+  figure.fig {
+    color-scheme: light;
+    --ink: #2b2b2a; --ink2: #575755; --ink3: #6d6d6b; --grid: #e4e4e1; --grid2: #d0d0cc;
+    --paper: #f4f4f2; --bg: #fdfdfc; --stage: #f4f4f2;
+    --t-red: #bf392f; --t-orange: #b25611; --t-yellow: #8f6a0b; --t-green: #2e7a33; --t-cyan: #137a73; --t-blue: #2d69b8; --t-violet: #7a46b8;
+    color: var(--ink); background: var(--bg); padding: 14px 14px 12px; border-radius: 16px;
+    box-shadow: 0 0 0 1px rgba(255,255,255,0.06), 0 8px 30px rgba(0,0,0,0.35);
+  }
+  .c-time:not(figure.fig *), .c-grey:not(figure.fig *) { color: #a3a09a; }
+  .c-solar:not(figure.fig *) { color: #e6b44a; } .c-wind:not(figure.fig *) { color: #74b6de; }
+  .c-gas:not(figure.fig *) { color: #ee9466; } .c-coal:not(figure.fig *) { color: #b0aba1; }
+  .c-procurement:not(figure.fig *) { color: #e9b55c; } .c-network:not(figure.fig *) { color: #9daede; }
+  .c-taxes:not(figure.fig *) { color: #bdb6a9; } .c-hot:not(figure.fig *) { color: #f08a6e; } .c-cold:not(figure.fig *) { color: #82abf0; }
+  .c-B:not(figure.fig *) { color: #e8b25e; }
+  /* page elements that used fixed light colours */
+  .aside { background: #262625; }
+  ol.notes li:target { background: #4a3f17; }
+  #play-toggle { background: rgba(35,35,34,0.92); }
+  nav.series { background: rgba(26,26,25,0.94); }
+  nav.series li a:hover { background: #2c2c2a; }
+  nav.series li a[aria-current=page] { background: var(--ink); color: var(--bg); }
+  nav.series li a[aria-current=page] .n, nav.series li a[aria-current=page] small { color: #575755; }
+  .series-scrim { background: rgba(0,0,0,.55); }
+  details.peek { background: var(--paper); }
+  details.peek > summary::before { background: color-mix(in srgb, var(--pk) 30%, var(--paper)); color: var(--ink); }
+  details.peek[open] > summary::before { color: var(--bg); background: var(--ink); }
+  details.peek > summary:hover { background: #2a2a28; }
+  .pk-lv { color: var(--ink) !important; background: color-mix(in srgb, var(--pk) 35%, var(--paper)) !important; }
+  a { text-decoration-color: #66645e; }
+  a:hover { text-decoration-color: var(--ink2); }
+}
+@media (prefers-color-scheme: dark) and (min-width: 960px) { nav.series { background: rgba(26,26,25,0.98); } }
+@media (prefers-color-scheme: dark) and (max-width: 959px) { nav.series .series-in { background: rgba(26,26,25,0.98); } }
+@media (prefers-color-scheme: dark) and (max-width: 640px) { figure.fig, figure.fig.showpiece, figure.fig.narrow { padding: 8px 6px 10px; border-radius: 10px; } }
+
+/* keyboard pointer (app.js Fig._kbdPtr, 9 Nov 2026): shown only while a figure has keyboard focus */
+.canvas-wrap canvas:focus-visible { outline: 2px solid var(--ink2); outline-offset: 2px; }
+.kbd-ptr { position: absolute; left: -9px; top: -9px; width: 18px; height: 18px; border-radius: 50%; border: 2px solid var(--ink, #1a1a1a); box-shadow: 0 0 0 2px rgba(255,255,255,.9); pointer-events: none; display: none; z-index: 2; }
+.kbd-ptr::after { content: ''; position: absolute; left: 50%; top: 50%; width: 4px; height: 4px; margin: -2px 0 0 -2px; border-radius: 50%; background: var(--ink, #1a1a1a); }
+.kbd-ptr.grab { background: color-mix(in srgb, var(--ink, #1a1a1a) 25%, transparent); }
+canvas:focus-visible ~ .kbd-ptr.on { display: block; }

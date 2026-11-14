@@ -6,9 +6,9 @@
 <title>What a Kilowatt-Hour Is: Charge, Voltage and Heat · Why Did Electricity Stop Getting Cheaper?</title>
 <meta name="description" content="What is actually sold as a kilowatt-hour: charge and current, voltage as the height of an energy hill, resistance as electrons colliding with a hot lattice, and the difference between power and energy.">
 <link rel="icon" href="data:,">
-<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="style.css?v=19b66744">
 <link rel="alternate" type="application/rss+xml" title="Why Did Electricity Stop Getting Cheaper?" href="feed.xml">
-<meta property="article:modified_time" content="2026-11-07">
+<meta property="article:modified_time" content="2026-11-09">
 <link rel="canonical" href="https://akarshgopal.github.io/blog/electricity/kilowatt-hour.html">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Why Did Electricity Stop Getting Cheaper?">
@@ -28,7 +28,7 @@
 <article>
 <header class="top">
 <h1>What a Kilowatt-Hour Is: Charge, Voltage and Heat</h1>
-<p class="byline">Essay 2 of 9 · by Akarsh Gopal · October 2026 · updated <time datetime="2026-11-07">7 November 2026</time></p>
+<p class="byline">Essay 2 of 9 · by Akarsh Gopal · October 2026 · updated <time datetime="2026-11-09">9 November 2026</time></p>
 </header>
 
 <div class="brief" role="note" aria-label="In brief"><p><b>In brief.</b> A kilowatt-hour is a thousand watts for an hour, 3.6 million joules. This essay follows the charge in a wire, the voltage that pushes it and the heat lost on the way, and shows why power travels at high voltage.</p><p><b>The surprise.</b> In 2025 an American household paid on average 17.3¢ for a kilowatt-hour; a German one about 43.7¢, two and a half times as much, for reasons that are mostly not the power station.</p></div>
@@ -53,11 +53,8 @@
 
 <p>Each electron carries a tiny, fixed amount of negative <b>charge</b>. Charge is counted in coulombs; one coulomb is the charge of about six billion billion electrons. A <b>current</b> is charge flowing past a point, and one ampere is one coulomb a second.</p>
 
-<p>Now connect the wire to a battery. The battery pushes a little extra negative charge onto one end of the wire and pulls some away from the other, and this sets up an <span class="c-field" style="color:#b6404f;font-weight:600">electric field</span> along the whole length of the wire. The field gives each <span class="c-electron">electron</span> a very gentle shove in one direction between collisions. Their random motion is still there, but now it has a tiny drift superimposed on it:</p>
+<p>Now connect the wire to a battery. The battery pushes a little extra negative charge onto one end of the wire and pulls some away from the other, and this sets up an <span class="c-field">electric field</span> along the whole length of the wire. The field gives each <span class="c-electron">electron</span> a very gentle shove in one direction between collisions. Their random motion is still there, but now it has a tiny drift superimposed on it, shown in the first step of the figure in section 3.</p>
 
-<figure class="fig" data-fig="drift" id="fig-drift">
-<figcaption><span class="tagline tag-ill">Model</span> Above: free electrons in copper, their thermal jitter slowed enormously. Below: the circuit they belong to. The readout computes drift speed and signal delay for a 1.5 mm² copper conductor.<sup class="fn"><a href="#n1">1</a></sup></figcaption>
-</figure>
 
 <p>The drift is very slow: in a kettle cable the electrons creep along at a fraction of a millimetre per second, slower than a snail; with alternating current they merely shuffle back and forth by a few micrometres. Yet the lamp lights at once, because what travels fast is not the electrons but the field. Close the switch and the push runs along the wire at a large fraction of the speed of light, like water in a pipe that is already full.</p>
 
@@ -69,13 +66,11 @@
 
 <p>The height of the hill is the <b>voltage</b>. It is measured in energy per unit of charge: one volt means each coulomb carries one joule. A 12-volt battery lifts every coulomb that passes through it by 12 joules. The push a battery gives is often called its <i>electromotive force</i>, or EMF, though it is not a force at all; it is this height.</p>
 
-<p>The figure lays a simple circuit, a battery, two wires and a lamp, flat on the floor, and raises each point of it by the energy a charge carries there. The colour of each charge shows the same thing.<sup class="fn"><a href="#n2">2</a></sup></p>
+<span id="fig-emfHill" class="anchor"></span>
+<p>Picture a simple circuit, a battery, two wires and a lamp, laid flat on the floor, with each point of it raised by the energy a charge carries there. The battery lifts every charge by its voltage, and the charges lose almost all of that height in the lamp.<sup class="fn"><a href="#n2">2</a></sup></p>
 
-<figure class="fig" data-fig="emfHill" id="fig-emfHill">
-<figcaption><span class="tagline tag-ill">Model</span> A circuit as a landscape. The dashed loop on the floor is the circuit as wired; the height of the track above it is the energy carried by each charge (volts). The battery lifts every charge by its voltage; the charges lose almost all of that height in the lamp. The lamp is a fixed 12 Ω.</figcaption>
-</figure>
 
-<p>Two things in the picture matter later. First, the <span class="c-field" style="color:#b6404f;font-weight:600">field</span> is the steepness of the hill: the volts lost per metre. Where the track is steep, as through the lamp, the field is strong and the charges give up energy quickly. Where it is nearly flat, as along the copper wires, they give up very little. Second, a taller hill pushes harder, and more charge flows each second: double the voltage and, through the same lamp, the current doubles too.</p>
+<p>Two things in the picture matter later. First, the <span class="c-field">field</span> is the steepness of the hill: the volts lost per metre. Where the track is steep, as through the lamp, the field is strong and the charges give up energy quickly. Where it is nearly flat, as along the copper wires, they give up very little. Second, a taller hill pushes harder, and more charge flows each second: double the voltage and, through the same lamp, the current doubles too.</p>
 
 <p>Why does the lamp take nearly all of the height, and the wires almost none? That is a question about what slows charge down.</p>
 
@@ -85,10 +80,11 @@
 
 <p>Three things make a conductor resist more. A <b>longer</b> one has more lattice to cross, so it needs more push for the same current. A <b>thinner</b> one has fewer lanes for the same flow, so each electron must drift faster and is stopped more often. A <b>hotter</b> one has ions vibrating harder, so collisions come sooner. The material matters as well: tungsten, the metal of old lamp filaments, resists about three times as much as copper of the same size.<sup class="fn"><a href="#n1">1</a></sup></p>
 
-<p>A lamp circuit puts these side by side. The figure shows one: a metre of household copper wire, a filament of fine tungsten and another metre of wire, on a 12-volt battery. Above it is the same height profile as before.</p>
+<p>A lamp circuit puts these side by side. Step 2 of the figure shows one: a metre of household copper wire, a filament of fine tungsten and another metre of wire, on a 12-volt battery. Above it is the height profile of the charges, as in that picture.</p>
 
-<figure class="fig" data-fig="resistance" id="fig-resistance">
-<figcaption><span class="tagline tag-ill">Model</span> A copper wire, a straightened tungsten filament and a copper wire in series on a 12 V battery, magnified and not to scale. Electrons (coloured by the energy they still carry) drift through a lattice of ions; rings mark collisions, at a rate that follows the heat released in each part. The filament’s temperature is set directly here; in a real lamp the current itself heats it. Resistivities from standard tables, varying linearly with temperature.<sup class="fn"><a href="#n1">1</a></sup></figcaption>
+<span id="fig-drift" class="anchor"></span>
+<figure class="fig showpiece" data-fig="resistance" id="fig-resistance">
+<figcaption><span class="tagline tag-ill">Model</span> <b>Step 1, drift.</b> Above: free electrons in copper, their thermal jitter slowed enormously. Below: the circuit they belong to. The readout computes drift speed and signal delay for a 1.5 mm² copper conductor.<sup class="fn"><a href="#n1">1</a></sup> <b>Step 2, resistance.</b> A copper wire, a straightened tungsten filament and a copper wire in series on a 12 V battery, magnified and not to scale. Electrons (coloured by the energy they still carry) drift through a lattice of ions; rings mark collisions, at a rate that follows the heat released in each part. The filament’s temperature is set directly here; in a real lamp the current itself heats it. Resistivities from standard tables, varying linearly with temperature.<sup class="fn"><a href="#n1">1</a></sup></figcaption>
 </figure>
 
 <p>The same current flows through every part, because charge cannot pile up anywhere in the loop: every electron that enters the filament leaves it. In the thin filament the electrons crowd into a narrow channel and drift much faster, and the collisions there are many and hard. That is where the height goes. The filament takes almost all of the 12 volts and glows; the copper takes a few hundredths of a volt and stays cool.</p>
@@ -130,7 +126,7 @@
 <h2 id="notes">Notes and sources</h2>
 <ol class="notes">
 <li id="n1">Material constants from standard tables (e.g. <i>CRC Handbook of Chemistry and Physics</i>): copper has about 8.5 × 10²⁸ free electrons per cubic metre, moving at about 1,570 km/s (the Fermi speed; C. Kittel, <i>Introduction to Solid State Physics</i>); resistivity at 20 °C of copper 1.68 × 10⁻⁸ Ω·m and tungsten 5.6 × 10⁻⁸ Ω·m; temperature coefficient of tungsten about 0.0045 per kelvin. The model applies that coefficient linearly up to 2,500 °C, which understates tungsten’s hot resistance somewhat; the ratio of hot to cold resistance in a real filament is closer to fifteen than ten. One coulomb is 6.24 × 10¹⁸ electron charges.</li>
-<li id="n2">The figure follows the electrons themselves and draws the hill for the energy they carry, so they leave the battery at the top. Textbooks usually draw the same hill for the electric potential, which is the energy per unit of <i>positive</i> charge; electrons, being negative, flow the other way round it. The energy story, and every number, is the same.</li>
+<li id="n2">This picture follows the electrons themselves and draws the hill for the energy they carry, so they leave the battery at the top. Textbooks usually draw the same hill for the electric potential, which is the energy per unit of <i>positive</i> charge; electrons, being negative, flow the other way round it. The energy story, and every number, is the same.</li>
 <li id="n3">Water: 4.18 kJ per kilogram per degree, so heating a litre from 20 °C to 100 °C takes 0.33 MJ. Lifting: 3.6 MJ / (1,000 kg × 9.81 m/s²) ≈ 367 m. Sustained human output of about 100 W is a common figure for trained cyclists over several hours; for most people it is less.</li>
 <li id="n4">US: EIA, <i>Electric Power Monthly</i>, <a href="https://www.eia.gov/electricity/monthly/">eia.gov</a>, 2025 average residential price 17.3¢/kWh. Germany: Eurostat <i>nrg_pc_204</i>, second half of 2025, households using 2,500–4,999 kWh a year, all taxes included: €0.387/kWh, converted at US$1.13/€ (ECB 2025). <a class="xref" href="price.html">Essay 8</a> takes both bills apart.</li>
 <li id="n5">3.6 MJ / 0.35 ≈ 10.3 MJ of fuel heat. A kilogram of “standard coal”, the unit used by the IEA and China’s statistics, holds 29.3 MJ, so 10.3 MJ is about 0.35 kg. Real coals range from about half that energy content (lignite) to slightly more. Plant efficiencies are in <a class="xref" href="the-machine.html#heat">essay 3</a>.</li>
@@ -138,6 +134,6 @@
 <nav class="pager" aria-label="Previous and next in the series"><a class="prev" href="cheaper.html"><small>← Previous</small>Cheaper, Then Not: A Century of Electricity Prices</a><a class="next" href="the-machine.html"><small>Next →</small>The Machine: Magnets, Steam and the Limits of Heat</a></nav>
 </article>
 </main>
-<script type="module" src="js/kilowatt-hour.js"></script>
+<script type="module" src="js/kilowatt-hour.js?v=de832af6"></script>
 </body>
 </html>
