@@ -22,7 +22,7 @@ for (const f of pages) {
     n++;
     if (url === '' ) { problems.push(`${f}: empty ${attr}`); continue; }
     if (url.startsWith('/')) { problems.push(`${f}: absolute path "${url}" breaks file:// use`); continue; }
-    const [path, frag] = url.split('#');
+    const [pathq, frag] = url.split('#'); const path = pathq.split('?')[0]; // a cache stamp (?v=) is not part of the file name
     const target = path === '' ? f : path;
     if (!existsSync(join(DIST, target)) || statSync(join(DIST, target)).isDirectory()) { problems.push(`${f}: ${attr}="${url}" → missing file ${target}`); continue; }
     if (target !== f && target.endsWith('.html')) cross++;

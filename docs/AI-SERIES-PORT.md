@@ -246,3 +246,18 @@ Secondary or reported only:
   stylesheets.
 - **Rebuilding from the `ai-explainer` source:** put the same code in that source's figure runtime, or the
   rebuild will drop it.
+
+## 14. After PR #39 (ai-explainer c4cbf13); cache stamps (14 Nov 2026)
+
+- **What #39 did:** it rebuilt `app.js` and `three3d.js` from `ai-explainer` c4cbf13 (the Opus visuals pass, with
+  §2–§7 ported). The keyboard pointer of §13 was not yet in that source.
+- **The keyboard pointer was re-applied to the new `app.js`:** the same hook and `_kbdPtr` method, inserted after the
+  `pointerleave` listener of `interact()`. The result is master's `app.js` plus exactly those characters. **Port §12
+  and §13 into `ai-explainer` before its next rebuild.** The series guard fails a rebuild that drops them.
+- **Cache stamps:** every local script and stylesheet is now loaded as `name?v=<first 8 hex of its sha256>`.
+  - GitHub Pages lets browsers cache files for 10 minutes, so an unstamped `app.js` could run, cached, against a
+    newly deployed `three3d.js` or page.
+  - `.github/scripts/stamp-assets.py` on master rewrites the stamps after any edit to a `.js` or `.css` file in
+    `blog/ai`.
+  - The series guard runs `stamp-assets.py --check`.
+  - A rebuild from `ai-explainer` should write the same stamps, or run the script before its PR.

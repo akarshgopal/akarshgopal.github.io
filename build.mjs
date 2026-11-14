@@ -1,5 +1,6 @@
 import { build } from 'esbuild';
 import { cpSync, mkdirSync, rmSync, readFileSync, writeFileSync, existsSync } from 'node:fs';
+import { createHash } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
 import { resolve } from 'node:path';
 import { PAGES, SERIES_TITLE } from './src/series.mjs';
@@ -47,6 +48,7 @@ cpSync('src/og.png', `${OUT}/og.png`);
 cpSync('src/img', `${OUT}/img`, { recursive: true }); // static images (the landing page's chart thumbnail) // the card shown when a page is shared (1200 × 630)
 
 const esc = s => s.replace(/&/g, '&amp;').replace(/</g, '&lt;');
+const stamp = f => createHash('sha256').update(readFileSync(`${OUT}/${f}`)).digest('hex').slice(0, 8);
 
 function nav(cur) {
   // left rail on wide screens, a drawer behind a "Series" button on narrower ones (the site-wide pattern)
@@ -98,7 +100,12 @@ PAGES.forEach((p, i) => {
   html = html.replace(/(<p class="byline">[^<]*?)(<\/p>)/, `$1 · updated <time datetime="${up}">${longDate(up)}</time>$2`);
   html = html.replace(/(<main>)/, nav(i) + '\n$1');
   html = html.replace(/(<\/article>)/, pager(i) + '\n$1');
-  html = html.replace('<script src="series.js"></script>', `<script type="module" src="js/${p.file.replace(/\.html$/, '')}.js"></script>`);
+  // cache stamps: ?v= is the start of the file's sha256, so a browser never mixes a cached file with a new deploy
+  // (an old page entry would import chunk names that no longer exist). .github/scripts/stamp-assets.py on master
+  // uses the same rule, and the series guard checks every stamp.
+  const entry = `js/${p.file.replace(/\.html$/, '')}.js`;
+  html = html.replace('<script src="series.js"></script>', `<script type="module" src="${entry}?v=${stamp(entry)}"></script>`);
+  html = html.replace('<link rel="stylesheet" href="style.css">', `<link rel="stylesheet" href="style.css?v=${stamp('style.css')}">`);
   writeFileSync(`${OUT}/${p.file}`, html);
 });
 // feed.xml: one item per page, dated by its last update, so feed readers see revised essays.

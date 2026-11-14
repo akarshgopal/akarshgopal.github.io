@@ -165,6 +165,9 @@ WebSearch worked (snippets only); WebFetch is bound by the same network allowlis
   canvases draw a fixed light palette. Colour words in prose (`.c-solar` …) get lighter variants outside figures. A
   new colour class needs both variants, and inline `style="color:…"` in prose defeats dark mode (use a class).
   Data sources, vintages and how to refresh them: `docs/DATA-REFRESH.md`.
+  Cache stamps (14 Nov 2026): `build.mjs` writes each page's `style.css` and `js/<page>.js` as `?v=<first 8 hex of
+  the file's sha256>`. Without them, a browser holding a cached page entry after a deploy would import chunk files that
+  no longer exist. The series guard on master checks every stamp.
 - **Site**: `akarshgopal/akarshgopal.github.io`, GitHub Pages from `master`. Deploy: copy `dist/*.html`,
   `dist/js/` (replacing the old folder), `dist/series.js`, `dist/style.css`, `dist/og.png` (and `dist/fonts/` if
   changed) into `blog/electricity/`, then commit on a branch, open a PR and merge it. A check on `master`
