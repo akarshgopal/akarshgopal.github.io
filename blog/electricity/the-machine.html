@@ -7,9 +7,9 @@
 <meta name="description" content="How a spinning magnet makes electricity, why most of it still starts as heat, and the two engines of cheapening, better steam and bigger units, that ran for seventy years and then stalled.">
 <link rel="icon" href="data:,">
 <link rel="stylesheet" href="style.css">
-<script>(function(){var m={"fig-drift":"kilowatt-hour.html#fig-drift","fig-powerEnergy":"kilowatt-hour.html#fig-powerEnergy","power-and-energy":"kilowatt-hour.html#power-and-energy","voltage-is-height":"kilowatt-hour.html#voltage-is-height","s1":"kilowatt-hour.html#current","fig-potential":"kilowatt-hour.html#fig-emfHill","fig-hero3d":"the-machine.html#fig-threePhase","s3":"the-machine.html#heat"};var h=location.hash.slice(1);if(m[h])location.replace(m[h]);})();</script>
+<script>(function(){var m={"fig-drift":"kilowatt-hour.html#fig-drift","fig-powerEnergy":"kilowatt-hour.html#fig-powerEnergy","power-and-energy":"kilowatt-hour.html#power-and-energy","voltage-is-height":"kilowatt-hour.html#voltage-is-height","fig-threePhase":"transformers.html#fig-windings","s1":"kilowatt-hour.html#current","fig-potential":"kilowatt-hour.html#fig-emfHill","fig-hero3d":"transformers.html#fig-windings","s3":"the-machine.html#heat"};var h=location.hash.slice(1);if(m[h])location.replace(m[h]);})();</script>
 <link rel="alternate" type="application/rss+xml" title="Why Did Electricity Stop Getting Cheaper?" href="feed.xml">
-<meta property="article:modified_time" content="2026-11-07">
+<meta property="article:modified_time" content="2026-11-08">
 <link rel="canonical" href="https://akarshgopal.github.io/blog/electricity/the-machine.html">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Why Did Electricity Stop Getting Cheaper?">
@@ -29,7 +29,7 @@
 <article>
 <header class="top">
 <h1>The Machine: Magnets, Steam and the Limits of Heat</h1>
-<p class="byline">Essay 3 of 9 · by Akarsh Gopal · October 2026 · updated <time datetime="2026-11-07">7 November 2026</time></p>
+<p class="byline">Essay 3 of 9 · by Akarsh Gopal · October 2026 · updated <time datetime="2026-11-08">8 November 2026</time></p>
 </header>
 
 <div class="brief" role="note" aria-label="In brief"><p><b>In brief.</b> About 91 per cent of the world’s electricity still comes from a magnet turning inside coils of copper. The machine got cheaper in two ways, hotter steam and bigger units, and this essay follows each to where it stopped.</p><p><b>The surprise.</b> Steam plants topped out near 40 per cent efficiency with Eddystone 1 in 1960; the best coal plant in the world today, in China, reaches about 47 on the American way of counting.</p></div>
@@ -48,19 +48,17 @@
 
 <h2 id="s2"><span class="num">1</span>A magnet, a coil and a shaft</h2>
 
-<p>A battery pushes charge with chemistry and a solar cell with light, but nearly all of the world’s electricity has, for more than a century, been pushed by the effect Michael Faraday found in 1831: <b>a changing magnetic field pushes charge around a loop of wire</b>. Move a magnet into a coil and a current flows one way; pull it out and it flows the other way; hold the magnet still and nothing happens at all.</p>
+<p>A battery pushes charge with chemistry and a solar cell with light, but nearly all of the world’s electricity has, for more than a century, been pushed by the effect Michael Faraday found in 1831: <b>a changing magnetic field pushes charge around a loop of wire</b>. Move a magnet into a coil and a current flows one way; pull it out and it flows the other way; hold the magnet still and nothing happens at all. The first step of the figure below does exactly that.</p>
 
-<figure class="fig" data-fig="faraday" id="fig-faraday">
-<figcaption><span class="tagline tag-ill">Model</span> A magnet moving through a coil. The meter and the trace show the induced voltage, which follows how quickly the magnetic flux through the coil changes, not how strong the magnet is.</figcaption>
+<span id="fig-faraday" class="anchor"></span>
+<figure class="fig showpiece" data-fig="rotor" id="fig-rotor">
+<figcaption><span class="tagline tag-ill">Model</span> <b>Step 1, a moving magnet.</b> A magnet moving through a coil. The meter and the trace show the induced voltage, which follows how quickly the magnetic flux through the coil changes, not how strong the magnet is. <b>Step 2, a spinning one.</b> A generator seen end-on: the same magnet on a shaft, inside one copper coil whose two sides sit in the slots left and right. Dots and crosses show current coming out of and going into the page. Drawn 60 times slower than real.</figcaption>
 </figure>
 
 <p>What matters is the <i>rate of change</i>. A faster movement gives a bigger voltage. The direction depends on whether the magnetic field threading the coil, its <b>flux</b>, is growing or shrinking, which is why pushing the magnet in and pulling it out give opposite kicks. This push is the “height” of <a class="xref" href="kilowatt-hour.html#voltage-is-height">essay 2</a>: a generator is a machine for lifting charge up that hill, over and over.</p>
 
-<p>Pushing a magnet in and out by hand will not light a city. Instead, we turn it. Put the same magnet on a shaft inside a coil, seen here end-on, and turn the shaft. As the north pole swings past one side of the coil and then the other, the flux through the coil rises, falls and reverses. Turn it slowly by hand, and then fast:</p>
+<p>Pushing a magnet in and out by hand will not light a city. Instead, we turn it. Put the same magnet on a shaft inside a coil, seen here end-on, and turn the shaft. As the north pole swings past one side of the coil and then the other, the flux through the coil rises, falls and reverses. Turn it slowly by hand, and then fast, in the figure’s second step.</p>
 
-<figure class="fig" data-fig="rotor" id="fig-rotor">
-<figcaption><span class="tagline tag-ill">Model</span> A generator seen end-on: the same magnet on a shaft, inside one copper coil whose two sides sit in the slots left and right. Dots and crosses show current coming out of and going into the page. Drawn 60 times slower than real.</figcaption>
-</figure>
 
 <p>Turned steadily, the voltage traces a smooth wave, a <b>sine</b>, because the coil sees the magnet’s pole from a steadily turning angle. One revolution of a two-pole rotor gives one cycle, so a two-pole machine must spin at exactly 3,000 rpm to make 50 Hz and 3,600 rpm to make 60 Hz. A slow hydro turbine with many poles turns at a few hundred rpm and makes the same frequency. The frequency of a grid is the speed of its generators, which is why <a class="xref" href="balancing.html">essay 5</a> can read the balance of a whole continent off a single number.</p>
 
@@ -68,11 +66,8 @@
 
 <p>A single coil’s power pulses: full, nothing, full, nothing, a hundred times a second. Large machines dislike pulsing torque. The fix, standard since the 1890s, is two more coils in the same machine, each a third of a turn round the stator. The magnet reaches each one a third of a turn later, so each makes the same sine wave, 120° behind the last: <span class="c-A">phase A</span>, <span class="c-B">phase B</span> and <span class="c-C">phase C</span>.</p>
 
-<figure class="fig" data-fig="threePhase" id="fig-threePhase">
-<figcaption><span class="tagline tag-ill">Model</span> The same generator with three coils, coloured by phase. The other two views add the three voltages, which cancel at every instant, and the three powers into equal loads, which sum to a constant.</figcaption>
-</figure>
 
-<p>Add the three voltages together and they make zero at every instant, and so do the currents into equal loads, so the three wires serve as each other’s return path and no heavy fourth conductor is needed. Add the three powers and the pulses fill each other’s gaps: the total is perfectly steady, and the shaft feels a smooth, constant load. This is why almost every high-voltage line carries its conductors in threes.</p>
+<p>Add the three voltages together and they make zero at every instant, and so do the currents into equal loads, so the three wires serve as each other’s return path and no heavy fourth conductor is needed. Add the three powers and the pulses fill each other’s gaps: the total is perfectly steady, and the shaft feels a smooth, constant load. This is why almost every high-voltage line carries its conductors in threes. The three coils, and the ways their windings are joined, are drawn in the <a class="xref" href="transformers.html#fig-windings">transformers deep dive</a>.</p>
 
 <p>That is the machine at the heart of almost every power station: a magnet turning inside three sets of coils. A real one is the same arrangement scaled up to hundreds of megawatts, with an electromagnet in place of the permanent magnet. It is also very good at its job. A large generator turns more than 98 per cent of the mechanical power on its shaft into electricity. If electricity was ever going to get cheaper, it would not be by improving the generator. It would be by finding cheaper rotation.</p>
 

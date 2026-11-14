@@ -1,1 +1,1 @@
-import{a as e}from"./chunks/chunk-FRB2XFBG.js";import"./chunks/chunk-ZFAZGCYI.js";import{c as r}from"./chunks/chunk-DRRA7XMF.js";r({centuryTeaser:e.centuryTeaser});
+import{d as o}from"./chunks/chunk-Y2EIP3HQ.js";o({});

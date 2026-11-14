@@ -7,9 +7,9 @@
 <meta name="description" content="An interactive explainer of power transformers: induction and flux, hysteresis and eddy-current losses, efficiency, cooling and insulation ageing, three-phase vector groups, tap changers, the family from pole-top units to generator step-ups, the 2020s supply crunch, resilience and solid-state transformers.">
 <link rel="icon" href="data:,">
 <link rel="stylesheet" href="style.css">
-<script>(function(){var m={"fig-threePhase":"the-machine.html#fig-threePhase","fig-losses":"transmission.html#fig-losses","fig-transformer":"transmission.html#fig-transformer","fig-shortage":"transmission.html#fig-shortage"};var h=location.hash.slice(1);if(m[h])location.replace(m[h]);})();</script>
+<script>(function(){var m={"fig-losses":"transmission.html#fig-losses","fig-shortage":"transmission.html#fig-shortage","fig-transformer":"transmission.html#fig-transformer","fig-threePhase":"transformers.html#fig-windings"};var h=location.hash.slice(1);if(m[h])location.replace(m[h]);})();</script>
 <link rel="alternate" type="application/rss+xml" title="Why Did Electricity Stop Getting Cheaper?" href="feed.xml">
-<meta property="article:modified_time" content="2026-11-07">
+<meta property="article:modified_time" content="2026-11-08">
 <link rel="canonical" href="https://akarshgopal.github.io/blog/electricity/transformers.html">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Why Did Electricity Stop Getting Cheaper?">
@@ -29,7 +29,7 @@
 <article>
 <header class="top">
 <h1>Deep Dive: Transformers</h1>
-<p class="byline">Deep dive · by Akarsh Gopal · October 2026 · updated <time datetime="2026-11-07">7 November 2026</time></p>
+<p class="byline">Deep dive · by Akarsh Gopal · October 2026 · updated <time datetime="2026-11-08">8 November 2026</time></p>
 </header>
 
 <div class="brief" role="note" aria-label="In brief"><p><b>In brief.</b> Almost every unit of electricity passes through four or five transformers. This deep dive explains how they work, why big ones are so efficient, how they age, and why they have become one of the scarcest parts of the energy transition.</p><p><b>The surprise.</b> A large transformer that arrived within a year before the pandemic took three years or more by 2024.</p></div>
@@ -88,19 +88,17 @@
 
 <p>Core loss has two parts. <b>Hysteresis</b>: magnetic domains stick and snap rather than swing freely, so magnetising and demagnetising follow different paths, and the area of the loop is energy turned to heat each cycle. <b>Eddy currents</b>: the changing flux induces voltages in the iron itself, driving currents round inside the core.</p>
 
-<figure class="fig" data-fig="coreLoss" id="fig-coreLoss">
-<figcaption><span class="tagline tag-ill">Model</span> The B–H loop of three core materials at 50 Hz, a core cross-section with eddy currents in each sheet, and both losses per kilogram.<sup class="fn"><a href="#n4">4</a></sup></figcaption>
+<span id="fig-efficiency" class="anchor"></span>
+<figure class="fig showpiece" data-fig="coreLoss" id="fig-coreLoss">
+<figcaption><span class="tagline tag-mixed">Data + model</span> <b>Step 1, core losses.</b> The B–H loop of three core materials at 50 Hz, a core cross-section with eddy currents in each sheet, and both losses per kilogram.<sup class="fn"><a href="#n4">4</a></sup> <b>Step 2, efficiency rules.</b> Maximum permitted losses for EU oil-immersed distribution transformers (Tier 1 from 2015, Tier 2 from 2021)<sup class="fn"><a href="#n5">5</a></sup> and the efficiency that follows at each load.</figcaption>
 </figure>
 
 <p>Materials science has attacked both. About 3% silicon raises iron’s resistance and cuts eddy currents. In 1934 the American metallurgist Norman Goss found how to roll and anneal silicon steel so its grains line up; this <b>grain-oriented electrical steel</b> (GOES) magnetises far more easily along the rolling direction, with a much narrower loop. Building the core from thin insulated sheets, usually 0.23–0.30 mm, traps eddy currents in each sheet, and because eddy loss grows with the square of thickness, halving the sheet quarters it. In a solid plate the eddy loss swamps everything else, which is why no one builds cores that way.</p>
 
 <p><b>Amorphous metal</b> goes further: an alloy cooled so fast, in ribbons about 0.025 mm thick, that it never crystallises. Its core losses are a fraction of silicon steel’s, but it is brittle, saturates lower and is harder to build with. China and India have installed 1.1 and 1.3 million amorphous-core transformers, against 600,000 in the United States.<sup class="fn"><a href="#n1">1</a></sup></p>
 
-<p>Copper losses are simpler: current squared times resistance. Since core loss is fixed and copper loss grows with load squared, a transformer is most efficient where the two are equal. The EU’s ecodesign rules set maximums for both at every rating, and the figure uses them:<sup class="fn"><a href="#n5">5</a></sup></p>
+<p>Copper losses are simpler: current squared times resistance. Since core loss is fixed and copper loss grows with load squared, a transformer is most efficient where the two are equal. The EU’s ecodesign rules set maximums for both at every rating, and step 2 of the figure above uses them.<sup class="fn"><a href="#n5">5</a></sup></p>
 
-<figure class="fig" data-fig="efficiency" id="fig-efficiency">
-<figcaption><span class="tagline tag-real">Data</span> Maximum permitted losses for EU oil-immersed distribution transformers (Tier 1 from 2015, Tier 2 from 2021)<sup class="fn"><a href="#n5">5</a></sup> and the efficiency that follows at each load.</figcaption>
-</figure>
 
 <p>A 1,000 kVA unit built to the 2021 limits may waste at most 693 W in its core and 7,600 W in its windings at full load, and its efficiency peaks at 99.5% near 30% load.<sup class="fn"><a href="#n5">5</a></sup> Those fractions sound negligible, but core loss runs every hour for decades on transformers that are mostly lightly loaded, so utilities “capitalise” losses, paying more up front for a lower-loss core.</p>
 
@@ -119,17 +117,15 @@
 
 <h2 id="three-phase"><span class="num">5</span>Three phases, stars and deltas</h2>
 
-<p>The grid is <a class="xref" href="the-machine.html#fig-threePhase">three-phase</a> (essay 3): each generator has three coils a third of a turn apart, making three voltages 120° apart. A three-phase transformer has a limb, and a winding, per phase. Take the three windings out and there are two ways to connect them. Join one end of each at a common point and you have a <b>star</b> (Y); join them end to end in a loop and you have a <b>delta</b> (D).</p>
+<p>The grid is <a class="xref" href="the-machine.html#three-phases">three-phase</a> (essay 3, and the first step of the figure below): each generator has three coils a third of a turn apart, making three voltages 120° apart. A three-phase transformer has a limb, and a winding, per phase. Take the three windings out and there are two ways to connect them. Join one end of each at a common point and you have a <b>star</b> (Y); join them end to end in a loop and you have a <b>delta</b> (D).</p>
 
-<figure class="fig" data-fig="windings" id="fig-windings">
-<figcaption><span class="tagline tag-ill">Model</span> Three windings, one colour per phase, joined in star (with neutral N) or delta to the line conductors A, B and C.</figcaption>
+<span id="fig-vectorGroups" class="anchor"></span>
+<figure class="fig showpiece" data-fig="windings" id="fig-windings">
+<figcaption><span class="tagline tag-ill">Model</span> <b>Step 1, three phases.</b> The generator of essay 3 with three coils, coloured by phase; its other views add the three voltages, which cancel at every instant, and the three powers into equal loads, which sum to a constant. <b>Step 2, star and delta.</b> Three windings, one colour per phase, joined in star (with neutral N) or delta to the line conductors A, B and C. <b>Step 3, vector groups.</b> Four common vector groups: capitals for the high-voltage side (Y star, D delta), lower case for the low-voltage side (n: neutral out), and a “clock” number in 30° steps, with the phasors of each.</figcaption>
 </figure>
 
-<p>With equal loads the three currents cancel at the star point and the neutral carries nothing. Unbalance them and the difference flows home along the neutral. In delta there is no common point at all; each winding sits between two lines, so it sees the voltage between them, √3 times bigger and 30° ahead. The choice therefore changes each winding’s voltage by √3, decides whether there is a neutral to earth, and can rotate the output’s phase. Real transformers combine the two:</p>
+<p>With equal loads the three currents cancel at the star point and the neutral carries nothing. Unbalance them and the difference flows home along the neutral. In delta there is no common point at all; each winding sits between two lines, so it sees the voltage between them, √3 times bigger and 30° ahead. The choice therefore changes each winding’s voltage by √3, decides whether there is a neutral to earth, and can rotate the output’s phase. Real transformers combine the two, as the third step of the figure above shows.</p>
 
-<figure class="fig" data-fig="vectorGroups" id="fig-vectorGroups">
-<figcaption><span class="tagline tag-ill">Model</span> Four common vector groups: capitals for the high-voltage side (Y star, D delta), lower case for the low-voltage side (n: neutral out), and a “clock” number in 30° steps, with the phasors of each.</figcaption>
-</figure>
 
 <p>The neighbourhood transformer in 230 V countries needs a star with an earthed neutral on the low side, to give each house 230 V between a phase and neutral, and a delta on the high side, in which the unbalanced part of the load current circulates instead of reaching the medium-voltage network. Because a delta winding sees the voltage <em>between</em> two phases, the combination also shifts every phase by 30°, one hour on a clock face. IEC 60076-1 writes it <b>Dyn11</b>: delta high side, star low side with neutral, low-voltage phasor at eleven o’clock.</p>
 
@@ -196,11 +192,9 @@
 
 <p>The transformer equation suggests an escape from size and steel: raise the frequency. At 400 Hz, the aircraft standard, a transformer needs far less iron than at 50 Hz, and at tens of kilohertz less still. A <b>solid-state transformer</b> uses power electronics to get there: it rectifies AC to DC, chops it into high-frequency AC with fast silicon or silicon-carbide switches, passes it through a small transformer and converts it back.<sup class="fn"><a href="#n19">19</a></sup></p>
 
-<figure class="fig" data-fig="sizeFrequency" id="fig-sizeFrequency">
-<figcaption><span class="tagline tag-ill">Model</span> Relative volume of the magnetics for the same power, scaling as (1/<i>f B</i>)<sup>3/4</sup>, with the core material changing as frequency rises.<sup class="fn"><a href="#n20">20</a></sup> Stage efficiencies are illustrative.</figcaption>
-</figure>
 
-<p>Raise the frequency to tens of kilohertz and the core shrinks to a few per cent of its 50 Hz volume, but a chain of converters grows around it. Each stage loses perhaps 1%, more than a conventional transformer’s single half per cent, and every switch, capacitor and fan can fail, unlike a tank of oil and copper that runs for half a century. In exchange, a solid-state transformer can regulate voltage continuously, offer a DC port for batteries, solar or electrolysers, control power flow and block faults.</p>
+<span id="fig-sizeFrequency" class="anchor"></span>
+<p>Raise the frequency to tens of kilohertz and the core shrinks to a few per cent of its 50 Hz volume,<sup class="fn"><a href="#n20">20</a></sup> but a chain of converters grows around it. Each stage loses perhaps 1%, more than a conventional transformer’s single half per cent, and every switch, capacitor and fan can fail, unlike a tank of oil and copper that runs for half a century. In exchange, a solid-state transformer can regulate voltage continuously, offer a DC port for batteries, solar or electrolysers, control power flow and block faults.</p>
 
 <p>So the copper-and-iron box keeps winning in the bulk grid while power electronics spread at its edges: HVDC converter stations, trains, fast chargers, data centres and electrolysers that need DC anyway, and the inverters of every solar farm and battery. The likely future is not fewer transformers but many more, and more of them next to a converter.</p>
 
