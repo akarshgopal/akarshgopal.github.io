@@ -268,3 +268,14 @@ ol.essays .d { font-size: 0.88rem; line-height: 1.5; color: var(--ink2); }
 .c-C { color: #1a7381; }
 .c-electron { color: #3268b8; }
 .c-freq { color: #1a7381; }
+
+/* the market-designs table (text columns) */
+table.mini.designs td, table.mini.designs th { text-align: left; vertical-align: top; }
+table.mini caption { caption-side: top; text-align: left; font-size: 0.85rem; color: var(--ink2); margin-bottom: 6px; }
+
+/* a static chart image that links to its live figure */
+figure.fig.thumb a { display: block; }
+figure.fig.thumb img { display: block; width: 100%; height: auto; border-radius: 9px; background: var(--paper); }
+
+/* the step selector of a merged figure */
+.controls.fig-steps { margin-bottom: 8px; }
