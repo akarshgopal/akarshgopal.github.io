@@ -23,6 +23,13 @@ put back an older version of either series.
   Then check that the guard passes.
 - The new figures are in `blog/ai/thesis.js`, readable and unminified, to be moved into `src/figs/`.
 
+## Cache stamps
+
+Pages load their local scripts and stylesheets as `name?v=<first 8 hex of the file's sha256>`. After editing any
+`.js` or `.css` file in `blog/ai`, or after a rebuild that writes unstamped references, run
+`python3 .github/scripts/stamp-assets.py`. The electricity build writes the same stamps itself. The series guard fails
+a pull request with a stale or missing stamp.
+
 ## Updating the guard
 
 When a series legitimately changes a page that a marker checks, update the marker in

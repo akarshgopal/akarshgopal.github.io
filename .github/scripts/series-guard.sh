@@ -18,12 +18,22 @@ need   "$A/verdict.html" 'data-xfig="meterSteps"' "the step-by-step meter on the
 need   "$A/app.js"      'Rubin (2026)'        "Rubin on the roofline (6 Nov 2026)"
 forbid "$A/app.js"      '\\u20AC'             "euro prices (the series is in US dollars since 5 Nov 2026)"
 for f in "$A"/*.html; do forbid "$f" 'written for Akarsh Gopal' "the old byline (copy-edits of 5 Nov 2026)"; done
+need   "$A/app.js"      '_kbdPtr('            "keyboard access to the figures (9 Nov 2026)"
+need   "$A/style.css"   'prefers-color-scheme: dark' "dark mode (9 Nov 2026)"
+need   "$A/style.css"   'body.series-open nav.series { -webkit-backdrop-filter: none' "the phone drawer fix (9 Nov 2026)"
 
 E=blog/electricity
 need   "$E/index.html"   'Why Did Electricity Stop Getting Cheaper?' "the restructured series title (31 Oct 2026)"
 need   "$E/futures.html" 'data-fig="billSplit"' "the household kWh split back to 1951 (essay 9)"
+need   "$E/style.css"   '.kbd-ptr'            "keyboard access to the figures (9 Nov 2026)"
+need   "$E/style.css"   'prefers-color-scheme: dark' "dark mode (9 Nov 2026)"
+need   "$E/style.css"   'inset: 0; z-index: 19;' "the phone drawer fix (9 Nov 2026)"
+exists "$E/feed.xml"    "the RSS feed (7 Nov 2026)"
 n=$(ls "$E"/*.html 2>/dev/null | wc -l)
 if [ "$n" -lt 12 ]; then echo "::error::blog/electricity has $n pages; the current series has 12 or more"; fail=1; fi
+
+# cache stamps: every local script and stylesheet is loaded as name?v=<hash of the file> (9 Nov 2026)
+python3 .github/scripts/stamp-assets.py --check || fail=1
 
 if [ "$fail" -ne 0 ]; then
   echo
