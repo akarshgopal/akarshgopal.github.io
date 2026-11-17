@@ -1,6 +1,6 @@
 # Draft: an Insull vignette for essay 1 (for the author to judge, 9 Nov 2026)
 
-**Status: draft, not on any page.** Nothing here is deployed.
+**Status, 17 Nov 2026: applied** as a box (`#insull`) in essay 1, §5, after the paragraph on the costs growth spread. The live version merges the bullets into prose and says "every hour that plant stood idle was capital earning nothing" in place of "idle plant was the largest cost he had", which the source does not state. Notes 12–14.
 
 **Where it goes:** essay 1 (`cheaper.html`), §5 "An engine and the costs around it". It would sit right after the
 paragraph ending "…they have climbed back (essay 9)", as a `<div class="deepdive" role="note">` box, like the
