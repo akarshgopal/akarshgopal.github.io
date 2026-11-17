@@ -38,7 +38,8 @@ python3 .github/scripts/stamp-assets.py --check || fail=1
 if [ "$fail" -ne 0 ]; then
   echo
   echo "This change would put back an older version of a series. Read SERIES-SOURCES.md at the root of master."
-  echo "For blog/ai: port docs/AI-SERIES-PORT.md (branch electricity-source) into the ai-explainer source first."
+  echo "For blog/ai: after a rebuild, run python3 .github/scripts/ai-postbuild.py (re-adds keyboard access, restamps),"
+  echo "  and port docs/AI-SERIES-PORT.md and docs/AI-PORT-KIT.md (branch electricity-source) into the ai-explainer source."
   echo "For blog/electricity: build from the head of the electricity-source branch."
   exit 1
 fi

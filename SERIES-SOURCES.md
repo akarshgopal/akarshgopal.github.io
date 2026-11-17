@@ -23,6 +23,14 @@ put back an older version of either series.
   Then check that the guard passes.
 - The new figures are in `blog/ai/thesis.js`, readable and unminified, to be moved into `src/figs/`.
 
+## After every rebuild of blog/ai/
+
+Run `python3 .github/scripts/ai-postbuild.py` before opening the pull request. It does two things:
+- It puts back the keyboard pointer, if the `ai-explainer` source does not have it yet.
+- It rewrites the cache stamps.
+
+The full port into the source is described in `docs/AI-PORT-KIT.md` on the `electricity-source` branch.
+
 ## Cache stamps
 
 Pages load their local scripts and stylesheets as `name?v=<first 8 hex of the file's sha256>`. After editing any
