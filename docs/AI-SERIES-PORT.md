@@ -261,3 +261,6 @@ Secondary or reported only:
     `blog/ai`.
   - The series guard runs `stamp-assets.py --check`.
   - A rebuild from `ai-explainer` should write the same stamps, or run the script before its PR.
+- **Safety net (17 Nov 2026):** `.github/scripts/ai-postbuild.py` on master re-inserts the keyboard pointer into a
+  rebuilt `app.js` and rewrites the stamps. Run it after every rebuild. The readable port for the source is in
+  `docs/AI-PORT-KIT.md`.
