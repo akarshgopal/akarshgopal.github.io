@@ -264,3 +264,13 @@ Secondary or reported only:
 - **Safety net (17 Nov 2026):** `.github/scripts/ai-postbuild.py` on master re-inserts the keyboard pointer into a
   rebuilt `app.js` and rewrites the stamps. Run it after every rebuild. The readable port for the source is in
   `docs/AI-PORT-KIT.md`.
+
+## 15. Closed: the source is the `ai-source` branch (20 Nov 2026)
+
+These notes are now history. The AI series' source is the `ai-source` branch of this repository: an orphan branch
+like `electricity-source`, pushed on 12 Nov 2026. Its snapshot `d6c89cd` already held §1–§13, and `881398b` added
+§14's content-hash stamps and per-page scripts (`js/<page>.js`).
+
+The safety net `ai-postbuild.py` and `docs/AI-PORT-KIT.md` were written while that branch went unnoticed, and are
+retired. From now on, change the AI series only in `ai-source` and deploy its build (see its `HANDOVER.md`, and
+`SERIES-SOURCES.md` on master).
