@@ -1,12 +1,42 @@
 import { build } from 'esbuild';
-import { cpSync, mkdirSync, rmSync, readFileSync, writeFileSync, existsSync } from 'node:fs';
+import { cpSync, mkdirSync, rmSync, readFileSync, writeFileSync, existsSync, readdirSync } from 'node:fs';
+import { createHash } from 'node:crypto';
 import { PAGES, SERIES_TITLE, REDIRECTS } from './src/series.mjs';
 import { TIMELINE } from './src/timeline.mjs';
 import { LEVELS } from './src/stack.mjs';
 
 rmSync('dist', { recursive: true, force: true });
 mkdirSync('dist/fonts', { recursive: true });
-await build({ bundle: true, minify: true, format: 'iife', target: ['es2020'], legalComments: 'eof', entryPoints: ['src/main.js'], outfile: 'dist/app.js' });
+// Per-page scripts (since Nov 2026): src/main.js stays the one registry of figures, and each page gets its own classic
+// IIFE bundle, js/<page>.js, holding only the figures that page shows (esbuild drops the rest). Classic scripts, not
+// modules, so the pages still work from file://.
+const MAIN = readFileSync('src/main.js', 'utf8');
+const IMPORTS = MAIN.split('\n').filter(l => l.startsWith('import ')).join('\n');
+const REGISTRY = (() => {
+  const body = MAIN.slice(MAIN.indexOf('boot({') + 6, MAIN.lastIndexOf('})'));
+  const reg = new Map(), spreads = [];
+  for (const part of body.split(',').map(x => x.trim()).filter(Boolean)) {
+    if (part.startsWith('...')) {
+      const id = part.slice(3);
+      const from = MAIN.match(new RegExp(`import \\{[^}]*\\bFIGS as ${id}\\b[^}]*\\} from '\\./([^']+)'`))[1];
+      const keys = readFileSync(`src/${from}`, 'utf8').match(/export const FIGS = \{([^}]*)\}/)[1].split(',').map(k => k.trim().split(':')[0].trim()).filter(Boolean);
+      for (const k of keys) reg.set(k, `${id}.${k}`);
+    } else {
+      const [k, v] = part.split(':').map(x => x.trim());
+      reg.set(k, v || k);
+    }
+  }
+  return reg;
+})();
+async function pageScript(p, html) {
+  const names = [...new Set([...html.matchAll(/data-fig="([A-Za-z0-9]+)"/g)].map(m => m[1]))];
+  const missing = names.filter(n => !REGISTRY.has(n));
+  if (missing.length) throw new Error(`${p.file}: figures not in src/main.js: ${missing.join(', ')}`);
+  const out = `js/${p.file.replace(/\.html$/, '')}.js`;
+  await build({ bundle: true, minify: true, format: 'iife', target: ['es2020'], legalComments: 'eof', outfile: `dist/${out}`,
+    stdin: { contents: `${IMPORTS}\nboot({ ${names.map(n => `${n}: ${REGISTRY.get(n)}`).join(', ')} });\n`, resolveDir: 'src', sourcefile: `${p.file}.entry.js` } });
+  return out;
+}
 // three.js and the 3D figures live in their own classic-script bundle, loaded before app.js only on pages that use them
 // (a plain <script>, not a module, so the pages still work from file://)
 const FIGS3D = ['lossValley', 'sgdValley', 'mosfet', 'cmosInverter', 'powerLadder', 'clusterGrid', 'triode', 'coolantFlow', 'dataDistance', 'tokensPerParam', 'systolic', 'nvlinkPair', 'yieldDie', 'relayLogic', 'litho', 'heatLoop', 'transformerBlock', 'relayCascade'];
@@ -90,7 +120,11 @@ for (const [i, p] of PAGES.entries()) {
   html = html.replace(/<figure([^>]*?)data-fig="([A-Za-z0-9]+)"([^>]*)>/g, (m, a, name, b) => /\bid=/.test(a + b) ? m : `<figure${a}data-fig="${name}" id="fig-${name}"${b}>`);
   html = html.replace(/(<main>)/, nav(i) + '\n$1').replace(/(<header class="top">[\s\S]*?<\/header>)/, `$1\n${spine(i)}`);
   html = html.replace(/(<\/article>)/, pager(i) + '\n$1');
-    if (FIGS3D.some(f => html.includes(`data-fig="${f}"`))) html = html.replace('<script src="app.js"></script>', '<script src="three3d.js?v=' + Date.now().toString(36) + '"></script>\n<script src="app.js"></script>');
+  {
+    const js = await pageScript(p, html);
+    const three = FIGS3D.some(f => html.includes(`data-fig="${f}"`)) ? '<script src="three3d.js"></script>\n' : '';
+    html = html.replace('<script src="app.js"></script>', js ? `${three}<script src="${js}"></script>` : '');
+  }
   writeFileSync(`dist/${p.file}`, html);
 }
 // RSS 2.0 feed of the live pages, newest update first (ties keep series order)
@@ -118,5 +152,14 @@ for (const r of REDIRECTS) {
 <p>This page has moved to <a href="${r.to}">${r.to}</a>.</p>
 </body></html>
 `);
+}
+// Cache stamps: every local script and stylesheet loads as name?v=<first 8 hex of the file's sha256>, the rule that
+// master's .github/scripts/stamp-assets.py writes and the series guard checks. A browser can then never mix a cached
+// file with a new deploy.
+for (const f of readdirSync('dist').filter(f => f.endsWith('.html'))) {
+  const html = readFileSync(`dist/${f}`, 'utf8');
+  const out = html.replace(/(<(?:script|link)\b[^>]*?\b(?:src|href)=")([A-Za-z0-9_./-]+\.(?:js|css))(?:\?v=[A-Za-z0-9]+)?(")/g,
+    (m, a, ref, b) => existsSync(`dist/${ref}`) ? `${a}${ref}?v=${createHash('sha256').update(readFileSync(`dist/${ref}`)).digest('hex').slice(0, 8)}${b}` : m);
+  if (out !== html) writeFileSync(`dist/${f}`, out);
 }
 console.log('built dist/: ' + live.map(p => p.file).join(', ') + '; redirects: ' + REDIRECTS.map(r => r.from).join(', '));
