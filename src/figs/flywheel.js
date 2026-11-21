@@ -25,7 +25,7 @@ const INLETS = {
 const ERAS = {
   crowd: { inlets: ['crowd'], loop: false, people: 'crowd', txt: '<b>2009, ImageNet.</b> About 49,000 crowd workers in 167 countries sorted photos through Amazon Mechanical Turk. Data went one way: nobody was using the model, so nothing came back round.' },
   rlhf: { inlets: ['usage', 'sft', 'rank'], loop: true, people: 'contractors', txt: '<b>2022, the first chat models.</b> InstructGPT was tuned with about 40 contractors writing answers and ranking replies. Once a model is released, its users’ prompts and ratings come back round, and the loop closes: a year after launch ChatGPT had 100 million weekly users.' },
-  agents: { inlets: ['usage', 'sft', 'rank', 'rl', 'robot', 'synth'], loop: true, people: 'experts', txt: '<b>2026, agents.</b> Paid experts write, rank and build graded practice tasks; others record robots and their own hands at work; models make synthetic data too. Each turn is a new model, and a better model draws more users: 900 million a week for ChatGPT by February 2026 (OpenAI).' },
+  agents: { inlets: ['usage', 'sft', 'rank', 'rl', 'robot', 'synth'], loop: true, people: 'experts', txt: '<b>2026, agents.</b> Paid experts write, rank and build graded practice tasks; others record robots and their own hands at work; models make synthetic data too. Each turn is a new model, and a better model draws more users: more than 1.2 billion a week for ChatGPT by October 2026.' },
 };
 
 export function flywheel(el) {
