@@ -408,7 +408,7 @@ function coolantFlow2d(el) {
 // Sources (factory notes 15–17): facility supply = the ASHRAE TC 9.9 liquid-cooling class (maximum facility water supply,
 // °C) and its typical heat-rejection plant (2021 reference card); chip case band 80–90 °C on W32 water (ASHRAE white
 // paper, 2021); Nvidia's 45 °C in, ~55 °C out (NVIDIA blog, 22 June 2026). ASSUMED, and said so in words: the CDU
-// approach (default 4 °C; vendor examples run about 2–7 °C) and a facility flow equal to the coolant flow. MODEL: both
+// approach (default 4 °C, an assumption) and a facility flow equal to the coolant flow. MODEL: both
 // loops warm by ΔT = Q / (ṁ c), the same riseC() as the cold-plate figure above. Die temperature is not computed.
 const W_CLASS = [
   { k: 'W17', t: 17, plant: 'chiller + cooling tower', sup: 'chillers typically needed', chill: true },
@@ -423,6 +423,9 @@ const HL_PRESETS = {
   page: { cls: 'W32', appr: 4, kw: 120, Lpm: 50 }, // the maths box: a 120 kW rack at 50 L/min
   nvidia: { cls: 'W40', appr: 5, kw: 120, Lpm: 173 }, // W40 + 5 °C = 45 °C in; 173 L/min makes 120 kW rise ≈ 10 °C
 };
+// opening state: W32 water, with the flow set so the loop warms by about 10 °C, the rise in Nvidia's 45 → 55 °C
+// (the page's 50 L/min example, a 34.6 °C rise, is one press away)
+const HL_START = { cls: 'W32', appr: 4, kw: 120, Lpm: 173 };
 const T_LO = 10, T_HI = 100; // the one temperature scale every leg is coloured on
 const T_STOPS = [[10, C.blue], [30, C.cyan], [50, C.yellow], [70, C.orange], [90, C.red]];
 function tempCol(t) {
@@ -433,7 +436,7 @@ function tempCol(t) {
 const fmtC = v => { const r = Math.round(v * 10) / 10; return `${String(Number.isInteger(r) ? r : r.toFixed(1)).replace('-', '−')} °C`; };
 
 export function heatLoop(el) {
-  let s = { ...HL_PRESETS.page }, flowT = 0;
+  let s = { ...HL_START }, flowT = 0;
   const cls = () => W_CLASS.find(c => c.k === s.cls);
   const temps = () => {
     const fs = cls().t, rise = riseC(s.kw, s.Lpm), ts = fs + s.appr; // facility supply, ΔT (both loops: facility flow = coolant flow, assumed), coolant supply
