@@ -1,7 +1,7 @@
 // Yardstick: energy sinks on a log scale, plus a Sankey of primary → final → end-uses vs the three rung bars.
 import { Fig } from '../lib/fig.js';
 import { C, alpha } from '../lib/colors.js';
-import { text, rrect, line, clamp } from '../lib/draw.js';
+import { text, rrect, line, clamp, measure } from '../lib/draw.js';
 import { controls, slider, readout, hint } from '../lib/ui.js';
 import { publish } from '../lib/lean.js';
 import { loadPrefs, patchAct1, savePrefs } from '../lib/prefs.js';
@@ -111,9 +111,17 @@ export function energyFlow(el) {
       // col 0: primary (full height)
       const hp = hOf(PRIM), y0 = t;
       rrect(ctx, cols[0], y0, bw, hp, 3); ctx.fillStyle = C.green; ctx.fill();
-      text(ctx, n ? 'Primary' : 'Primary energy', cols[0] + bw / 2, y0 - 12, { size: 11, weight: 700, color: C.ink, align: 'center' });
-      if (!n) text(ctx, '167k TWh', cols[0] + bw / 2, y0 + hp + 14, { size: 10.5, weight: 650, color: C.ink2, align: 'center' });
-      else text(ctx, '167k', cols[0] + bw / 2, y0 + hp / 2 + 4, { size: 10, weight: 650, color: '#fff', align: 'center' });
+      // phone: the value sits beside the column title (a 10 px column cannot carry white text legibly)
+      const head = (name, val, cx, y, left) => {
+        const a = measure(ctx, name, 11, 700), b = measure(ctx, ' ' + val, 10.5, 650);
+        const x0 = left ? Math.max(pad - 6, cx - 4) : cx - (a + b) / 2;
+        text(ctx, name, x0, y, { size: 11, weight: 700, color: C.ink });
+        text(ctx, ' ' + val, x0 + a, y, { size: 10.5, weight: 650, color: C.ink2 });
+      };
+      if (!n) {
+        text(ctx, 'Primary energy', cols[0] + bw / 2, y0 - 12, { size: 11, weight: 700, color: C.ink, align: 'center' });
+        text(ctx, '167k TWh', cols[0] + bw / 2, y0 + hp + 14, { size: 10.5, weight: 650, color: C.ink2, align: 'center' });
+      } else head('Primary', '167k TWh', cols[0], y0 - 12, true);
       // col 1: final (proportional) + conversion losses above
       const hf = hOf(FINAL), yf = t + (H - hf); // align bottoms with primary
       const hl = hOf(PRIM - FINAL);
@@ -125,9 +133,10 @@ export function energyFlow(el) {
         text(ctx, n ? 'not final' : 'losses, own use, feedstocks', (cols[0] + cols[1]) / 2 + bw / 2, t + Math.min(hl, 18) / 2 + 4, { size: n ? 9 : 10, color: C.ink3, align: 'center' });
       }
       rrect(ctx, cols[1], yf, bw, hf, 3); ctx.fillStyle = C.blue; ctx.fill();
-      text(ctx, 'Final', cols[1] + bw / 2, yf - 12, { size: 11, weight: 700, color: C.ink, align: 'center' });
-      if (!n) text(ctx, '125k TWh', cols[1] + bw / 2, yf + hf + 14, { size: 10.5, weight: 650, color: C.ink2, align: 'center' });
-      else text(ctx, '125k', cols[1] + bw / 2, yf + hf / 2 + 4, { size: 10, weight: 650, color: '#fff', align: 'center' });
+      if (!n) {
+        text(ctx, 'Final', cols[1] + bw / 2, yf - 12, { size: 11, weight: 700, color: C.ink, align: 'center' });
+        text(ctx, '125k TWh', cols[1] + bw / 2, yf + hf + 14, { size: 10.5, weight: 650, color: C.ink2, align: 'center' });
+      } else head('Final', '125k', cols[1] + bw / 2, yf - 12);
       // electricity is a cut across every sector, not a branch of one: no ribbon (any ribbon seemed to leave from the sector it
       // crossed); the column alone, to the same scale, in the empty space above the sector stack
       const he = hOf(ELEC), ye = t + 14;
@@ -148,9 +157,10 @@ export function energyFlow(el) {
       // not as a child of one sector — band leaves from the middle of the final column.
       rrect(ctx, cols[3], ye, bw, he, 3); ctx.fillStyle = C.cyan; ctx.fill();
       // Title above the column (avoids overlap with the sector stack labels to the right)
-      text(ctx, n ? 'Elec.' : 'Electricity', cols[3] + bw / 2, ye - 12, { size: 11, weight: 700, color: C.ink, align: 'center' });
-      if (!n) text(ctx, '28.2k · ≈21% of final, same scale, used in every sector', cols[3] - 4, ye + he + 14, { size: 10.5, color: C.ink2 });
-      else text(ctx, '28.2k', cols[3] + bw / 2, ye + he / 2 + 4, { size: 10, weight: 650, color: '#fff', align: 'center' });
+      if (!n) {
+        text(ctx, 'Electricity', cols[3] + bw / 2, ye - 12, { size: 11, weight: 700, color: C.ink, align: 'center' });
+        text(ctx, '28.2k · ≈21% of final, same scale, used in every sector', cols[3] - 4, ye + he + 14, { size: 10.5, color: C.ink2 });
+      } else head('Elec.', '28.2k', cols[3] + bw / 2, ye - 12);
       // Electricity-by-consuming-sector (IEA World 2024). Thin stack to the right — not invented sector→elec flows.
       const eSplitX = cols[3] + bw + (n ? 6 : 12);
       const eSplitW = n ? 8 : 10;
