@@ -83,6 +83,7 @@ Verdicts: **OK** teaches its idea at a glance · **Minor** small polish · **Fix
 | essay · flipEnergy | heat glow on the working valve, radius by ½CV² (16–50 px over 0–250 fJ), brightness by flow; "heat" label sits on the glow | 2c3a866 |
 | flip · mosfet (3D) | "gate" anchored on the top centre of the visible gate body per generation (planar slab, FinFET wrap top, top GAA sleeve). Cut-plane re-check: Peek slid the cut to x = −0.9 at GAA, clipping the whole gate stack away; it now stops at the FinFET default (x = −0.2), inside every gate. Materials, lights, camera untouched | 7e6d74f |
 | essay · joulesPerOp | energy-rail labels in one row under the rail; landmarks placed first, a tick whose label would touch is dropped (phone: 1 kWh, 1 MWh, world) | acd8dff |
+| factory · heatLoop (3D → 2D) | Replaced the 3D row of boxes with a 2D canvas build, as UNDERSTANDING-AUDIT asked: die → cold plate → CDU → outdoor reject, TCS and FWS loops with warm legs on top and cooled returns below, every pipe coloured on one 10–100 °C scale (the legend rail), a temperature on each leg. Facility supply = ASHRAE class W17–W45 (segmented) with its typical plant; CDU approach assumed (2–7 °C, default 4); ΔT = Q/(ṁ c) from the coolant-flow figure; facility flow assumed equal; chip case band 80–90 °C (ASHRAE white paper) and the gap to it; Nvidia 45 → 55 °C bracket and preset. Phone stacks the loops as a snake. heatloop3d.js removed | see `git log heatloop-2d` |
 
 No 3D/2D decision in UNDERSTANDING-AUDIT.md was changed. All 3D edits are DOM labels or the phone stage height; materials,
 lights and desktop cameras are untouched, so the QA21 chroma baselines were not rebaselined.
@@ -91,7 +92,6 @@ lights and desktop cameras are untouched, so the QA21 chroma baselines were not 
 
 | Figure | Issue | Why deferred / what it would take |
 |---|---|---|
-| factory · heatLoop | Still a row of coloured boxes; the hot→cold story is carried only by the caption and a travelling pulse | The audit's own condition stands: replace only with a proper 2D build (temperature-coloured flow along die → plate → CDU → outdoor, warm legs on top, cool returns), which needs a temperature model per leg. Labels now fixed |
 | essay · manyHands, clusterGrid, parallel · latencyHiding, flip · cmosInverter | dead space / "output voltage (V)" axis title touching the 0.70 tick | Cosmetic |
 | data · dataFlow | Plain grey box flowchart: clear but well below the visual bar of the rest | Not redrawn (figure-polish pass, Nov 2026): dataFlow is not placed on any page in the current build (no data-fig="dataFlow"; only registered in main.js), so a redraw would not reach readers. Redo with the part colours if it returns |
 

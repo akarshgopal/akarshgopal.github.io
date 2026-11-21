@@ -16,7 +16,7 @@ Rule (user direction): *not everything needs to be 3D; the priority is understan
 | 10 | nvlink (parallel) | A number leaving one package crosses the board, so the distance cost goes up | Little: two boxes and a link | Simplify candidate; the existing 2D fallback is too crude to adopt yet, so **keep 3D** this wave |
 | 11 | tokens (scaling) | Tokens per parameter: about 20:1 is compute-optimal; real models drifted far above it | **No**: piles of cubes show a ratio worse than an axis does; the real-model scatter teaches the trend | **Convert to 2D** (scatter of notable models + 20:1 line + yearly median) |
 | 12 | transformer (model) | The FLOPs split across embed / attention / MLP; MLP dominates | Little: bar heights, but bricks read like blocks being built | Keep 3D this wave; simplify candidate (bar chart) |
-| 13 | heat loop (factory) | Heat path: die → plate → CDU → outside; coolant in cold, out hot | Partly: a pipeline, readable in 2D | Keep 3D |
+| 13 | heat loop (factory) | Heat path: die → plate → CDU → outside; coolant in cold, out hot | Partly: a pipeline, readable in 2D | Keep 3D (superseded 21 Nov 2026: replaced by the 2D temperature-coloured build this row asked for) |
 | 14 | cold plate (factory) | Coolant flows through fins over the die, entering cold and leaving hot | Yes: the fins sit above the die | **Keep 3D** |
 | 15 | factory zoom: server / board06 (factory) | Scale: die → board → rack → hall → building | Yes: a continuous spatial zoom is the point | **Keep 3D** |
 | 16 | factory zoom: rack / hall (factory) | Same zoom, mid-scale | Yes | **Keep 3D** (hall fill fix) |
