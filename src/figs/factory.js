@@ -1,6 +1,6 @@
 // The AI Factory: from one chip to the grid. Real inputs from src/lib/constants.js; every derived number is computed here.
 import { Fig, isPlaying, onPlayChange } from '../lib/fig.js';
-import { C, alpha } from '../lib/colors.js';
+import { C, alpha, mix, darken } from '../lib/colors.js';
 import { text, rrect, line, circle, arrow, clamp, measure } from '../lib/draw.js';
 import { controls, slider, segmented, button, readout, hint, more } from '../lib/ui.js';
 import { K } from '../lib/constants.js';
@@ -295,12 +295,14 @@ function powerLadder2d(el) {
 // Water: textbook ρ, cp. Outlet ΔT from P = ṁ·c·ΔT (MODEL). Flow rates are schematic totals for the chosen load.
 const WATER = { rho: 997, cp: 4180 }; // kg/m³, J/(kg·K)
 const AIR_CAP = 1.2 * 1005; // J/(m³·K) — for the volume comparison in the readout only
+const flowKgS = Lpm => (Lpm / 60000) * WATER.rho; // L/min of water → kg/s
+const riseC = (kw, Lpm) => kw * 1000 / (flowKgS(Lpm) * WATER.cp); // ΔT = Q / (ṁ c), °C; used by coolantFlow and heatLoop
 export function coolantFlow(el) { try { if (window.AIX3D && window.AIX3D.coldPlate3d(el, { ui: UI3D })) return; } catch (e) { console.warn(e); el.querySelector(".three-wrap")?.remove(); } coolantFlow2d(el); }
 function coolantFlow2d(el) {
   let kw = 40.8, Lpm = 50, R = {};
   const drops = [], sparks = []; // water along the channel; heat rising from the die
-  const mDot = () => (Lpm / 60000) * WATER.rho; // kg/s
-  const dT = () => kw * 1000 / (mDot() * WATER.cp); // °C
+  const mDot = () => flowKgS(Lpm); // kg/s
+  const dT = () => riseC(kw, Lpm); // °C
   const fig = new Fig(el, {
     height: w => (narrow(w) ? 420 : 380), animated: true,
     label: 'A cold plate over a hot die: water flows through a channel, picks up heat, and leaves warmer by ΔT = P / (ṁ c), a model',
@@ -402,88 +404,150 @@ function coolantFlow2d(el) {
   paint();
 }
 
-// ---------- 2b. Bridge: same cold plate into the facility loop (CIECH #9) ----------
-function heatLoop2d(el) {
-  let t = 0.55, goal = null, R = {}, pulse = 0;
-  const STAGES = [
-    { name: 'die', short: 'die' },
-    { name: 'cold plate', short: 'plate' },
-    { name: 'CDU / exchanger', short: 'CDU' },
-    { name: 'outdoor reject', short: 'out' },
-  ];
+// ---------- 2b. Bridge: the same plate into the CDU and the facility loop, with a temperature on every leg ----------
+// Sources (factory notes 15–17): facility supply = the ASHRAE TC 9.9 liquid-cooling class (maximum facility water supply,
+// °C) and its typical heat-rejection plant (2021 reference card); chip case band 80–90 °C on W32 water (ASHRAE white
+// paper, 2021); Nvidia's 45 °C in, ~55 °C out (NVIDIA blog, 22 June 2026). ASSUMED, and said so in words: the CDU
+// approach (default 4 °C; vendor examples run about 2–7 °C) and a facility flow equal to the coolant flow. MODEL: both
+// loops warm by ΔT = Q / (ṁ c), the same riseC() as the cold-plate figure above. Die temperature is not computed.
+const W_CLASS = [
+  { k: 'W17', t: 17, plant: 'chiller + cooling tower', sup: 'chillers typically needed', chill: true },
+  { k: 'W27', t: 27, plant: 'chiller + cooling tower', sup: 'chillers typically needed', chill: true },
+  { k: 'W32', t: 32, plant: 'cooling tower', sup: 'chiller or district heat only as a supplement', chill: false },
+  { k: 'W40', t: 40, plant: 'cooling tower', sup: 'chiller or district heat only as a supplement', chill: false },
+  { k: 'W45', t: 45, plant: 'cooling tower', sup: 'district heat as a supplement, no chiller listed', chill: false },
+];
+const CASE_BAND = [80, 90]; // °C, cold-plate case temperatures on W32 water (ASHRAE white paper)
+const NV = [45, 55]; // °C, Nvidia: enters at 45, exits at roughly 55
+const HL_PRESETS = {
+  page: { cls: 'W32', appr: 4, kw: 120, Lpm: 50 }, // the maths box: a 120 kW rack at 50 L/min
+  nvidia: { cls: 'W40', appr: 5, kw: 120, Lpm: 173 }, // W40 + 5 °C = 45 °C in; 173 L/min makes 120 kW rise ≈ 10 °C
+};
+const T_LO = 10, T_HI = 100; // the one temperature scale every leg is coloured on
+const T_STOPS = [[10, C.blue], [30, C.cyan], [50, C.yellow], [70, C.orange], [90, C.red]];
+function tempCol(t) {
+  if (t <= T_STOPS[0][0]) return T_STOPS[0][1];
+  for (let i = 1; i < T_STOPS.length; i++) if (t <= T_STOPS[i][0]) { const [a, ca] = T_STOPS[i - 1], [b, cb] = T_STOPS[i]; return mix(ca, cb, (t - a) / (b - a)); }
+  return T_STOPS[T_STOPS.length - 1][1];
+}
+const fmtC = v => { const r = Math.round(v * 10) / 10; return `${String(Number.isInteger(r) ? r : r.toFixed(1)).replace('-', '−')} °C`; };
+
+export function heatLoop(el) {
+  let s = { ...HL_PRESETS.page }, flowT = 0;
+  const cls = () => W_CLASS.find(c => c.k === s.cls);
+  const temps = () => {
+    const fs = cls().t, rise = riseC(s.kw, s.Lpm), ts = fs + s.appr; // facility supply, ΔT (both loops: facility flow = coolant flow, assumed), coolant supply
+    return { fs, ts, tr: ts + rise, fr: fs + rise, rise, margin: CASE_BAND[0] - (ts + rise) };
+  };
+  const isPreset = p => Object.keys(p).every(k => p[k] === s[k]);
   const fig = new Fig(el, {
-    height: w => (narrow(w) ? 300 : 260), animated: true,
-    label: 'Heat path from the die through the cold plate to the facility loop and outdoor reject — schematic',
-    step(dt) {
-      pulse += dt;
-      if (goal != null) {
-        const d = goal - t;
-        if (Math.abs(d) < 0.004) { t = goal; goal = null; }
-        else t += d * Math.min(1, dt * 5);
-      } else {
-        t = (t + dt * 0.12) % 1; // mid-action default: keep circulating
-      }
-      paint();
-    },
+    height: w => (narrow(w) ? 440 : 300), animated: true,
+    label: 'Heat from the die through the cold plate, the CDU and the facility loop to the outdoor plant, with every pipe coloured by its temperature on one scale; facility water from the ASHRAE class, CDU approach assumed, rise from ΔT = Q / (ṁ c)',
+    step(dt) { flowT += dt * (0.4 + s.Lpm / 120); },
     draw(ctx, w, h) {
-      const n = narrow(w), pad = n ? 12 : 18, top = 36, bot = h - 52;
-      const xs = STAGES.map((_, i) => pad + 30 + i * ((w - pad * 2 - 60) / (STAGES.length - 1)));
-      const y = (top + bot) / 2;
-      // facility loop band
-      rrect(ctx, pad, top, w - pad * 2, bot - top, 10); ctx.fillStyle = '#eceeea'; ctx.fill();
-      // die → plate is conduction through metal, not a pipe
-      arrow(ctx, xs[0] + 30, y, xs[1] - 30, y, C.heat, 4, 9);
-      text(ctx, n ? 'conducts' : 'conduction', (xs[0] + xs[1]) / 2, y + 48, { size: 10, align: 'center', color: C.heat });
-      // two loops share the CDU: TCS (plate ↔ CDU) and FWS (CDU ↔ outdoor); warm leg out on top, cooled leg back below
-      [[1, 2, 'TCS loop'], [2, 3, 'FWS loop']].forEach(([a, b, name]) => {
-        line(ctx, xs[a] + 34, y - 12, xs[b] - 34, y - 12, alpha(C.heat, 0.5), 6);
-        arrow(ctx, xs[a] + 26, y - 12, xs[b] - 26, y - 12, C.heat, 2, 7);
-        line(ctx, xs[b] - 34, y + 12, xs[a] + 34, y + 12, alpha(C.cyan, 0.5), 6);
-        arrow(ctx, xs[b] - 26, y + 12, xs[a] + 26, y + 12, C.cyan, 2, 7);
-        text(ctx, name, (xs[a] + xs[b]) / 2, y + 48, { size: 10, align: 'center', weight: 700, color: C.ink2 });
-      });
-      STAGES.forEach((s, i) => {
-        const on = Math.abs(i - t * (STAGES.length - 1)) < 0.55;
-        const col = i === 0 ? C.heat : i === 1 ? C.cyan : i === 2 ? C.blue : C.green;
-        rrect(ctx, xs[i] - 34, y - 28, 68, 56, 8);
-        ctx.fillStyle = on ? alpha(col, 0.35) : alpha(col, 0.14); ctx.fill();
-        ctx.strokeStyle = on ? col : C.ink3; ctx.lineWidth = on ? 2 : 1; ctx.stroke();
-        // name sits ABOVE the box so the pipe through the box centre cannot strike it
-        text(ctx, n ? s.short : s.name, xs[i], y - 36, { size: n ? 11 : 12, align: 'center', weight: 700, color: C.ink, halo: 3 });
-      });
-      // circulating heat particle on forward path
-      const u = (pulse * 0.25) % 1;
-      const seg = Math.min(STAGES.length - 2, Math.floor(u * (STAGES.length - 1)));
-      const f = u * (STAGES.length - 1) - seg;
-      const px = xs[seg] + (xs[seg + 1] - xs[seg]) * f;
-      circle(ctx, px, seg ? y - 12 : y, 6, C.heat, '#fff', 1.5); // heat rides the warm legs
-      // scrub rail
-      const rl = pad + 20, rr = w - pad - 20, ry = h - 26;
-      line(ctx, rl, ry, rr, ry, C.grid2, 4);
-      STAGES.forEach((s, i) => {
-        const x = rl + i / (STAGES.length - 1) * (rr - rl);
-        circle(ctx, x, ry, 4, '#fff', C.ink3, 1.2);
-        if (!n) text(ctx, s.short, x, ry + 16, { size: 10, align: 'center', color: C.ink3 });
-      });
-      circle(ctx, rl + t * (rr - rl), ry, 10, '#fff', C.heat, 3);
-      R = { rl, rr, ry };
+      const n = narrow(w), T = temps(), c = cls(), pad = n ? 8 : 14, bg = '#eceeea';
+      const lab = (str, x, y, o = {}) => text(ctx, str, x, y, { size: 11, color: C.ink, weight: 650, halo: 3, haloColor: bg, ...o });
+      // a pipe of water at one temperature, with dashes running in the direction of flow
+      const pipe = (x1, y1, x2, y2, t) => {
+        const col = tempCol(t);
+        line(ctx, x1, y1, x2, y2, col, 9);
+        ctx.save(); ctx.lineCap = 'butt'; ctx.setLineDash([6, 12]); ctx.lineDashOffset = -flowT * 30;
+        line(ctx, x1, y1, x2, y2, 'rgba(255,255,255,0.6)', 3, [6, 12]);
+        ctx.restore();
+        const mx = (x1 + x2) / 2, my = (y1 + y2) / 2, dx = Math.sign(x2 - x1), dy = Math.sign(y2 - y1);
+        arrow(ctx, mx - dx * 6, my - dy * 6, mx + dx * 7, my + dy * 7, darken(col, 0.25), 2, 9);
+      };
+      // a box whose water runs between two temperatures, top warm and bottom cool
+      const vgrad = (x, y, bw, bh, tTop, tBot) => { const g = ctx.createLinearGradient(0, y, 0, y + bh); g.addColorStop(0, alpha(tempCol(tTop), 0.55)); g.addColorStop(1, alpha(tempCol(tBot), 0.55)); return g; };
+      rrect(ctx, pad, 6, w - pad * 2, h - 84, 10); ctx.fillStyle = bg; ctx.fill();
+
+      // geometry: desktop is one row (plate · CDU · outdoor); phone is a snake (row 1 plate → CDU, row 2 CDU → outdoor)
+      const bw = n ? 78 : 104;
+      let P, U, O, yW1, yC1, yW2, yC2;
+      if (!n) {
+        const top = 52, bh = 128;
+        P = { x: pad + 22, y: top, w: bw, h: bh }; U = { x: w / 2 - bw / 2, y: top, w: bw, h: bh }; O = { x: w - pad - 22 - bw, y: top, w: bw, h: bh };
+        yW1 = yW2 = top + 30; yC1 = yC2 = top + bh - 30;
+      } else {
+        P = { x: pad + 10, y: 48, w: bw, h: 116 }; U = { x: w - pad - 10 - bw, y: 48, w: bw, h: 290 }; O = { x: pad + 10, y: 240, w: bw, h: 98 };
+        yW1 = P.y + 26; yC1 = P.y + P.h - 26; yW2 = O.y + 24; yC2 = O.y + O.h - 24;
+      }
+      // pipes: TCS (plate ⇄ CDU) and FWS (CDU ⇄ outdoor); warm legs on top, cooled returns below
+      pipe(P.x + P.w, yW1, U.x, yW1, T.tr); pipe(U.x, yC1, P.x + P.w, yC1, T.ts);
+      if (!n) { pipe(U.x + U.w, yW2, O.x, yW2, T.fr); pipe(O.x, yC2, U.x + U.w, yC2, T.fs); }
+      else { pipe(U.x, yW2, O.x + O.w, yW2, T.fr); pipe(O.x + O.w, yC2, U.x, yC2, T.fs); }
+      // boxes: plate with the die under it, CDU split into its two sides (counterflow), outdoor plant
+      rrect(ctx, P.x, P.y, P.w, P.h, 8); ctx.fillStyle = vgrad(P.x, P.y, P.w, P.h, T.tr, T.ts); ctx.fill(); ctx.strokeStyle = C.cyan; ctx.lineWidth = 2.5; ctx.stroke();
+      const dieY = P.y + P.h + 3; rrect(ctx, P.x + 10, dieY, P.w - 20, 16, 4); ctx.fillStyle = C.heat; ctx.fill();
+      text(ctx, 'not modelled', P.x + P.w / 2, dieY + 31, { size: 10, align: 'center', color: C.ink3, halo: 3, haloColor: bg });
+      // what the plate's outlet leaves for the chip: the gap to the 80–90 °C case band
+      const mTxt = T.tr >= 100 ? 'outlet boils: no loop' : T.margin > 0 ? `${fmtC(T.margin)} below chip case band` : `${fmtC(-T.margin)} into chip case band`;
+      text(ctx, mTxt, P.x + P.w + 10, dieY + 12, { size: 11, weight: 700, color: T.margin > 0 && T.tr < 100 ? darken(C.orange, 0.3) : C.red, halo: 3, haloColor: bg });
+      rrect(ctx, U.x, U.y, U.w, U.h, 8); ctx.fillStyle = '#fff'; ctx.fill();
+      ctx.save(); rrect(ctx, U.x, U.y, U.w, U.h, 8); ctx.clip();
+      if (!n) { ctx.fillStyle = vgrad(U.x, U.y, U.w / 2, U.h, T.tr, T.ts); ctx.fillRect(U.x, U.y, U.w / 2, U.h); ctx.fillStyle = vgrad(U.x, U.y, U.w / 2, U.h, T.fr, T.fs); ctx.fillRect(U.x + U.w / 2, U.y, U.w / 2, U.h); }
+      else { const hm = (yC1 + yW2) / 2; ctx.fillStyle = vgrad(U.x, U.y, U.w, hm - U.y, T.tr, T.ts); ctx.fillRect(U.x, U.y, U.w, hm - U.y); ctx.fillStyle = vgrad(U.x, hm, U.w, U.y + U.h - hm, T.fr, T.fs); ctx.fillRect(U.x, hm, U.w, U.y + U.h - hm); }
+      ctx.restore();
+      if (!n) line(ctx, U.x + U.w / 2, U.y + 6, U.x + U.w / 2, U.y + U.h - 6, C.blue, 2, [4, 3]); else { const hm = (yC1 + yW2) / 2; line(ctx, U.x + 6, hm, U.x + U.w - 6, hm, C.blue, 2, [4, 3]); }
+      rrect(ctx, U.x, U.y, U.w, U.h, 8); ctx.strokeStyle = C.blue; ctx.lineWidth = 2.5; ctx.stroke();
+      rrect(ctx, O.x, O.y, O.w, O.h, 8); ctx.fillStyle = vgrad(O.x, O.y, O.w, O.h, T.fr, T.fs); ctx.fill(); ctx.strokeStyle = C.green; ctx.lineWidth = 2.5; ctx.stroke();
+      // the outdoor plant this class typically needs (ASHRAE card)
+      const om = O.x + O.w / 2, oy = O.y + O.h / 2;
+      const pl = c.chill ? ['chiller', '+ tower'] : ['cooling', 'tower'];
+      text(ctx, pl[0], om, oy - 2, { size: 11.5, align: 'center', weight: 700, color: c.chill ? C.red : C.ink });
+      text(ctx, pl[1], om, oy + 13, { size: 11.5, align: 'center', weight: 700, color: c.chill ? C.red : C.ink });
+      // stage names in the caption's colours
+      lab('die', P.x + P.w / 2, dieY + 13, { align: 'center', color: '#fff', halo: 0, size: 10.5 });
+      lab(n ? 'plate' : 'cold plate', P.x + P.w / 2, P.y - 9, { align: 'center', color: darken(C.cyan, 0.2), size: 12 });
+      lab('CDU', U.x + U.w / 2, U.y - 9, { align: 'center', color: C.blue, size: 12 });
+      lab(n ? 'outdoor' : 'outdoor reject', O.x + O.w / 2, O.y - 9, { align: 'center', color: darken(C.green, 0.1), size: 12 });
+      // leg temperatures and loop names
+      const legs = !n
+        ? [[(P.x + P.w + U.x) / 2, yW1 - 12, `TCS return ${fmtC(T.tr)}`], [(P.x + P.w + U.x) / 2, yC1 + 22, `TCS supply ${fmtC(T.ts)}`],
+           [(U.x + U.w + O.x) / 2, yW2 - 12, `FWS return ${fmtC(T.fr)}`], [(U.x + U.w + O.x) / 2, yC2 + 22, `${c.k} supply ${fmtC(T.fs)}`]]
+        : [[(P.x + P.w + U.x) / 2, yW1 - 11, `out ${fmtC(T.tr)}`], [(P.x + P.w + U.x) / 2, yC1 + 21, `in ${fmtC(T.ts)}`],
+           [(O.x + O.w + U.x) / 2, yW2 - 11, `out ${fmtC(T.fr)}`], [(O.x + O.w + U.x) / 2, yC2 + 21, `${c.k} in ${fmtC(T.fs)}`]];
+      legs.forEach(([x, y, str]) => lab(str, x, y, { align: 'center', size: n ? 11 : 11.5 }));
+      const l1 = !n ? 'TCS loop · server side' : 'TCS loop', l2 = !n ? 'FWS loop · facility side' : 'FWS loop';
+      lab(l1, (P.x + P.w + U.x) / 2, (yW1 + yC1) / 2 + 4, { align: 'center', color: C.ink2, weight: 600, size: 11 });
+      lab(l2, n ? (O.x + O.w + U.x) / 2 : (U.x + U.w + O.x) / 2, (yW2 + yC2) / 2 + 4, { align: 'center', color: C.ink2, weight: 600, size: 11 });
+
+      // the shared temperature scale: legend, every leg as a dot, the chip case band, Nvidia's 45 → 55 °C
+      const rl = pad + 14, rr = w - pad - 14, ry = h - 34, sx = t => rl + (clamp(t, T_LO, T_HI) - T_LO) / (T_HI - T_LO) * (rr - rl);
+      const g = ctx.createLinearGradient(rl, 0, rr, 0);
+      T_STOPS.forEach(([t, col]) => g.addColorStop((t - T_LO) / (T_HI - T_LO), col)); g.addColorStop(1, T_STOPS[T_STOPS.length - 1][1]);
+      rrect(ctx, rl, ry - 4, rr - rl, 8, 4); ctx.fillStyle = g; ctx.fill();
+      // case band and the margin left to it
+      ctx.fillStyle = alpha(C.red, 0.16); ctx.fillRect(sx(CASE_BAND[0]), ry - 22, sx(CASE_BAND[1]) - sx(CASE_BAND[0]), 30);
+      line(ctx, sx(CASE_BAND[0]), ry - 22, sx(CASE_BAND[0]), ry + 8, C.red, 1.5);
+      line(ctx, sx(CASE_BAND[1]), ry - 22, sx(CASE_BAND[1]), ry + 8, C.red, 1.5);
+      text(ctx, n ? 'chip case' : 'chip case 80–90', sx((CASE_BAND[0] + CASE_BAND[1]) / 2), ry - 27, { size: 10.5, align: 'center', weight: 650, color: darken(C.red, 0.15) });
+      if (T.margin > 0) { const a = sx(T.tr), b = sx(CASE_BAND[0]); line(ctx, a, ry - 9, b, ry - 9, darken(C.orange, 0.3), 2); line(ctx, b, ry - 13, b, ry - 5, darken(C.orange, 0.3), 2); }
+      // Nvidia marker
+      line(ctx, sx(NV[0]), ry - 16, sx(NV[1]), ry - 16, C.ink2, 1.5); line(ctx, sx(NV[0]), ry - 20, sx(NV[0]), ry - 12, C.ink2, 1.5); line(ctx, sx(NV[1]), ry - 20, sx(NV[1]), ry - 12, C.ink2, 1.5);
+      text(ctx, n ? 'Nvidia 45→55' : 'Nvidia 45 → 55', sx((NV[0] + NV[1]) / 2), ry - 27, { size: 10.5, align: 'center', weight: 600, color: C.ink2 });
+      [T.fs, T.ts, T.fr, T.tr].forEach(t => circle(ctx, sx(t), ry, 6, tempCol(t), '#fff', 2));
+      for (let t = 20; t <= 100; t += 20) { line(ctx, sx(t), ry + 5, sx(t), ry + 9, C.ink3, 1); text(ctx, t === 100 ? (T.tr > 100 ? '100+ °C' : '100 °C') : String(t), sx(t), ry + 22, { size: 10.5, align: t === 100 ? 'right' : 'center', color: C.ink3 }); }
+      text(ctx, n ? 'one scale' : 'one colour scale for every leg', rl, ry - 27, { size: 10.5, color: C.ink3 });
     },
   });
-  fig.interact({
-    panY: true, cursor: 'ew-resize',
-    hit: (x, y) => (Math.abs(y - R.ry) < 26 ? 't' : null),
-    down(k, x) { goal = null; t = clamp((x - R.rl) / (R.rr - R.rl), 0, 1); paint(); },
-    move(k, x) { t = clamp((x - R.rl) / (R.rr - R.rl), 0, 1); paint(); },
-    up() { goal = Math.round(t * (STAGES.length - 1)) / (STAGES.length - 1); },
-  });
+  const ctl = controls(el);
+  const seg = segmented(ctl, { label: 'Facility water (ASHRAE class)', color: C.blue, value: s.cls, options: W_CLASS.map(c => ({ label: c.k, value: c.k, name: c.k })), onchange: v => { s.cls = v; paint(); } });
+  const sA = slider(ctl, { label: 'CDU approach (assumed)', name: 'approach', min: 2, max: 7, step: 0.5, value: s.appr, color: C.blue, fmt: v => `${v} °C`, oninput: v => { s.appr = v; paint(); } });
+  const sQ = slider(ctl, { label: 'Rack heat', name: 'heat', min: 10, max: 240, step: 1, value: s.kw, color: C.orange, fmt: v => `${v} kW`, oninput: v => { s.kw = v; paint(); } });
+  const sF = slider(ctl, { label: 'Coolant flow', name: 'flow', min: 30, max: 250, step: 1, value: s.Lpm, color: C.cyan, fmt: v => `${v} L/min`, oninput: v => { s.Lpm = v; paint(); } });
+  const preset = p => { s = { ...p }; seg.set(s.cls); sA.set(s.appr); sQ.set(s.kw); sF.set(s.Lpm); paint(); };
+  button(ctl, '120 kW at 50 L/min', () => preset(HL_PRESETS.page), { name: 'page' });
+  button(ctl, 'Nvidia 45 °C rack', () => preset(HL_PRESETS.nvidia), { name: 'nvidia' });
   const ro = readout(el);
   const paint = () => {
-    const i = Math.round(t * (STAGES.length - 1));
-    const names = ['the die (same object as above), conducting into the plate', 'the cold plate, in warm coolant of the TCS loop', 'a CDU / heat exchanger (schematic), passing it to the facility water (FWS) loop', 'outdoor towers or dry coolers; the cooled water returns'];
-    ro.innerHTML = `Heat leaves <b>${names[i]}</b>. <span class="c-orange">Warm</span> legs carry it out, <span class="c-cyan">cooled</span> legs return. Geometry is schematic — not a site layout.`;
+    const T = temps(), c = cls();
+    const gap = T.tr >= 100 ? `<b>above 100 °C</b>: the water would boil, so this is no working loop` : T.margin > 0 ? `<b>${fmtC(T.margin)}</b> below the 80–90 °C chip case band` : `<b>${fmtC(-T.margin)} inside</b> the 80–90 °C chip case band, no room left for the plate`;
+    const nv = isPreset(HL_PRESETS.nvidia) ? ` The Nvidia preset gets its 45 °C as W40 plus a 5 °C approach, and sets 173 L/min so 120 kW rises about 10 °C; Nvidia gives neither the class nor a flow.` : '';
+    ro.innerHTML = `<b>${c.k}</b> facility water at <b>${fmtC(T.fs)}</b> plus a ${fmtC(s.appr)} CDU approach (assumed) sends coolant into the plate at <b>${fmtC(T.ts)}</b>; ${s.kw} kW at ${s.Lpm} L/min warms it by ${fmtC(T.rise)} to <b>${fmtC(T.tr)}</b>, ${gap}, and the facility water leaves at ${fmtC(T.fr)} (same flow assumed) for a <b>${c.plant}</b>: ${c.sup}.${nv}`;
     fig.invalidate();
   };
-  hint(el, 'drag along the loop; the particle keeps circulating when you let go.');
+  hint(el, 'press W17, then W45, and watch the plate’s outlet climb towards the chip’s case band while the chiller drops out.');
   paint();
 }
 
@@ -491,7 +555,6 @@ function fmtDT(v) { return (v >= 100 ? Math.round(v) : v >= 10 ? v.toFixed(1) : 
 function mixHeat(dTv) { return dTv > 20 ? C.heat : dTv > 8 ? C.orange : C.cyan; }
 
 // ---------- 3. Why it runs flat out: idle hardware against the price of power ----------
-export function heatLoop(el) { try { if (window.AIX3D && window.AIX3D.heatLoop3d(el, { ui: UI3D })) return; } catch (e) { console.warn(e); el.querySelector(".three-wrap")?.remove(); } heatLoop2d(el); }
 
 export function idleCost(el) {
   let price = 85, R = {};

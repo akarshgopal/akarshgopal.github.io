@@ -39,7 +39,7 @@ async function pageScript(p, html) {
 }
 // three.js and the 3D figures live in their own classic-script bundle, loaded before app.js only on pages that use them
 // (a plain <script>, not a module, so the pages still work from file://)
-const FIGS3D = ['lossValley', 'sgdValley', 'mosfet', 'cmosInverter', 'powerLadder', 'clusterGrid', 'triode', 'coolantFlow', 'dataDistance', 'tokensPerParam', 'systolic', 'nvlinkPair', 'yieldDie', 'relayLogic', 'litho', 'heatLoop', 'transformerBlock', 'relayCascade'];
+const FIGS3D = ['lossValley', 'sgdValley', 'mosfet', 'cmosInverter', 'powerLadder', 'clusterGrid', 'triode', 'coolantFlow', 'dataDistance', 'tokensPerParam', 'systolic', 'nvlinkPair', 'yieldDie', 'relayLogic', 'litho', 'transformerBlock', 'relayCascade'];
 await build({ bundle: true, minify: true, format: 'iife', target: ['es2020'], legalComments: 'eof', entryPoints: ['src/three/entry.js'], outfile: 'dist/three3d.js' });
 cpSync('src/fonts', 'dist/fonts', { recursive: true });
 cpSync('src/style.css', 'dist/style.css');
