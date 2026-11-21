@@ -229,10 +229,18 @@ export function flipEnergy(el) {
       ctx.strokeStyle = C.ink3; ctx.lineWidth = 2; ctx.strokeRect(dx, py - 6, dEnd - dx, 12);
       if (!charging && st.fill > 0.03) { ctx.fillStyle = lighten(C.compute, 0.7); ctx.fillRect(dx, py - 6, dEnd - dx, 12); }
       rrect(ctx, dvx - 13, py - 15, 26, 30, 5); ctx.fillStyle = !charging ? C.on : '#e6e6e3'; ctx.fill(); ctx.stroke();
+      // heat: a glow on whichever valve is working. Its size follows the energy per flip (½CV², at most 250 fJ here) and it
+      // brightens while water is moving; the label sits on top of the glow, so it names the thing drawn under it
+      const E = 0.5 * st.Cf * st.V * st.V, gx = charging ? vx1 : dvx, flow = Math.min(1, Math.abs((charging ? 1 : 0) - st.fill) * 2.5);
+      const gr = 16 + 34 * Math.sqrt(E / 250), ga = 0.4 + 0.45 * flow;
+      const g = ctx.createRadialGradient(gx, py, 4, gx, py, gr);
+      g.addColorStop(0, alpha(C.heat, ga)); g.addColorStop(0.5, alpha(C.heat, ga * 0.45)); g.addColorStop(1, alpha(C.heat, 0));
+      ctx.fillStyle = g; ctx.beginPath(); ctx.arc(gx, py, gr, 0, Math.PI * 2); ctx.fill();
+      rrect(ctx, gx - 13, py - 15, 26, 30, 5); ctx.strokeStyle = alpha(C.heat, 0.4 + 0.6 * flow); ctx.lineWidth = 2; ctx.stroke();
       text(ctx, 'to ground', dEnd, py + 26, { size: 11, align: 'right', color: C.ink3 });
-      // heat sparks at whichever valve is working
+      // heat sparks rising from the working valve
       st.heat.forEach(p => { const ox = p.which ? vx1 : dvx; circle(ctx, ox + p.x, py - 18 + p.y, 2.6, alpha(C.heat, p.life)); });
-      text(ctx, 'heat', charging ? vx1 : dvx, top + 6, { size: 12, align: 'center', weight: 650, color: C.heat });
+      text(ctx, 'heat', gx, Math.min(py - 36, py - gr * 0.75 - 18), { size: 12, align: 'center', weight: 650, color: C.heat, halo: 3 });
     },
   });
   fig.interact({
