@@ -70,7 +70,11 @@ export function mosfet3d(el, opt) {
   const ui = opt.ui, colors = ui.C;
   const narrow = w => w < 560;
   let gen = 1.15;
-  let cut = 0.25 + 0.55 * (1.15 / 2);
+  // the peek plane cuts across the gate, so its wrap shows in section. It used to keep sliding with Peek to x = −0.9 at
+  // GAA, which cut the whole gate stack away (and left the gate label over nothing); it now stops at the FinFET default
+  // (x = −0.2), inside the gate of every generation
+  const PEEK_CUT = v => 0.25 + 0.55 * (Math.min(v, 1.15) / 2);
+  let cut = PEEK_CUT(1.15);
   let vg = 0.55, vt = 0.35;
   let particles = [];
   let revealRef = null;
@@ -200,6 +204,7 @@ export function mosfet3d(el, opt) {
 
   // GAA — three nanosheet ribbons with rounded tips + wrap sleeves
   const gaaGroup = new THREE.Group(); root.add(gaaGroup);
+  const sleeves = [];
   for (let i = 0; i < 3; i++) {
     const y = 0.42 + i * 0.28;
     const sheet = new THREE.Group();
@@ -213,7 +218,7 @@ export function mosfet3d(el, opt) {
     const ox = new THREE.Mesh(new THREE.BoxGeometry(0.72, 0.13, 0.34), mOx);
     ox.position.set(0, y, 0); gaaGroup.add(ox);
     const sleeve = roundSlab(0.7, 0.16, 0.4, mGate, 10);
-    sleeve.position.set(0, y, 0); gaaGroup.add(sleeve);
+    sleeve.position.set(0, y, 0); gaaGroup.add(sleeve); sleeves.push(sleeve);
   }
   // GAA side rails
   for (const sx of [-1, 1]) {
@@ -246,8 +251,15 @@ export function mosfet3d(el, opt) {
     try { ch.add(new THREE.LineSegments(new THREE.EdgesGeometry(ch.geometry, 24), edgeInk.clone())); } catch (_) {}
   }
 
-  // Single floating gate label — source/drain/channel live in colour-in-prose readout
-  st.label('<span class="c-yellow">gate</span>', () => new THREE.Vector3(0, gen > 1.4 ? 1.45 : (gen > 0.5 ? 1.22 : 0.85), -0.55), '');
+  // Single gate label — source/drain/channel live in colour-in-prose readout. Anchored on the gate body of the generation
+  // shown (planar slab, the FinFET wrap's top, the top GAA sleeve): top centre of the part the peek cut leaves visible
+  const gBox = new THREE.Box3();
+  st.label('<span class="c-yellow">gate</span>', () => {
+    const body = gen < 0.45 ? planarGate : gen < 1.45 ? finGateTop : sleeves[2];
+    body.updateWorldMatrix(true, true); gBox.setFromObject(body);
+    const x1 = Math.min(gBox.max.x, clipPlane.constant);
+    return new THREE.Vector3((gBox.min.x + x1) / 2, gBox.max.y, (gBox.min.z + gBox.max.z) / 2);
+  }, '');
 
   function syncMorph() {
     const p = clamp(1 - gen, 0, 1);
@@ -305,7 +317,7 @@ export function mosfet3d(el, opt) {
   }
 
   const ctl = ui.controls(el);
-  ui.slider(ctl, { label: 'Peek', name: 'gen', min: 0, max: 2, step: 0.01, value: gen, color: colors.compute, fmt: v => (v < 0.45 ? 'planar' : v < 1.45 ? 'FinFET' : 'GAA'), oninput: v => { gen = v; cut = 0.25 + 0.55 * (v / 2); paint(); } });
+  ui.slider(ctl, { label: 'Peek', name: 'gen', min: 0, max: 2, step: 0.01, value: gen, color: colors.compute, fmt: v => (v < 0.45 ? 'planar' : v < 1.45 ? 'FinFET' : 'GAA'), oninput: v => { gen = v; cut = PEEK_CUT(v); paint(); } });
   ui.slider(ctl, { label: 'Gate', name: 'vg', min: 0, max: VDD, step: 0.01, value: vg, color: colors.cyan, fmt: v => `${v.toFixed(2)} V`, oninput: v => { vg = v; paint(); } });
   const ro = ui.readout(el);
   ui.hint(el, '<span class="c-blue">gate</span> fills <span class="c-cyan">channel</span> · <span class="c-blue">source</span>← →<span class="c-blue">drain</span> · Peek: planar → FinFET → GAA');
