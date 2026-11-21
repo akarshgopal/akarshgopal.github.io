@@ -280,35 +280,52 @@ export function launchCost(el) {
       const X = v => a.sx(lg(v)), Y = v => a.sy(lg(clamp(v, YMIN, YMAX)));
       rrect(ctx, l, Y(M.TERR_BAND[1]), r - l, Y(M.TERR_BAND[0]) - Y(M.TERR_BAND[1]), 3); ctx.fillStyle = alpha(C.blue, 0.16); ctx.fill();
       text(ctx, `terrestrial (Suncatcher): $${M.TERR_BAND[0]}–${M.TERR_BAND[1]}/kWh`, l + 6, Y(M.TERR_BAND[0]) - 6, { size: 11, weight: 650, color: C.blue, align: 'left', halo: 4, haloColor: '#f4f4f2' });
-      {
-        // faint reference lines; labels as a compact legend (phone) or end-of-line (desktop)
-        const refs = [13, 25, 40];
-        refs.forEach(k => { ctx.save(); ctx.strokeStyle = alpha(C.ink3, 0.55); ctx.lineWidth = 1.2; ctx.beginPath(); ctx.moveTo(X(XMIN), Y(M.launchOnly(XMIN, k))); ctx.lineTo(X(XMAX), Y(M.launchOnly(XMAX, k))); ctx.stroke(); ctx.restore(); });
-        if (n) {
-          // phone: stacked legend inside the plot, clear of the grid band label and the live callout
-          const legendX = r - 4, baseY = Math.min(b - 8, Math.max(t + 54, Y(M.TERR_BAND[1]) + 36));
-          refs.forEach((k, i) => text(ctx, `${k} kg/kW`, legendX, baseY + i * 14, { size: 10.5, color: C.ink3, align: 'right', halo: 4, haloColor: '#f4f4f2' }));
-        } else {
-          const labs = refs.map(k => ({ k, y: Y(M.launchOnly(XMAX, k)) + (k === 13 ? 14 : -5) }));
-          labs.sort((a, b) => a.y - b.y);
-          for (let i = 1; i < labs.length; i++) if (labs[i].y - labs[i - 1].y < 15) labs[i].y = labs[i - 1].y + 15;
-          const lf = X(p.usdkg) > r - 190;
-          labs.forEach(({ k, y }) => text(ctx, `${k} kg/kW`, lf ? X(80) : X(XMAX) - 4, y, { size: 10.5, color: C.ink3, align: lf ? 'left' : 'right', halo: 4, haloColor: '#f4f4f2' }));
-        }
-      }
+      // faint reference lines (their labels are placed last, clear of everything else)
+      const refs = [40, 25, 13];
+      refs.forEach(k => { ctx.save(); ctx.strokeStyle = alpha(C.ink3, 0.55); ctx.lineWidth = 1.2; ctx.beginPath(); ctx.moveTo(X(XMIN), Y(M.launchOnly(XMIN, k))); ctx.lineTo(X(XMAX), Y(M.launchOnly(XMAX, k))); ctx.stroke(); ctx.restore(); });
       ctx.save(); ctx.strokeStyle = C.red; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(X(XMIN), Y(M.launchOnly(XMIN, p.kgkw))); ctx.lineTo(X(XMAX), Y(M.launchOnly(XMAX, p.kgkw))); ctx.stroke(); ctx.restore();
-      [[3600, 'Falcon 9 today, $3,600 (Suncatcher paper)'], [200, '2035 learning-curve target, $200']].forEach(([v, s], i) => { line(ctx, X(v), t, X(v), b, C.ink3, 1, [3, 3]); text(ctx, i ? (n ? '2035: $200' : '2035 target $200') : (n ? 'today: $3,600' : 'today $3,600'), X(v) + (i ? 5 : -5), t + 12, { size: 10.5, color: C.ink3, align: i ? 'left' : 'right', halo: 4, haloColor: '#f4f4f2' }); });
+      const busy = [], box = (s, x, y, al, size = 10.5, wt = 450) => { const tw = measure(ctx, s, size, wt), x0 = al === 'right' ? x - tw : al === 'center' ? x - tw / 2 : x; return [x0 - 2, y - size + 1, x0 + tw + 2, y + 3]; };
+      [[3600, n ? 'today: $3,600' : 'today $3,600', 0], [200, n ? '2035: $200' : '2035 target $200', 1]].forEach(([v, s, i]) => {
+        line(ctx, X(v), t, X(v), b, C.ink3, 1, [3, 3]); busy.push([X(v) - 2, t, X(v) + 2, b]);
+        text(ctx, s, X(v) + (i ? 5 : -5), t + 12, { size: 10.5, color: C.ink3, align: i ? 'left' : 'right', halo: 4, haloColor: '#f4f4f2' }); busy.push(box(s, X(v) + (i ? 5 : -5), t + 12, i ? 'left' : 'right'));
+      });
+      busy.push(box(`terrestrial (Suncatcher): $${M.TERR_BAND[0]}–${M.TERR_BAND[1]}/kWh`, l + 6, Y(M.TERR_BAND[0]) - 6, 'left', 11, 650));
       const cx = X(p.usdkg), cy = Y(M.launchOnly(p.usdkg, p.kgkw));
-      circle(ctx, cx, cy, 8, '#fff', C.red, 3);
+      circle(ctx, cx, cy, 8, '#fff', C.red, 3); busy.push([cx - 10, cy - 10, cx + 10, cy + 10]);
       {
         const lab = `$${M.launchOnly(p.usdkg, p.kgkw) >= 1 ? M.launchOnly(p.usdkg, p.kgkw).toFixed(2) : M.launchOnly(p.usdkg, p.kgkw).toFixed(3)} per kWh`;
-        // phone: keep callout left of the legend; desktop: beside the cursor
-        if (n) text(ctx, lab, Math.min(cx + 12, r - 72), cy < t + 50 ? cy + 22 : cy - 12, { size: 12, weight: 700, color: C.ink, align: 'left', halo: true });
-        else {
-          const preferRight = cx < r - 160;
-          text(ctx, lab, preferRight ? cx + 12 : cx - 12, cy < t + 50 ? cy + 22 : cy - 12, { size: 12, weight: 700, color: C.ink, align: preferRight ? 'left' : 'right', halo: true });
-        }
+        // phone: keep the callout inside the plot; desktop: beside the cursor
+        const ly = cy < t + 50 ? cy + 22 : cy - 12, right = n || cx < r - 160, lx = n ? Math.min(cx + 12, r - 72) : right ? cx + 12 : cx - 12;
+        text(ctx, lab, lx, ly, { size: 12, weight: 700, color: C.ink, align: right ? 'left' : 'right', halo: true });
+        const bx = box(lab, lx, ly, right ? 'left' : 'right', 12, 700); bx[2] = Math.min(bx[2], r); busy.push(bx);
       }
+      // reference-line labels, written along their own line, just above it (below it when the red line sits there). Start
+      // at the right end and step left until the label clears the markers, the callout, the band label and the other labels
+      // (as imagenetCompute steps names until they clear)
+      const hit = bx => busy.some(o => bx[0] < o[2] && bx[2] > o[0] && bx[1] < o[3] && bx[3] > o[1]);
+      const xv = x => 10 ** (lg(XMIN) + (x - l) / (r - l) * (lg(XMAX) - lg(XMIN)));
+      const yAt = (x, k) => Y(M.launchOnly(xv(x), k));
+      const ang = Math.atan2(yAt(r, 25) - yAt(l, 25), r - l), co = Math.cos(ang), si = Math.sin(ang);
+      const inBand = y => y > Y(M.TERR_BAND[1]) && y < Y(M.TERR_BAND[0]);
+      let below = false; // once a label drops under its line, the lines beneath follow, so no gap holds two labels
+      refs.forEach(k => {
+        const s = `${k} kg/kW`, tw = measure(ctx, s, 10.5);
+        // vertical offset of the red line from this one (lines are parallel on log–log axes)
+        const dv = (yAt(l, p.kgkw) - yAt(l, k)) * co, sides = below || (Math.abs(p.kgkw - k) > 0.5 && dv < 2 && dv > -20) ? [1] : [-1, 1];
+        let best = null;
+        for (const sd of sides) for (let xc = r - tw / 2 - 6; xc - tw / 2 > l + 4 && !best; xc -= 10) {
+          const yc = yAt(xc, k), oy = sd < 0 ? -5 : 13, y0 = sd < 0 ? -15 : 3, y1 = sd < 0 ? -2 : 16;
+          const pts = [[-tw / 2 - 2, y0], [tw / 2 + 2, y0], [-tw / 2 - 2, y1], [tw / 2 + 2, y1]].map(([u, v]) => [xc + u * co - v * si, yc + u * si + v * co]);
+          const bx = [Math.min(...pts.map(q => q[0])), Math.min(...pts.map(q => q[1])), Math.max(...pts.map(q => q[0])), Math.max(...pts.map(q => q[1]))];
+          if (bx[1] > t + 2 && bx[3] < b - 2 && bx[2] < r && !hit(bx)) best = { xc, yc, oy, bx };
+        }
+        if (!best) { const xc = r - tw / 2 - 6; best = { xc, yc: yAt(xc, k), oy: -5, bx: null }; }
+        if (best.bx) busy.push(best.bx);
+        if (best.oy > 0) below = true;
+        ctx.save(); ctx.translate(best.xc, best.yc); ctx.rotate(ang);
+        text(ctx, s, 0, best.oy, { size: 10.5, color: C.ink3, align: 'center', halo: 4, haloColor: inBand(best.yc + best.oy - 4) ? mix('#f4f4f2', C.blue, 0.16) : '#f4f4f2' });
+        ctx.restore();
+      });
     },
   });
   const ctl = controls(el); let S;
