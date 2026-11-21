@@ -77,6 +77,13 @@ Verdicts: **OK** teaches its idea at a glance · **Minor** small polish · **Fix
 | factory · coolantFlow (3D) | in/out labels lifted above the elbows (cyan "in" vanished on the cyan pipe); phone stage shorter so the plate fills it | fa6f517 |
 | rules · relayLogic, relayCascade (3D) | A/B labels lowered onto their coils | a8b7d0b |
 | dist | rebuild | a21d9ad |
+| yardstick · energyFlow (390) | phone values beside the column titles ("Primary 167k TWh", "Final 125k", "Elec. 28.2k") instead of white text inside 10 px columns | 6097055 |
+| verdict · verdictMeter | "supply cap" / "tripwires" set in clear stage space above (or below) the band and cap line, avoiding the R1–R3 ticks, with thin leaders to the cap line and both tripwire diamonds; when the band fills the panel they sit by their target with a halo in the band's own tint. Labels only: model, numbers and readout untouched | ee2e461 |
+| orbital · launchCost | 40 / 25 / 13 kg/kW written along their own lines (above; below when the red line or a label takes that gap), stepped left from the right end until clear of the markers, callout, band label and each other, as imagenetCompute does; replaces the stacked end labels and the swatchless phone legend | c6ef455 |
+| essay · flipEnergy | heat glow on the working valve, radius by ½CV² (16–50 px over 0–250 fJ), brightness by flow; "heat" label sits on the glow | 2c3a866 |
+| flip · mosfet (3D) | "gate" anchored on the top centre of the visible gate body per generation (planar slab, FinFET wrap top, top GAA sleeve). Cut-plane re-check: Peek slid the cut to x = −0.9 at GAA, clipping the whole gate stack away; it now stops at the FinFET default (x = −0.2), inside every gate. Materials, lights, camera untouched | 7e6d74f |
+| essay · joulesPerOp | energy-rail labels in one row under the rail; landmarks placed first, a tick whose label would touch is dropped (phone: 1 kWh, 1 MWh, world) | acd8dff |
+| data · flywheel (text) | caption aligned with the demand figure: "900 million a week for ChatGPT by February 2026 (OpenAI)". The flywheel figure is not on any page in the current build, so nothing visible changes | 0633a01 |
 
 No 3D/2D decision in UNDERSTANDING-AUDIT.md was changed. All 3D edits are DOM labels or the phone stage height; materials,
 lights and desktop cameras are untouched, so the QA21 chroma baselines were not rebaselined.
@@ -86,15 +93,8 @@ lights and desktop cameras are untouched, so the QA21 chroma baselines were not 
 | Figure | Issue | Why deferred / what it would take |
 |---|---|---|
 | factory · heatLoop | Still a row of coloured boxes; the hot→cold story is carried only by the caption and a travelling pulse | The audit's own condition stands: replace only with a proper 2D build (temperature-coloured flow along die → plate → CDU → outdoor, warm legs on top, cool returns), which needs a temperature model per leg. Labels now fixed |
-| flip · mosfet (3D) | "gate" label anchors on the gate via, so at FinFET/GAA it sits up and to the right of the gate | Needs a per-generation anchor on the gate body (planarGate / finGateTop) and a re-check of the peek cut plane; low impact |
-| index/verdict · verdictMeter | "supply cap" / "tripwires" labels sit on the dashed line, with a grey halo that does not match the orange band | Core decision figure; worth a careful pass on label placement on its own rather than a quick nudge |
-| index/orbital/verdict · launchCost | 40 / 25 kg/kW line labels crowd at the top right | Minor; would need end-label de-collision like imagenetCompute |
-| yardstick · energyFlow (390) | "167k" / "125k" / "28.2k" white numbers inside 10 px columns are barely legible | Move phone values beside the columns; small, not started |
-| essay · flipEnergy | "heat" label floats with nothing drawn under it | Needs a heat cue (glow on the switch/wire) rather than moving text |
-| essay · joulesPerOp | energy rail tick labels staggered above/below the rail | Minor clutter; needs fewer ticks or a second row |
 | essay · manyHands, clusterGrid, parallel · latencyHiding, flip · cmosInverter | dead space / "output voltage (V)" axis title touching the 0.70 tick | Cosmetic |
-| data · dataFlow | Plain grey box flowchart: clear but well below the visual bar of the rest | A redraw in the series' part colours; low understanding impact |
-| data · flywheel (text) | Caption says "more than 1.2 billion a week for ChatGPT by October 2026"; the demand page was corrected to 900 M weekly users (OpenAI, Feb 2026) in 4b7231a | Text/accuracy, outside this figures-only pass; flagged for the text owner, not changed |
+| data · dataFlow | Plain grey box flowchart: clear but well below the visual bar of the rest | Not redrawn (figure-polish pass, Nov 2026): dataFlow is not placed on any page in the current build (no data-fig="dataFlow"; only registered in main.js), so a redraw would not reach readers. Redo with the part colours if it returns |
 
 ## checkall
 
