@@ -15,10 +15,11 @@ need   "$A/index.html"  'Start with <a href="essay.html">' "the index as content
 need   "$A/essay.html"  'id="s18"'            "the essay's closing act, sections 15-18 (6 Nov 2026)"
 need   "$A/demand.html" 'id="reconcile"'      "the bottom-up demand reconciliation (5 Nov 2026)"
 need   "$A/verdict.html" 'data-xfig="meterSteps"' "the step-by-step meter on the Verdict (5 Nov 2026)"
-need   "$A/app.js"      'Rubin (2026)'        "Rubin on the roofline (6 Nov 2026)"
-forbid "$A/app.js"      '\\u20AC'             "euro prices (the series is in US dollars since 5 Nov 2026)"
+need   "$A/js/parallel.js" 'Rubin (2026)'     "Rubin on the roofline (6 Nov 2026)"
+for f in "$A"/js/*.js; do forbid "$f" '\\u20AC' "euro prices (the series is in US dollars since 5 Nov 2026)"; done
 for f in "$A"/*.html; do forbid "$f" 'written for Akarsh Gopal' "the old byline (copy-edits of 5 Nov 2026)"; done
-need   "$A/app.js"      '_kbdPtr('            "keyboard access to the figures (9 Nov 2026)"
+need   "$A/js/essay.js" '_kbdPtr('            "keyboard access to the figures (9 Nov 2026)"
+exists "$A/js/index.js" "per-page scripts built from the ai-source branch (Nov 2026)"
 need   "$A/style.css"   'prefers-color-scheme: dark' "dark mode (9 Nov 2026)"
 need   "$A/style.css"   'body.series-open nav.series { -webkit-backdrop-filter: none' "the phone drawer fix (9 Nov 2026)"
 
@@ -38,8 +39,7 @@ python3 .github/scripts/stamp-assets.py --check || fail=1
 if [ "$fail" -ne 0 ]; then
   echo
   echo "This change would put back an older version of a series. Read SERIES-SOURCES.md at the root of master."
-  echo "For blog/ai: after a rebuild, run python3 .github/scripts/ai-postbuild.py (re-adds keyboard access, restamps),"
-  echo "  and port docs/AI-SERIES-PORT.md and docs/AI-PORT-KIT.md (branch electricity-source) into the ai-explainer source."
+  echo "For blog/ai: build from the head of the ai-source branch (see its HANDOVER.md) and copy dist/ into blog/ai/."
   echo "For blog/electricity: build from the head of the electricity-source branch."
   exit 1
 fi
