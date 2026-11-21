@@ -83,7 +83,6 @@ Verdicts: **OK** teaches its idea at a glance · **Minor** small polish · **Fix
 | essay · flipEnergy | heat glow on the working valve, radius by ½CV² (16–50 px over 0–250 fJ), brightness by flow; "heat" label sits on the glow | 2c3a866 |
 | flip · mosfet (3D) | "gate" anchored on the top centre of the visible gate body per generation (planar slab, FinFET wrap top, top GAA sleeve). Cut-plane re-check: Peek slid the cut to x = −0.9 at GAA, clipping the whole gate stack away; it now stops at the FinFET default (x = −0.2), inside every gate. Materials, lights, camera untouched | 7e6d74f |
 | essay · joulesPerOp | energy-rail labels in one row under the rail; landmarks placed first, a tick whose label would touch is dropped (phone: 1 kWh, 1 MWh, world) | acd8dff |
-| data · flywheel (text) | caption aligned with the demand figure: "900 million a week for ChatGPT by February 2026 (OpenAI)". The flywheel figure is not on any page in the current build, so nothing visible changes | 0633a01 |
 
 No 3D/2D decision in UNDERSTANDING-AUDIT.md was changed. All 3D edits are DOM labels or the phone stage height; materials,
 lights and desktop cameras are untouched, so the QA21 chroma baselines were not rebaselined.

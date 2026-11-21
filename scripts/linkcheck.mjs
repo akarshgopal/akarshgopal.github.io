@@ -7,7 +7,7 @@ const DIST = 'dist';
 // checked against that series' built dist/ (file and #anchor), so they resolve once both sit side by side.
 const SIBLINGS = { '../electricity/': process.env.ELECTRICITY_DIST || '/workspace/electricity-explainer/dist' };
 const sibIds = {};
-const sibCheck = (f, url) => { for (const [pre, dir] of Object.entries(SIBLINGS)) if (url.startsWith(pre)) { const [path, frag] = url.slice(pre.length).split('#'); const file = path || 'index.html'; const fp = join(dir, file); if (!existsSync(fp)) return `${f}: sibling link "${url}" → missing ${fp}`; if (frag) { sibIds[fp] ??= new Set([...strip(readFileSync(fp, 'utf8')).matchAll(/\sid="([^"]+)"/g)].map(m => m[1])); if (!sibIds[fp].has(frag)) return `${f}: sibling link "${url}" → no id "${frag}"`; } return 'ok'; } return null; };
+const sibCheck = (f, url) => { for (const [pre, dir] of Object.entries(SIBLINGS)) if (url.startsWith(pre)) { const [pathq, frag] = url.slice(pre.length).split('#'); const path = pathq.split('?')[0]; const file = path || 'index.html'; const fp = join(dir, file); if (!existsSync(fp)) return `${f}: sibling link "${url}" → missing ${fp}`; if (frag) { sibIds[fp] ??= new Set([...strip(readFileSync(fp, 'utf8')).matchAll(/\sid="([^"]+)"/g)].map(m => m[1])); if (!sibIds[fp].has(frag)) return `${f}: sibling link "${url}" → no id "${frag}"`; } return 'ok'; } return null; };
 let sib = 0;
 const pages = readdirSync(DIST).filter(f => f.endsWith('.html'));
 const ids = {}, problems = [];
@@ -29,7 +29,7 @@ for (const f of pages) {
     n++;
     if (url === '' ) { problems.push(`${f}: empty ${attr}`); continue; }
     if (url.startsWith('/')) { problems.push(`${f}: absolute path "${url}" breaks file:// use`); continue; }
-    const [path, frag] = url.split('#');
+    const [pathq, frag] = url.split('#'); const path = pathq.split('?')[0]; // a cache stamp (?v=) is not part of the file name
     const target = path === '' ? f : path;
     if (!existsSync(join(DIST, target)) || statSync(join(DIST, target)).isDirectory()) { problems.push(`${f}: ${attr}="${url}" → missing file ${target}`); continue; }
     if (target !== f && target.endsWith('.html')) cross++;
