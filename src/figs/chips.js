@@ -110,12 +110,21 @@ export function joulesPerOp(el) {
       rrect(ctx, xs - (n ? 14 : 58), ys - 11, n ? 28 : 116, 22, 11); ctx.fillStyle = C.ink; ctx.fill();
       text(ctx, n ? '⇕' : `⇕ ${JOBS[job][0].split('’')[0]}`, xs, ys + 4, { size: 11.5, align: 'center', weight: 650, color: '#fff' });
       // energy gauge
-      const E = flop(job) / M[sel].eff / 3.6e6, gy = y0 + rh * M.length + 44, g0 = 8, g1 = w - 8;
+      const E = flop(job) / M[sel].eff / 3.6e6, gy = y0 + rh * M.length + (n ? 44 : 38), g0 = 8, g1 = w - 8;
       const gx = v => g0 + (L10(v) - -1) / (19 - -1) * (g1 - g0);
       line(ctx, g0, gy, g1, gy, C.grid2, 6);
       rrect(ctx, g0, gy - 4, Math.max(4, gx(clamp(E, 0.1, 1e19)) - g0), 8, 4); ctx.fillStyle = C.heat; ctx.fill();
-      REF.forEach(([v, s], i) => { const x = gx(v); line(ctx, x, gy - 8, x, gy + 8, C.ink3, 1); if (!n || i % 2 === 0 || i === REF.length - 1) text(ctx, s, x, gy + (i % 2 || (n && i === REF.length - 1) ? -12 : 22), { size: 10.5, align: i === REF.length - 1 ? 'right' : 'center', color: C.ink3 }); });
-      text(ctx, `energy for ${JOBS[job][0]}: ${kwh(E)}`, g0, gy + (n ? 44 : 40), { size: 13, weight: 650, color: C.heat });
+      // reference ticks: one row of labels under the rail. Place the landmarks first (world, Ireland), then the units, and
+      // leave out a tick whose label would touch a placed one (on a phone that keeps kWh, GWh and the world)
+      const placed = [];
+      [4, 3, 0, 2, 1].forEach(i => {
+        const [v, s] = REF[i], x = gx(v), tw = measure(ctx, s, 10.5), last = i === REF.length - 1;
+        const al = last ? (x + tw <= g1 ? 'left' : 'right') : 'center', a0 = al === 'left' ? x - 2 : al === 'right' ? x - tw : x - tw / 2, bx = [Math.max(g0, a0) - 6, Math.max(g0, a0) + tw + 6];
+        if (placed.some(o => bx[0] < o[1] && bx[1] > o[0])) return;
+        placed.push(bx); line(ctx, x, gy - 8, x, gy + 8, C.ink3, 1);
+        text(ctx, s, al === 'left' ? x - 2 : x, gy + 22, { size: 10.5, align: al, color: C.ink3 });
+      });
+      text(ctx, `energy for ${JOBS[job][0]}: ${kwh(E)}`, g0, gy + 44, { size: 13, weight: 650, color: C.heat });
       R = { y0, rh, xs };
     },
   });
