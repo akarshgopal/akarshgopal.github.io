@@ -1,8 +1,8 @@
 // The index page's three live figures: the Act 1 verdict meter, and Act 2's capacity meter and launch-cost chart.
 // All numbers come from src/lib/model.js, where every default is labelled as a source, a derivation or an assumption.
 import { Fig } from '../lib/fig.js';
-import { C, alpha } from '../lib/colors.js';
-import { text, rrect, line, circle, axes, clamp, tag } from '../lib/draw.js';
+import { C, alpha, mix } from '../lib/colors.js';
+import { text, rrect, line, circle, axes, clamp, tag, measure } from '../lib/draw.js';
 import { controls, slider, segmented, button, readout, hint, more } from '../lib/ui.js';
 import * as M from '../lib/model.js';
 import { publish } from '../lib/lean.js';
@@ -95,12 +95,40 @@ export function verdictMeter(el) {
       for (let i = path.length - 1; i >= 0; i--) { const [, hi] = M.band(path[i].m, p); ctx.lineTo(xy(path[i].y), ys(hi)); }
       ctx.closePath(); ctx.fill(); ctx.restore();
       ctx.save(); ctx.strokeStyle = C.ink3; ctx.lineWidth = 1.5; ctx.setLineDash([5, 4]); ctx.beginPath(); path.forEach((d, i) => (i ? ctx.lineTo(xy(d.y), ys(d.capTwh)) : ctx.moveTo(xy(d.y), ys(d.capTwh)))); ctx.stroke(); ctx.restore();
-      text(ctx, 'supply cap', xy(2027.3), ys(path[2].capTwh) - 8, { size: 10.5, color: C.ink3, halo: 4, haloColor: '#f4f4f2' });
       ctx.save(); ctx.strokeStyle = C.heat; ctx.lineWidth = 3; ctx.lineJoin = 'round'; ctx.beginPath(); path.forEach((d, i) => (i ? ctx.lineTo(xy(d.y), ys(d.m)) : ctx.moveTo(xy(d.y), ys(d.m)))); ctx.stroke(); ctx.restore();
       line(ctx, xy(2035), ys(M.IEA_DC_2035[0]), xy(2035), ys(M.IEA_DC_2035[1]), alpha(C.ink3, 0.55), 7); if (!n) text(ctx, 'IEA 2035, all data centres', xy(2035) + 8, ys(1100) + 4, { size: 10.5, color: C.ink3, halo: 4, haloColor: '#f4f4f2' });
       M.RUNGS.forEach((rg, i) => { const y = ys(M.bar(rg, p)), x = xy(rg.year); line(ctx, x - (rg.year === 2035 ? 14 : 70), y, x + (rg.year === 2035 ? 14 : 0), y, C.ink, 2.5); text(ctx, `${rg.id}`, x - (rg.year === 2035 ? 18 : 74), y + 4, { size: 11.5, weight: 700, align: 'right', color: C.ink }); });
       M.TRIPWIRES.forEach(tw => { const d = M.at(path, tw.year), ok = d.m >= tw.twh, x = xy(tw.year), y = ys(tw.twh); ctx.save(); ctx.translate(x, y); ctx.rotate(Math.PI / 4); ctx.fillStyle = ok ? C.green : '#fff'; ctx.strokeStyle = ok ? C.green : C.red; ctx.lineWidth = 2; ctx.fillRect(-5, -5, 10, 10); ctx.strokeRect(-5, -5, 10, 10); ctx.restore(); });
-      text(ctx, 'tripwires', xy(2030) + 10, ys(300) + 4, { size: 10.5, color: C.ink3, halo: 4, haloColor: '#f4f4f2' });
+      // "supply cap" / "tripwires": set in clear stage space above the band and the cap line (below the band if there is no
+      // room above), each joined to what it names by a thin leader; labels only, the path is untouched
+      const yOf = x => 2025 + (x - l) / (r - l) * 25;
+      const edge = (yr, up) => { const d = M.at(path, clamp(Math.round(yr), 2025, 2050)), [lo, hi] = M.band(d.m, p); return up ? Math.min(ys(hi), ys(d.capTwh), ys(d.m)) : Math.max(ys(lo), ys(d.capTwh), ys(d.m)); };
+      const clear = (x0, x1, up) => { let v = up ? Infinity : -Infinity; for (let yr = Math.floor(yOf(x0)); yr <= Math.ceil(yOf(x1)); yr++) v = up ? Math.min(v, edge(yr, true)) : Math.max(v, edge(yr, false)); return v; };
+      // what the labels must not cover: the R1–R3 bar ticks and their names, and each other
+      const busy = M.RUNGS.map(rg => { const y = ys(M.bar(rg, p)), x = xy(rg.year), a = rg.year === 2035 ? 14 : 70; return [x - a - 8 - measure(ctx, rg.id, 11.5, 700), y - 11, x + (rg.year === 2035 ? 14 : 0), y + 5]; });
+      const hits = b => busy.some(o => b[0] < o[2] && b[2] > o[0] && b[1] < o[3] && b[3] > o[1]);
+      const callout = (s, xc, targets) => {
+        const tw = measure(ctx, s, 10.5, 600), x0 = xc - tw / 2 - 4, x1 = xc + tw / 2 + 4, box = y => [x0, y - 11, x1, y + 4];
+        const ok = y => y - 11 >= pt - 6 && y + 4 <= pb - 4 && !hits(box(y));
+        const up = clear(x0, x1, true) - 12, dn = clear(x0, x1, false) + 20, cand = [];
+        for (let k = 0; k < 6; k++) cand.push([up - k * 14, -1], [dn + k * 14, 1]);
+        const near = y => Math.min(...targets.map(t => Math.abs(t[1] - y))) < (n ? 80 : 90); // a long leader reads worse than a tinted halo
+        let [by, side] = cand.find(([y]) => ok(y) && near(y)) || [null, 0];
+        if (by === null) { // the band fills the panel: sit on it, nearest the targets, with a halo of the band's own tint
+          const ty = targets.reduce((a, t) => a + t[1], 0) / targets.length - 14;
+          by = clamp(ty, pt + 6, pb - 6);
+          for (let k = 0; k < 40 && !ok(by); k++) { const y = ty + (k % 2 ? 1 : -1) * Math.ceil(k / 2) * 7; if (ok(y)) { by = y; break; } }
+        }
+        busy.push(box(by));
+        for (const [tx, ty] of targets) {
+          const sy = ty > by ? by + 4 : by - 13, dx = tx - xc, dy = ty - sy, dl = Math.hypot(dx, dy);
+          if (dl > 10) line(ctx, xc, sy, tx - dx / dl * 7, ty - dy / dl * 7, C.ink3, 1);
+        }
+        text(ctx, s, xc, by, { size: 10.5, weight: 600, color: C.ink2, align: 'center', halo: 4, haloColor: side ? C.paper : mix(C.paper, C.heat, 0.2) });
+      };
+      const capYr = n ? 2041 : 2042, capX = xy(capYr);
+      callout('supply cap', capX, [[capX, ys(M.at(path, capYr).capTwh)]]);
+      callout('tripwires', xy(2032.5), M.TRIPWIRES.map(tw => [xy(tw.year), ys(tw.twh)]));
       circle(ctx, xy(2025), ys(M.M0), 5, C.ink, '#fff', 2);
     },
   });
