@@ -146,7 +146,7 @@ export function joulesPerOp(el) {
 export function manyHands(el) {
   let N = 8, s = 0.05, R = {}, prog = 0;
   const fig = new Fig(el, {
-    height: w => narrow(w) ? 330 : 300, animated: true, label: 'A job split between one fast worker and many workers; the serial part does not shrink',
+    height: w => 246, animated: true, label: 'A job split between one fast worker and many workers; the serial part does not shrink',
     step(dt) { prog = (prog + dt * 0.25) % 1.25; },
     draw(ctx, w, h) {
       const n = narrow(w), l = n ? 18 : 140, r = w - 22, T = r - l;
@@ -162,7 +162,7 @@ export function manyHands(el) {
       text(ctx, '1 worker', n ? l : 10, y1 - 8 + (n ? 0 : 22), { size: 12, color: C.ink2, weight: 600 });
       rrect(ctx, l, y1, s * T, bh, 4); ctx.fillStyle = C.time; ctx.fill();
       rrect(ctx, l + s * T, y1, (1 - s) * T, bh, 4); ctx.fillStyle = alpha(C.compute, 0.75); ctx.fill();
-      text(ctx, `${N} workers`, n ? l : 10, y2 - 8 + (n ? 0 : 22), { size: 12, color: C.ink2, weight: 600 });
+      text(ctx, `${N} workers`, n ? l : 10, n ? y2 - bh * 0.3 - 6 : y2 + 14, { size: 12, color: C.ink2, weight: 600 });
       rrect(ctx, l, y2, s * T, bh, 4); ctx.fillStyle = C.time; ctx.fill();
       const lanes = Math.min(N, 16), lh = bh * 1.6 / lanes;
       for (let i = 0; i < lanes; i++) { ctx.fillStyle = alpha(C.compute, 0.4 + 0.4 * (i % 2)); ctx.fillRect(l + s * T, y2 + i * lh - bh * 0.3, Math.max(1.5, (1 - s) * T / N), Math.max(0.8, lh - 0.6)); }
