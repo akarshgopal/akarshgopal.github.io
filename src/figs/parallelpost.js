@@ -112,8 +112,12 @@ function systolic2d(el) {
         // colour story (T9): inputs green, weights cyan, the running sum warms yellow → orange as it fills in
         const fin = acc(i, j, 99) || 1, fill = clamp(sum / fin, 0, 1);
         rrect(ctx, x + 3, y + 3, cs - 6, cs - 6, 7); ctx.fillStyle = done ? C.heat : act ? mixc('#ffffff', C.on, 0.3 + 0.3 * flash) : mixc('#ffffff', C.on, 0.22 * fill); ctx.fill(); ctx.strokeStyle = done ? C.heat : act ? C.on : C.grid2; ctx.lineWidth = act && !done ? 2.2 : 1.3; ctx.stroke();
-        text(ctx, String(sum), x + cs * 0.64, y + cs * 0.64 + 5, { size: Math.min(17, cs * 0.3), align: 'center', weight: 750, color: done ? '#fff' : sum ? C.ink : C.ink3 });
-        if (act && fr < 0.6) text(ctx, `+${A[i][k] * B[k][j]}`, x + cs * 0.64, y + cs * 0.9, { size: Math.min(10, cs * 0.17), align: 'center', weight: 700, color: C.heat });
+        // phone: the +product label is lifted to the 11 px minimum; where it would touch the total, it sits on the cell's bottom edge and the total moves up clear of it
+        const tight = nr && y + cs * 0.9 - 8 < y + cs * 0.64 + 7, ss = Math.max(11, Math.min(17, cs * 0.3));
+        const sy = tight ? Math.max(y + cs * 0.24 + 6 + 0.75 * ss, Math.min(y + cs * 0.64 + 5, y + cs - 14.5)) : y + cs * 0.64 + 5; // ...but never up into the resting input's digit
+        const py = tight ? Math.max(y + cs - 4, sy + 10.5) : y + cs * 0.9;
+        text(ctx, String(sum), x + cs * 0.64, sy, { size: Math.min(17, cs * 0.3), align: 'center', weight: 750, color: done ? '#fff' : sum ? C.ink : C.ink3 });
+        if (act && fr < 0.6) text(ctx, `+${A[i][k] * B[k][j]}`, x + cs * 0.64, py, { size: Math.min(10, cs * 0.17), align: 'center', weight: 700, color: C.heat });
       }
       // the moving numbers: a pill at fractional position, so each one visibly slides from cell to cell
       const pill = (cx, cy, v, col, a) => { if (a <= 0) return; ctx.save(); ctx.globalAlpha = a; const r = Math.min(9.5, cs * 0.16); circle(ctx, cx, cy, r, col, '#fff', 1.5); text(ctx, String(v), cx, cy + 4, { size: Math.min(11, cs * 0.19), align: 'center', weight: 750, color: '#fff' }); ctx.restore(); };
