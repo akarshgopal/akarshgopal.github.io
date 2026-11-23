@@ -30,7 +30,7 @@ function cmosInverter2d(el) {
   const rel = x => clamp(L10(Math.max(x, 1e-12)) / 6 + 1, 0, 1); // how open a switch is, on the same 6-decade scale as the MOSFET figure
   let vin = 0.0;
   const fig = new Fig(el, {
-    height: w => (narrow(w) ? 480 : 372), label: 'A CMOS inverter: a p-type and an n-type transistor in series between supply and ground, with the output voltage and the current drawn from the supply as the input voltage changes',
+    height: w => (narrow(w) ? 524 : 372), label: 'A CMOS inverter: a p-type and an n-type transistor in series between supply and ground, with the output voltage and the current drawn from the supply as the input voltage changes',
     draw(ctx, w, h) {
       const n = narrow(w), sx0 = n ? 14 : 18, sw = n ? w - 28 : Math.min(190, w * 0.34), sh = n ? 160 : h - 30, top = 14;
       const { vo, i } = solve(vin), gp = g(VDD - vin) / g(VDD), gn = g(vin) / g(VDD);
@@ -62,10 +62,14 @@ function cmosInverter2d(el) {
       // plots: output voltage and supply current against input voltage
       const px = n ? 52 : sx0 + sw + 54, pr = w - 16, ph = n ? 108 : (h - 134) / 2;
       const y1 = n ? top + sh + 36 : 36, y2 = y1 + ph + 58;
-      const a1 = axes(ctx, { box: { l: px, r: pr, t: y1, b: y1 + ph }, x0: -0.03, x1: VDD + 0.02, y0: 0, y1: VDD, xticks: [0, 0.35, 0.7], yticks: [0, 0.35, 0.7], xfmt: v => (v ? v.toFixed(2) : '0'), yfmt: v => (v ? v.toFixed(2) : '0'), ylabel: 'output voltage (V)' });
+      const a1 = axes(ctx, { box: { l: px, r: pr, t: y1, b: y1 + ph }, x0: -0.03, x1: VDD + 0.02, y0: 0, y1: VDD, xticks: [0, 0.35, 0.7], yticks: [0, 0.35, 0.7], xfmt: v => (v ? v.toFixed(2) : '0'), yfmt: v => (v ? v.toFixed(2) : '0') });
+      // plot titles set 16 px above the plot (axes() puts them at 10 px, where the descenders touch the top tick label)
+      const ptitle = (s, y) => text(ctx, s, px - 4, y - 16, { size: 11, color: C.ink3, weight: 500 });
+      ptitle('output voltage (V)', y1);
       ctx.save(); ctx.strokeStyle = C.blue; ctx.lineWidth = 2.5; ctx.beginPath(); for (let k = 0; k <= 70; k++) { const v = k / 100, s = solve(v); k ? ctx.lineTo(a1.sx(v), a1.sy(s.vo)) : ctx.moveTo(a1.sx(v), a1.sy(s.vo)); } ctx.stroke(); ctx.restore();
       circle(ctx, a1.sx(vin), a1.sy(vo), 7, '#fff', C.blue, 3);
-      const a2 = axes(ctx, { box: { l: px, r: pr, t: y2, b: y2 + ph }, x0: -0.03, x1: VDD + 0.02, y0: -7, y1: 0, yticks: [-6, -4, -2, 0], xticks: [0, 0.35, 0.7], xfmt: v => (v ? v.toFixed(2) : '0'), yfmt: v => (v === 0 ? '1' : `10${sup(v)}`), ylabel: 'supply current, relative to a fully open switch', xlabel: 'input voltage (V)' });
+      const a2 = axes(ctx, { box: { l: px, r: pr, t: y2, b: y2 + ph }, x0: -0.03, x1: VDD + 0.02, y0: -7, y1: 0, yticks: [-6, -4, -2, 0], xticks: [0, 0.35, 0.7], xfmt: v => (v ? v.toFixed(2) : '0'), yfmt: v => (v === 0 ? '1' : `10${sup(v)}`), xlabel: 'input voltage (V)' });
+      ptitle('supply current, relative to a fully open switch', y2);
       ctx.save(); ctx.strokeStyle = C.heat; ctx.lineWidth = 2.5; ctx.beginPath(); for (let k = 0; k <= 70; k++) { const v = k / 100, s = solve(v); const yy = a2.sy(clamp(L10(Math.max(s.i, 1e-12)), -7, 0)); k ? ctx.lineTo(a2.sx(v), yy) : ctx.moveTo(a2.sx(v), yy); } ctx.stroke(); ctx.restore();
       circle(ctx, a2.sx(vin), a2.sy(clamp(L10(Math.max(i, 1e-12)), -7, 0)), 7, '#fff', C.heat, 3);
     },
