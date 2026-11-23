@@ -97,8 +97,35 @@ export function clusterGrid(el) {
     [K.dcTWh2024 * 1e6 / 8760, 'every data centre in the world, 2024 average'],
     [K.dcTWh2030 * 1e6 / 8760, 'IEA base case for 2030'],
   ].sort((a, b) => a[0] - b[0]);
+  // Reference labels packed into as few rows as fit: each label sits left or right of its dot, and no label covers another
+  // label, dot or leader (the leaders run up to the axis). Fewer rows than one per label, so the strip has no empty half.
+  const mctx = document.createElement('canvas').getContext('2d'), memo = {};
+  const place = w => {
+    if (memo[w]) return memo[w];
+    const n = narrow(w), l = 22, r = w - 22, size = n ? 11.5 : 12, pad = 8;
+    const base = REFS.map(([mw, s0]) => { const s = n ? s0.replace('data-centre load lost', 'load lost').replace(', 2024 average', ', 2024') : s0; return { x: l + (L10(mw) + 2) / 8 * (r - l), s, tw: measure(mctx, s, size) }; });
+    const box = (it, right) => (right ? [it.x - 8 - it.tw, it.x + 5] : [it.x - 5, it.x + 8 + it.tw]);
+    let best = null;
+    for (let m = 0; m < 1 << base.length; m++) {
+      const its = []; let ok = true;
+      for (let i = 0; i < base.length && ok; i++) {
+        const right = !!(m >> i & 1), [a, b] = box(base[i], right);
+        if (a < 2 || b > w - 2) { ok = false; break; }
+        let row = 0;
+        for (; row < base.length; row++) {
+          const clash = its.some(o => (o.row === row && a < o.b + pad && b > o.a - pad) || (o.row < row && base[i].x > o.a - 4 && base[i].x < o.b + 4) || (o.row > row && o.x > a - 4 && o.x < b + 4));
+          if (!clash) break;
+        }
+        its.push({ ...base[i], right, row, a, b });
+      }
+      if (!ok) continue;
+      const rows = Math.max(...its.map(o => o.row)), flips = its.filter(o => o.right !== o.x > w * 0.6).length;
+      if (!best || rows < best.rows || (rows === best.rows && flips < best.flips)) best = { items: its, rows, flips };
+    }
+    return (memo[w] = { ...best, ay: n ? 70 : 64, pitch: n ? 44 : 36, size });
+  };
   const fig = new Fig(el, {
-    height: w => narrow(w) ? 380 : 320, label: 'A cluster’s power draw on a log scale from one server to all the world’s data centres',
+    height: w => { const L = place(w); return L.ay + 34 + L.rows * L.pitch + 14; }, label: 'A cluster’s power draw on a log scale from one server to all the world’s data centres',
     draw(ctx, w, h) {
       const n = narrow(w), l = 22, r = w - 22, sx = mw => l + (L10(mw) - -2) / (6 - -2) * (r - l);
       const ay = n ? 70 : 64;
@@ -111,7 +138,8 @@ export function clusterGrid(el) {
       rrect(ctx, a - 3, ay - 12, b - a + 6, 24, 8); ctx.fillStyle = alpha(C.heat, 0.85); ctx.fill();
       circle(ctx, (a + b) / 2, ay, 12, '#fff', C.heat, 3);
       R = { sx, ay, l, r };
-      REFS.forEach(([mw, s], i) => { const x = sx(mw), y = ay + 34 + i * (n ? 44 : 36); line(ctx, x, ay + 8, x, y - 12, alpha(C.ink3, 0.6), 1, [2, 3]); circle(ctx, x, y - 6, 4, C.ink2); const right = x > w * 0.6; text(ctx, n ? s.replace('data-centre load lost', 'load lost').replace(', 2024 average', ', 2024') : s, x + (right ? -8 : 8), y - 2, { size: n ? 11.5 : 12, align: right ? 'right' : 'left', color: C.ink2 }); });
+      const L = place(w);
+      L.items.forEach(({ x, s, row, right }) => { const y = ay + 34 + row * L.pitch; line(ctx, x, ay + 8, x, y - 12, alpha(C.ink3, 0.6), 1, [2, 3]); circle(ctx, x, y - 6, 4, C.ink2); text(ctx, s, x + (right ? -8 : 8), y - 2, { size: L.size, align: right ? 'right' : 'left', color: C.ink2 }); });
     },
   });
   const setN = x => { const mw = 10 ** ((x - R.l) / (R.r - R.l) * 8 - 2); N = Math.round(clamp(mw * 1000 / (K.dgxH100.maxW / 8000 * 1.3), 8, 3e6)); if (N > 1000) N = Math.round(N / 1000) * 1000; paint(); };
