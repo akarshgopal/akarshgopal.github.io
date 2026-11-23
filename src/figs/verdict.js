@@ -96,7 +96,7 @@ export function verdictMeter(el) {
       ctx.closePath(); ctx.fill(); ctx.restore();
       ctx.save(); ctx.strokeStyle = C.ink3; ctx.lineWidth = 1.5; ctx.setLineDash([5, 4]); ctx.beginPath(); path.forEach((d, i) => (i ? ctx.lineTo(xy(d.y), ys(d.capTwh)) : ctx.moveTo(xy(d.y), ys(d.capTwh)))); ctx.stroke(); ctx.restore();
       ctx.save(); ctx.strokeStyle = C.heat; ctx.lineWidth = 3; ctx.lineJoin = 'round'; ctx.beginPath(); path.forEach((d, i) => (i ? ctx.lineTo(xy(d.y), ys(d.m)) : ctx.moveTo(xy(d.y), ys(d.m)))); ctx.stroke(); ctx.restore();
-      line(ctx, xy(2035), ys(M.IEA_DC_2035[0]), xy(2035), ys(M.IEA_DC_2035[1]), alpha(C.ink3, 0.55), 7); if (!n) text(ctx, 'IEA 2035, all data centres', xy(2035) + 8, ys(1100) + 4, { size: 10.5, color: C.ink3, halo: 4, haloColor: '#f4f4f2' });
+      line(ctx, xy(2035), ys(M.IEA_DC_2035[0]), xy(2035), ys(M.IEA_DC_2035[1]), alpha(C.ink3, 0.55), 7); // its label is placed with the callouts below, clear of the cap line
       M.RUNGS.forEach((rg, i) => { const y = ys(M.bar(rg, p)), x = xy(rg.year); line(ctx, x - (rg.year === 2035 ? 14 : 70), y, x + (rg.year === 2035 ? 14 : 0), y, C.ink, 2.5); text(ctx, `${rg.id}`, x - (rg.year === 2035 ? 18 : 74), y + 4, { size: 11.5, weight: 700, align: 'right', color: C.ink }); });
       M.TRIPWIRES.forEach(tw => { const d = M.at(path, tw.year), ok = d.m >= tw.twh, x = xy(tw.year), y = ys(tw.twh); ctx.save(); ctx.translate(x, y); ctx.rotate(Math.PI / 4); ctx.fillStyle = ok ? C.green : '#fff'; ctx.strokeStyle = ok ? C.green : C.red; ctx.lineWidth = 2; ctx.fillRect(-5, -5, 10, 10); ctx.strokeRect(-5, -5, 10, 10); ctx.restore(); });
       // "supply cap" / "tripwires": set in clear stage space above the band and the cap line (below the band if there is no
@@ -107,8 +107,8 @@ export function verdictMeter(el) {
       // what the labels must not cover: the R1–R3 bar ticks and their names, and each other
       const busy = M.RUNGS.map(rg => { const y = ys(M.bar(rg, p)), x = xy(rg.year), a = rg.year === 2035 ? 14 : 70; return [x - a - 8 - measure(ctx, rg.id, 11.5, 700), y - 11, x + (rg.year === 2035 ? 14 : 0), y + 5]; });
       const hits = b => busy.some(o => b[0] < o[2] && b[2] > o[0] && b[1] < o[3] && b[3] > o[1]);
-      const callout = (s, xc, targets) => {
-        const tw = measure(ctx, s, 10.5, 600), x0 = xc - tw / 2 - 4, x1 = xc + tw / 2 + 4, box = y => [x0, y - 11, x1, y + 4];
+      const callout = (s, xc, targets, o = {}) => {
+        const wt = o.weight || 600, tw = measure(ctx, s, 10.5, wt), x0 = xc - tw / 2 - 4, x1 = xc + tw / 2 + 4, box = y => [x0, y - 11, x1, y + 4];
         const ok = y => y - 11 >= pt - 6 && y + 4 <= pb - 4 && !hits(box(y));
         const up = clear(x0, x1, true) - 12, dn = clear(x0, x1, false) + 20, cand = [];
         for (let k = 0; k < 6; k++) cand.push([up - k * 14, -1], [dn + k * 14, 1]);
@@ -124,11 +124,20 @@ export function verdictMeter(el) {
           const sy = ty > by ? by + 4 : by - 13, dx = tx - xc, dy = ty - sy, dl = Math.hypot(dx, dy);
           if (dl > 10) line(ctx, xc, sy, tx - dx / dl * 7, ty - dy / dl * 7, C.ink3, 1);
         }
-        text(ctx, s, xc, by, { size: 10.5, weight: 600, color: C.ink2, align: 'center', halo: 4, haloColor: side ? C.paper : mix(C.paper, C.heat, 0.2) });
+        text(ctx, s, xc, by, { size: 10.5, weight: wt, color: o.color || C.ink2, align: 'center', halo: 4, haloColor: side ? C.paper : mix(C.paper, C.heat, 0.2) });
       };
       const capYr = n ? 2041 : 2042, capX = xy(capYr);
       callout('supply cap', capX, [[capX, ys(M.at(path, capYr).capTwh)]]);
       callout('tripwires', xy(2032.5), M.TRIPWIRES.map(tw => [xy(tw.year), ys(tw.twh)]));
+      // the IEA bar's name: placed last, so it steps around the two labels above; it starts just right of the bar, with a leader to its top
+      if (!n) {
+        const s = 'IEA 2035, all data centres', tw = measure(ctx, s, 10.5, 450), x0 = xy(2035) + 10, ty = ys(M.IEA_DC_2035[1]), by = ty + 8;
+        // beside the bar's top when the cap line and the path stay clear of that box; otherwise a callout with a leader
+        const lines = []; for (let yr = 2035; yr <= Math.min(2050, Math.ceil(yOf(x0 + tw + 4))); yr++) { const d = M.at(path, yr); lines.push(ys(d.capTwh), ys(d.m)); }
+        const bx = [x0 - 4, by - 11, x0 + tw + 4, by + 4];
+        if (lines.every(y => y > by + 7 || y < by - 14) && !hits(bx) && by - 11 >= pt - 6) { busy.push(bx); text(ctx, s, x0, by, { size: 10.5, color: C.ink3, halo: 4, haloColor: '#f4f4f2' }); }
+        else callout(s, xy(2035) + 20 + tw / 2, [[xy(2035), ty]], { weight: 450, color: C.ink3 });
+      }
       circle(ctx, xy(2025), ys(M.M0), 5, C.ink, '#fff', 2);
     },
   });

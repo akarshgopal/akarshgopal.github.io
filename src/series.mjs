@@ -21,7 +21,7 @@ export const PAGES = [
   { file: 'factory.html',    short: 'The factory',   title: 'The AI Factory: Chips, Cooling and the Grid', status: 'live', updated: '2026-11-21' },
   { file: 'binds.html',      short: 'What binds',    title: 'What Binds, 2026–30: Chips, Power, Permits or Money?', status: 'live', updated: '2026-11-07' },
   { file: 'orbital.html',    short: 'Orbital',       title: 'Orbital Compute: Is Space the Only Answer?', status: 'live', updated: '2026-11-21' },
-  { file: 'verdict.html',    short: 'The verdict',   title: 'The Verdict: What the Ledger Says', status: 'live', updated: '2026-11-21' },
+  { file: 'verdict.html',    short: 'The verdict',   title: 'The Verdict: What the Ledger Says', status: 'live', updated: '2026-11-23' },
 ];
 // Legacy filenames kept as thin redirects so old links and the electricity series back-links still resolve.
 export const REDIRECTS = [
