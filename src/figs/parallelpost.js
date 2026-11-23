@@ -148,19 +148,20 @@ export function latencyHiding(el) {
   const CMP = 20, LAT = 400; let W = 4, R = {};
   const util = () => Math.min(1, W * CMP / (CMP + LAT));
   const fig = new Fig(el, {
-    height: w => (narrow(w) ? 330 : 290), label: 'Groups of threads on one GPU core: while one waits for memory, another computes',
+    height: w => (narrow(w) ? 270 : 250), label: 'Groups of threads on one GPU core: while one waits for memory, another computes',
     draw(ctx, w, h) {
-      const l = narrow(w) ? 64 : 120, r = w - 14, top = 26, rows = Math.min(W, 12), rh = Math.min(16, (h - 130) / rows), span = 1200, sx = c => l + c / span * (r - l);
+      // the arithmetic row sits a fixed step above the rail; the group rows share the space above it (taller when there are few)
+      const l = narrow(w) ? 64 : 120, r = w - 14, top = 26, ry = h - 30, by = ry - 60, rows = Math.min(W, 8), rh = Math.min(narrow(w) ? 36 : 28, (by - top - (W > rows ? 24 : 16)) / rows), span = 1200, sx = c => l + c / span * (r - l);
       text(ctx, 'cycles →', r, top - 8, { size: 11, align: 'right', color: C.ink3 });
       // schedule: one issue slot; warps queue round-robin
       const ready = Array(W).fill(0), busyMap = []; let c = 0;
       while (c < span) { let k = -1, best = Infinity; for (let i = 0; i < W; i++) if (ready[i] < best) { best = ready[i]; k = i; } c = Math.max(c, best); if (c >= span) break; busyMap.push([k, c]); ready[k] = c + CMP + LAT; c += CMP; }
-      for (let i = 0; i < rows; i++) { const y = top + i * rh; text(ctx, `group ${i + 1}`, l - 8, y + rh * 0.75, { size: 10.5, align: 'right', color: C.ink3, small: true }); ctx.fillStyle = alpha(C.time, 0.15); ctx.fillRect(l, y + 1, r - l, rh - 2); }
+      for (let i = 0; i < rows; i++) { const y = top + i * rh; text(ctx, `group ${i + 1}`, l - 8, y + rh / 2 + 4, { size: 10.5, align: 'right', color: C.ink3, small: true }); ctx.fillStyle = alpha(C.time, 0.15); ctx.fillRect(l, y + 1, r - l, rh - 2); }
       busyMap.forEach(([k, c0]) => { if (k < rows) { ctx.fillStyle = C.compute; ctx.fillRect(sx(c0), top + k * rh + 1, Math.max(1, sx(c0 + CMP) - sx(c0)), rh - 2); } });
       if (W > rows) text(ctx, `… and ${W - rows} more groups`, l, top + rows * rh + 14, { size: 11, color: C.ink3 });
-      const by = top + rows * rh + 26; text(ctx, narrow(w) ? 'arithmetic' : 'arithmetic units', l - 8, by + 12, { size: 10.5, align: 'right', color: C.ink2, weight: 600, small: true });
+      text(ctx, narrow(w) ? 'arithmetic' : 'arithmetic units', l - 8, by + 12, { size: 10.5, align: 'right', color: C.ink2, weight: 600, small: true });
       ctx.fillStyle = alpha(C.time, 0.15); ctx.fillRect(l, by, r - l, 16); busyMap.forEach(([, c0]) => { ctx.fillStyle = C.compute; ctx.fillRect(sx(c0), by, Math.max(1, sx(c0 + CMP) - sx(c0)), 16); });
-      const ry = h - 30; R.inv = logRail(ctx, 24, w - 24, ry, 1, 64, [1, 2, 4, 8, 16, 32, 64], v => `${v}`, W, C.compute); R.ry = ry;
+      R.inv = logRail(ctx, 24, w - 24, ry, 1, 64, [1, 2, 4, 8, 16, 32, 64], v => `${v}`, W, C.compute); R.ry = ry;
       text(ctx, 'groups of threads on the core (drag)', 24, ry - 14, { size: 11, color: C.ink3 });
     },
   });

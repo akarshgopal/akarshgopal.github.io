@@ -10,7 +10,7 @@ export const PAGES = [
   // Physics stack: what a switch is → what a flip costs → why GPUs won (efficiency lever g0)
   { file: 'rules.html',      short: 'Rules',         title: 'Rules: Switch, Gate, Adder, Program', status: 'live', updated: '2026-11-07' },
   { file: 'flip.html',       short: 'The flip',      title: 'The Price of a Flip', status: 'live', updated: '2026-11-21' },
-  { file: 'parallel.html',   short: 'Parallel',      title: 'Parallel: Why GPUs Won', status: 'live', updated: '2026-11-07' },
+  { file: 'parallel.html',   short: 'Parallel',      title: 'Parallel: Why GPUs Won', status: 'live', updated: '2026-11-23' },
   // Demand stack: what a model is → tokens → scaling (T) → data (examples) → who asks (U)
   { file: 'model.html',      short: 'A model',       title: 'A Model Is a Function You Can Tune', status: 'live', updated: '2026-11-07' },
   { file: 'language.html',   short: 'Language',      title: 'Language: Tokens to Next Word', status: 'live', updated: '2026-11-07' },
