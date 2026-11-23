@@ -183,17 +183,23 @@ export function energyFlow(el) {
       // Enlarged inset (honestly labelled) compares DC vs AI only.
       const insetW = n ? w - pad * 2 - 8 : Math.min(180, r - (cols[3] + bw + 118) - 8);
       const insetX = n ? pad + 4 : Math.max(cols[3] + bw + 118, r - insetW);
-      const insetH = n ? phoneInsetH : 70;
+      // desktop title wrapped to the inset's width (it ran past the inset and the canvas edge at 1366); phone keeps its short title
+      const tLines = [];
+      if (n) tLines.push('DC & AI · ×40, not column scale');
+      else if (measure(ctx, 'enlarged ×40, not column scale', 10.5, 650) <= insetW - 16) tLines.push('Data centres & AI', 'enlarged ×40, not column scale');
+      else for (const wd of 'Data centres & AI · enlarged ×40, not column scale'.split(' ')) { const k = tLines.length - 1; if (k >= 0 && measure(ctx, `${tLines[k]} ${wd}`, 10.5, 650) <= insetW - 16) tLines[k] += ` ${wd}`; else tLines.push(wd); }
+      const tExtra = (tLines.length - 1) * 13;
+      const insetH = n ? phoneInsetH : 70 + tExtra;
       const insetY = n ? btm + 8 : ye + he + 44; // below the electricity column, clear of its labels
       rrect(ctx, insetX, insetY, insetW, insetH, 6);
       ctx.fillStyle = alpha(C.ink, 0.04); ctx.fill();
       ctx.strokeStyle = C.grid2; ctx.lineWidth = 1; ctx.stroke();
-      text(ctx, n ? 'DC & AI · ×40, not column scale' : 'Data centres & AI · enlarged ×40, not column scale', insetX + 8, insetY + 14, { size: n ? 9.5 : 10.5, weight: 650, color: C.ink3 });
+      tLines.forEach((s, i) => text(ctx, s, insetX + 8, insetY + 14 + i * 13, { size: n ? 9.5 : 10.5, weight: 650, color: C.ink3 }));
       const maxDA = Math.max(DC, AI) * 40;
       const barMax = insetW - 70;
       const dcW = Math.max(4, (DC * 40 / maxDA) * barMax);
       const aiW = Math.max(3, (AI * 40 / maxDA) * barMax);
-      const by = insetY + 26;
+      const by = insetY + 26 + tExtra;
       rrect(ctx, insetX + 8, by, dcW, 12, 3); ctx.fillStyle = C.orange; ctx.fill();
       text(ctx, `DC ${DC}`, insetX + 12 + dcW, by + 10, { size: 10, color: C.ink2 });
       rrect(ctx, insetX + 8, by + 18, aiW, 12, 3); ctx.fillStyle = C.heat; ctx.fill();

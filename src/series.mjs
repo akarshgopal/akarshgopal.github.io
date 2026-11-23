@@ -6,7 +6,7 @@ export const PAGES = [
   { file: 'index.html',      short: 'Contents',      title: 'Can AI outgrow the planet’s power grid?', status: 'live', updated: '2026-11-07' },
   // The essay: the whole argument in one sitting; the pages after it are its deep dives
   { file: 'essay.html',      short: 'The essay',     title: 'From Switch to Supercluster: Can the Grid Keep Up?', status: 'live', updated: '2026-11-23' },
-  { file: 'yardstick.html',  short: 'The yardstick', title: 'The Yardstick: How Big Is the Bar?', status: 'live', updated: '2026-11-21' },
+  { file: 'yardstick.html',  short: 'The yardstick', title: 'The Yardstick: How Big Is the Bar?', status: 'live', updated: '2026-11-23' },
   // Physics stack: what a switch is → what a flip costs → why GPUs won (efficiency lever g0)
   { file: 'rules.html',      short: 'Rules',         title: 'Rules: Switch, Gate, Adder, Program', status: 'live', updated: '2026-11-07' },
   { file: 'flip.html',       short: 'The flip',      title: 'The Price of a Flip', status: 'live', updated: '2026-11-23' },
